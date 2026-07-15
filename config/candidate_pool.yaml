@@ -1,0 +1,116 @@
+# 「自分では気づいていないが、世界情勢的に注目度が上がっているかもしれない」
+# ハイリスク・テーマ株の候補プールです。
+#
+# ここに登録した銘柄はすべて毎日Gemini APIで分析され、レポート内の
+# 「注目テーマ銘柄（ハイリスク候補）」セクションに買い/売りスコア付きで表示されます。
+# watchlist.yaml（自分専用の銘柄）とは別枠として扱われます。
+#
+# AIは、このリストに実在しない銘柄コードを追加することはありません
+# （リストの追加・削除は必ず人間が行い、ティッカーコードの実在確認をした上で登録してください）。
+#
+# 各項目の意味:
+#   symbol: ティッカーコード
+#   name: 表示名
+#   market: "JP" / "US"
+#   theme: どんなテーマに属するか（世界情勢との紐付けの手がかりとしてAIに渡される）
+#   risk_level: "high" 固定（このプールは高リスク銘柄用のため）
+#   nisa_growth_eligible: NISA成長投資枠の対象になりやすいかどうかの目安
+#     （レバレッジ型・インバース型ETFなどは対象外になるため false）
+#     ※ 正式な対象可否は必ず証券会社側で確認してください。
+
+candidates:
+  # --- 半導体・AI関連 ---
+  - symbol: "6920.T"
+    name: "レーザーテック"
+    market: "JP"
+    theme: "半導体"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "6857.T"
+    name: "アドバンテスト"
+    market: "JP"
+    theme: "半導体"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "AMD"
+    name: "Advanced Micro Devices"
+    market: "US"
+    theme: "半導体・AI"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "PLTR"
+    name: "Palantir Technologies"
+    market: "US"
+    theme: "AI・データ分析"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "SOUN"
+    name: "SoundHound AI"
+    market: "US"
+    theme: "AI（小型成長株）"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 防衛・地政学関連 ---
+  - symbol: "7011.T"
+    name: "三菱重工業"
+    market: "JP"
+    theme: "防衛・地政学"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "LMT"
+    name: "Lockheed Martin"
+    market: "US"
+    theme: "防衛・地政学"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 資源・エネルギー関連 ---
+  - symbol: "1605.T"
+    name: "INPEX"
+    market: "JP"
+    theme: "資源・エネルギー"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "XOM"
+    name: "Exxon Mobil"
+    market: "US"
+    theme: "資源・エネルギー"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 暗号資産関連 ---
+  - symbol: "COIN"
+    name: "Coinbase Global"
+    market: "US"
+    theme: "暗号資産"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "MSTR"
+    name: "MicroStrategy (Strategy)"
+    market: "US"
+    theme: "暗号資産（ビットコイン保有）"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 国内小型成長株 ---
+  - symbol: "4385.T"
+    name: "メルカリ"
+    market: "JP"
+    theme: "国内グロース"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "4382.T"
+    name: "HEROZ"
+    market: "JP"
+    theme: "AI（国内小型成長株）"
+    risk_level: "high"
+    nisa_growth_eligible: true

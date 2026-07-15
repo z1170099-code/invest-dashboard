@@ -1,0 +1,1702 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI投資分析ダッシュボード</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page:           #f9f9f7;
+    --surface-1:      #fcfcfb;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --status-good:     #0ca30c;
+    --status-warning:  #fab219;
+    --status-critical: #d03b3b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page:           #0d0d0d;
+      --surface-1:      #1a1a19;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page:           #0d0d0d;
+    --surface-1:      #1a1a19;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+  }
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  h1 { font-size: 1.4rem; margin: 0; }
+  .updated { color: var(--text-muted); font-size: 0.85rem; }
+  .theme-toggle {
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  .disclaimer {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--status-warning);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 16px 0 28px;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+  .disclaimer strong { color: var(--text-primary); }
+
+  section { margin-bottom: 32px; }
+  h2 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--gridline);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+
+  .macro-list { list-style: none; padding: 0; margin: 0; }
+  .macro-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gridline);
+    font-size: 0.9rem;
+  }
+  .macro-list li:last-child { border-bottom: none; }
+  .macro-list a { color: var(--text-primary); text-decoration: none; }
+  .macro-list a:hover { text-decoration: underline; }
+  .macro-source { color: var(--text-muted); font-size: 0.8rem; }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--status-color, var(--baseline));
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .card.status-good     { --status-color: var(--status-good); }
+  .card.status-warning  { --status-color: var(--status-warning); }
+  .card.status-critical { --status-color: var(--status-critical); }
+  .card.status-muted    { --status-color: var(--text-muted); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .rank { color: var(--text-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+  .name { font-weight: 600; font-size: 1.05rem; }
+  .symbol { color: var(--text-muted); font-size: 0.85rem; font-weight: 400; }
+  .market-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    border: 1px solid var(--gridline);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+  }
+  .theme-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    background: var(--page);
+    border: 1px solid var(--gridline);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+  }
+  .nisa-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--gridline);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+  }
+  .risk-banner {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--status-critical);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .risk-banner strong { color: var(--text-primary); }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--status-color, var(--text-muted));
+    flex: none;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .score-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    width: 3.5em;
+    text-align: right;
+  }
+  .score-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--gridline);
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    background: var(--status-color, var(--baseline));
+  }
+
+  .price-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    margin: 8px 0 10px;
+  }
+  .price-row span.label { color: var(--text-muted); margin-right: 4px; }
+
+  .reasoning { font-size: 0.92rem; margin: 8px 0; }
+  .risks { font-size: 0.85rem; color: var(--text-secondary); }
+  .risks .label { color: var(--text-muted); }
+
+  .factors {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .factors li {
+    font-size: 0.78rem;
+    background: var(--page);
+    border: 1px solid var(--gridline);
+    border-radius: 999px;
+    padding: 3px 10px;
+    color: var(--text-secondary);
+  }
+
+  details.news-detail { margin-top: 10px; font-size: 0.82rem; }
+  details.news-detail summary {
+    cursor: pointer;
+    color: var(--text-muted);
+  }
+  details.news-detail ul { margin: 8px 0 0; padding-left: 18px; }
+  details.news-detail a { color: var(--text-primary); }
+
+  footer {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    text-align: center;
+    margin-top: 40px;
+    border-top: 1px solid var(--gridline);
+    padding-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>AI投資分析ダッシュボード</h1>
+    <button class="theme-toggle" id="theme-toggle" type="button">☀︎ / ☾ 切替</button>
+  </header>
+  <div class="updated">最終更新: 2026年07月16日 02:09 (JST)</div>
+
+  <div class="disclaimer">
+    <strong>⚠ 免責事項:</strong>
+    本サイトの内容はAIによる自動分析であり、投資助言・推奨ではありません。
+    表示されるスコア・推奨・理由は、公開されている株価データとニュース見出しをもとに
+    AIが機械的に整理した参考情報に過ぎず、正確性・完全性を保証するものではありません。
+    投資に関する最終判断は、必ずご自身の責任で行ってください。
+  </div>
+
+  <section>
+    <h2>世界情勢・マクロ経済ニュース</h2>
+    
+    <ul class="macro-list">
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5tYUZzcFRNNng2QjJ6Z3pGYktGd0FLSEV4aUpCYk5OWXZmTjRhYXk5Ri1vT3hWeU5mQm43YkhmQ19xZUd0alNCeXBLSGtDbHVLdjdxTEhTRmIzbVY5TkdrR25zMUhXeU1Hei1tNA?oc=5" target="_blank" rel="noopener">日銀がマイナス金利導入の議事録公開 16年上期、｢奇策｣副作用巡り論戦 - 日本経済新聞</a>
+        <div class="macro-source">日本経済新聞 ・ Tue, 14 Jul 2026 23:52:26 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMib0FVX3lxTFA1QXAyWHI3dUVlRmsyLUs4N1g3VEt4ek5VOW03NDIyRnFyTzI1SlcyN1AwbmJLblFsZGVkbGJFT2tmR29PejlUbVFEckdLc3htQnA2RXZ6eTYxS1doMTMxVGFudVFiNDAzWFdOaWxBMA?oc=5" target="_blank" rel="noopener">日銀の自主性尊重を明記＝骨太方針、２１日閣議決定―政府 - iJAMPポータル</a>
+        <div class="macro-source">iJAMPポータル ・ Tue, 14 Jul 2026 10:36:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE8zdWh2WGwzU1M1WVdRN21NWXhQVm1TNm56UGhYaFlSMFRjNFdOam5IcTNRQXdzYXhZMjlYT0tPamlYMFhseDZTXy0zdTM4Y3pKdGp6d2hIWk41RV8tNkw3OVJENWVkcU0?oc=5" target="_blank" rel="noopener">長期金利がマイナスに 思わぬ副作用、黒田日銀はさらなる「奇策」へ - 朝日新聞</a>
+        <div class="macro-source">朝日新聞 ・ Wed, 15 Jul 2026 08:00:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTE16RGJpWU5yMnZxQ0VBdExaeE1jazRIaENfR092TVBvaXpjazJyM01Ob2ltNTJZS00zQjFUOGQtSHM0bmRILWpJYVcyX1NxOG8xeGpn?oc=5" target="_blank" rel="noopener">FRBが利下げから利上げ政策に急転換。 金融相場への影響を見極める - ダイヤモンド・オンライン</a>
+        <div class="macro-source">ダイヤモンド・オンライン ・ Tue, 23 Jun 2026 07:00:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE01emJKZkdVY2p0OXFBZTN0cDdRbURPMzFvOW1TUGg1ZlRJUUtNUHM2YmczdHBOTUFyXzliR1NRUGlvbGpOMDRPelgyNHpiOHg2b3MyLXNoWnRNZ2hiTXdv?oc=5" target="_blank" rel="noopener">歴史的円安のワケは FRB議長“タカ”の本性？【経済コラム】 - NHKニュース</a>
+        <div class="macro-source">NHKニュース ・ Fri, 10 Jul 2026 08:49:33 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE00bHlidmhreUtHYVVJQ1ItVjc1cTBZei1kbjBfMks3eUhnRHh0ampqS3BqXzJqeWlxbHBvc2FlY3VwR2JsVUtRVDlXRGFLMXMxQVdONWV1RzdGTDZnZlZz?oc=5" target="_blank" rel="noopener">米金融政策見通しを変更 年2回の利下げから据え置きへ 米国野村證券・雨宮愛知 - nomura.co.jp</a>
+        <div class="macro-source">nomura.co.jp ・ Wed, 27 May 2026 07:00:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxOLUN2cWJ2aEdUcnhzNXlyd1V2UXlvWlQ5WHNkczkzRG1zRkRPdUJEcHJkcW1Eck9vSW1GNEttd25XMWVmZnp2WHhINGQwcExPNjR4WTdZNXBscjNadlhNNmRrdDFzYnlTTml4ZU91QTJlUkZLSnVNWVVvZE1uNU5HWnZOTnNPVGs?oc=5" target="_blank" rel="noopener">外為：1ドル162円20銭前後とドル安・円高で推移(株探ニュース) - Yahoo!ファイナンス</a>
+        <div class="macro-source">Yahoo!ファイナンス ・ Wed, 15 Jul 2026 05:01:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTFBaY0h2RGF2SXJteUVMOXNIRVRqV0o4TnQtUmdycVBMNFFlZFloR3FaYThfTnBNWXhWZjFWQXRWWXRMelZNUkZsQng4MzRhWXdfUGRlcFVENGMwcnhYZE1OUVdGdw?oc=5" target="_blank" rel="noopener">FX/為替「ドル/円今日の見通し｜米CPI下振れで早期利上げ観測後退 じりじりとした円安基調続く」 外為どっとコム トゥデイ 2026年7月15日号 - 外為どっとコム</a>
+        <div class="macro-source">外為どっとコム ・ Wed, 15 Jul 2026 03:38:32 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE9XTlJnQVJYMFZhWnVERUV0Q0FmcktrQVZwb0VTMzNxMm5Feno0YTk0X05MblpXdFh0VTJ3Vmw2aTNQeXpoYlZFSGw1RVRRSGR0WTJaVVl0Q2lSSHc?oc=5" target="_blank" rel="noopener">～円安材料の雰囲気が変わるタイミングであれば、再び介入の可能性も～ - 第一ライフ資産運用経済研究所</a>
+        <div class="macro-source">第一ライフ資産運用経済研究所 ・ Mon, 13 Jul 2026 01:39:50 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxNM3F4SHFVa1JyUXpIRDVjVTBYUEZNdmNBYTJFS2tnZ2t5dWlSd2xRNE80a1V3Z0p1eTgxcEtYVjhlbW12Wm9fd0MyS3ZUZFNvQ0xYenFEM3NOcXNBUDJhS0tVcHdnS3JTTTFVWEpwZy1yS1Qtd25mbk1yay14NzgxWFBXUTlRTF9Ib0E?oc=5" target="_blank" rel="noopener">ホルムズ海峡“再封鎖”で手数料20％か…1隻あたり約52億円も 原油価格・物価への影響は？【#みんなのギモン】 - 日テレNEWS NNN</a>
+        <div class="macro-source">日テレNEWS NNN ・ Tue, 14 Jul 2026 12:28:01 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxQdG83NkIzWmlOTDNIT0ZBRHREU0JDMDVSb05sZmFOS0pEOUxJWWV3WHFnLTZweVdqeC12dmpvY2w5ZzhmTFdXdkx2NUtFMmdXR0ZTZ0tWWkdGM0JwOHo0TERZMlNYc1ZNUjAwSFJmcjJrandXRC1BV3d4ODNaX1NNdmNmaVJPNXM?oc=5" target="_blank" rel="noopener">【要人発言】BOC総裁「原油価格がさらに急騰すれば、追加利上げが必要になる可能性がある」(トレーダーズ・ウェブ) - Yahoo!ファイナンス</a>
+        <div class="macro-source">Yahoo!ファイナンス ・ Wed, 15 Jul 2026 15:10:27 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE52aEhsODMwb0RkNGZ1SlJodllvZjJFOTVHVHZzckl5OURxT1NINk1IUkxLNzVwcnVNTWFlRnI1QkVIMHI3djNYX0tpdlFxcWxhdHFNRWVNa3NOTGZuSmRGSQ?oc=5" target="_blank" rel="noopener">NY為替：原油価格上昇に連れ、ドル買い戻しが強まる - 株探</a>
+        <div class="macro-source">株探 ・ Tue, 14 Jul 2026 21:22:12 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxOREFBZFhsemNqSmRmaWt0aXA1QWE4b2FyN1ZBT2JHeVBOSlI2Z0J6LWc1OHV6bjRTd3NZZ0pvbFJwX2thZVFNX3FRTHptVkZEZlRLaExaOEpPYVJqSXgxUXp6WjRBbEVvZl8xQU0xckd2Y1ltdnZ6bE1DYTdYS3ZEZg?oc=5" target="_blank" rel="noopener">米国株式市場＝反発、好調な銀行決算やＣＰＩ鈍化受け - ロイター</a>
+        <div class="macro-source">ロイター ・ Tue, 14 Jul 2026 21:32:40 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9sb1lUaF9vQ2tabkZ3aWlITzJwSjRIb1RMZTNzY3lmcTl1UUNRdDhfaGJUQW1sdGhCLTMwT0xvZk9Ta0FVNFA4dXZjdmxKck0?oc=5" target="_blank" rel="noopener">SKハイニックス【SKHY】：株価・株式情報 - Yahoo!ファイナンス</a>
+        <div class="macro-source">Yahoo!ファイナンス ・ Wed, 15 Jul 2026 16:59:13 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5JWnZ6Rkk3OVBvdzh6VzRHUGN4ZDFxaUUtNmFHd3diNzgwenY3RDRZRWIyZS1Qd1p5TXM3Rmx2Q2VNRjdSdmMwQi1fRk92bzlnQWlyUm5hemJ2RUVWaXNOX2YwV0NEdU1PTVI2bQ?oc=5" target="_blank" rel="noopener">NYダウ反発9ドル高、米利上げ観測が後退 金融株高支え - 日本経済新聞</a>
+        <div class="macro-source">日本経済新聞 ・ Tue, 14 Jul 2026 20:44:38 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1wcHpMd185dzI0UWIzdVc1LTV5VTJ4cVMtOENnMUFDcHNmTmp1eUpTMzNrbVAtUHpfcmFsTGFxUkExS3l6MzJYbElORFdvUm5PbGFHUmVCWEVmN0x5SmZHbVRfMFk5VlJibktOMQ?oc=5" target="_blank" rel="noopener">日経平均終値1008円高、AIで進む優勝劣敗 米IBMショック波及 - 日本経済新聞</a>
+        <div class="macro-source">日本経済新聞 ・ Wed, 15 Jul 2026 02:57:31 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTE1NMFhEeUF5SnBHdjFmZGVJSUd5Q0VFZG1FcVZGZDBDYzdxQmFMLVFWeHllaHFRcHN4VTY0RjBXMWc1NU9yZFBnbHNLVUVETnBPbVNv?oc=5" target="_blank" rel="noopener">【日本株】キオクシアなどAI・半導体関連株の調整中は、メガバンクなどの内需系大型バリュー株に期待！日経平均株価が25日移動平均線を上回るまでは慎重に - ダイヤモンド・オンライン</a>
+        <div class="macro-source">ダイヤモンド・オンライン ・ Tue, 14 Jul 2026 11:15:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTFBZa2NRYUtYUWNyS1V0c3lCanVhUHNMb3Z5Y1ZtYXAtMmJLSTE1VWV4TXFja0RHV3dQMjIyeGVuVEFZQ1J2cHNOOTVhZ3FYcTBlc2N0NnBoQk80NEtNeVlJWmhKRQ?oc=5" target="_blank" rel="noopener">【テクニカル】日経平均株価テクニカル分析－転換線上を久しぶりに回復 - 外為どっとコム</a>
+        <div class="macro-source">外為どっとコム ・ Wed, 15 Jul 2026 15:37:34 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9rZE9MOWZZbXBaX3RLZnRaa3B5UGs5UEFCNEhUZksxbllYNGVjZVMxN2tLSk51ZHpTRTJ6akF4YTVKOEtfUy1hakp1S292dHI5N09LdnJuYzhQd2JGV2NiTEpFdHI5UG9rTGptdA?oc=5" target="_blank" rel="noopener">電力先物、取引の短期シフト鮮明 地政学リスクで長期は停滞 - 日本経済新聞</a>
+        <div class="macro-source">日本経済新聞 ・ Wed, 15 Jul 2026 04:36:46 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE5wQldGNm1LYWlsTmxaLVQ2RlNOb0tsX2hpWk5ZenpDWXAxT0lEckxScE1GU2owMDE0UTA5cTM4Nl9UZWRObFQ2NzlwOHhyeVVfb093Sm13?oc=5" target="_blank" rel="noopener">トランプ関税、規制の武器化、資源争奪戦、上半期に現実化した地政学リスク、より不安定で、より不確実な世界に - JBpress</a>
+        <div class="macro-source">JBpress ・ Mon, 13 Jul 2026 21:00:00 GMT</div>
+      </li>
+      
+      <li>
+        <a href="https://news.google.com/rss/articles/CBMiakFVX3lxTFBBMDRLa2dWT3dMaFJ4ei1Kaklsb2ZJQWw1V3JLMHRZSFI3dldYWG5YYTU2OHYxeGJ4cEFYZXdCUEdoeVBXVlk5Mk9HU2tYcTJ1VlVWVW44cFlaY2xTTThrUGhGTlhNNkctMVE?oc=5" target="_blank" rel="noopener">半導体業界向け次世代サプライチェーン・リスクセミナー、8/4に開催 - PR TIMES</a>
+        <div class="macro-source">PR TIMES ・ Wed, 15 Jul 2026 02:00:03 GMT</div>
+      </li>
+      
+    </ul>
+    
+  </section>
+
+  
+
+  <section>
+    <h2>銘柄ランキング（スコア順）</h2>
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#1</span><br>
+          <span class="name">ソフトバンクグループ</span>
+          <span class="symbol">9984.T</span>
+          <span class="market-tag">JP</span>
+          
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +3.30%</span>
+        <span><span class="label">1週間</span>▲ +13.91%</span>
+        <span><span class="label">1ヶ月</span>▼ -7.91%</span>
+      </div>
+      
+
+      <p class="reasoning">AI関連投資の拡大や証券会社による目標株価引き上げはポジティブ材料ですが、地政学リスクによる原油高や為替の不透明感が強まっています。株価のボラティリティが上昇しており、急激な上昇後の調整リスクを考慮して慎重な姿勢が求められます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>AI関連企業への出資による成長期待と目標株価の引き上げ</li>
+        
+        <li>ホルムズ海峡の地政学リスクに伴う原油価格と金融市場の不安定化</li>
+        
+        <li>米金融政策の転換と為替相場の変動による投資環境の不確実性</li>
+        
+        <li>直近の急騰に対する調整圧力と高いボラティリティ</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 保有するAI関連資産の評価額が地政学リスクや金利環境の変化によって短期間で大きく変動するリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE9BS1JpeXgxUXZSeEtUbEFYbjJrVkRjM1Iwdy1OUFp5RS1MV2RDQ0x4MWFVbkVycVB4Q0tES25QT0NQTFl0bmJZalJ6UjZNSVpFQjhyNGFmVVpfUjda?oc=5" target="_blank" rel="noopener">【動画公開】ソフトバンクグループ株式会社の第46回定時株主総会が開催されました - ソフトバンク</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE1xOEEzM2dkbG5xUFA1NHh2cGpYaDNtNnlmUnFBY0dSMlQ2VEVvTHBTRy1nN2I3UkxVX2RDLVRjSzdxbGZaTEcydllTcTBPV3ItRUpGdg?oc=5" target="_blank" rel="noopener">ソフトバンクGの株価から考えたオープンAIの価値 - 日経CNBC online</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE5KbTAtdU1RQWdXU2syc19GQUlVS2NKYnY1UldzSmJ2MHhPUnlMMnZRS2hlS1dWVHZvWjNJSWRFdTZIOHhsVjVnVERtenBqMXF3c3J0ODFsMVNqaTA3N0U0ZQ?oc=5" target="_blank" rel="noopener">ソフトバンクＧが大幅続伸、国内大手証券は目標株価１万２２０円に引き上げ - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxPMnJjYzBJLWxIeUtQYnVYSlk2STI0d2k5T1pFcnBjWUNXcWhUQlRYZ09ZclozYXM2ZEhqRzFHVDVUSEQ5SlMtR2J5OUdxX0YyWklDXzJNT1dUdGp0cmNCSlZpTjBoOElMNW40RmZBSE9ZYmtLOFNlSHNPRnZWQ3ZDWQ?oc=5" target="_blank" rel="noopener">ソフトバンクＧ、オープンＡＩ株担保の借り入れ協議再開 返済保証を提示 - ロイター</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1Ka2JiSklZU3JUTi1FYlJEeVJ2RGhRYmYwcUlvTndsdEM5NUxHNl9nWUNZdm1TcmYtN3RETE5WbktiY3VKdWJQcmdya19ORmNGdVUzcU9jM3g4VWszNXNkVnNEMXpIN1d5OHp1OQ?oc=5" target="_blank" rel="noopener">ソフトバンクG株価が反落 オープンAIに1.6兆円払い込み反応薄 - 日本経済新聞</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#2</span><br>
+          <span class="name">Apple</span>
+          <span class="symbol">AAPL</span>
+          <span class="market-tag">US</span>
+          
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +4.02%</span>
+        <span><span class="label">1週間</span>▲ +4.51%</span>
+        <span><span class="label">1ヶ月</span>▲ +12.50%</span>
+      </div>
+      
+
+      <p class="reasoning">Appleは過去最高値を更新する強いモメンタムがある一方、急激な上昇による割高感や地政学リスクに伴うコスト増への懸念が残ります。米国の利下げ観測後退というマクロ経済環境を考慮すると、短期的には株価の調整が入りやすい局面であると考えられます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>プレミアム価格維持による堅調な収益性</li>
+        
+        <li>過去最高値更新に伴う過熱感と割高懸念</li>
+        
+        <li>地政学リスクによるサプライチェーンおよびコストへの懸念</li>
+        
+        <li>米金融政策の先行き不透明感</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 地政学リスクの深刻化やインフレ再燃による追加利上げが実施された場合、消費減退とともに株価が急調整するリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE4yX2QtVVVnQ09XSXJFWTJHSDhVUDdaNDBGVkRyTkpwaWhXN0xRZEhvUFRhOUlscWVYZmhscjFzRWdISnhScVVCV1VValU2dUpTLWtFd0c1a3R3QWJ6U1B0VzRnbGtsbC0tckk1YmJUcG9kYlIx?oc=5" target="_blank" rel="noopener">アップル株が過去最高値、「iPhone200ドル値上げ」と折りたたみ機投入に投資家が賭ける - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQTnZIc0hrMVRkaEFKZVl5NnQ0OUpKSDNNX3dfZmcyU3MyQzVsRWo1aWdLSlJjd3FBZGZZRWZ5T3V3SlhHVGxqZmNpcXBDeVlvTzdtaHhhZFFqTmx4VUtUTHV5Q2F0RUh3cm9XcmdDbnM3RVVJYU5aM29KTXd0NkxMWDFqODRjd2VZY2tHY1Zfbw?oc=5" target="_blank" rel="noopener">7月15日のApple Inc (AAPL) 値動きは3.51%上昇：完全な分析 - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTFBFa2tXTk5kdVRmaHdpbE1RbmV4aVpReERoakwxbVRJOVJBUDFGSHZoeExOWC1xOEZ5a2ZrVnlWeUY4bUdPWUY0b0RKdnZnQjJJdFlTSnJKRFI?oc=5" target="_blank" rel="noopener">アップル株が約5％急落、時価総額44兆円超の消失──MacBookやiPadなどを値上げ - Forbes JAPAN</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMid0FVX3lxTE1aLXN2VVdOeTdxWjVYWFc5RHQwQmNpTzZRT216ckM5YmRwTnlaUkdZS2g0MWtPU1VDN0wxS3dLUDNkSVoxdUN3Sm1vYmpGYy1pcHpCTFVHcnBOV0l4MWktMVI5dVQydjBZbmlFZzBfcWYzNTVlQkZz?oc=5" target="_blank" rel="noopener">Citi Raises Apple Stock Price Target as Premium Brand Power Protects Margins - TIKR.com</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiiwFBVV95cUxOZWtxVndrQzVfRzRIMXZLdF83M0JNeUlfRTA5QUlxX2hmbmNQYXQwQVhwVXUtdTY1VEdtcnlqZTFuaEprVGw5eHdVeVFBbjJuVmQyenVDSmFzdVZhSlR5NVFoM09XdVdRNEJzb3JMbWMzRlJIS0dzQjRyWG4tUHdTWU00NVVqWVpkZWln0gGLAUFVX3lxTE5la3FWd2tDNV9HNEgxdkt0XzczQk15SV9FMDlBSXFfaGZuY1BhdDBBWHBVdS11NjVUR21yeWplMW5oSmtUbDl4d1V5UUFuMm5WZDJ6dUNKYXN1VmFKVHk1UWgzT1d1V1E0QnNvckxtYzNGUkhLR3NCNHJYbi1Qd1NZTTQ1VWpZWmRlaWc?oc=5" target="_blank" rel="noopener">アップル（AAPL）は、そのキャッシュフローの観点から見ると、株価が高くなりすぎたのだろうか？ - simplywall.st</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#3</span><br>
+          <span class="name">NVIDIA</span>
+          <span class="symbol">NVDA</span>
+          <span class="market-tag">US</span>
+          
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -1.69%</span>
+        <span><span class="label">1週間</span>▲ +2.00%</span>
+        <span><span class="label">1ヶ月</span>▲ +1.47%</span>
+      </div>
+      
+
+      <p class="reasoning">AI分野での強固な提携ニュースやPER改善による割安感が見られる一方、米国金融政策の不透明感や地政学リスクによる原油高などが重石となっています。市場環境が不安定なため、トレンドが明確になるまで慎重な判断が求められます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>日本企業とのAIデータセンター提携による成長期待</li>
+        
+        <li>PERの歴史的低下によるバリュエーションの修正余地</li>
+        
+        <li>米国の利下げ観測後退と金融政策の不透明感</li>
+        
+        <li>地政学リスクに伴うエネルギーコスト上昇懸念</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 米国の金融引き締め長期化やサプライチェーンの地政学リスクが半導体需要を減退させる可能性があります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE16YXVqQlNZVE1yMk9pSkM1dWx2aW9LTGptYlRPZTVtTFIxRmhpMlhkTTRtM1RjTkZaakM1a3F4QnVmbkJMRzBZUFI4a3pXYXpGMlctTURSVE4tNjZ4bHJ3bW0xMm1sWDVZdVVGWA?oc=5" target="_blank" rel="noopener">三菱重工業の株価反発 「エヌビディアとAIデータセンターで提携」報道 - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9WaDRRQTlYRGo4ZnQyVGQxR0k3ODJwQUV5Z2E3bkxoM21NR1ZReUhYcjBNcDczMllsQlJqaFNMZ2JpbHZkdW9KYm9TWERLZVc3SnJ3STV4RlNWUU5ySGhvbzhZR1ZLdl9KZ29NTThXX2RmaDdw?oc=5" target="_blank" rel="noopener">エヌビディア株5%上昇の裏で進むPER急低下——歴史的な買いシグナルか - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE10cmxxcW5VZjhJSlEzd19oS0RPaXVtTFFZZGNhQ2syQ3FaT0dPbkNQdmpaSUoyR0RvaDJDUjVIdXRVakdIZkYyOVBUOG9DTkJmdzVPb0ZxX0NYM0QwQmVV?oc=5" target="_blank" rel="noopener">エヌビディア、好決算でも時間外で株価下落 米国株式市場への影響と今後の注目点 野村證券・村山誠 - nomura.co.jp</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE1RRmo1a3FOemFlbWd2WE01WHhrZFhYQ1RfNDB3ZlFuMEpZUTJrbThucndJXzhSX0FPWFNDRmhZVEpHcEdGdUdnWU1SdUFMQkJUMkc3NVNn?oc=5" target="_blank" rel="noopener">GOがストップ高、三菱重はNVIDIA提携報道で反発(午前の個別銘柄解説) - QUICK Money World</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTE1SOUxCVDBhM01venBlM2ZzWlFoUzFENlRpaFZQWWtUVkE4TVo0R3RVLTkycGlnazhBMnBXTnhyakNOcmNVTzNMd3phY1BGUG9OMm12RUpEQlF6ODU1RmRCcWR5UWxscGhVUG85OGd3eW94RFpudS1LNldEWjk?oc=5" target="_blank" rel="noopener">「エヌビディア・キラー」となるのか！？革新的AI半導体を擁するセレブラスシステムズ - SBI証券</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#4</span><br>
+          <span class="name">S&amp;P500連動ETF (iシェアーズ)</span>
+          <span class="symbol">1655.T</span>
+          <span class="market-tag">ETF</span>
+          
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +0.35%</span>
+        <span><span class="label">1週間</span>▲ +0.91%</span>
+        <span><span class="label">1ヶ月</span>▲ +1.44%</span>
+      </div>
+      
+
+      <p class="reasoning">S&amp;P500は米国経済の堅調さやインフレ鈍化による利上げ観測の後退により底堅い推移を見せています。ただし、地政学リスクによる原油価格上昇懸念や為替相場の変動性が高まっており、慎重な姿勢を維持すべき局面です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>米インフレ指標の鈍化による利下げ期待の復活</li>
+        
+        <li>米国株式市場の堅調な企業業績と底堅い相場展開</li>
+        
+        <li>ホルムズ海峡情勢など地政学リスクによる市場の不確実性</li>
+        
+        <li>為替相場の変動による日本円換算での資産評価への影響</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 中東情勢悪化に伴うエネルギー価格の急騰が米国のインフレを再燃させ、金融政策に逆風となるリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE9IaUlXYUt6WWFlTGtOelkwMUwwb01mUzJzRjBXYXd4cjBYeVhLMVA2NG1sQTVGdFh4eTZOMmFENVp3c3pfNldsSnAxMTVuUlZ0TkE?oc=5" target="_blank" rel="noopener">iシェアーズ S&amp;P500プレミアムインカム【452A】：株価・株式情報（夜間PTS含む） - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE9TVGJvT1lKczNhYmJ5TmRKTmlhTUdEMFRMOXhkOU81SC1ERkY1dGtHSGJ0QzdLTEl1Z082YW1iVkd3T2t1ejBnb3FDWDlBbzh4cWc?oc=5" target="_blank" rel="noopener">MAXIS 米国株式(S&amp;P500)上場投信【2558】：株価・株式情報（夜間PTS含む） - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMizwFBVV95cUxNNkhSTXdXckZoZ0x4S2dXMFRBN2dGdjlvLWVrWmhic1BqT3pTR1FBdTdXWmhzQUJGOEFNQWZXTVR1T1dIbjRNdzhvMmd5eEl2NWx4MmF4R2VMdXNyX1M0LUNUQ0ZUQ3JRZ1BLYndqemdDaXhIZGgzSDlqOFVCWXd3VUtnWlFSaS1vT28wd2NjQ3VKak5wMTdwYnV4MDViMTJidG9YRThlNGZQbzZQVHZtcmRIWkFySFpsa1JEenhEcmI5ejM5YndtYVItVVhsWDTSAc8BQVVfeXFMTTZIUk13V3JGaGdMeEtnVzBUQTdnRnY5by1la1poYnNQak96U0dRQXU3V1poc0FCRjhBTUFmV01UdU9XSG40TXc4bzJneXhJdjVseDJheEdlTHVzcl9TNC1DVENGVENyUWdQS2J3anpnQ2l4SGRoM0g5ajhVQll3d1VLZ1pRUmktb09vMHdjY0N1SmpOcDE3cGJ1eDA1YjEyYnRvWEU4ZTRmUG82UFR2bXJkSFpBckhabGtSRHp4RHJiOXozOWJ3bWFSLVVYbFg0?oc=5" target="_blank" rel="noopener">ブラックロック株が注目される社会保障改革の有力候補3選 - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMia0FVX3lxTE1iSkFqUW9SakthdlV5cWhLd3BIQjNvZHh4WVg5RDZKejhUbkNtLWhfbWxlZmVMX0xaNnpzQjhfZVp2U2E4Q3gxSTZlTGpqdGRETGN0bGFrREJuUk9HZlFlbktCMk5ZWXRwOThj?oc=5" target="_blank" rel="noopener">【楽天銀行証券担保ローン】ETF116銘柄を担保対象に追加！（2/24 18:00～） - 楽天証券</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBtSjhFenh2aTItMnBxNDYxLXdGTkN5U0FxQml4TzhFM2NXWWZDRlhxbmRBZzBGWjFmcWY4S3ZlaE5lZFBwNUMycUlGZzVCbHVnRUdlRXlWVzR6THB1ZEhj?oc=5" target="_blank" rel="noopener">新NISA初心者向け、日本株か米国株か？ETFの選び方と投資信託との賢い使い分け - BigGo ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#5</span><br>
+          <span class="name">トヨタ自動車</span>
+          <span class="symbol">7203.T</span>
+          <span class="market-tag">JP</span>
+          
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+20</div>
+        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +1.18%</span>
+        <span><span class="label">1週間</span>▼ -3.63%</span>
+        <span><span class="label">1ヶ月</span>▼ -2.19%</span>
+      </div>
+      
+
+      <p class="reasoning">歴史的円安基調による収益押し上げ効果の一方で、地政学リスクによる原油高と将来的な為替介入の不透明感が重石となっています。株価指標面では割安感があるものの、直近のボラティリティと不安定な外部環境を考慮すると、トレンド転換を確認するまでの慎重な姿勢が求められます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>割安なPBRと高い配当利回りの水準</li>
+        
+        <li>地政学リスクに伴う原油高によるコスト圧迫懸念</li>
+        
+        <li>為替介入リスクと米金融政策転換による不透明感</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の悪化による原油価格の急騰と、急激な円高修正による業績下振れリスクに注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1EdmpyVngtTjQxZWwxbEhFQ0RiM1VtdzRXWnplQ18yWmhvYlg4MjFlaVUxWW9zU3RlaEdEY1NHSXRwR3VuaW5EcEdYU0kyS2wwTGpvb3luZ243X1A4MGk0?oc=5" target="_blank" rel="noopener">トヨタ自動車(株)【7203】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE01NnNEVUhPRVpLMWphVXJJMXFmVXpRZG9INFhxdldSTFRGdHJhcnBhaUt5Tm5TbkJic29BZmtWd3pTQWllVVVRRXRuZmtYbkg5SWp5N9IBV0FVX3lxTE5xSTgzVXVyQ3g1N2ZwaktpcWlHY0M5bW5aeGJhMUtIVFBaSU0yTXpJQkoza3k4bDV2d2RXZGdBRE53MXhoSm92QXROakk1NnUyQzd1QVBZZw?oc=5" target="_blank" rel="noopener">【日本株】「尻尾は逃すな」、トヨタ株 - マネクリ</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBxdndDSmp0SFBaSl84SlpkY1F1cHMzN0llOGd0YVhnR0RlbThhQlJXWUpuNGtZM1hyVFpCTGVzemhXQnFtQk5ERnE2eGdFRmNXeHZtVEJDWQ?oc=5" target="_blank" rel="noopener">株価下落で好機到来か､PBR1倍割れで利回り4％超の自動車株 - 四季報オンライン</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBkZmxQbThRRUxYYU9KbTdZWWNfTG1Jb1d3VVF1XzFTblN6UjVCSkxaQ3dhcXhGMW9LVERrOFVrQUU2VFE1UGFfUU01WGJJR0l3TFBWQk1RYWtrcWlPUEp5MVZDYUNNMGpSdlNLWA?oc=5" target="_blank" rel="noopener">トヨタ自動車株価が朝高後下落 39年半ぶり円安水準、買い続かず - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE1maTRHeUh3NnppZ3l3VmhVYWhUZnhYbklwX1g2aWVQaHZTQThiWWNqZ2ZURjN0WHRLWUlBMnN4UVZPVDRkWlBDYnloYU1VazdDU0JmOA?oc=5" target="_blank" rel="noopener">トヨタ自動車、ドル円は安値うかがうも株価は前日に年初来安値 中東危機で需要減 - 日経CNBC online</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+  </section>
+
+  <section>
+    <h2>注目テーマ銘柄（ハイリスク候補）</h2>
+    <div class="risk-banner">
+      <strong>⚠ ハイリスク銘柄について:</strong>
+      このセクションは、世界情勢・マクロ経済ニュースをもとにAIが値動きの大きいテーマ株・成長株の中から
+      注目度を整理したものです。通常の銘柄よりも価格変動が大きく、短期的に大きく下落する可能性もあります。
+      投資対象として検討する場合は特に慎重に判断してください。
+    </div>
+    
+    
+      
+    <div class="card status-good">
+      <div class="card-head">
+        <div>
+          <span class="rank">#1</span><br>
+          <span class="name">三菱重工業</span>
+          <span class="symbol">7011.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">防衛・地政学</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ▲ 買い候補
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+65</div>
+        <div class="score-track"><div class="score-fill" style="width: 65%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -0.32%</span>
+        <span><span class="label">1週間</span>▼ -6.56%</span>
+        <span><span class="label">1ヶ月</span>▲ +2.38%</span>
+      </div>
+      
+
+      <p class="reasoning">防衛需要に加え、NVIDIAとのAIデータセンター向け技術提携は中長期的な成長基盤として評価できます。地政学リスクの高まりは防衛関連銘柄への追い風となり、業績の多角化も投資妙味を高めています。</p>
+
+      
+      <ul class="factors">
+        
+        <li>NVIDIAとのAI・省エネ技術での提携</li>
+        
+        <li>地政学リスクに伴う恒常的な防衛需要</li>
+        
+        <li>電力関連インフラとしての強固な事業基盤</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 為替市場の急激な円高転換や、原材料・エネルギーコストの上昇による利益率への圧迫には注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE16YXVqQlNZVE1yMk9pSkM1dWx2aW9LTGptYlRPZTVtTFIxRmhpMlhkTTRtM1RjTkZaakM1a3F4QnVmbkJMRzBZUFI4a3pXYXpGMlctTURSVE4tNjZ4bHJ3bW0xMm1sWDVZdVVGWA?oc=5" target="_blank" rel="noopener">三菱重工業の株価反発 「エヌビディアとAIデータセンターで提携」報道 - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE05OTFvdDg5Xzl1dEUtaEtjdmlrS0d3WHZCc01fN3I5QjdiWjllZ1VyMXptTkk1ektnRk9rN055Ny0zMmEwYnEwWnlHQkNKeTFDeWZPOXB4aGVKRmVGYkpV?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBGUW1ydkNlOFU2WlA5VVh2dWV2Skk2RzRvMHRyRFZCQjB1S2lRSkdoMmcxc2NVTkhOM0YwcmgyUElQd2NaQ1hxZGM1ZzlENzJJOURCUm44Tk1Jb1FCLVVn?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE1QYXUzM1ZjTi1BTnRhcEdpMl8xMjZwc1hTQUxZZmFoZjBKeFVoRHhsT1FaNTN4anRFM3VQWThYZ21CVXNYMm90TWd2X3o1RndJU2tDcTlzSXA?oc=5" target="_blank" rel="noopener">三菱重工はなぜ株価10倍になったのか……「防衛銘柄」では説明できない成長の本質 - Forbes JAPAN</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE9HX09vVUFpd3I5NGczejVYb0dycHk0aEEtbzRqMnBMdnZ1dGZSZGlqbG5zZnVaMHVsbTZfSDF5eVN0R3RUSExzMlpEd0x0OXl4VVp5b3E5STJHRWVWUm1WQ2lvVTZnaE1GLTFPWEw0cVljZk5z?oc=5" target="_blank" rel="noopener">NVIDIAと三菱重工、次世代「AI工場」で冷却・省エネ技術提携へ - BigGo ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#2</span><br>
+          <span class="name">メルカリ</span>
+          <span class="symbol">4385.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">国内グロース</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+65</div>
+        <div class="score-track"><div class="score-fill" style="width: 65%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +1.25%</span>
+        <span><span class="label">1週間</span>▲ +5.74%</span>
+        <span><span class="label">1ヶ月</span>▲ +28.25%</span>
+      </div>
+      
+
+      <p class="reasoning">メルカリは収益性改善への期待とトレカ市場の好調を背景に株価が急騰し、直近の高値圏で推移しています。ただし、地政学リスクによる資源高やインフレ再燃の懸念がある中で、グロース株全般がマクロ環境の変化に敏感であり、短期間の急騰後の過熱感には警戒が必要です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>スキマバイト事業撤退によるコスト削減への市場評価</li>
+        
+        <li>目標株価引き上げを伴うトレーディングカード市場の活況</li>
+        
+        <li>米金融政策の不透明感と地政学リスクによる市場のボラティリティ上昇</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 短期的な過熱感による利確売りの圧力と、金利変動に伴うグロース銘柄全般への資金引き揚げリスクに注意してください。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE5lcVVrWExfWFdXQ3pCVWFPN2t6eGZFYTlWbW1ySGsyYm96MU9lSWpxTW1SRm5PcUVRWi1VQ2RQMkhMNU5vNEhBSm81S1Jka1BEZlpsbzhrbl9DQmRRbTcw?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE9kemNINHBaVW8tWEdKaEFoQ0JMMHhpNVctZk44WExDdkI3N2ZscEFUa0VLdXg5ZlFob1lnNkNfZGw2bFpWRGRpZTVyQnlIS0l2cmc?oc=5" target="_blank" rel="noopener">＜動意株・１４日＞（大引け）＝ＴＤＣソフト、松竹、メルカリなど - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9FR2lRXzdfbTFYM3RKQ2VPMDgxT3dfbXctMmFuTW44MHhyVVV1VVhUdFhQek03bnZZT3g5Y1FYU0c2dlJYM2lXXy1PWWNiSXFQU0pZb2NjUS1OZC14X2M3QzZaX1RPZmEwbndKSA?oc=5" target="_blank" rel="noopener">メルカリ株価4年ぶり高値 SMBC日興証券が目標上げ、トレカ活況 - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNUWhUa2cweDBMcm4tcFFZc29jOEsxdVNZZDZiZDZTcXFWeVMtb3YwSzNhRS1jOEg1R1dUMFgyV1hZc3FLcDBfbGg5SGhZNldFQkJOX1JOZUNKYUtObEEtRTRXaEdHWFpEOTVHM3RvdWpkTENrampVaE9DbWhONE1YVFd4RVFIbkU?oc=5" target="_blank" rel="noopener">話題株ピックアップ【夕刊】（3）：サカタタネ、メルカリ、シンプレクス(株探ニュース) - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE1yeVk1THZTUUxVZjRPRzRjSTlqcW03eDFiRzhYbDlvRkdZLW1YSThvbkotd2tkdmpfSXhyT2l4a0lDb05sYVlzTWlSanBjRThkTlk5dUNWNzQ?oc=5" target="_blank" rel="noopener">スキマバイト撤退で株価急騰の「メルカリ」と一強でも冴えない「タイミー」、明暗分けた要因とは？ - マネーフォワード</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#3</span><br>
+          <span class="name">アドバンテスト</span>
+          <span class="symbol">6857.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">半導体</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+40</div>
+        <div class="score-track"><div class="score-fill" style="width: 40%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +3.31%</span>
+        <span><span class="label">1週間</span>▲ +3.03%</span>
+        <span><span class="label">1ヶ月</span>▲ +1.21%</span>
+      </div>
+      
+
+      <p class="reasoning">米SOX指数の上昇を背景に強い買いが入っており、日経平均への寄与度も高い銘柄ですが、世界的な地政学リスクや為替の変動による不確実性が残ります。直近の株価反発は評価できるものの、高値からの乖離幅とマクロ経済の不透明感を考慮すると、テクニカルな底打ちを確認する慎重な姿勢が求められます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>米半導体関連株の上昇によるポジティブな波及効果</li>
+        
+        <li>日経平均への高い寄与度とテクニカル指標の回復</li>
+        
+        <li>ホルムズ海峡の地政学リスクによる供給網への懸念</li>
+        
+        <li>米金融政策見通しの変化に伴う為替ボラティリティ</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 地政学リスクの悪化や予期せぬ米政策金利の再転換による株価の急激な調整リスクには注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1kcEJfQ2pOejlHcU5MOHFFVFd1R1JIS0JqMnBiUGMxdEt2dGtJUlZMWkVHUXpPVndXbE52WE9RYzMzaHpRRDNQZTVFWmxLdDVxbmlsSmRfcVBkc0MxVGxCOURvb3Q1UHJPeElOdA?oc=5" target="_blank" rel="noopener">アドバンテスト株価続伸 米SOX上昇で買い波及（15日の株式市場） - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNTjVRZTdCd2czWjlaem9nQW1rejRtRFEwMmcyYjBSb2RNUVJKaUhBRUdZNnpROEJSdHE0bmlLdDRNanNvMzZ6YkIzQ2xzUlZqTWhqWkNPc1BnNWExQXowUGNTSGwzZ2M3eE1lNE5xVFNWbjVYSzZUV1g4aEtBY2dJWjNtWWpORVU?oc=5" target="_blank" rel="noopener">日経平均寄与度ランキング（大引け）～日経平均は大幅続伸、アドバンテストや東エレクが2銘柄で約731円分押し上げ(フィスコ) - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFBlR0NJZVR1T05Oa1FlRU9aVnZGaEs2ZFdBTmJ2eUY5a3dmWkJZNC1ISWtZOUt6aElkNVY3SEcxSGVDWmU4WHN3SG9DdU5MZVNQMkE?oc=5" target="_blank" rel="noopener">日経平均寄与度ランキング（大引け）～日経平均は反発、アドバンテストやソフトバンクGが2銘柄で約399円分押し上げ - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPNjdvZHAxU2NucTBHd3lBbkY0ejFXUDI3THJrM0xTWXltNHBaNXFYeXRaTVBUTHhtekZnSkVFYTBSUk44Tk5ER0F1MERPdVYxX1lQVTkzZTJfSjQ5ajJWVjZhVm5lVFN0VnYyeS1WeXFqZGt5RzB6V0pJRmtsM2dobW1TWDJRREU?oc=5" target="_blank" rel="noopener">日経平均は続伸、アドバンテストが1銘柄で約312円分押し上げ(フィスコ) - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1EZXdGbXFBVzlZQVprdkhEYjBjbTVRcmtmSndZV01nYXBBZURuT3MxOTNQZXBJb0l2MjF2Q1VZWFNqYlpxUVJxMVdMSmh2VmNDNmpFaDhZbVNFZ1BFUHItTTVmNF9MZmJXOXZxcw?oc=5" target="_blank" rel="noopener">アドバンテスト株価続伸 米SOX上昇で買い波及 - 日本経済新聞</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#4</span><br>
+          <span class="name">INPEX</span>
+          <span class="symbol">1605.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">資源・エネルギー</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+40</div>
+        <div class="score-track"><div class="score-fill" style="width: 40%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +3.92%</span>
+        <span><span class="label">1週間</span>▲ +7.41%</span>
+        <span><span class="label">1ヶ月</span>▲ +2.48%</span>
+      </div>
+      
+
+      <p class="reasoning">地政学リスクによる原油価格の上昇が追い風となって株価は続伸していますが、一方で業績予想の小幅な下方修正や目標株価の引き下げといった慎重なアナリスト評価も混在しています。原油高と円安の相乗効果への期待がある反面、テクニカル面では高値からの乖離が大きく、ボラティリティの高さには注意が必要です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>地政学リスクによる原油価格（WTI）の80ドル台上昇</li>
+        
+        <li>資源価格上昇による恩恵と業績下支え期待</li>
+        
+        <li>証券会社による目標株価引き下げと慎重な評価</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の急変による乱高下や、想定以上の円高進行が利益を圧迫するリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE83bEtpWDhMRzJvU1BtYUpqZFl5UVliellSTzIzWmRmcG9yTmdpQU5QOHVfLWF5S01sY0cwM1BUdVZ1akszSkZWMFQ0dlBwcHBiVlBoN01RaENUb3l4dDhSaTlQN25uNFYtcWNQSg?oc=5" target="_blank" rel="noopener">INPEXの株価続伸 米の海上封鎖再開宣言でNY原油80ドル台に - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPNm14Q21LMTI5YkpGTzFORzcyUHRFRmJLQzdhdHkybWVFNzQ2U0x6N2FsOTFQMW5GSjhZRDRINWN6TXZQT0JqU3lob1oyYTQwRXNNUlhMTXV0d21aXzhubUZ6X2hna2V6UjNPMHZXYnQ5azFfc3h6VDgwNU9lNTg4b05vUFNQOUk?oc=5" target="_blank" rel="noopener">【アナリスト予想】ＩＮＰＥＸ、26年12月期経常予想。対前週2.1%下降。(アイフィス株予報) - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE5ZLV9jeDl2YTVLNzFoTXhFbkY0WF9mT1pyM3N0blJ3eTlrUnZPSWpNY1JST0Nia18zc0wxMjJKQnMyN3dqNnFIcW53WTZ4OC0zNWc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが大幅続伸、米国のイラン海上封鎖再開でＷＴＩ８０ドル台乗せ - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFAxWktITU42WlNpU3pCU2lxUmNsWnMwa01nUFhiSGdhR0VIamJyOGkyS1IwaXp1T2Z1MzhvV2puMS0wM0pRR2xWbmxzbG9jb2RTX2FOb05QZw?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸ (1605) の株価・株式 - QUICK Money World</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNa2ZLMWY4d0h5LV9ENlU3T3otRjg4S0xUVWFRUVBjZG14UkpZTzJjajFYaTRPYWhUdjdEVUIzYlhvajluQTdyTGdmZWVTQ0ItZ0hUNHRVWXdPNVJfczF5ZjRLeXFxSzIzdnhpQzlLakIyTGhabkVFekg5a1RqUDJfRTA0Z3l5c28?oc=5" target="_blank" rel="noopener">【アナリスト評価】ＩＮＰＥＸ、レーティング中立を据置き、目標株価3,650円に引下げ（米系大手証券）(アイフィス株予報) - Yahoo!ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#5</span><br>
+          <span class="name">Lockheed Martin</span>
+          <span class="symbol">LMT</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">防衛・地政学</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +0.06%</span>
+        <span><span class="label">1週間</span>▼ -2.40%</span>
+        <span><span class="label">1ヶ月</span>▼ -4.64%</span>
+      </div>
+      
+
+      <p class="reasoning">地政学リスクの高まりは防衛セクターの追い風となりますが、買収案件に対する投資家の懸念や直近の株価調整により上値は重い展開です。割安感からの押し目買い意欲はあるものの、マクロ経済の不透明感が強いため、市場の動向を慎重に見極めるべき状況です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>世界的な地政学リスクの高まりによる防衛需要の底堅さ</li>
+        
+        <li>株価の割安水準とアナリストによる買い推奨への転換</li>
+        
+        <li>大型買収に伴う投資家の慎重姿勢と直近の株価下落傾向</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 防衛予算の変動や買収後の統合プロセスが収益性に与える影響には注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE05LXdIa3pFamtpQWNLbFFTM1BjTVltNEZoRGFSckgzVV9aREhiMmUyck80VDRpQkM1RjM3ZUZhLWl3UUNZS1Vyd3lwUjF2QQ?oc=5" target="_blank" rel="noopener">ロッキード・マーティン【LMT】：株価・株式情報 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxPS25RQ19IOHJmdGk3Y2FBRzhmRFc2ZjR6WXBQTWZGdFFSWTROdC1ZVHBWbGRUdV9EdHNZb1IwdDZ4cExXVDFyYlhnYW1NQTZNVWdEMmV6UklwQTdZR2hmU3VTQVQ5aVA1TTNDc0FpVEVTTy1lVUk3MXhwSkppX2t2eDNnSkNhTnFqWFRYTVZIYWM3aEFNdXoybUphRdIBoAFBVV95cUxQMVpidHlOLWtPRXk0ZGVxSWxCRFdOY1k1TEF2VzNtSHNOb3ljdW14Um95Sm1YT0Rpd0ctTW0wc1djM195VzhqYmZIcGNoaXk2TGozQlZ4dEhHM0lWQ3ZfdlFxUmJHTURITGpTQ0lrcURyVlBnU0REZ0FpYU16ZlZUdDJXRjc5MGhCeW5oUFEwTXVVR3JDbC1NcC0wUzdYbFFB?oc=5" target="_blank" rel="noopener">ロッキード・マーティン（LMT）の株価は、適正価値および収益に比べて割安で取引されている - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxOT1U3ajUzS0xCME4wcFpEbTVYNVpFM2Z1QU8xbnhTWmNsVzF4b0lIV3dZNVN5V1hSbHBxcmJqd0hXSFI5ZmQzRllvbnExWk1HY19xeEpiU0tQSkduX05jNGNWVnE3UlRmNVlvR2tvbGJJQWxud19zQThlVEpqSkhMaFNDcXJCNi02YnpNWWZXX2ZKdDNUS1NGWVlNWlRZRDJueUpZVVNQdGY?oc=5" target="_blank" rel="noopener">ドイツ銀行はロッキード・マーチンの株価目標を575ドルから550ドルに修正しました。 - Moomoo</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5GZzNZMnl4MXRVTG44b2VWN1hwZEg2bGNieDdDMGpXbVRpbC14NmtfLXVwd1Z1eWtlakhLYS16NXRRTmxUN3IwdXpqam5NUDlnUDFxUDRNbkF0TzNoUV93YkVVcURVUTVwX2d4LTNabUUxMElV?oc=5" target="_blank" rel="noopener">ロッキード・マーティン、ウルトラ・マリタイムを34.5億ドルで買収へ――投資家は取引評価に慎重、株価は下落 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMixgFBVV95cUxQTEQ2SWY2SmR6bjVBbXpLb1BhS0tqcTVncnFSMUZwdF8xZzBRaFE5Zk5PQTZ2bHhGTW5vSm41VEVnVmpBWU1XSzZ0NzJYOTlIMXNVYmgzekVQTVFTdURQYWk0M2tnU2tNeHlrMEFiM01RVktKMTZkQVFpYUVNdXV0LWRrUmxNMUxvbjJEUGNPR2ZxV0kzQUhhemdEQjZ4NFgzMEFUTHRoeUNxaGh6LTRjc0tUbEhfRnQ4RjVVNmt4a0VHZWJNTlE?oc=5" target="_blank" rel="noopener">Citi Upgrades Lockheed Martin Stock to Buy as Historical Rebounds Override Election Fears - TIKR.com</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#6</span><br>
+          <span class="name">Exxon Mobil</span>
+          <span class="symbol">XOM</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">資源・エネルギー</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+30</div>
+        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -1.41%</span>
+        <span><span class="label">1週間</span>▲ +1.36%</span>
+        <span><span class="label">1ヶ月</span>▼ -2.70%</span>
+      </div>
+      
+
+      <p class="reasoning">地政学リスクに伴う原油価格の上昇圧力はエネルギー銘柄にとって追い風となりますが、米国の金利政策の見通し変更や目標株価の引き下げが上値を抑える要因となっています。株価は割安感があるものの、金融情勢の不確実性が高いため、今後の相場動向を確認しながら慎重な判断が必要です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>ホルムズ海峡の地政学リスクによる原油供給不安</li>
+        
+        <li>目標株価引き下げによる市場センチメントの停滞</li>
+        
+        <li>FRBの政策転換による米金融市場の不確実性</li>
+        
+        <li>現状の株価指標におけるバリュエーションの割安感</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 米国の金融引き締め長期化や世界的な景気減速懸念が、エネルギー需要を減少させるリスクに留意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTFBONl9VUGMzaVVpTXljM3lwbEYteTM4OVF1UVdacEJmODNpQ3RVWUhYeGgwd250eWdQdkVoYllHc1A2U3hsUzgxeVRrU25GQm9CRDdReUZ3NWw?oc=5" target="_blank" rel="noopener">エクソン・モービル【XOM】：企業情報（従業員数・代表者名など） - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxPREdkUnljWkN2b2tJbjFkZTRJY2xTUmxJU3NmenRYZWVDY3dPRGNuUWpYc29Mb2E1aTV2alpIN2dXbnVET0RhWUhLYno5OFpPVHBDRFRoUk1wNHFSUVhyWkFpeEZXalRmWFNlRE1aQWpDdGpNdXMtWDZ0LUFtWHVqME8yN3JRZXNEdGQ0SGZn?oc=5" target="_blank" rel="noopener">7月13日のExxon Mobil Corp (XOM) 値動きは3.10%上昇：値動きの背後にある事実 - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNNnp1QWJ4RUJjOWxRaURlT1FuNDJXcGc0MGszYUJ0RmhuNTVrS1BsNTIyb3Znc0JpT3dqcndpRmRHemtIbGNIa3BfZ0dfMDU5Nl9QdkZBQllDUHNGR1lvdV9La0ZDWmpFRXpicjNJV1JrRWxuTWsyTWpaNGJtQ0NCYnQ3Q3FMVjRySVVCbXZDb0lvVl9ad282WHlUNmVHeUFsUHRN?oc=5" target="_blank" rel="noopener">JPモルガンはエクソン・モービルの株価目標を173ドルから158ドルに修正しました。 - Moomoo</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQdXpiQ2NlTWZGWF96SE13UzZUQXV1RmlBbVh6V2EzallmeGxjT0g4d0d3NmlRUVEzU2hJSEJhSDM2MlVudXIyZGY2Y1pYZ0c3UkJBMm1HOGxicWlyLWFTV2pIdm9rdHNERGtnT3ZQXzJZbTVkaHE5TkRCcHhUcEZnWFR0RFVFLXZLd3ozSTlqSXktM0FlbWZ1OVctZkFibHNaZHVuOE1QZ24zSEU?oc=5" target="_blank" rel="noopener">Exxon Mobil Stock’s Dividend Yield Looks Wide Against Its 52-Week Trading Range - TIKR.com</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOcU8tSU5DV0hQandjeWsza2xjZ3NiS1lZUlc0c1plMzhxM19oN01hbmRjVmRXN1ZNdE9pMU9KRFY0dGRVSEJvVUNsYW1teW1iN0o4VEJld1hESWxINzFyZ2dUVk9FemZZVEZDU0dqZ2JIY0RhTTkxelpxUDBZQndITkNlNVpCU19tZXBNYdIBkgFBVV95cUxOZGZvRTNvMDE1YjhqcVNsM1ozWE93Z2Z3VkJ5R3k5cDdtM2VHTnR2SXF6aHJJbFhNMjFrUWNUOVUzNUlGdXltQ3k3MTNFaGs5ejFZODZjQ2tBcHJFX2pRUzV1b1NadmZjMXNsWkJXbk92dXZ4U0d3dHVNN0ZUV2RrSlJzVzA5T2FmWER6eDdjTWtQdw?oc=5" target="_blank" rel="noopener">エクソン モービル (XOM) 株は本店移転後も18.5%割安の可能性か - simplywall.st</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#7</span><br>
+          <span class="name">レーザーテック</span>
+          <span class="symbol">6920.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">半導体</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+25</div>
+        <div class="score-track"><div class="score-fill" style="width: 25%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +0.74%</span>
+        <span><span class="label">1週間</span>▲ +2.38%</span>
+        <span><span class="label">1ヶ月</span>▼ -6.26%</span>
+      </div>
+      
+
+      <p class="reasoning">目標株価の引き上げやテクニカル指標の陽転シグナルなど、半導体関連の個別材料にはポジティブな動きが見られます。一方で、世界的な地政学リスクや原油高、米国の金融政策の不確実性が相場の重石となっており、慎重な判断が求められます。</p>
+
+      
+      <ul class="factors">
+        
+        <li>アナリストによる目標株価引き上げと技術的シグナルの改善</li>
+        
+        <li>米国の利下げ観測の後退と地政学リスクによる市場の不安定化</li>
+        
+        <li>半導体セクター全体の調整とボラティリティの高まり</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 原油価格の急騰に伴うコスト増と、世界的な地政学リスクの悪化によるサプライチェーンへの影響に注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFB6ZlBYUThNX0VUQ29MMkE1eEUtQjc5TlZDZDFCOG9qaDg4SEtFNkpTWEtEbFNoakQzcHU2cG5waElnVG80QW8zWUxRQ3hXaWI5SzF6LU1GV0tGS0Ixa2xB?oc=5" target="_blank" rel="noopener">レーザーテック(株)【6920】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE0yaG9IS0hoa1dCTHBnd1pwdEJDQkRnbndtYkVvR1p6Ti03NWZ6N3p1N3pNMk1vTm50MUJmMWtiX2F1TnMtOEdORjROSkVTMUQ2MUE?oc=5" target="_blank" rel="noopener">レーザーテック---パラボリックは陽転シグナルを発生へ - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5mZDEtY1hueEN0M2NsZnRMeUdwcUlVVnpPU3FVVXI0aFVRcVlDRVZLa3lMeGJ4V1lpb0loZWpHQlFYak1BOFpsajlydVRqQ3pKUUJLbVNOeGlmcWNMcl9qY2JNMVlLLTJfcmJ2N0l4T1d3UlVM?oc=5" target="_blank" rel="noopener">読売333が2日続伸、406円高の5万3028円 レーザーテック10％高 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTE9YLUtveV8xbXFPWWxGbF9Kd2l5TW1GTVNJeGdyRDdGQmZGTnllaWpWcU4wRTJzbXlOZnhmVGVjTUg4bi1RSlBFdFV3VDZqT1ROLUV3?oc=5" target="_blank" rel="noopener">レーザーテック－みずほが目標株価を引き上げ Intelの具体的な投資計画も発表され始めた点に注目 - Moomoo</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE5xR3BfMXY0UWk5U1dDMHp4RXZnbzBMVmd1X2dMSFJCX01RUWVpUjFMMEV3SkcyRWk2eVp5U29IUnA1QWZHTHBRWkVNY2pKUFA0cE1oUWJn?oc=5" target="_blank" rel="noopener">レーザーテクが後場一段高、テラドローンは防衛関連材料で急伸(午後の個別銘柄解説) - QUICK Money World</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#8</span><br>
+          <span class="name">Palantir Technologies</span>
+          <span class="symbol">PLTR</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">AI・データ分析</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -0.17%</span>
+        <span><span class="label">1週間</span>▲ +0.96%</span>
+        <span><span class="label">1ヶ月</span>▲ +4.30%</span>
+      </div>
+      
+
+      <p class="reasoning">AI分野の成長期待が根強い一方で、割高感に対する市場の警戒心も強く、株価は乱高下しやすい状況です。米国のインフレ鈍化による利上げ観測後退はプラス要因ですが、地政学リスクに伴うエネルギーコストの上昇など不透明感が残るため、方向感を見極める必要があります。</p>
+
+      
+      <ul class="factors">
+        
+        <li>AI需要に伴う長期的な成長ポテンシャル</li>
+        
+        <li>米CPI鈍化による利上げ観測の後退</li>
+        
+        <li>高バリュエーションに対する市場の過熱感への懸念</li>
+        
+        <li>地政学リスクと原油価格上昇によるマクロ経済の不確実性</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 成長期待が市場のコンセンサスを下回った場合、高いバリュエーションが修正される大幅な株価調整リスクに注意が必要です。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQVkpvV3JaNTBCUjJ4U0w2YjhoeFZEUnFCWVpCbWtqZ2U4Z0NDN19IUE1FRnNWN081eUhSYWh3dm9wWW55TzR3d08yZDZaOGZoT21rZU81X1dINjVzdDdiTDhSeVhjSEpiajZ1V0RRS19UOXRPZkVMREt4ZW9nQTl2cnBfUlNjTDJrQlduWTNDbw?oc=5" target="_blank" rel="noopener">7月14日のPalantir Technologies Inc (PLTR) 値動きは4.02%上昇：値動きの背後にある要因 - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxQWUZXTERmdnN0azd4MU5vUDZFZUpLZ0ZYSFdPVjlMX0ZpMTZ6ekdBd3VfdHo4Tzd5Q3MtT3h6WmQxeEh4OU9icVUtZVU4RWZJUUJlZDBnVGpNVC1nZks3QU5rczU5dXNydlBJNmRkSTVWOXRtVElLeWhOS0h5MHpBdHd6SFFEemFMRHJvbG9kbjNESS1wTmlaMlBjaElPdXh6Q3VIb0Zn0gGmAUFVX3lxTFBZRldMRGZ2c3RrN3gxTm9QNkVlSktnRlhIV09WOUxfRmkxNnp6R0F3dV90ejhPN3lDcy1PeHpaZDF4SHg5T2JxVS1lVThFZklRQmVkMGdUak1ULWdmSzdBTmtzNTl1c3J2UEk2ZGRJNVY5dG1USUt5aE5LSHkwekF0d3pIUUR6YUxEcm9sb2RuM0RJLXBOaVoyUGNoSU91eHpDdUhvRmc?oc=5" target="_blank" rel="noopener">パランティア・テクノロジーズ（PLTR）の株価は、AI関連の取引を経て割高になっているのか？ - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiigFBVV95cUxOb0p1YlJ0TUZMLWJzX2kwUGVjTk5xN0ZpbkNHWHJSSF9DT09QWkNmM05jNVh2eS1IbmZYcWJOd0RxZ3BTRHNiVlBFQWRPMDhqeVpHRTIyMmRHUE9FMHhrdG4yM2RBOEFwTjNidzJldW80MnF5elhtbW13YktrWldYdVdVX2RiWDdXTnc?oc=5" target="_blank" rel="noopener">パランティア（PLTR）──「AI時代のOS」か、高すぎる幻想か？ 驚異の成長が試す投資家の正気 - Business Insider Japan</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5sb1FrbWJJTGNIcmtpUUp4NlBxQmlEVkVKQXdwMU00MjM5cDNYdTNHNHQ3Zzk0QVVjTnlyLUhRa3ptb0g2eUhHQVZkTHAxdlBxZ3NRWlkteXlqd2N0THZQM2RFNk9CSjJqV0VzRmtsUHN6RWpT?oc=5" target="_blank" rel="noopener">パランティア、決算控え急落から反転——AI関連銘柄に押し目買い殺到 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE1VU1IwdzVQSS1IU3ZxVEhNSjVNUFhPVEVqWEJQWksySFgtS0ZkOFV0c2Q2YWF3dU56ZFd6ekktbURBUGZLbVoybmNJZnJ6dTVEaWN3QlZNb2RjdEJMLXUyekppZ0FNMUl5RTF2NzAwbmE?oc=5" target="_blank" rel="noopener">Palantirの株価が52週安値122.66ドルを記録 執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#9</span><br>
+          <span class="name">MicroStrategy (Strategy)</span>
+          <span class="symbol">MSTR</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">暗号資産（ビットコイン保有）</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +1.25%</span>
+        <span><span class="label">1週間</span>▲ +5.25%</span>
+        <span><span class="label">1ヶ月</span>▼ -20.30%</span>
+      </div>
+      
+
+      <p class="reasoning">ビットコイン価格との連動性が極めて高く、足元では暗号資産市場の反発を受けて株価が支えられています。しかし、米国の金融政策の不透明感や地政学リスクに伴う市場全体のボラティリティ増大が懸念されるため、積極的な売買は慎重に判断すべき局面です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>ビットコイン保有量に裏打ちされた高いレバレッジ効果</li>
+        
+        <li>米利上げ観測の後退による投資家心理の改善</li>
+        
+        <li>ホルムズ海峡の地政学リスク等によるマクロ環境の不確実性</li>
+        
+        <li>短期的な株価上昇後のテクニカル的な調整圧力</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> ビットコイン価格の急落が株価に直接的な下落圧力として働くリスク。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE9od3pqNW1GZXphS19qelYzOGEtb3lsQl81N2tHakt4ZlBLWG9STm5hUmdGSVVoRmIya3RlYnVLNWc1X05Ea0ZnYnljWi0?oc=5" target="_blank" rel="noopener">ストラテジー（マイクロストラテジー）とは？ビットコイン大量保有で注目される理由と株価が動く仕組み - coincheck.com</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTE9KZjF2LU5ySDVaY3hEWHBkelBSQ3pQTUpzV3hsVGRpNXhxTE81bkNhVC0wbFRaV0x1cXV0dm5mWkVHNnB3NnZtTzY5YS1laUl0clNJTkM3YzFvLWhXSkNkdTA1MnlyNnNqd0JVM29COFhQVWh0bGNoZ014b2c?oc=5" target="_blank" rel="noopener">ストラテジー株、2026年7月の見通し - BeInCrypto</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxOcUxqN1VnNUwtZHQxTjNFSzg0QUVYaTJUd1lCcVBpN0xuYmloZ0ZlUk9fLWxiZ2ZySV9iMHgtazRPcktYeXdlYTE3YmxKVW9mMU1RY1FZWFZXaGhScmZaZUlFVHpHc1c5WWdyOU55bTMwUmF3T2VRNjJXT1VhY2IwUVNvRTVieGtzNG91T1dXS0VRVENBZk1VdThCcnNncE85TnoyQ29oaWNJcGJ2N1hOOW5n?oc=5" target="_blank" rel="noopener">マイケル・サヤラーがBitcoin戦略を擁護し、MSTR株がPre-Marketで4%上昇 - KuCoin</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMi5gFBVV95cUxQQjczaFV2eFhwaU9xc0xnZUYyM0h4THNlYWpkaURialZVNjJsMi1BWGhVRG81RVc0NEUyc1J6cExTSXFzX3BkUG5vT2hXZ1VadnFScHp0ZXZudnFfdDhGSXNzLXA2US16ajhCakpVNzNRZHN6cUJFaEdDSTd0MDlKRVAxWF8tZ0JPZVJYMHo2SGthY01fYWNlNWNTVW0xa01veEJ5eEI0MWM5S1FZYWlFWHlfQURNTHV2RzMwQWFUUDd6dndzV3R4U0d6bDUySlY4X0NMd3o5TjhRTE45WXpYamtOTjA2Zw?oc=5" target="_blank" rel="noopener">MSTR株価予測 2026-2030：マイクロストラテジーは究極のビットコイン・レバレッジ銘柄か？ - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE50c0JZSlo0dFBTRWVGejltYy1WTmZUaDNGT0l3TlROOHBMeVNyNTZVTFFJTElxQ05EMUxUb2hxd1BObkxTd25ySUtvZnpnZ0ctQzFlVWgwSkJBWTVnZmhn?oc=5" target="_blank" rel="noopener">【マイクロストラテジー株急騰】ビットコインの反発で保有資産が含み益に転換 - BigGo ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#10</span><br>
+          <span class="name">HEROZ</span>
+          <span class="symbol">4382.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">AI（国内小型成長株）</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +2.17%</span>
+        <span><span class="label">1週間</span>▼ -1.67%</span>
+        <span><span class="label">1ヶ月</span>▼ -10.28%</span>
+      </div>
+      
+
+      <p class="reasoning">直近の決算では大幅な増益を達成しており業績面での評価は高まる一方、株価は高値から大きく調整しておりテクニカル面では不透明感が残ります。世界的なAI需要への期待はあるものの、地政学リスクや金利政策の不確実性が小型成長株にとって逆風となり得るため、トレンドの転換を見極めるべき段階です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>営業利益の大幅増益と8期ぶりの最高益更新見通し</li>
+        
+        <li>中長期的なAI関連銘柄への資金流入期待</li>
+        
+        <li>高値から40%以上の下落による需給の悪化と調整局面</li>
+        
+        <li>不安定な世界情勢によるグロース株への資金の選別姿勢</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 成長性を重視する銘柄のため、金利上昇局面や地政学リスクの顕在化による市場全体の冷え込みが大きな下押し圧力となる可能性があります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE10Vmx6a212c1VsT0tJV1dCUnduc3pIZDBnM2ZsdENtTDNnaU5yM3l6YTc1TkltdU45bFBta3Y0VDdKQWRwdC11Vl95b01Val9LX3AwNDRSblFBdw?oc=5" target="_blank" rel="noopener">ＨＥＲＯＺ(株)【4382】：掲示板 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE5nVXZWb2NIbnBHVmNEQ0s5bGtZNFBXV0ZGQ0VYVnpGN05zMlVLbmljUFQ3ZFdMQjFkVXZNUVFxaXlGSUhwZ3NaS21rRkxVeHJpS1hOY2ZUVmVJTl9IdlplRQ?oc=5" target="_blank" rel="noopener">今朝の注目ニュース！ ★アピリッツ、ＨＥＲＯＺ、ｃｏｔｔａなどに注目！ - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE5Va3VWeXBob3BYV19DUjdOckhLelpXSEtQSVFqRnlfdWN3TUZPUFNZbXVoaWxIRnJPWXpKZW9LalZBRWtYbkZiMnFPLTVSOFNuOUE?oc=5" target="_blank" rel="noopener">HEROZ、営業利益は前年比+191.2％と約3倍 通期予想は子会社の業績を踏まえ下方修正も、増収増益計画を維持 - ログミーFinance</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE1OMDBWaElUa01WQnVrVzJ2REtlR3JhVW50OGJMYndLTTJLUW52X2pxTm9XMHFJV1ZjZU1ldTg2RUR5Q193UzZvTmVnWDhSWEpoZnpkU0lfS3JuLTVqRTBnZg?oc=5" target="_blank" rel="noopener">話題株先取り【寄り付き】（2）：ＦＥＡＳＹ、ＨＥＲＯＺ、ＡＣＣＥＳＳなど - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNVG5BbU55Z041REdyTGJfSTFPVk1lVHVfck5hVVZobkh3NEJKb293OEdwTWFYbExUeWN3Y29tcjM1RFN2OUlTR0tpVHF3NjNXRW40VWxxVE1oSThhUmYtUV9nTDdLbmZZaEY2aThYeDdfdl9oLWlvVGpwRG5rcWtjTmJmOFFKaWM?oc=5" target="_blank" rel="noopener">【決算速報】ＨＥＲＯＺ、今期経常は72％増で8期ぶり最高益更新へ(株探ニュース) - Yahoo!ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#11</span><br>
+          <span class="name">Advanced Micro Devices</span>
+          <span class="symbol">AMD</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">半導体・AI</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+10</div>
+        <div class="score-track"><div class="score-fill" style="width: 10%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -4.93%</span>
+        <span><span class="label">1週間</span>▲ +0.71%</span>
+        <span><span class="label">1ヶ月</span>▲ +1.86%</span>
+      </div>
+      
+
+      <p class="reasoning">AI需要による中長期的な成長期待は維持されているものの、直近の株価急騰に対する警戒感や、好材料が既に織り込まれているとのアナリスト分析が目立ちます。米金融政策の不透明感や地政学リスクによる市場のボラティリティ上昇も考慮し、決算発表等のイベントを見極めるべき局面です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>AIエージェント需要に伴うCPU再評価</li>
+        
+        <li>直近の株価急騰による割高感とアナリストの警戒姿勢</li>
+        
+        <li>米金融政策の先行き不透明感と市場ボラティリティ</li>
+        
+        <li>地政学リスクに伴うサプライチェーンへの懸念</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 決算発表において期待値を上回る成長やガイダンスが示されない場合、過熱感からの利益確定売りが強まるリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxOMjcyb1BVNFEtcnI3NW1IZmVEY1YtNzdOSU1sZ3M1dDhFSk9EQ0pjRU1ieXpDQWRpc2Yzb1ZQUGhKdkdXenhNSk5MVDV4YlRVdXVtb0dTOTJ3T2Zyc0xkN0FPMXFxajlOdl81aERZWnpQZlVrWk1qbHBTdXpfR1FrRHN6cnh4bjFfMnR6Q2RuSlVEdUM5NlF4NDluVUdHN2lud1JyZEZ4bVhqeUJHQmfSAa4BQVVfeXFMTjI3Mm9QVTRRLXJyNzVtSGZlRGNWLTc3TklNbGdzNXQ4RUpPRENKY0VNYnl6Q0FkaXNmM29WUFBoSnZHV3p4TUpOTFQ1eGJUVXV1bW9HUzkyd09mcnNMZDdBTzFxcWo5TnZfNWhEWVp6UGZVa1pNamxwU3V6X0dRa0RzenJ4eG4xXzJ0ekNkbkpVRHVDOTZReDQ5blVHRzdpbndScmRGeG1YanlCR0Jn?oc=5" target="_blank" rel="noopener">AMD（AMD）株、5年にわたる上昇が続く中、株価はすでに適正水準に達しているようだ - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE4xMk9GdDRUYXBrRWRVTThfNm91RGxNTGdnS3ZjMVBtbzhVcEhMQjZ0OEZLN2JLdTdralZ0SENQRTR2UW5JYkpQbUxBdExSck9PdmF2MVd5M3N3dHNfRXlxU0dMMTdYOThRcUt6clFyelV6ekd2?oc=5" target="_blank" rel="noopener">AMD、サーバー事業の強さで目標株価引き上げ相次ぐも、ハイテク株全面安の中で4.2%下落 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxOLVVhSExhcjNjclpmVEJPVW4taDRmcThXaVlFOF9FekptMUg1NWlxRS12aGJEZ2RsTDA2dWxuaVNzQjBKNmJ5NXBiM3I2ZVhFOXJXcW12ZFhRZmpjdFdSRC1ibldUTzF6blYwTGdVZW8yaU9vT1VjMS05N3BYVy04TmlDZXZsSXRkVGRtZWhB?oc=5" target="_blank" rel="noopener">7月14日のAdvanced Micro Devices Inc (AMD) 値動きは4.03%上昇：どのようなシグナルを示しているのか？ - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE1YUFk1bDV0U0p4c2F4WHJxUDhQczNSR3RmMjZuNU9MdndUWDdpUFk0TG1kMTE3ZUlEUDJRazdISmF0Vm10NUpHT3FyalczRDJjWk01cm5GMWVsWER2bHltXzM1QdIBaEFVX3lxTE93R0JQLVhjUkZXcmZtbjQwVTJ6Q1JkRk91SmFxRTdWT3BNX3pLeWxhcWdodWVOWmZMaEZqTTAwZDdoMVJlck5ITkl6dkJnNWxLSEpiT3JwY3JHNHZCWlNhczRFZjRET2VS?oc=5" target="_blank" rel="noopener">AMD株急騰にアナリストから警戒感、Zen 6発表とQ2決算を前に「好材料は織り込み済み」か - 財経新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5oY0htbmRnOF9PRUl6ZzJFaHpwN1ZacmdXeEpseGF3ZDJCZ1ZkRlJjaTdfemhVVVRBLXR0NGVsTk9RM0dNMGVTdkdmWU5KRVh6U0NtbkZTRmQyRElzN1FnNVIzQkhZaGdDbktENg?oc=5" target="_blank" rel="noopener">決算:米AMD、1カ月で株価9割急騰 AIエージェント需要でCPU再評価 - 日本経済新聞</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#12</span><br>
+          <span class="name">SoundHound AI</span>
+          <span class="symbol">SOUN</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">AI（小型成長株）</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">-10</div>
+        <div class="score-track"><div class="score-fill" style="width: 10%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -2.62%</span>
+        <span><span class="label">1週間</span>▼ -4.19%</span>
+        <span><span class="label">1ヶ月</span>▼ -5.58%</span>
+      </div>
+      
+
+      <p class="reasoning">高い成長性と強気な評価がある一方、ボラティリティの高さと割高感が指摘されており、慎重な姿勢が求められます。マクロ経済における金利動向の不透明さと地政学リスクの増大が、小型成長株である同社の株価に重石となる可能性があります。</p>
+
+      
+      <ul class="factors">
+        
+        <li>52週高値から大幅な下落による割安感と適正評価の議論</li>
+        
+        <li>高い売上成長を背景とした強気な見通しとアナリストの期待</li>
+        
+        <li>米金融政策の不透明感によるグロース株への逆風</li>
+        
+        <li>地政学リスク増大に伴う市場全体のボラティリティ上昇</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 成長期待が市場の評価を下回った場合や、金利引き下げ観測の後退により、一段の株価調整が発生するリスクがあります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxPVVIxNERMUzhmYkVMLXl1NUF6ajkxc2VtLXBMMVV5Mkl3LWdZNU5vTXRqQnBEUW1UWkNFZWV4YjJKSzNMQkVqYWJ0VVZDRHpWdmdTcGlSWi03cWxiWFlVdmpRTjFPRnU3T1pueUVkS0x5Z3lkbnlyOGtNTzI0Sy1vRjhVYklCZDF1R2NDYUNkUFplbGlRbFRMRFZ3c9IBmwFBVV95cUxPVVIxNERMUzhmYkVMLXl1NUF6ajkxc2VtLXBMMVV5Mkl3LWdZNU5vTXRqQnBEUW1UWkNFZWV4YjJKSzNMQkVqYWJ0VVZDRHpWdmdTcGlSWi03cWxiWFlVdmpRTjFPRnU3T1pueUVkS0x5Z3lkbnlyOGtNTzI0Sy1vRjhVYklCZDF1R2NDYUNkUFplbGlRbFRMRFZ3cw?oc=5" target="_blank" rel="noopener">SoundHound AI（SOUN）の株価は、過去3年間で91％上昇したにもかかわらず、適正価値を上回っているようだ - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBGLXpOLWZZMjlET2U5VGFJR0FvRkcwNGJUSGdyVEp5bks0YURBcS1QT0NCVnJOaDJVTnE2Y3FrcUtiRHRRaUN3cFp1YTRpbzVTMGxmTDNpME9sVGJKUTBR?oc=5" target="_blank" rel="noopener">【米国株】サウンドハウンドAIに60％の強気見通し、C3.aiはウォール街で売り優勢 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxNNWhLeEk2SGxlUE0xR3J1LWZlYnlCdGVITGY4d21CdFJlNkFSa1JrcmRuVi1nalBzRC1JZGVCbnJPbFQ4c3dhNU1pQUlVVmVLb18wN3BheW1IYTF4cUJaS180VDlSenRRNGNBNXI3QWdSUENaTHBXZ0dQRkVwV2dubGMwVzlzNVBRa1h5X2RzbERmejBIUlA3SXVmVjk2MnVGME5naUVzcTEwcVMxd3c?oc=5" target="_blank" rel="noopener">SoundHound分析：見過ごされているこのAI銘柄は、2026年の意外な勝者となるか？ - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxONm4ycWZUQXJaZi1URU1tUFZDdUVES2lqbFJhOGktVk8zdk5DZVNsZjVKR1NpOWlhbVZWWnhJeW41WGMtb2dZbW5EQnh4ZzVPQW8zZWRFWTY3NzVVbm5zaDdsenhYaDVPenowUUZPMkZYOVpCcjcyMUNEVHU2bkM3RnhaZGl3Nk5rYTVPaFJHamVCTVRTcE1SWA?oc=5" target="_blank" rel="noopener">SoundHound Stock Fell 69% From Its High Despite 52% Revenue Growth - TIKR.com</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxNVF9PR3VhVDhPQ3QwT2lxdEVZXzZVZ2hQbjdjcUNlLXNPWHRackFxUVpNa1ZOSTlHblh5UW02aURoa1hxbEhVNWxtd0NGMjNwYkZBQmRtQ1JLVlRDWHQ1N3dXTzhSTjdTdHhoWjZFZ3NuVExkU3hYM1YtbU9FWl9aVGlEeWd3aVduZVJ3UzB0VlJoZDZJUGI0cEp5N3VQSEZfc0lYMGc5OC1SbDZvNFVR?oc=5" target="_blank" rel="noopener">ボラティリティが高いにもかかわらず、ウォール街が依然として$SOUN を好意的に見る理由 - Moomoo</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning">
+      <div class="card-head">
+        <div>
+          <span class="rank">#13</span><br>
+          <span class="name">Coinbase Global</span>
+          <span class="symbol">COIN</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">暗号資産</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">-20</div>
+        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +2.64%</span>
+        <span><span class="label">1週間</span>▲ +4.02%</span>
+        <span><span class="label">1ヶ月</span>▲ +3.75%</span>
+      </div>
+      
+
+      <p class="reasoning">株価は直近で反発しているものの、高値からの乖離が大きく業績面での割高感が指摘されています。また、米金融政策の先行き不透明感や地政学リスクを背景とした市場全体のボラティリティ増加が、暗号資産関連銘柄である同社の重石となる可能性があります。</p>
+
+      
+      <ul class="factors">
+        
+        <li>機関投資家による継続的な買い需要</li>
+        
+        <li>目標株価の引き下げと業績面の割高感</li>
+        
+        <li>米金融政策および地政学リスクに伴う相場の不確実性</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 暗号資産市場全体の規制動向や、米金利動向による流動性の変化が株価に急激な影響を及ぼす可能性があります。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxONWpwa0xJbXRQWWxWTVQ1SjFkZWFlNW9hVVJsN1EtdlR6NVlBcXJVV2FXMWxaRnplNzJqbVpNTHdNUXQwbkNRTFFublllcEVmOUxIWFAzV0tkT1BkSGl0TmQ4eFlGN0JuWDNUVXJ3SlluajJRZ3hRTjVQQ0h3V3VWVnIyazh6bGlDMWZaYk1pMmhKVzEtUXlVWWk2ajY0NGhnd01Kd1hZS2diRE3SAbABQVVfeXFMTXBNR1E3MjhxcmRDM0tDaDNCbWpYZnNWLWQ0QmVKdkpWcW5PZmQxNHBnSEpBZEhBcUtxRlZPRnhURjhNVG5vbmV4Uk5QT2p6Qy13NVRtTVNkeGwxYWprdllWc1p0NzhQdXUtTWlReVhNLUEyVEZROGZjSGQxb0h6TWtaNzRMM1pYTWhBY2ExeXdZWnVOLU51eVZ1RG44SXpicGN1TUNLTnhBMjdlWDFpSGM?oc=5" target="_blank" rel="noopener">コインベース（COIN）の株価は60％下落したことで割安に見えるが、業績面では割高だ - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxOZ1cyakN5TEJTVEFMTUx3OVoyR2FmTXFiMGdMVExuazJrb0NnZ3BrdzN4c0E2bWY0Qklza3VKTkpiQ1dJMVdwZGtaLXlrN1pXMWY1ZFk2bFRnLVVfY2VuRi1zTXNSdWtSTm9DdHJkU2dPRnBMdmF3SC0xZDV4cVBpUk9GRnBURV9zWDZOMmptM2JVdUlzX0lRTFVUSkpTUjNIT09YOUkzZGs?oc=5" target="_blank" rel="noopener">シティグループ証券は、コインベース・グローバル（Coinbase Global）の株価目標を355ドルから325ドルに引き下げました。 - Moomoo</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNeTFYQnZZcENHNlQ2RUYxMG5VcWNxeTNDX2dVTFgyaE9kaEZ3MDBCa25ZM1VqWWxaVmZkM3BoQnZja3ZwTm5CNGp5NHFDamhsZFljM0ZOeEJtTGN4MHVIM2VqMm4zODE5eVJLekZ5SnNHc183ZFpKWU1hN3QybTFyakE5SVVsYkRfb29IU1RpWW13d3lrcGlrMWozVW1NNmR0OUpPVE40ang?oc=5" target="_blank" rel="noopener">Coinbase Stock Trades Well Below Its 52-Week High. Analysts Aren’t Backing Off. - TIKR.com</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5mNDlGYVZxRDVqZ2NqN1I5MlNncFFHWG1sWEIzcnNwcWJMbzFYTE5nOGhkVGtJdE5jZ0xsUWo5RFZRZ1oyTGlLRTVsSkl0aFNJVVl0aDJzRk4zLUJqVE9zV1paS0ZULU90ZXcxcHpYNndqWGJR?oc=5" target="_blank" rel="noopener">Visa・BlackRock参画の「Open USD」登場でCircle株価8%急落 - BigGo ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5RWWdZZ3daVlNOVllKaldEcFZTTXVfSUwxUXVKMEZIbDNEc09oR3h6Zmk0ZUFmSVl1Z0xQU0tEdEZSNDhpbDZ0Zmx5bXBWRGw5a1h5a3RjZ1FTbEZBclpMVnhyNUgtRTJCaGMxVkx6TDVZM1VyYmdOYzJacWVpT3c?oc=5" target="_blank" rel="noopener">Ark Invest、コインベース株1840万ドル分を購入＝The Block（NADA NEWS） - Yahoo!ニュース</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+    
+  </section>
+
+  <footer>
+    このページはGitHub ActionsとGemini APIにより自動生成されています。個人利用目的の参考情報です。
+  </footer>
+
+</div>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var key = "invest-dashboard-theme";
+    var saved = localStorage.getItem(key);
+    if (saved) root.setAttribute("data-theme", saved);
+    document.getElementById("theme-toggle").addEventListener("click", function () {
+      var current = root.getAttribute("data-theme");
+      var next = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem(key, next);
+    });
+  })();
+</script>
+</body>
+</html>
