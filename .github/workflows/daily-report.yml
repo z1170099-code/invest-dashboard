@@ -28,6 +28,7 @@ jobs:
         working-directory: scripts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PYTHONUTF8: "1"
         run: python main.py
 
       - name: Commit and push if changed

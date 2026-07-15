@@ -26,7 +26,7 @@ def _fmt_pct(value) -> str:
     return f"{arrow} {value:+.2f}%"
 
 
-def _build_view_model(result: dict) -> dict:
+def _build_view_model(result: dict, group: str = "") -> dict:
     price_stats = result.get("price_stats") or {}
     status = _STATUS_MAP.get(result.get("recommendation"), _STATUS_MAP["分析失敗"])
     score = result.get("score")
@@ -37,6 +37,7 @@ def _build_view_model(result: dict) -> dict:
         "name": result["name"],
         "market": result.get("market", ""),
         "theme": result.get("theme", ""),
+        "group": group,
         "recommendation": result.get("recommendation", "分析失敗"),
         "status_key": status["key"],
         "status_icon": status["icon"],
@@ -69,6 +70,18 @@ def _sort_by_score(results: list[dict]) -> list[dict]:
     )
 
 
+def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
+    buy_list = sorted(
+        (t for t in combined if t["recommendation"] == "買い候補"),
+        key=lambda t: -(t["score"] or 0),
+    )
+    sell_list = sorted(
+        (t for t in combined if t["recommendation"] == "売り候補"),
+        key=lambda t: (t["score"] or 0),
+    )
+    return buy_list, sell_list
+
+
 def generate_report(
     watchlist_results: list[dict],
     candidate_results: list[dict],
@@ -76,8 +89,13 @@ def generate_report(
     templates_dir: Path,
     output_path: Path,
 ) -> None:
-    watchlist_view = [_build_view_model(r) for r in _sort_by_score(watchlist_results)]
-    candidate_view = [_build_view_model(r) for r in _sort_by_score(candidate_results)]
+    watchlist_view = [
+        _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
+    ]
+    candidate_view = [
+        _build_view_model(r, group="ハイリスク候補") for r in _sort_by_score(candidate_results)
+    ]
+    summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
 
     env = Environment(loader=FileSystemLoader(str(templates_dir)), autoescape=True)
     template = env.get_template("report.html.jinja")
@@ -88,6 +106,8 @@ def generate_report(
         tickers=watchlist_view,
         candidates=candidate_view,
         macro_news=macro_news,
+        summary_buy=summary_buy,
+        summary_sell=summary_sell,
         generated_at=generated_at,
     )
 

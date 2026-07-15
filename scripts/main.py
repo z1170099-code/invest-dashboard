@@ -1,6 +1,7 @@
 """エントリーポイント: ウォッチリスト読み込み→株価取得→ニュース取得→AI分析→レポート生成 を実行する。"""
 
 import logging
+import sys
 from pathlib import Path
 
 import yaml
@@ -10,6 +11,13 @@ from analyze import analyze_all
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import fetch_all_price_stats
 from generate_report import generate_report
+
+# GitHub Actions(Ubuntu)ではstdout/stderrがUTF-8でない場合があり、
+# 日本語やBOM付き文字列をログ出力しようとしてUnicodeEncodeErrorが発生し、
+# 本来のエラー原因が隠れてしまうことがあるため、明示的にUTF-8化する。
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)

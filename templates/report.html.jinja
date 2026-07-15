@@ -174,6 +174,69 @@
   }
   .risk-banner strong { color: var(--text-primary); }
 
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+  .summary-heading {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .summary-heading.buy { color: var(--status-good); }
+  .summary-heading.sell { color: var(--status-critical); }
+  .summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .summary-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--gridline);
+    font-size: 0.85rem;
+  }
+  .summary-list li:last-child .summary-link { border-bottom: none; }
+  .summary-link:hover { background: var(--page); }
+  .summary-score {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    width: 3em;
+    flex: none;
+  }
+  .summary-score.buy { color: var(--status-good); }
+  .summary-score.sell { color: var(--status-critical); }
+  .summary-name { font-weight: 600; }
+  .summary-symbol { color: var(--text-muted); font-size: 0.78rem; }
+  .summary-group {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    flex: none;
+  }
+  .summary-empty {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .summary-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 10px 0 0;
+  }
+
   .status-chip {
     display: inline-flex;
     align-items: center;
@@ -282,10 +345,55 @@
   </div>
 
   <section>
+    <h2>AIによる売買サマリー</h2>
+    <div class="summary-grid">
+      <div>
+        <h3 class="summary-heading buy">▲ 買い候補</h3>
+        {% if summary_buy %}
+        <ul class="summary-list">
+          {% for t in summary_buy %}
+          <li>
+            <a class="summary-link" href="#ticker-{{ t.symbol }}">
+              <span class="summary-score buy">{{ t.score_display }}</span>
+              <span class="summary-name">{{ t.name }}</span>
+              <span class="summary-symbol">{{ t.symbol }}</span>
+              <span class="summary-group">{{ t.group }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="summary-empty">本日は買い候補に該当する銘柄がありません。</p>
+        {% endif %}
+      </div>
+      <div>
+        <h3 class="summary-heading sell">▼ 売り候補</h3>
+        {% if summary_sell %}
+        <ul class="summary-list">
+          {% for t in summary_sell %}
+          <li>
+            <a class="summary-link" href="#ticker-{{ t.symbol }}">
+              <span class="summary-score sell">{{ t.score_display }}</span>
+              <span class="summary-name">{{ t.name }}</span>
+              <span class="summary-symbol">{{ t.symbol }}</span>
+              <span class="summary-group">{{ t.group }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="summary-empty">本日は売り候補に該当する銘柄がありません。</p>
+        {% endif %}
+      </div>
+    </div>
+    <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
+  </section>
+
+  <section>
     <h2>世界情勢・マクロ経済ニュース</h2>
     {% if macro_news %}
     <ul class="macro-list">
-      {% for article in macro_news %}
+      {% for article in macro_news[:5] %}
       <li>
         <a href="{{ article.link }}" target="_blank" rel="noopener">{{ article.title }}</a>
         <div class="macro-source">{{ article.source }}{% if article.published %} ・ {{ article.published }}{% endif %}</div>
@@ -298,7 +406,7 @@
   </section>
 
   {% macro ticker_card(t, rank) %}
-    <div class="card status-{{ t.status_key }}">
+    <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
       <div class="card-head">
         <div>
           <span class="rank">#{{ rank }}</span><br>
