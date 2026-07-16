@@ -20,4 +20,9 @@
 #     purchase_date: "2026-04-10"
 #     purchase_price: 2950
 
-holdings: []
+holdings:
+  - symbol: "NVDA"
+    name: "NVIDIA"
+    market: "US"
+    purchase_date: "2026-07-16"
+    purchase_price: 206.92  # 単元未満株を7,000円分購入。当日終値をUSD換算の取得単価として使用
