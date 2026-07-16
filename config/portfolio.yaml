@@ -32,3 +32,21 @@ holdings:
     market: "JP"
     purchase_date: "2026-07-16"
     purchase_price: 3828  # 単元未満株を5,000円分購入。7/16は海の日で休場のため7/15終値を取得単価として使用
+
+  - symbol: "4063.T"
+    name: "信越化学工業"
+    market: "JP"
+    purchase_date: "2026-06-26"
+    purchase_price: 6835  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
+
+  - symbol: "7974.T"
+    name: "任天堂"
+    market: "JP"
+    purchase_date: "2026-06-10"
+    purchase_price: 7215  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
+
+  - symbol: "7735.T"
+    name: "SCREENホールディングス"
+    market: "JP"
+    purchase_date: "2025-07-30"
+    purchase_price: 5678.82  # 単元未満株を1,000円分購入。当日終値を取得単価として使用
