@@ -237,6 +237,46 @@
     margin: 10px 0 0;
   }
 
+  .portfolio-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .portfolio-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: var(--surface-1);
+    white-space: nowrap;
+  }
+  .portfolio-table th, .portfolio-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--gridline);
+  }
+  .portfolio-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+  .portfolio-table tbody tr:last-child td { border-bottom: none; }
+  .portfolio-table td.num, .portfolio-table th.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .portfolio-row-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .portfolio-row-link:hover { text-decoration: underline; }
+  .gain-up { color: var(--status-good); }
+  .gain-down { color: var(--status-critical); }
+  .status-good-text { color: var(--status-good); font-weight: 600; }
+  .status-critical-text { color: var(--status-critical); font-weight: 600; }
+  .status-muted-text { color: var(--text-muted); font-weight: 600; }
+
   .status-chip {
     display: inline-flex;
     align-items: center;
@@ -390,7 +430,7 @@
   </section>
 
   {% macro holding_card(h) %}
-    <div class="card status-{{ h.status_key }}">
+    <div class="card status-{{ h.status_key }}" id="holding-{{ h.symbol }}-{{ h.purchase_date }}">
       <div class="card-head">
         <div>
           <span class="name">{{ h.name }}</span>
@@ -446,6 +486,41 @@
   <section>
     <h2>保有銘柄の売却タイミング</h2>
     {% if holdings %}
+    <div class="portfolio-table-wrap">
+      <table class="portfolio-table">
+        <thead>
+          <tr>
+            <th>銘柄</th>
+            <th>購入日</th>
+            <th class="num">購入価格</th>
+            <th class="num">現在値</th>
+            <th class="num">含み損益</th>
+            <th class="num">保有日数</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for h in holdings %}
+          <tr>
+            <td>
+              <a class="portfolio-row-link" href="#holding-{{ h.symbol }}-{{ h.purchase_date }}">
+                {{ h.name }} <span class="summary-symbol">{{ h.symbol }}</span>
+              </a>
+            </td>
+            <td>{{ h.purchase_date or "—" }}</td>
+            <td class="num">{{ h.purchase_price if h.purchase_price is not none else "—" }}</td>
+            <td class="num">{{ h.latest_close if h.latest_close is not none else "—" }}</td>
+            <td class="num gain-{{ 'up' if (h.gain_loss_pct or 0) > 0 else ('down' if (h.gain_loss_pct or 0) < 0 else '') }}">{{ h.gain_loss_display }}</td>
+            <td class="num">{{ h.holding_days if h.holding_days is not none else "—" }}日</td>
+            <td>
+              <span class="status-{{ h.status_key }}-text">{{ h.status_icon }} {{ h.recommendation }}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
     {% for h in holdings %}
       {{ holding_card(h) }}
     {% endfor %}
