@@ -50,3 +50,27 @@ holdings:
     market: "JP"
     purchase_date: "2025-07-30"
     purchase_price: 5678.82  # 単元未満株を1,000円分購入。当日終値を取得単価として使用
+
+  - symbol: "285A.T"
+    name: "キオクシア"
+    market: "JP"
+    purchase_date: "2026-06-05"
+    purchase_price: 78140  # 単元未満株を3,000円分購入。当日終値を取得単価として使用
+
+  - symbol: "AMD"
+    name: "AMD (Advanced Micro Devices)"
+    market: "US"
+    purchase_date: "2026-06-26"
+    purchase_price: 521.58  # 単元未満株を2,500円分購入。当日終値をUSD換算の取得単価として使用
+
+  - symbol: "6857.T"
+    name: "アドバンテスト"
+    market: "JP"
+    purchase_date: "2026-06-26"
+    purchase_price: 32440  # 単元未満株を2,500円分購入。当日終値を取得単価として使用
+
+  - symbol: "ADS.DE"
+    name: "adidas"
+    market: "DE"
+    purchase_date: "2026-03-19"
+    purchase_price: 130.80  # PayPay証券アプリで購入。単元未満株を1,000円分購入。当日終値をEUR換算の取得単価として使用
