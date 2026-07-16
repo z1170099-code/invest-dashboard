@@ -1,0 +1,23 @@
+# ここには「実際に自分が購入した銘柄」を登録してください。
+# watchlist.yaml（気になる銘柄）や candidate_pool.yaml（ハイリスク候補）とは違い、
+# ここに登録した銘柄は「もう買った後、いつ売るか」をAIが判断する専用リストです。
+#
+# 各項目の意味:
+#   symbol: ティッカーコード（watchlist.yamlと同じ表記）
+#   name: 表示名
+#   market: "JP" / "US" / "ETF" など（自由記述）
+#   purchase_date: 購入日（"YYYY-MM-DD"形式）
+#   purchase_price: 購入時の価格（1株あたり。円や米ドルなど、銘柄の通貨単位で入力）
+#
+# 同じ銘柄を複数回に分けて買った場合（ナンピン等）は、購入ごとに別の項目として
+# 登録してください（symbolが重複してもOKです）。
+#
+# 例（実際に使う際はコメントを外して自分の情報に書き換えてください）:
+# holdings:
+#   - symbol: "7203.T"
+#     name: "トヨタ自動車"
+#     market: "JP"
+#     purchase_date: "2026-04-10"
+#     purchase_price: 2950
+
+holdings: []

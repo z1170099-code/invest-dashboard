@@ -389,6 +389,73 @@
     <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
   </section>
 
+  {% macro holding_card(h) %}
+    <div class="card status-{{ h.status_key }}">
+      <div class="card-head">
+        <div>
+          <span class="name">{{ h.name }}</span>
+          <span class="symbol">{{ h.symbol }}</span>
+          {% if h.market %}<span class="market-tag">{{ h.market }}</span>{% endif %}
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          {{ h.status_icon }} {{ h.recommendation }}
+        </div>
+      </div>
+
+      <div class="price-row">
+        <span><span class="label">購入日</span>{{ h.purchase_date or "—" }}</span>
+        <span><span class="label">購入価格</span>{{ h.purchase_price if h.purchase_price is not none else "—" }}</span>
+        <span><span class="label">現在値</span>{{ h.latest_close if h.latest_close is not none else "—" }}</span>
+        <span><span class="label">保有日数</span>{{ h.holding_days if h.holding_days is not none else "—" }}日</span>
+      </div>
+      <div class="price-row">
+        <span><span class="label">含み損益</span><strong>{{ h.gain_loss_display }}</strong></span>
+        <span><span class="label">前日比</span>{{ h.change_1d }}</span>
+        <span><span class="label">1週間</span>{{ h.change_1w }}</span>
+        <span><span class="label">1ヶ月</span>{{ h.change_1m }}</span>
+      </div>
+
+      <p class="reasoning">{{ h.reasoning }}</p>
+
+      {% if h.key_factors %}
+      <ul class="factors">
+        {% for factor in h.key_factors %}
+        <li>{{ factor }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if h.risks %}
+      <p class="risks"><span class="label">留意点:</span> {{ h.risks }}</p>
+      {% endif %}
+
+      {% if h.news %}
+      <details class="news-detail">
+        <summary>関連ニュース（{{ h.news|length }}件）</summary>
+        <ul>
+          {% for article in h.news %}
+          <li><a href="{{ article.link }}" target="_blank" rel="noopener">{{ article.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+    </div>
+  {% endmacro %}
+
+  <section>
+    <h2>保有銘柄の売却タイミング</h2>
+    {% if holdings %}
+    {% for h in holdings %}
+      {{ holding_card(h) }}
+    {% endfor %}
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      まだ保有銘柄が登録されていません。<code>config/portfolio.yaml</code> に購入した銘柄・購入日・購入価格を登録すると、ここに売却タイミングの判断が表示されます。
+    </p>
+    {% endif %}
+  </section>
+
   <section>
     <h2>世界情勢・マクロ経済ニュース</h2>
     {% if macro_news %}

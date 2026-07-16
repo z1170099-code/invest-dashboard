@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from analyze import analyze_all
+from analyze import analyze_all, analyze_all_holdings
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import fetch_all_price_stats
 from generate_report import generate_report
@@ -38,6 +38,7 @@ def _analyze_group(
     tickers: list[dict],
     max_per_ticker: int,
     macro_news: list[dict],
+    analyze_fn=analyze_all,
 ) -> list[dict]:
     if not tickers:
         return []
@@ -53,7 +54,7 @@ def _analyze_group(
     }
 
     logger.info("[%s] Gemini APIで分析中...", label)
-    return analyze_all(tickers, price_stats_by_symbol, news_by_symbol, macro_news)
+    return analyze_fn(tickers, price_stats_by_symbol, news_by_symbol, macro_news)
 
 
 def main() -> None:
@@ -61,10 +62,12 @@ def main() -> None:
 
     watchlist = _load_yaml(_CONFIG_DIR / "watchlist.yaml")
     candidate_pool = _load_yaml(_CONFIG_DIR / "candidate_pool.yaml")
+    portfolio = _load_yaml(_CONFIG_DIR / "portfolio.yaml")
     news_config = _load_yaml(_CONFIG_DIR / "news_sources.yaml")
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
+    holdings = portfolio.get("holdings", []) if portfolio else []
 
     if not tickers:
         raise RuntimeError("config/watchlist.yaml に銘柄が1件も登録されていません。")
@@ -79,11 +82,15 @@ def main() -> None:
 
     watchlist_results = _analyze_group("ウォッチリスト", tickers, max_per_ticker, macro_news)
     candidate_results = _analyze_group("ハイリスク候補", candidates, max_per_ticker, macro_news)
+    portfolio_results = _analyze_group(
+        "保有銘柄", holdings, max_per_ticker, macro_news, analyze_fn=analyze_all_holdings
+    )
 
     logger.info("レポートを生成中...")
     generate_report(
         watchlist_results,
         candidate_results,
+        portfolio_results,
         macro_news,
         _TEMPLATES_DIR,
         _OUTPUT_PATH,
