@@ -69,8 +69,8 @@ holdings:
     purchase_date: "2026-06-26"
     purchase_price: 32440  # 単元未満株を2,500円分購入。当日終値を取得単価として使用
 
-  - symbol: "ADS.DE"
-    name: "adidas"
-    market: "DE"
+  - symbol: "PAYP"
+    name: "PayPay Corporation"
+    market: "US"
     purchase_date: "2026-03-19"
-    purchase_price: 130.80  # PayPay証券アプリで購入。単元未満株を1,000円分購入。当日終値をEUR換算の取得単価として使用
+    purchase_price: 20.45  # PayPay証券アプリで購入したPayPayのADS(米国預託証券)。単元未満株を1,000円分購入。当日終値をUSD換算の取得単価として使用
