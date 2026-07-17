@@ -39,12 +39,6 @@ holdings:
     purchase_date: "2026-06-26"
     purchase_price: 6835  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
 
-  - symbol: "7974.T"
-    name: "任天堂"
-    market: "JP"
-    purchase_date: "2026-06-10"
-    purchase_price: 7215  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
-
   - symbol: "285A.T"
     name: "キオクシア"
     market: "JP"
