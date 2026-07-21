@@ -121,9 +121,14 @@ GitHub Actions（自動実行の仕組み）がAPIキーを使えるようにし
 3. `Run workflow` から手動実行してみる
 4. 数分後、`docs/index.html` が自動更新され、GitHub Pagesにも反映されることを確認する
 
-普段は平日朝（JST 7時頃）に自動実行されます。時間を変更したい場合は
+普段は毎日朝9:30（JST）に自動実行されます。時間を変更したい場合は
 `.github/workflows/daily-report.yml` 内の `cron` の値を編集してください
 （UTC時刻で指定する点に注意）。
+
+**注意:** GitHub Actionsの `schedule` は「指定した時刻ちょうどに必ず実行される」もの
+ではなく、GitHub全体の混雑状況によって数分〜数時間遅れることがあります
+（GitHub公式のドキュメントにも明記されている既知の仕様です）。決まった時刻に
+確実に更新したい場合は、後述の「決まった時刻に確実に更新したい場合」を参照してください。
 
 ---
 
@@ -178,6 +183,63 @@ holdings:
   設定していますが、正式な対象可否は必ず証券会社側で確認してください
 - レポート上では「注目テーマ銘柄（ハイリスク候補）」という別セクションに、通常の
   銘柄ランキングとは明確に分けて表示され、専用の注意書きが常に添えられます
+
+---
+
+## 決まった時刻に確実に更新したい場合（外部cronサービスとの連携）
+
+GitHub Actionsの `schedule` は遅延することがあるため、「毎朝9:30ちょうどに必ず
+更新してほしい」場合は、無料の外部cronサービス（[cron-job.org](https://cron-job.org)）
+からGitHubに「今すぐ実行して」と直接命令を送る方法があります。GitHub側の
+混雑状況に左右されず、指定時刻ぴったりに実行されます。
+
+**この設定にはあなた自身のGitHubアカウントで発行するトークンを使うため、
+以下の手順はご自身で行ってください（私が代行することはできません）。**
+
+### 1. GitHubで、このリポジトリ専用のアクセストークンを発行する
+
+1. GitHubの [Fine-grained personal access tokens](https://github.com/settings/personal-access-tokens/new) のページを開く
+2. `Token name` に分かりやすい名前（例: `invest-dashboard-cron`）を入力
+3. `Expiration` は任意の期限（90日など。切れたら作り直せばOK）
+4. `Repository access` で `Only select repositories` を選び、このリポジトリ
+   （`invest-dashboard`）だけを選択する
+5. `Permissions` → `Repository permissions` → `Actions` を `Read and write` に設定
+6. `Generate token` をクリックし、表示されたトークン（`github_pat_...` で始まる文字列）を
+   **その場でコピーして控えておく**（後から二度と表示されません）
+
+### 2. cron-job.orgに登録する
+
+1. [cron-job.org](https://cron-job.org) で無料アカウントを作成する
+2. ログイン後、`CREATEJOB` から新しいジョブを作成する
+3. 以下の内容を設定する：
+
+   | 項目 | 値 |
+   |---|---|
+   | Title | `invest-dashboard daily trigger` |
+   | Address (URL) | `https://api.github.com/repos/z1170099-code/invest-dashboard/actions/workflows/daily-report.yml/dispatches` |
+   | Request method | `POST` |
+   | Schedule | 毎日 9:30（タイムゾーンをAsia/Tokyoに設定できる場合はそれを選択。UTCしか選べない場合は0:30 UTCを指定） |
+
+4. `Advanced` タブ（または `Headers` / `Body` 設定欄）で以下を追加：
+
+   **Headers:**
+   ```
+   Authorization: Bearer <手順1でコピーしたトークン>
+   Accept: application/vnd.github+json
+   Content-Type: application/json
+   ```
+
+   **Body (JSON):**
+   ```json
+   {"ref":"main"}
+   ```
+
+5. 保存し、`Test run`（テスト実行）ボタンがあれば一度試してみる
+6. GitHubリポジトリの `Actions` タブで、`Daily Investment Report` が実行されていれば成功
+
+既存の `schedule`（GitHub側のcron設定）はそのまま残しておいて問題ありません。
+仮に両方が近い時間に実行されても、変更がなければ自動コミットは発生しない
+（`git diff --cached --quiet` でスキップされる）ため、二重更新の心配はありません。
 
 ---
 
