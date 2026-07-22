@@ -74,3 +74,9 @@ holdings:
     market: "JP"
     purchase_date: "2026-07-21"
     purchase_price: 3580  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
+
+  - symbol: "AAPL"
+    name: "Apple"
+    market: "US"
+    purchase_date: "2026-07-22"
+    purchase_price: 327.74  # 単元未満株を2,000円分購入。購入日時点で7/22の米国市場終値が未確定のため、直近の確定終値（7/21終値）を仮の取得単価として使用。実際の約定価格が分かり次第、要修正
