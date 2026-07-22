@@ -62,3 +62,15 @@ holdings:
     market: "US"
     purchase_date: "2026-03-19"
     purchase_price: 20.45  # PayPay証券アプリで購入したPayPayのADS(米国預託証券)。単元未満株を1,000円分購入。当日終値をUSD換算の取得単価として使用
+
+  - symbol: "XOM"
+    name: "Exxon Mobil"
+    market: "US"
+    purchase_date: "2026-07-21"
+    purchase_price: 151.71  # 単元未満株を5,000円分購入。当日終値をUSD換算の取得単価として使用
+
+  - symbol: "1605.T"
+    name: "INPEX"
+    market: "JP"
+    purchase_date: "2026-07-21"
+    purchase_price: 3580  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
