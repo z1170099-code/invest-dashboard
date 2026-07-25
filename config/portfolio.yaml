@@ -45,12 +45,6 @@ holdings:
     purchase_date: "2026-06-05"
     purchase_price: 78140  # 単元未満株を3,000円分購入。当日終値を取得単価として使用
 
-  - symbol: "AMD"
-    name: "AMD (Advanced Micro Devices)"
-    market: "US"
-    purchase_date: "2026-06-26"
-    purchase_price: 521.58  # 単元未満株を2,500円分購入。当日終値をUSD換算の取得単価として使用
-
   - symbol: "6857.T"
     name: "アドバンテスト"
     market: "JP"
@@ -80,3 +74,15 @@ holdings:
     market: "US"
     purchase_date: "2026-07-22"
     purchase_price: 327.74  # 単元未満株を2,000円分購入。購入日時点で7/22の米国市場終値が未確定のため、直近の確定終値（7/21終値）を仮の取得単価として使用。実際の約定価格が分かり次第、要修正
+
+  - symbol: "AAPL"
+    name: "Apple"
+    market: "US"
+    purchase_date: "2026-07-25"
+    purchase_price: 333.02  # 単元未満株を3,000円分追加購入。直近の確定終値（7/24終値）を取得単価として使用
+
+  - symbol: "LMT"
+    name: "Lockheed Martin"
+    market: "US"
+    purchase_date: "2026-07-25"
+    purchase_price: 582.60  # 単元未満株を5,000円分購入。直近の確定終値（7/24終値）を取得単価として使用
