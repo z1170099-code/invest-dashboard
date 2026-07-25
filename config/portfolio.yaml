@@ -84,5 +84,5 @@ holdings:
   - symbol: "LMT"
     name: "Lockheed Martin"
     market: "US"
-    purchase_date: "2026-07-25"
-    purchase_price: 582.60  # 単元未満株を5,000円分購入。直近の確定終値（7/24終値）を取得単価として使用
+    purchase_date: "2026-07-24"
+    purchase_price: 582.60  # 単元未満株を10,000円分購入。当日(7/24)終値を取得単価として使用
