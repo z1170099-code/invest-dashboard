@@ -331,6 +331,14 @@
   .reasoning { font-size: 0.92rem; margin: 8px 0; }
   .risks { font-size: 0.85rem; color: var(--text-secondary); }
   .risks .label { color: var(--text-muted); }
+  .reflection {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    border-left: 2px solid var(--border);
+    padding-left: 8px;
+    margin: 8px 0;
+  }
 
   .factors {
     list-style: none;
@@ -470,6 +478,10 @@
       <p class="risks"><span class="label">留意点:</span> {{ h.risks }}</p>
       {% endif %}
 
+      {% if h.reflection %}
+      <p class="reflection">🔁 前回からの振り返り: {{ h.reflection }}</p>
+      {% endif %}
+
       {% if h.news %}
       <details class="news-detail">
         <summary>関連ニュース（{{ h.news|length }}件）</summary>
@@ -589,6 +601,10 @@
 
       {% if t.risks %}
       <p class="risks"><span class="label">留意点:</span> {{ t.risks }}</p>
+      {% endif %}
+
+      {% if t.reflection %}
+      <p class="reflection">🔁 前回からの振り返り: {{ t.reflection }}</p>
       {% endif %}
 
       {% if t.news %}

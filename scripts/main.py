@@ -11,6 +11,7 @@ from analyze import analyze_all, analyze_all_holdings
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import fetch_all_price_stats
 from generate_report import generate_report
+from history import apply_group_results, load_history, save_history
 
 # GitHub Actions(Ubuntu)ではstdout/stderrがUTF-8でない場合があり、
 # 日本語やBOM付き文字列をログ出力しようとしてUnicodeEncodeErrorが発生し、
@@ -26,6 +27,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 _CONFIG_DIR = _ROOT / "config"
 _TEMPLATES_DIR = _ROOT / "templates"
 _OUTPUT_PATH = _ROOT / "docs" / "index.html"
+_HISTORY_PATH = _ROOT / "data" / "analysis_history.json"
 
 
 def _load_yaml(path: Path) -> dict:
@@ -38,6 +40,8 @@ def _analyze_group(
     tickers: list[dict],
     max_per_ticker: int,
     macro_news: list[dict],
+    history: dict,
+    group: str,
     analyze_fn=analyze_all,
 ) -> list[dict]:
     if not tickers:
@@ -54,7 +58,9 @@ def _analyze_group(
     }
 
     logger.info("[%s] Gemini APIで分析中...", label)
-    return analyze_fn(tickers, price_stats_by_symbol, news_by_symbol, macro_news)
+    return analyze_fn(
+        tickers, price_stats_by_symbol, news_by_symbol, macro_news, history=history, group=group
+    )
 
 
 def main() -> None:
@@ -74,16 +80,28 @@ def main() -> None:
 
     max_per_ticker = news_config.get("max_articles_per_ticker", 5)
 
+    history = load_history(_HISTORY_PATH)
+
     logger.info("マクロ経済ニュースを取得中...")
     macro_news = fetch_macro_news(
         news_config.get("macro_queries", []),
         news_config.get("max_articles_per_query", 3),
     )
 
-    watchlist_results = _analyze_group("ウォッチリスト", tickers, max_per_ticker, macro_news)
-    candidate_results = _analyze_group("ハイリスク候補", candidates, max_per_ticker, macro_news)
+    watchlist_results = _analyze_group(
+        "ウォッチリスト", tickers, max_per_ticker, macro_news, history, "watchlist"
+    )
+    candidate_results = _analyze_group(
+        "ハイリスク候補", candidates, max_per_ticker, macro_news, history, "candidate"
+    )
     portfolio_results = _analyze_group(
-        "保有銘柄", holdings, max_per_ticker, macro_news, analyze_fn=analyze_all_holdings
+        "保有銘柄",
+        holdings,
+        max_per_ticker,
+        macro_news,
+        history,
+        "holding",
+        analyze_fn=analyze_all_holdings,
     )
 
     logger.info("レポートを生成中...")
@@ -95,6 +113,14 @@ def main() -> None:
         _TEMPLATES_DIR,
         _OUTPUT_PATH,
     )
+
+    try:
+        apply_group_results(history, "watchlist", watchlist_results)
+        apply_group_results(history, "candidate", candidate_results)
+        apply_group_results(history, "holding", portfolio_results)
+        save_history(_HISTORY_PATH, history)
+    except Exception:
+        logger.exception("履歴の保存に失敗しましたが、レポートは正常に生成されています。")
 
     logger.info("完了しました: %s", _OUTPUT_PATH)
 
