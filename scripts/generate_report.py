@@ -118,6 +118,30 @@ def _sort_by_score(results: list[dict]) -> list[dict]:
     )
 
 
+def _build_theme_allocation(portfolio_results: list[dict]) -> tuple[list[dict], int]:
+    """保有銘柄をテーマ別に集計する。amount_invested_jpyが未入力の銘柄は集計から除外する。"""
+    totals: dict[str, float] = {}
+    excluded_count = 0
+    for r in portfolio_results:
+        amount = r.get("amount_invested_jpy")
+        if not isinstance(amount, (int, float)):
+            excluded_count += 1
+            continue
+        theme = r.get("theme") or "未分類"
+        totals[theme] = totals.get(theme, 0) + amount
+
+    grand_total = sum(totals.values())
+    if grand_total <= 0:
+        return [], excluded_count
+
+    allocation = [
+        {"theme": theme, "amount": amount, "pct": amount / grand_total * 100}
+        for theme, amount in totals.items()
+    ]
+    allocation.sort(key=lambda a: -a["amount"])
+    return allocation, excluded_count
+
+
 def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
     buy_list = sorted(
         (t for t in combined if t["recommendation"] == "買い候補"),
@@ -148,6 +172,7 @@ def generate_report(
         _build_holding_view_model(r) for r in _sort_holdings(portfolio_results)
     ]
     summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
+    theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
 
     env = Environment(loader=FileSystemLoader(str(templates_dir)), autoescape=True)
     template = env.get_template("report.html.jinja")
@@ -161,6 +186,8 @@ def generate_report(
         macro_news=macro_news,
         summary_buy=summary_buy,
         summary_sell=summary_sell,
+        theme_allocation=theme_allocation,
+        theme_allocation_excluded_count=theme_allocation_excluded_count,
         generated_at=generated_at,
     )
 

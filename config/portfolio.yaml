@@ -8,6 +8,12 @@
 #   market: "JP" / "US" / "ETF" など（自由記述）
 #   purchase_date: 購入日（"YYYY-MM-DD"形式）
 #   purchase_price: 購入時の価格（1株あたり。円や米ドルなど、銘柄の通貨単位で入力）
+#   theme: （任意）テーマ名の自由記述。candidate_pool.yamlと表記を揃えておくと、
+#     レポートの「テーマ別配分」で集計しやすくなります。未入力の場合は「未分類」として扱われます。
+#   amount_invested_jpy: （任意）その購入で実際に投資した円換算金額。単元未満株で
+#     「◯円分購入」のように買った場合は、その円金額をそのまま入力してください。
+#     入力しておくと、レポートに保有銘柄のテーマ別配分（何%がどのテーマに偏っているか）が
+#     表示されます。未入力の銘柄はテーマ別配分の集計から除外されます。
 #
 # 同じ銘柄を複数回に分けて買った場合（ナンピン等）は、購入ごとに別の項目として
 # 登録してください（symbolが重複してもOKです）。
@@ -19,6 +25,8 @@
 #     market: "JP"
 #     purchase_date: "2026-04-10"
 #     purchase_price: 2950
+#     theme: "自動車"
+#     amount_invested_jpy: 5000
 
 holdings:
   - symbol: "NVDA"
@@ -26,63 +34,85 @@ holdings:
     market: "US"
     purchase_date: "2026-07-16"
     purchase_price: 206.92  # 単元未満株を7,000円分購入。当日終値をUSD換算の取得単価として使用
+    theme: "半導体・AI"
+    amount_invested_jpy: 7000
 
   - symbol: "7011.T"
     name: "三菱重工業"
     market: "JP"
     purchase_date: "2026-07-16"
     purchase_price: 3828  # 単元未満株を5,000円分購入。7/16は海の日で休場のため7/15終値を取得単価として使用
+    theme: "防衛・地政学"
+    amount_invested_jpy: 5000
 
   - symbol: "4063.T"
     name: "信越化学工業"
     market: "JP"
     purchase_date: "2026-06-26"
     purchase_price: 6835  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
+    theme: "半導体"
+    amount_invested_jpy: 5000
 
   - symbol: "285A.T"
     name: "キオクシア"
     market: "JP"
     purchase_date: "2026-06-05"
     purchase_price: 78140  # 単元未満株を3,000円分購入。当日終値を取得単価として使用
+    theme: "半導体"
+    amount_invested_jpy: 3000
 
   - symbol: "6857.T"
     name: "アドバンテスト"
     market: "JP"
     purchase_date: "2026-06-26"
     purchase_price: 32440  # 単元未満株を2,500円分購入。当日終値を取得単価として使用
+    theme: "半導体"
+    amount_invested_jpy: 2500
 
   - symbol: "PAYP"
     name: "PayPay Corporation"
     market: "US"
     purchase_date: "2026-03-19"
     purchase_price: 20.45  # PayPay証券アプリで購入したPayPayのADS(米国預託証券)。単元未満株を1,000円分購入。当日終値をUSD換算の取得単価として使用
+    theme: "フィンテック"
+    amount_invested_jpy: 1000
 
   - symbol: "XOM"
     name: "Exxon Mobil"
     market: "US"
     purchase_date: "2026-07-21"
     purchase_price: 151.71  # 単元未満株を5,000円分購入。当日終値をUSD換算の取得単価として使用
+    theme: "資源・エネルギー"
+    amount_invested_jpy: 5000
 
   - symbol: "1605.T"
     name: "INPEX"
     market: "JP"
     purchase_date: "2026-07-21"
     purchase_price: 3580  # 単元未満株を5,000円分購入。当日終値を取得単価として使用
+    theme: "資源・エネルギー"
+    amount_invested_jpy: 5000
 
   - symbol: "AAPL"
     name: "Apple"
     market: "US"
     purchase_date: "2026-07-22"
     purchase_price: 327.74  # 単元未満株を2,000円分購入。購入日時点で7/22の米国市場終値が未確定のため、直近の確定終値（7/21終値）を仮の取得単価として使用。実際の約定価格が分かり次第、要修正
+    theme: "テクノロジー（総合）"
+    amount_invested_jpy: 2000
 
   - symbol: "AAPL"
     name: "Apple"
     market: "US"
     purchase_date: "2026-07-25"
     purchase_price: 333.02  # 単元未満株を3,000円分追加購入。直近の確定終値（7/24終値）を取得単価として使用
+    theme: "テクノロジー（総合）"
+    amount_invested_jpy: 3000
 
   - symbol: "LMT"
     name: "Lockheed Martin"
     market: "US"
     purchase_date: "2026-07-24"
     purchase_price: 582.60  # 単元未満株を10,000円分購入。当日(7/24)終値を取得単価として使用
+    theme: "防衛・地政学"
+    amount_invested_jpy: 10000

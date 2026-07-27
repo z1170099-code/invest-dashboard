@@ -317,6 +317,34 @@
     background: var(--status-color, var(--baseline));
   }
 
+  .allocation-box {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 0 0 18px;
+  }
+  .allocation-box h3 { margin: 0 0 10px; font-size: 1rem; }
+  .allocation-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0;
+    font-size: 0.85rem;
+  }
+  .allocation-label {
+    width: 9em;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+  .allocation-amount {
+    width: 7em;
+    flex-shrink: 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+  .allocation-note { color: var(--text-muted); font-size: 0.8rem; margin: 8px 0 0; }
+
   .price-row {
     display: flex;
     gap: 18px;
@@ -497,6 +525,25 @@
 
   <section>
     <h2>保有銘柄の売却タイミング</h2>
+
+    {% if theme_allocation %}
+    <div class="allocation-box">
+      <h3>テーマ別配分</h3>
+      {% for a in theme_allocation %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ a.theme }}</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ a.pct }}%;"></div></div>
+        <span class="allocation-amount">{{ "%.1f"|format(a.pct) }}%</span>
+      </div>
+      {% endfor %}
+      {% if theme_allocation_excluded_count %}
+      <p class="allocation-note">
+        投資金額（amount_invested_jpy）が未入力の保有銘柄が{{ theme_allocation_excluded_count }}件あり、この集計から除外されています。
+      </p>
+      {% endif %}
+    </div>
+    {% endif %}
+
     {% if holdings %}
     <div class="portfolio-table-wrap">
       <table class="portfolio-table">
