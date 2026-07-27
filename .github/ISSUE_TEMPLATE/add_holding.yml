@@ -9,6 +9,7 @@ body:
     id: symbol
     attributes:
       label: 銘柄コード
+      description: "日本株は末尾に .T を付けてください（例: 4385 ではなく 4385.T）"
       placeholder: "AAPL / 7203.T"
     validations:
       required: true

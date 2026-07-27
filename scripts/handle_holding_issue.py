@@ -57,11 +57,11 @@ def main() -> None:
         _write_result("権限がないため処理しませんでした。", changed=False)
         return
 
-    labels = os.environ.get("ISSUE_LABELS", "")
+    kind = os.environ.get("ISSUE_KIND", "")
     fields = _parse_issue_body(os.environ.get("ISSUE_BODY", ""))
 
     try:
-        if "add-holding" in labels:
+        if kind == "add":
             symbol = fields.get("銘柄コード")
             if not symbol:
                 raise RuntimeError("銘柄コードが未入力です。")
@@ -86,7 +86,7 @@ def main() -> None:
             comment = add_holding(symbol, name, market, amount, theme, purchase_date)
             _write_result(comment, changed=True)
 
-        elif "remove-holding" in labels:
+        elif kind == "remove":
             symbol = fields.get("銘柄コード")
             if not symbol:
                 raise RuntimeError("銘柄コードが未入力です。")
@@ -96,7 +96,7 @@ def main() -> None:
             _write_result(comment, changed=True)
 
         else:
-            _write_result("想定外のラベルのため処理しませんでした。", changed=False)
+            _write_result("想定外の種別のため処理しませんでした。", changed=False)
 
     except Exception as e:
         _write_result(

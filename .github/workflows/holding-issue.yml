@@ -13,10 +13,15 @@ jobs:
     # このリポジトリはPublicなので issues:opened は誰が作成しても発火する。
     # 必ずIssue作成者が本人であることを確認してから処理する（他人によるportfolio.yaml
     # への書き込みを防ぐための必須のガード）。
+    #
+    # 種別の判定はIssueのタイトル（テンプレートのtitle:で必ず付与される）で行う。
+    # ラベルは「テンプレートで指定しても、リポジトリに同名のラベルが事前に存在しない限り
+    # 自動生成はされず、何も付与されない」という仕様があり、実際にこれが原因で
+    # ワークフローが一度も起動しない不具合が起きたため、ラベルには依存しない設計にしている。
     if: >
       github.event.issue.user.login == 'z1170099-code' &&
-      (contains(github.event.issue.labels.*.name, 'add-holding') ||
-       contains(github.event.issue.labels.*.name, 'remove-holding'))
+      (startsWith(github.event.issue.title, '[保有追加]') ||
+       startsWith(github.event.issue.title, '[保有削除]'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,7 +40,7 @@ jobs:
         env:
           PYTHONUTF8: "1"
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
-          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          ISSUE_KIND: ${{ startsWith(github.event.issue.title, '[保有追加]') && 'add' || 'remove' }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: python handle_holding_issue.py
 

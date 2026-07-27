@@ -116,3 +116,11 @@ holdings:
     purchase_price: 582.60  # 単元未満株を10,000円分購入。当日(7/24)終値を取得単価として使用
     theme: "防衛・地政学"
     amount_invested_jpy: 10000
+
+  - symbol: "4385.T"
+    name: "メルカリ"
+    market: "JP"
+    purchase_date: "2026-07-27"
+    purchase_price: 4453  # 単元未満株を2,000円分購入。当日終値を取得単価として使用。実際の約定価格が分かり次第、要修正
+    theme: "国内グロース"
+    amount_invested_jpy: 2000

@@ -18,6 +18,8 @@ from history import build_key
 logger = logging.getLogger(__name__)
 
 DEFAULT_MODEL = "gemini-flash-lite-latest"
+# 低めに設定し、際どいスコアの銘柄で日によって判定が無意味にブレるのを抑える。
+_TEMPERATURE = 0.2
 
 _SYSTEM_INSTRUCTION = """\
 あなたは個人投資家向けの情報整理アシスタントです。
@@ -327,6 +329,7 @@ def analyze_holding(
                     system_instruction=_HOLDING_SYSTEM_INSTRUCTION,
                     response_mime_type="application/json",
                     response_schema=_HOLDING_RESPONSE_SCHEMA,
+                    temperature=_TEMPERATURE,
                 ),
             )
             data = json.loads(response.text)
@@ -433,6 +436,7 @@ def analyze_ticker(
                     system_instruction=_SYSTEM_INSTRUCTION,
                     response_mime_type="application/json",
                     response_schema=_RESPONSE_SCHEMA,
+                    temperature=_TEMPERATURE,
                 ),
             )
             data = json.loads(response.text)
