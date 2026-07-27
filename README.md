@@ -173,6 +173,23 @@ holdings:
 といった判断は表示せず、あくまで現状を数字で確認するための機能です。`amount_invested_jpy` を
 入力していない銘柄は、この集計から除外されます。
 
+### 株を買ったときの登録を楽にする
+
+`portfolio.yaml` を手で編集する代わりに、`scripts/add_holding.py` を使うとコマンド1つで
+登録できます。銘柄コードと投資額（円）だけ指定すれば、直近の終値をyfinanceから自動取得し、
+`config/watchlist.yaml`・`config/candidate_pool.yaml` に同じ銘柄があれば表示名・テーマも
+自動で補ってくれます。
+
+```powershell
+cd scripts
+python add_holding.py --symbol AAPL --amount 3000
+```
+
+日付・表示名・市場区分・テーマを指定したい場合は、それぞれ `--date`・`--name`・`--market`・
+`--theme` で上書きできます（例: `python add_holding.py --symbol 7011.T --amount 5000 --date 2026-07-24`）。
+実行すると `config/portfolio.yaml` の末尾に新しい保有銘柄が追記されます（既存のコメントは
+消えません）。追記後の内容を確認してからGitHubにpushしてください。
+
 ---
 
 ## ハイリスク・テーマ銘柄の候補プールについて

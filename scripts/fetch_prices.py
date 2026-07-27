@@ -46,6 +46,7 @@ def fetch_price_stats(symbol: str) -> dict | None:
     return {
         "symbol": symbol,
         "latest_close": float(latest),
+        "latest_date": closes.index[-1].date().isoformat(),
         "change_1d_pct": pct_change_over(1),
         "change_1w_pct": pct_change_over(5),
         "change_1m_pct": pct_change_over(21),
