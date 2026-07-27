@@ -182,13 +182,33 @@ holdings:
 
 ```powershell
 cd scripts
-python add_holding.py --symbol AAPL --amount 3000
+python add_holding.py add --symbol AAPL --amount 3000
 ```
 
 日付・表示名・市場区分・テーマを指定したい場合は、それぞれ `--date`・`--name`・`--market`・
-`--theme` で上書きできます（例: `python add_holding.py --symbol 7011.T --amount 5000 --date 2026-07-24`）。
+`--theme` で上書きできます（例: `python add_holding.py add --symbol 7011.T --amount 5000 --date 2026-07-24`）。
 実行すると `config/portfolio.yaml` の末尾に新しい保有銘柄が追記されます（既存のコメントは
 消えません）。追記後の内容を確認してからGitHubにpushしてください。
+
+売却した場合は `remove` サブコマンドで削除できます（同じ銘柄を複数回買っている場合は
+`--date` で購入日を指定して絞り込んでください）。
+
+```powershell
+python add_holding.py remove --symbol AAPL --date 2026-07-22
+```
+
+### サイト（GitHub Issue）から登録・削除する
+
+ターミナルを使わずスマホのブラウザからでも登録・削除できるように、GitHubのIssueフォームを
+用意しています。リポジトリの `Issues` タブ →`New issue` から
+
+- **保有銘柄の追加**: 買ったときに使う。銘柄コードと投資額を入力するだけでOK
+- **保有銘柄の削除（売却済み）**: 売ったときに使う。銘柄コードを入力するだけでOK
+
+を選んで送信すると、GitHub Actionsが自動で `config/portfolio.yaml` を更新し、結果を
+Issueへのコメントで知らせてIssueを自動的にクローズします。この処理はリポジトリ所有者
+本人が作成したIssueにのみ反応します（このリポジトリはPublicなので、他人が同じ操作を
+できないようにするための制限です）。
 
 ---
 

@@ -1,0 +1,50 @@
+name: 保有銘柄の追加
+description: 株を買ったときに入力すると、portfolio.yamlに自動で追加されます
+title: "[保有追加] "
+labels: ["add-holding"]
+body:
+  # 項目名（label）はscripts/handle_holding_issue.pyのパーサーと文字列を完全一致させる
+  # 必要があります。ここを変更したら、必ずhandle_holding_issue.py側も直してください。
+  - type: input
+    id: symbol
+    attributes:
+      label: 銘柄コード
+      placeholder: "AAPL / 7203.T"
+    validations:
+      required: true
+  - type: input
+    id: amount
+    attributes:
+      label: 投資額（円）
+      placeholder: "5000"
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: 購入日
+      description: "YYYY-MM-DD形式。空欄なら今日の日付になります"
+      placeholder: "2026-07-28"
+    validations:
+      required: false
+  - type: input
+    id: name
+    attributes:
+      label: 表示名
+      description: "空欄の場合、watchlist.yaml / candidate_pool.yamlから自動取得を試みます"
+    validations:
+      required: false
+  - type: input
+    id: market
+    attributes:
+      label: 市場区分
+      description: '"JP" / "US" など。空欄なら自動判定します'
+    validations:
+      required: false
+  - type: input
+    id: theme
+    attributes:
+      label: テーマ
+      description: "空欄の場合、自動取得を試み、見つからなければ「未分類」になります"
+    validations:
+      required: false

@@ -1,0 +1,24 @@
+name: 保有銘柄の削除（売却済み）
+description: 株を売却したときに入力すると、portfolio.yamlから自動で削除されます
+title: "[保有削除] "
+labels: ["remove-holding"]
+body:
+  # 項目名（label）はscripts/handle_holding_issue.pyのパーサーと文字列を完全一致させる
+  # 必要があります。ここを変更したら、必ずhandle_holding_issue.py側も直してください。
+  - type: input
+    id: symbol
+    attributes:
+      label: 銘柄コード
+      placeholder: "AAPL / 7203.T"
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: 購入日
+      description: >-
+        同じ銘柄を複数回に分けて買っている場合、削除したい購入日（YYYY-MM-DD）を指定してください。
+        1件しか登録が無い場合は空欄でかまいません。
+      placeholder: "2026-07-28"
+    validations:
+      required: false

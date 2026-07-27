@@ -1,0 +1,69 @@
+name: Handle Holding Issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  handle-holding:
+    # このリポジトリはPublicなので issues:opened は誰が作成しても発火する。
+    # 必ずIssue作成者が本人であることを確認してから処理する（他人によるportfolio.yaml
+    # への書き込みを防ぐための必須のガード）。
+    if: >
+      github.event.issue.user.login == 'z1170099-code' &&
+      (contains(github.event.issue.labels.*.name, 'add-holding') ||
+       contains(github.event.issue.labels.*.name, 'remove-holding'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Handle issue
+        working-directory: scripts
+        env:
+          PYTHONUTF8: "1"
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: python handle_holding_issue.py
+
+      - name: Commit and push if changed
+        if: always()
+        run: |
+          if [ "$(cat scripts/changed.txt 2>/dev/null)" = "true" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add config/portfolio.yaml
+            git diff --cached --quiet || git commit -m "Update portfolio via issue #${{ github.event.issue.number }}"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Comment result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f scripts/comment.txt ]; then
+            gh issue comment ${{ github.event.issue.number }} --body-file scripts/comment.txt
+          else
+            gh issue comment ${{ github.event.issue.number }} --body "処理中に予期しないエラーが発生しました。Actionsのログを確認してください。"
+          fi
+
+      - name: Close issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close ${{ github.event.issue.number }}
