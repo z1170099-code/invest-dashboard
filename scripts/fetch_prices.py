@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 def fetch_price_stats(symbol: str) -> dict | None:
     """指定した銘柄の価格統計を取得する。取得できない場合はNoneを返す。"""
     try:
-        history = yf.Ticker(symbol).history(period="1y", interval="1d")
+        # 1年騰落率の計算に最低252営業日分必要なため、境界での不足を避けて2年分取得する。
+        history = yf.Ticker(symbol).history(period="2y", interval="1d")
     except Exception:
         logger.exception("価格取得に失敗しました: %s", symbol)
         return None
@@ -50,6 +51,9 @@ def fetch_price_stats(symbol: str) -> dict | None:
         "change_1d_pct": pct_change_over(1),
         "change_1w_pct": pct_change_over(5),
         "change_1m_pct": pct_change_over(21),
+        "change_3m_pct": pct_change_over(63),
+        "change_6m_pct": pct_change_over(126),
+        "change_1y_pct": pct_change_over(252),
         "volatility_20d_pct": volatility,
         "high_52w": high_52w,
         "low_52w": low_52w,

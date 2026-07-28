@@ -59,6 +59,9 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
         "change_1w": _fmt_pct(price_stats.get("change_1w_pct")),
         "change_1m": _fmt_pct(price_stats.get("change_1m_pct")),
+        "change_3m": _fmt_pct(price_stats.get("change_3m_pct")),
+        "change_6m": _fmt_pct(price_stats.get("change_6m_pct")),
+        "change_1y": _fmt_pct(price_stats.get("change_1y_pct")),
         "price_available": bool(price_stats),
         "news": result.get("news") or [],
         "nisa_tag": (
@@ -95,6 +98,9 @@ def _build_holding_view_model(result: dict) -> dict:
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
         "change_1w": _fmt_pct(price_stats.get("change_1w_pct")),
         "change_1m": _fmt_pct(price_stats.get("change_1m_pct")),
+        "change_3m": _fmt_pct(price_stats.get("change_3m_pct")),
+        "change_6m": _fmt_pct(price_stats.get("change_6m_pct")),
+        "change_1y": _fmt_pct(price_stats.get("change_1y_pct")),
         "price_available": bool(price_stats),
         "news": result.get("news") or [],
     }
