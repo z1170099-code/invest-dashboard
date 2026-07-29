@@ -114,3 +114,48 @@ candidates:
     theme: "AI（国内小型成長株）"
     risk_level: "high"
     nisa_growth_eligible: true
+
+  # --- ヘルスケア・製薬関連（高齢化・パンデミックリスクが材料になりやすい） ---
+  - symbol: "4502.T"
+    name: "武田薬品工業"
+    market: "JP"
+    theme: "ヘルスケア・製薬"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "LLY"
+    name: "Eli Lilly and Company"
+    market: "US"
+    theme: "ヘルスケア・製薬"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 金融関連（金利政策・中央銀行の動向が材料になりやすい） ---
+  - symbol: "8306.T"
+    name: "三菱UFJフィナンシャル・グループ"
+    market: "JP"
+    theme: "金融"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "JPM"
+    name: "JPMorgan Chase & Co."
+    market: "US"
+    theme: "金融"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 生活必需品関連（インフレ・景気後退局面での相対的な底堅さが材料になりやすい） ---
+  - symbol: "2914.T"
+    name: "日本たばこ産業"
+    market: "JP"
+    theme: "生活必需品"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "PG"
+    name: "Procter & Gamble"
+    market: "US"
+    theme: "生活必需品"
+    risk_level: "high"
+    nisa_growth_eligible: true
