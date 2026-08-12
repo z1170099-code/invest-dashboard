@@ -180,6 +180,10 @@ def generate_report(
     summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
     theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
 
+    # 暗号資産（現物）は株式と資産クラスが異なるため、専用セクションに分けて表示する。
+    crypto_view = [v for v in candidate_view if v["market"] == "暗号資産"]
+    candidate_view = [v for v in candidate_view if v["market"] != "暗号資産"]
+
     env = Environment(loader=FileSystemLoader(str(templates_dir)), autoescape=True)
     template = env.get_template("report.html.jinja")
 
@@ -188,6 +192,7 @@ def generate_report(
     html = template.render(
         tickers=watchlist_view,
         candidates=candidate_view,
+        crypto=crypto_view,
         holdings=holding_view,
         macro_news=macro_news,
         summary_buy=summary_buy,

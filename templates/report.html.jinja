@@ -465,6 +465,86 @@
     <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
   </section>
 
+  {% macro ticker_card(t, rank) %}
+    <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
+      <div class="card-head">
+        <div>
+          <span class="rank">#{{ rank }}</span><br>
+          <span class="name">{{ t.name }}</span>
+          <span class="symbol">{{ t.symbol }}</span>
+          {% if t.market %}<span class="market-tag">{{ t.market }}</span>{% endif %}
+          {% if t.theme %}<span class="theme-tag">{{ t.theme }}</span>{% endif %}
+          {% if t.nisa_tag %}<span class="nisa-tag">{{ t.nisa_tag }}</span>{% endif %}
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          {{ t.status_icon }} {{ t.recommendation }}
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">{{ t.score_display }}</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ t.score_bar_pct }}%;"></div></div>
+      </div>
+
+      {% if t.price_available %}
+      <div class="price-row">
+        <span><span class="label">前日比</span>{{ t.change_1d }}</span>
+        <span><span class="label">1週間</span>{{ t.change_1w }}</span>
+        <span><span class="label">1ヶ月</span>{{ t.change_1m }}</span>
+        <span><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
+        <span><span class="label">6ヶ月</span>{{ t.change_6m }}</span>
+        <span><span class="label">1年</span>{{ t.change_1y }}</span>
+      </div>
+      {% endif %}
+
+      <p class="reasoning">{{ t.reasoning }}</p>
+
+      {% if t.key_factors %}
+      <ul class="factors">
+        {% for factor in t.key_factors %}
+        <li>{{ factor }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if t.risks %}
+      <p class="risks"><span class="label">留意点:</span> {{ t.risks }}</p>
+      {% endif %}
+
+      {% if t.reflection %}
+      <p class="reflection">🔁 前回からの振り返り: {{ t.reflection }}</p>
+      {% endif %}
+
+      {% if t.news %}
+      <details class="news-detail">
+        <summary>関連ニュース（{{ t.news|length }}件）</summary>
+        <ul>
+          {% for article in t.news %}
+          <li><a href="{{ article.link }}" target="_blank" rel="noopener">{{ article.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+    </div>
+  {% endmacro %}
+
+  <section>
+    <h2>暗号資産</h2>
+    <div class="risk-banner">
+      <strong>⚠ 暗号資産について:</strong>
+      株式とは異なる資産クラスで、価格変動が非常に大きく、NISA成長投資枠の対象にもなりません。
+      楽天証券のような証券会社では購入できず、暗号資産交換業者（楽天ウォレット等）の口座が別途必要です。
+    </div>
+    {% if crypto %}
+    {% for t in crypto %}
+      {{ ticker_card(t, loop.index) }}
+    {% endfor %}
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">暗号資産の候補銘柄が登録されていません。</p>
+    {% endif %}
+  </section>
+
   {% macro holding_card(h) %}
     <div class="card status-{{ h.status_key }}" id="holding-{{ h.symbol }}-{{ h.purchase_date }}">
       <div class="card-head">
@@ -608,70 +688,6 @@
     <p style="color: var(--text-muted); font-size: 0.9rem;">本日はマクロ経済ニュースを取得できませんでした。</p>
     {% endif %}
   </section>
-
-  {% macro ticker_card(t, rank) %}
-    <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
-      <div class="card-head">
-        <div>
-          <span class="rank">#{{ rank }}</span><br>
-          <span class="name">{{ t.name }}</span>
-          <span class="symbol">{{ t.symbol }}</span>
-          {% if t.market %}<span class="market-tag">{{ t.market }}</span>{% endif %}
-          {% if t.theme %}<span class="theme-tag">{{ t.theme }}</span>{% endif %}
-          {% if t.nisa_tag %}<span class="nisa-tag">{{ t.nisa_tag }}</span>{% endif %}
-        </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          {{ t.status_icon }} {{ t.recommendation }}
-        </div>
-      </div>
-
-      <div class="score-row">
-        <div class="score-value">{{ t.score_display }}</div>
-        <div class="score-track"><div class="score-fill" style="width: {{ t.score_bar_pct }}%;"></div></div>
-      </div>
-
-      {% if t.price_available %}
-      <div class="price-row">
-        <span><span class="label">前日比</span>{{ t.change_1d }}</span>
-        <span><span class="label">1週間</span>{{ t.change_1w }}</span>
-        <span><span class="label">1ヶ月</span>{{ t.change_1m }}</span>
-        <span><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
-        <span><span class="label">6ヶ月</span>{{ t.change_6m }}</span>
-        <span><span class="label">1年</span>{{ t.change_1y }}</span>
-      </div>
-      {% endif %}
-
-      <p class="reasoning">{{ t.reasoning }}</p>
-
-      {% if t.key_factors %}
-      <ul class="factors">
-        {% for factor in t.key_factors %}
-        <li>{{ factor }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-
-      {% if t.risks %}
-      <p class="risks"><span class="label">留意点:</span> {{ t.risks }}</p>
-      {% endif %}
-
-      {% if t.reflection %}
-      <p class="reflection">🔁 前回からの振り返り: {{ t.reflection }}</p>
-      {% endif %}
-
-      {% if t.news %}
-      <details class="news-detail">
-        <summary>関連ニュース（{{ t.news|length }}件）</summary>
-        <ul>
-          {% for article in t.news %}
-          <li><a href="{{ article.link }}" target="_blank" rel="noopener">{{ article.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </details>
-      {% endif %}
-    </div>
-  {% endmacro %}
 
   <section>
     <h2>銘柄ランキング（スコア順）</h2>
