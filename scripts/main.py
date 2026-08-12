@@ -12,6 +12,13 @@ from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import fetch_all_price_stats
 from generate_report import generate_report
 from history import apply_group_results, load_history, save_history
+from track_record import (
+    build_accuracy_summary,
+    load_track_record,
+    record_predictions,
+    resolve_predictions,
+    save_track_record,
+)
 
 # GitHub Actions(Ubuntu)ではstdout/stderrがUTF-8でない場合があり、
 # 日本語やBOM付き文字列をログ出力しようとしてUnicodeEncodeErrorが発生し、
@@ -28,6 +35,7 @@ _CONFIG_DIR = _ROOT / "config"
 _TEMPLATES_DIR = _ROOT / "templates"
 _OUTPUT_PATH = _ROOT / "docs" / "index.html"
 _HISTORY_PATH = _ROOT / "data" / "analysis_history.json"
+_TRACK_RECORD_PATH = _ROOT / "data" / "track_record.json"
 
 
 def _load_yaml(path: Path) -> dict:
@@ -81,6 +89,7 @@ def main() -> None:
     max_per_ticker = news_config.get("max_articles_per_ticker", 5)
 
     history = load_history(_HISTORY_PATH)
+    track_record = load_track_record(_TRACK_RECORD_PATH)
 
     logger.info("マクロ経済ニュースを取得中...")
     macro_news = fetch_macro_news(
@@ -104,12 +113,25 @@ def main() -> None:
         analyze_fn=analyze_all_holdings,
     )
 
+    all_results = watchlist_results + candidate_results + portfolio_results
+    current_prices = {
+        r["symbol"]: r["price_stats"]["latest_close"]
+        for r in all_results
+        if r.get("price_stats") and isinstance(r["price_stats"].get("latest_close"), (int, float))
+    }
+    resolve_predictions(track_record, current_prices)
+    record_predictions(track_record, "watchlist", watchlist_results)
+    record_predictions(track_record, "candidate", candidate_results)
+    record_predictions(track_record, "holding", portfolio_results)
+    accuracy_summary = build_accuracy_summary(track_record)
+
     logger.info("レポートを生成中...")
     generate_report(
         watchlist_results,
         candidate_results,
         portfolio_results,
         macro_news,
+        accuracy_summary,
         _TEMPLATES_DIR,
         _OUTPUT_PATH,
     )
@@ -121,6 +143,11 @@ def main() -> None:
         save_history(_HISTORY_PATH, history)
     except Exception:
         logger.exception("履歴の保存に失敗しましたが、レポートは正常に生成されています。")
+
+    try:
+        save_track_record(_TRACK_RECORD_PATH, track_record)
+    except Exception:
+        logger.exception("的中率記録の保存に失敗しましたが、レポートは正常に生成されています。")
 
     logger.info("完了しました: %s", _OUTPUT_PATH)
 

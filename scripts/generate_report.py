@@ -165,6 +165,7 @@ def generate_report(
     candidate_results: list[dict],
     portfolio_results: list[dict],
     macro_news: list[dict],
+    accuracy_summary: dict,
     templates_dir: Path,
     output_path: Path,
 ) -> None:
@@ -199,6 +200,7 @@ def generate_report(
         summary_sell=summary_sell,
         theme_allocation=theme_allocation,
         theme_allocation_excluded_count=theme_allocation_excluded_count,
+        accuracy=accuracy_summary,
         generated_at=generated_at,
     )
 

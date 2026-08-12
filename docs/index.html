@@ -410,7 +410,7 @@
     <h1>AI投資分析ダッシュボード</h1>
     <button class="theme-toggle" id="theme-toggle" type="button">☀︎ / ☾ 切替</button>
   </header>
-  <div class="updated">最終更新: 2026年08月12日 17:42 (JST)</div>
+  <div class="updated">最終更新: 2026年08月12日 18:34 (JST)</div>
 
   <div class="disclaimer">
     <strong>⚠ 免責事項:</strong>
@@ -447,10 +447,10 @@
           </li>
           
           <li>
-            <a class="summary-link" href="#ticker-8306.T">
+            <a class="summary-link" href="#ticker-JPM">
               <span class="summary-score buy">+75</span>
-              <span class="summary-name">三菱UFJフィナンシャル・グループ</span>
-              <span class="summary-symbol">8306.T</span>
+              <span class="summary-name">JPMorgan Chase &amp; Co.</span>
+              <span class="summary-symbol">JPM</span>
               <span class="summary-group">ハイリスク候補</span>
             </a>
           </li>
@@ -465,28 +465,19 @@
           </li>
           
           <li>
-            <a class="summary-link" href="#ticker-JPM">
+            <a class="summary-link" href="#ticker-8306.T">
               <span class="summary-score buy">+70</span>
-              <span class="summary-name">JPMorgan Chase &amp; Co.</span>
-              <span class="summary-symbol">JPM</span>
+              <span class="summary-name">三菱UFJフィナンシャル・グループ</span>
+              <span class="summary-symbol">8306.T</span>
               <span class="summary-group">ハイリスク候補</span>
             </a>
           </li>
           
           <li>
-            <a class="summary-link" href="#ticker-5713.T">
+            <a class="summary-link" href="#ticker-4385.T">
               <span class="summary-score buy">+65</span>
-              <span class="summary-name">住友金属鉱山</span>
-              <span class="summary-symbol">5713.T</span>
-              <span class="summary-group">ハイリスク候補</span>
-            </a>
-          </li>
-          
-          <li>
-            <a class="summary-link" href="#ticker-LLY">
-              <span class="summary-score buy">+65</span>
-              <span class="summary-name">Eli Lilly and Company</span>
-              <span class="summary-symbol">LLY</span>
+              <span class="summary-name">メルカリ</span>
+              <span class="summary-symbol">4385.T</span>
               <span class="summary-group">ハイリスク候補</span>
             </a>
           </li>
@@ -528,28 +519,37 @@
           </li>
           
           <li>
-            <a class="summary-link" href="#ticker-4385.T">
+            <a class="summary-link" href="#ticker-5713.T">
               <span class="summary-score buy">+60</span>
-              <span class="summary-name">メルカリ</span>
-              <span class="summary-symbol">4385.T</span>
+              <span class="summary-name">住友金属鉱山</span>
+              <span class="summary-symbol">5713.T</span>
+              <span class="summary-group">ハイリスク候補</span>
+            </a>
+          </li>
+          
+          <li>
+            <a class="summary-link" href="#ticker-LLY">
+              <span class="summary-score buy">+60</span>
+              <span class="summary-name">Eli Lilly and Company</span>
+              <span class="summary-symbol">LLY</span>
+              <span class="summary-group">ハイリスク候補</span>
+            </a>
+          </li>
+          
+          <li>
+            <a class="summary-link" href="#ticker-TSM">
+              <span class="summary-score buy">+55</span>
+              <span class="summary-name">Taiwan Semiconductor Manufacturing</span>
+              <span class="summary-symbol">TSM</span>
               <span class="summary-group">ハイリスク候補</span>
             </a>
           </li>
           
           <li>
             <a class="summary-link" href="#ticker-1605.T">
-              <span class="summary-score buy">+50</span>
+              <span class="summary-score buy">+45</span>
               <span class="summary-name">INPEX</span>
               <span class="summary-symbol">1605.T</span>
-              <span class="summary-group">ハイリスク候補</span>
-            </a>
-          </li>
-          
-          <li>
-            <a class="summary-link" href="#ticker-7011.T">
-              <span class="summary-score buy">+30</span>
-              <span class="summary-name">三菱重工業</span>
-              <span class="summary-symbol">7011.T</span>
               <span class="summary-group">ハイリスク候補</span>
             </a>
           </li>
@@ -564,7 +564,7 @@
           
           <li>
             <a class="summary-link" href="#ticker-COIN">
-              <span class="summary-score sell">-40</span>
+              <span class="summary-score sell">-45</span>
               <span class="summary-name">Coinbase Global</span>
               <span class="summary-symbol">COIN</span>
               <span class="summary-group">ハイリスク候補</span>
@@ -576,6 +576,23 @@
       </div>
     </div>
     <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
+  </section>
+
+  <section>
+    <h2>AIの的中率（過去の判定の検証）</h2>
+    <div class="risk-banner" style="border-left-color: var(--baseline);">
+      <strong>ℹ️ 検証方法:</strong>
+      「買い候補」「売り候補」「売却検討」の判定から7日後の株価と比較し、判定の方向（上昇/下落）と
+      実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
+      変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
+    </div>
+
+    
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      検証にはまず判定から7日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
+      （検証待ち: 18件）。
+    </p>
+    
   </section>
 
   
@@ -607,41 +624,41 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-20</div>
-        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+        <div class="score-value">-25</div>
+        <div class="score-track"><div class="score-fill" style="width: 25%;"></div></div>
       </div>
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▲ +0.28%</span>
-        <span><span class="label">1週間</span>▼ -1.77%</span>
-        <span><span class="label">1ヶ月</span>▼ -3.58%</span>
-        <span><span class="label">3ヶ月</span>▲ +3.71%</span>
-        <span><span class="label">6ヶ月</span>▼ -10.39%</span>
-        <span><span class="label">1年</span>▼ -31.86%</span>
+        <span><span class="label">前日比</span>▲ +0.58%</span>
+        <span><span class="label">1週間</span>▼ -1.48%</span>
+        <span><span class="label">1ヶ月</span>▼ -3.30%</span>
+        <span><span class="label">3ヶ月</span>▲ +4.02%</span>
+        <span><span class="label">6ヶ月</span>▼ -10.13%</span>
+        <span><span class="label">1年</span>▼ -31.66%</span>
       </div>
       
 
-      <p class="reasoning">中長期の騰落率で依然としてマイナス圏が続いており、上値の重い展開が継続しています。マクロ環境ではFRBの金融政策の不透明感や地政学リスクに伴う原油高への警戒感があり、リスク資産に対して慎重姿勢が求められる状況です。</p>
+      <p class="reasoning">中長期の騰落率が依然としてマイナス圏で推移しており、上値の重い膠着相場が続いています。マクロ環境においては、米国の金融政策や原油高への警戒感からリスク資産に対して慎重な姿勢が求められる状況です。</p>
 
       
       <ul class="factors">
         
-        <li>半年および1年の長期騰落率の低迷</li>
+        <li>1年および6ヶ月騰落率がマイナス圏で推移</li>
         
-        <li>米国金利やインフレ動向を巡る不確実性</li>
+        <li>買いが一巡し上値が重い膠着した値動き</li>
         
-        <li>地政学リスクと原油高によるリスクオフ圧力</li>
+        <li>FRBの金融政策の不透明感と原油高の継続</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 金融政策の予期せぬ変更や地政学リスクの急激な悪化によるボラティリティの上昇に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> インフレ動向や金利引き締め観測が強まった場合、リスク資産全体への売り圧力が高まるリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回提示した「様子見」の判断は、中長期の軟調なトレンドおよびマクロ経済の不透明感と合致しており妥当であったといえます。短期的には膠着状態が続いているため、今回も中長期の動向を見極めるスタンスを継続します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、その後の値動きがほぼ横ばいで推移したことから現状維持の妥当な判断でした。中長期のトレンドに大きな変化はないため、引き続き慎重な姿勢を継続します。</p>
       
 
       
@@ -653,9 +670,9 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMizwFBVV95cUxPQWxsWUxPdTl6Q196ZmJ0TkxscUJ6X1NXM2VRZWVfWWZxbkVTTnhIX1JYSk4tSGxXV3dWb2YzeEo5OS1DUGt3T1pWU0tpZGJ4Q3k3OWJHNW9HNGZLSlhlWXdqNVZKNUtzRW5JY0dxZEFRMERGeVplZjNtWTV3LTVDaE1hTzM2MjdEV1kxdml0OUtfRkotbGMwaE93cVRjSlR5TlJVanNqNnhxb2QwVzl6Zldac3lDbjNTaGxpdGZJUnBJdE9iR2VJbWl5NTBPRXM?oc=5" target="_blank" rel="noopener">安全資産がリスク資産と競合する時。BTCおよび株価への教訓：Crypto Daily - CoinDesk</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFBoVXNJV1JrcE41aVVUaHFYdVJvYUxtSWM2eWtlTERUbW5KT25DMjFtNHA1cGJ5a0dLVGYyTURiVHVJTGxTV01qeDY3bDlsTkRTT1E?oc=5" target="_blank" rel="noopener">ビットコインは上昇 買いが一巡し６万５０００ドル台は維持できず - 株探</a></li>
-          
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1XLWszcWZrUWNZM2RUMmQ3a19GLTQ1Tk03S29EeU9Yd2NWazh6U1BZQ0V1R3R2QzZ5ZnZMdkp3R0FlakVvQlk2U1BZaXVzWHZKbEd1d1dSRzJIVkF2Y0preURKLUQtU2c1U3lZZA?oc=5" target="_blank" rel="noopener">上がらないビットコイン 崩れた「錬金術」 - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFBoVXNJV1JrcE41aVVUaHFYdVJvYUxtSWM2eWtlTERUbW5KT25DMjFtNHA1cGJ5a0dLVGYyTURiVHVJTGxTV01qeDY3bDlsTkRTT1E?oc=5" target="_blank" rel="noopener">ビットコインは上昇 買いが一巡し６万５０００ドル台は維持できず - 株探</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxPMDhKbUp1aDFIbWR2MkpZMHRJLTdwS0NGX0hYR2ttNll1dzRVWXk4SlhNZ29VRnZyMHFReWUyem9zVThTUTlXQ3NOWFI5NWZ6WjJDaHo1SGEtV0plR1ZYeG9xYVZUZTRfNldZcUM5dGkwb0ZycmhDei1YbHRXRGxrdExNOWVzSE1uQllMWHIzWTBvWFFwQjNERGhISnNCcllsVmFBOWc5OFlIcHF0UVQxZmgwdE16ZndMWkxSYg?oc=5" target="_blank" rel="noopener">暗号資産＆株式｜ビットコインは膠着、メモリ株は下落：ボラティリティはどこへ向かうのか？ - Moomoo</a></li>
           
@@ -683,41 +700,41 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-20</div>
-        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+        <div class="score-value">-25</div>
+        <div class="score-track"><div class="score-fill" style="width: 25%;"></div></div>
       </div>
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▲ +0.47%</span>
-        <span><span class="label">1週間</span>▼ -1.20%</span>
-        <span><span class="label">1ヶ月</span>▼ -2.24%</span>
-        <span><span class="label">3ヶ月</span>▲ +16.67%</span>
-        <span><span class="label">6ヶ月</span>▼ -13.70%</span>
-        <span><span class="label">1年</span>▼ -40.77%</span>
+        <span><span class="label">前日比</span>▲ +1.10%</span>
+        <span><span class="label">1週間</span>▼ -0.59%</span>
+        <span><span class="label">1ヶ月</span>▼ -1.63%</span>
+        <span><span class="label">3ヶ月</span>▲ +17.40%</span>
+        <span><span class="label">6ヶ月</span>▼ -13.16%</span>
+        <span><span class="label">1年</span>▼ -40.41%</span>
       </div>
       
 
-      <p class="reasoning">前回から価格はほぼ横ばいで推移しており、3ヶ月騰落率のプラス回復に対して1年・6ヶ月騰落率や52週高値からの大きな乖離が依然として中長期の上値を重くしています。米国のインフレ警戒や中東情勢を背景としたマクロ環境の不確実性も継続しているため、明確なトレンド転換が確認できるまでは慎重な姿勢を維持すべきです。</p>
+      <p class="reasoning">前回分析時点から価格は小幅な変動に留まっており、3ヶ月騰落率の持ち直しが見られる一方で、1年騰落率のマイナス幅や52週高値からの大きな乖離は解消されていません。さらに、マクロ経済における金利動向や地政学リスクに伴うインフレ・原油高の懸念が暗号資産全般の重荷となっており、中長期での上値の重さが依然として意識されます。したがって、明確なトレンド転換シグナルが確認されるまでは引き続き様子見姿勢が妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月騰落率はプラスだが6ヶ月・1年騰落率は依然としてマイナス圏</li>
+        <li>3ヶ月騰落率はプラスを維持するも1年・6ヶ月騰落率の低迷が続く中長期の重荷</li>
         
-        <li>米国のインフレ高止まり懸念や地政学リスクによるマクロ経済の不透明感</li>
+        <li>米国の金利政策見通しや原油高などマクロ経済における不確実性</li>
         
-        <li>イーサリアムの下落に伴う未実現損失の発生など暗号資産固有の慎重論</li>
+        <li>イーサリアムの下落による未実現損失の発生など個別・関連ニュースの慎重姿勢</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の悪化や米国の金利・インフレ動向により、リスク資産全般から資金が流出するリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 地政学リスクの激化やマクロ経済の金利上昇による暗号資産市場全体からの資金流出リスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、ほぼ横ばいの値動きや依然として厳しい1年・6ヶ月のマイナス実績、マクロの不確実性と整合しており妥当でした。今回も中長期の弱含みトレンドとマクロリスクを考慮し、慎重姿勢を継続します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、価格が横ばい圏内で推移し中長期の下落トレンドが継続していたことから妥当な判断でした。今回もその中長期のトレンドやマクロ環境の不確実性を重視し、短期的な小幅上昇に惑わされず慎重な姿勢を継続します。</p>
       
 
       
@@ -1042,26 +1059,26 @@
         <span><span class="label">1年</span>▲ +1953.95%</span>
       </div>
 
-      <p class="reasoning">前回分析時点から中長期的なトレンドや52週高値からの大きな下落幅に大きな変化はなく、依然として36%を超える厳しい含み損を抱えた状態が続いています。半導体市場における個別材料への期待感はあるものの、マクロ経済の不確実性や高ボラティリティを考慮すると、これ以上リスクを抱えるよりは損失拡大を防ぐための売却検討が妥当と判断します。</p>
+      <p class="reasoning">前回分析時点から株価は同水準で推移しているものの、36%を超える大きな含み損を抱えた状態が続いています。52週高値からの大幅な下落や高いボラティリティ、さらにマクロ経済における金利・地政学リスクの不確実性を考慮すると、引き続きリスク管理を優先し損失拡大を防ぐための売却検討が妥当と判断します。</p>
 
       
       <ul class="factors">
         
-        <li>購入価格から-36.18%という大きな含み損の継続</li>
+        <li>36%を超える深刻な含み損の継続</li>
         
-        <li>52週高値から-54.12%と中長期的な下落トレンドからの回復途上</li>
+        <li>52週高値から50%を超える大きな下落乖離</li>
         
-        <li>直近20日ボラティリティの高さによる不安定な値動き</li>
+        <li>高いボラティリティとマクロ経済の不確実性</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有を継続する場合はさらなる下落リスクに備える必要があり、売却する場合は底打ち後の反発上昇機会を逃すリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 売却する場合は反発時の上昇益を逃すリスクがあり、保有継続する場合はさらなる下落による損失拡大リスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回提示した「売却検討」の判断は、直近の株価がほぼ横ばいで推移し高値からの大幅下落や大きな含み損が解消されていない状況を鑑みると、中長期的なリスク管理の観点から依然として妥当であったと考えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の売却検討の判断後、株価は横ばいで推移しており、大幅な含み損や高いボラティリティといったリスク要因に大きな変化は見られないため、前回の判断は引き続き妥当であったと考えます。</p>
       
 
       
@@ -1071,13 +1088,13 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5RNTEza2p4N25jSFdRT1d6OVk2ODJodVQ4ZUoyMm5mUFJ3Z2lGbGJJZVFUZjdTWXExUURGZFl2Mmdsczc3WkxLclZBcWxGNld5MGEzckNBOHhyaWFzemhWU3Y1VVBHN01HSXVvZw?oc=5" target="_blank" rel="noopener">キオクシアHD株価が後場一段高 「サムスンとSKに新規投資」報道で思惑 - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE8wN2NEUTI0T2h4UjBmZkl4MnlmQTBSMm5nZ0tkTzNMNmxDUUZfb0ktb1hjVkM0ZldwZ2NrYTE1cmd4OXdNdmxmN3dCaG5DekJqWDc4TUJzaEM0akNVN3FLNXIzU3QxUkFzM21xdmtMN1NVQjloVFhXZS1CV2NxR2M?oc=5" target="_blank" rel="noopener">【キオクシア「自社株買い」をどう評価するか】注視したい「2つの上限」への進捗率 同様の施策を先行発表した東京エレクトロンの株価はどう動いたか（マネーポストWEB） - Yahoo!ニュース</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxOdjJGZ015SExlY1A5amNnY0dXbkxKYWtJSmtBMEFpTnliWmF4T1M1LXNHOERPN3ZXSDczTEdRSTgtdmxqN0RQRTlRTjdTX3ZtTmluZmhaUk1ZejE1NlBreWdIcGw4Q0V5dVlqb0Q1NXVrNWo5b01nZl9sMkZQZ3VBNllOdENOLUE?oc=5" target="_blank" rel="noopener">話題株ピックアップ【夕刊】（2）：インフォＭＴ、キオクシア 、スクエニＨＤ(株探ニュース) - Yahoo!ファイナンス</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiR0FVX3lxTE95SDd5RHRLRld2R3hxWGFsQU1Fa05pNFV6ZHNacVpJVWdsalpSQ0NtRVdRdkNKc2gtUWtOSkNLRncza0p6V0tV?oc=5" target="_blank" rel="noopener">日経平均２６０円高、プラス寄与上位はアドバンテス、東エレク、キオクシアなど＝１２日後場 速報 - kabushiki.jp</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYcVAyMGdhTU5uU1dmV1lyNDMzSkd0dWNHUGZWbnd6anpVYVJYc2c4eDFNZGxPS1RTVUZMcmZpZnVka1Z5NHBFWG1BdHZHWE5DSHIwbUlSTWNKS292bE1OXw?oc=5" target="_blank" rel="noopener">株価70倍、記録的増収増益 半導体大手キオクシアが快進撃 岩手・北上工場で聞く「何が起きていますか？」 - 河北新報オンライン</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFA5YlFvdjJVeGZGbFpfNmRIcXVyd2FaUjY5N0hJUmdZcU5IemcyeE00VEJzdXdfQWdzYVVKbTRTOTRnWE5JRjZLZm44S01TUHRjcG1oT2NjSXV3Zw?oc=5" target="_blank" rel="noopener">次のキオクシアはどこだ 中小型グロース株に託された日本の命運 - Forbes JAPAN</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFA3NjNoeC11eWpYdFdQX215M0tpMVBCY0M3WjZlVmp5RTlPZ2ZLOWhMVUtfVVdpdUtNZF9qYk95UktzNHBTaEVJX0lvdVlQR0lQVmc?oc=5" target="_blank" rel="noopener">キオクシアＨＤ----1σが支持線として機能 - 株探</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYcVAyMGdhTU5uU1dmV1lyNDMzSkd0dWNHUGZWbnd6anpVYVJYc2c4eDFNZGxPS1RTVUZMcmZpZnVka1Z5NHBFWG1BdHZHWE5DSHIwbUlSTWNKS292bE1OXw?oc=5" target="_blank" rel="noopener">株価70倍、記録的増収増益 半導体大手キオクシアが快進撃 岩手・北上工場で聞く「何が起きていますか？」 - 河北新報オンライン</a></li>
           
         </ul>
       </details>
@@ -1115,26 +1132,26 @@
         <span><span class="label">1年</span>—</span>
       </div>
 
-      <p class="reasoning">購入価格から約28.5%の含み損が継続しており、3ヶ月騰落率が-23.95%と中長期的な下落トレンドから抜け出せていません。マクロ環境における原油高や金利・地政学リスクへの警戒感も重なり、早期の株価回復が見込みづらいため、前回に引き続き損切りを検討する局面です。</p>
+      <p class="reasoning">前回分析時点から株価に大きな変動はないものの、3ヶ月騰落率が-23.95%と依然として明確な中長期の下落トレンドにあります。さらに、米国の金利動向や地政学リスクに伴う原油高への警戒感からマクロ環境の不確実性が高まっており、早期の株価回復を期待しづらいため、これまでの判断を継続して損切りによるリスク管理を検討すべきです。</p>
 
       
       <ul class="factors">
         
-        <li>約28.5%の大きな含み損が継続していること</li>
+        <li>購入価格から-28.56%の大幅な含み損が継続していること</li>
         
-        <li>3ヶ月騰落率が-23.95%と中長期の下落トレンドが継続していること</li>
+        <li>3ヶ月騰落率が-23.95%と中長期の下落トレンドから脱却できていないこと</li>
         
-        <li>原油高や地政学リスクなどマクロ環境の不透明感が株式市場の重しとなっていること</li>
+        <li>原油高や米国金利への警戒感などマクロ経済の不確実性が高いこと</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 売却する場合は損失が確定するリスクがあり、保有を続ける場合はさらなる下落による損失拡大のリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 売却する場合は損失が確定しますが、保有を継続した場合はさらなる下落リスクや機会損失につながるおそれがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の売却検討の判断以降も株価は横ばい圏での推移にとどまり、中長期の下落トレンドやマクロ環境の重しに変化はなかったため、前回の判断は妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の売却検討の判断以降も株価は横ばいで推移しており、中長期の下落トレンドやマクロ環境の厳しさを踏まえた当時の判断は方向性として妥当でした。</p>
       
 
       
@@ -1144,7 +1161,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFBNVlFQWGt5VndGMHUxU1FIaDJoa1MtS2NGLVNjY1dlTURWbm1YT3ZTbUVkeGsydHU2dG1LR2VIaFg5X3VjOU9rQTYzVmZ1b0t4cXpndDV1aWE1dw?oc=5" target="_blank" rel="noopener">PayPay【PAYP】：企業情報（従業員数・代表者名など） - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tTWxoelFQNkRWZFlqN1FiSlUwZ1ZRNUszb2hMRzZLMnRIM2J6SVEtNlU2ei1ubnVEaHc3RFJsSFNjaWgyVjdPejNFM2ZreGlpRkUxbk9oYnl3VXUxUEdoZA?oc=5" target="_blank" rel="noopener">お知らせ - PayPay証券</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE8tTWxoelFQNkRWZFlqN1FiSlUwZ1ZRNUszb2hMRzZLMnRIM2J6SVEtNlU2ei1ubnVEaHc3RFJsSFNjaWgyVjdPejNFM2ZreGlpRkUxbk9oYnl3VXUxUEdoZA?oc=5" target="_blank" rel="noopener">お知らせ - paypay-sec.co.jp</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9iNHdsYS1uSng4T204ZEg1TzU1ZTYzY3FqZmkyODI0THZsd2ZHcy1aZ01pejJxNzhjai1famwxZmpqZWtTTmUxQklPOURRd1k?oc=5" target="_blank" rel="noopener">PayPay【PAYP】：株価・株式情報 - Yahoo!ファイナンス</a></li>
           
@@ -1188,26 +1205,26 @@
         <span><span class="label">1年</span>▲ +48.86%</span>
       </div>
 
-      <p class="reasoning">前回の判断から株価は横ばいで推移しており、3ヶ月・6ヶ月・1年といった中長期トレンドにおける上値の重さや、利益計画が市場予想を下回ったという根本的なファンダメンタルズの懸念に変化は見られません。短期的な反発の兆しはあるものの、マクロ環境における金利や原油価格の高騰リスクも考慮すると、引き続きリスク管理を優先した対応が妥当です。</p>
+      <p class="reasoning">前回の判断から株価は同水準で推移しており、3ヶ月・6ヶ月といった中長期トレンドの上値の重さや、利益計画が市場予想を下回ったファンダメンタルズの課題に大きな変化はみられません。中長期的なトレンドの弱さとマクロ環境の不透明感を考慮すると、引き続きリスク管理を意識した対応が合理的です。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月・1ヶ月騰落率のマイナス傾向が継続していること</li>
+        <li>3ヶ月・6ヶ月騰落率のマイナス継続による中長期の上値の重さ</li>
         
-        <li>27年3月期利益計画が市場予想を下回り、上値が重くなっていること</li>
+        <li>27年3月期利益計画が市場予想を下回ったことによるファンダメンタルズの懸念</li>
         
-        <li>原油価格高騰やマクロ経済の不透明感が重荷になっていること</li>
+        <li>日米の金融政策の行方や原油高などマクロ環境の不透明感</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有を継続する場合はさらなる市場予想からの下振れリスクに注意が必要であり、売却する場合は短期的な反発局面を逃す可能性があります。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有を継続する場合はさらなる中長期の下落リスクに注意が必要であり、売却する場合は今後の業績回復や株価反発時の機会損失に留意する必要があります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の判断時点から株価は横ばいであり、中長期の下落トレンドや利益計画への懸念という根本的要因に変化がないため、前回の売却検討の判断は引き続き妥当であったと言えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の売却検討の判断以降、株価は横ばいで推移しており、中長期トレンドや業績面の懸念が依然として解消されていないため、当時の判断は妥当なリスク管理であったと考えられます。</p>
       
 
       
@@ -1223,7 +1240,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE92Zk0xTEFjb1BRVW1zRUpOb21xRmRtZTB6MkhQZkNKUWxPRERJZ2JEUlVSYXprUk0tZjk3WGdoTGlhVEZmM3A4TXBtb29XNWd4b1E?oc=5" target="_blank" rel="noopener">信越化、非開示だった今期経常は9％増益、未定だった配当は10円増配 - 株探</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEdjRpU202OHhnejY1U21ZQmJndEhrTFlUMWMwZml3UVJ5TlhmR09SOER6eUJuWnExQk1WTEh0WmpfdTBvQUR0TWVPYWw4N0l2dGFzcU1Mbw?oc=5" target="_blank" rel="noopener">信越化学工業が4日続落､27年3月期は10％最終増益予想 - shikiho.toyokeizai.net</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBEdjRpU202OHhnejY1U21ZQmJndEhrTFlUMWMwZml3UVJ5TlhmR09SOER6eUJuWnExQk1WTEh0WmpfdTBvQUR0TWVPYWw4N0l2dGFzcU1Mbw?oc=5" target="_blank" rel="noopener">信越化学工業が4日続落､27年3月期は10％最終増益予想 - 四季報オンライン</a></li>
           
         </ul>
       </details>
@@ -1261,26 +1278,26 @@
         <span><span class="label">1年</span>▲ +33.59%</span>
       </div>
 
-      <p class="reasoning">直近の株価はメモリー高騰や売上高見通しに関する懸念から含み損を抱える状況となっていますが、3ヶ月や6ヶ月、1年といった中長期の騰落率は依然としてプラスを維持しています。短期的な部品不足やコスト上昇要因による調整局面と捉え、強力な価格決定力を持つ企業のファンダメンタルズを信じて引き続きじっくりと保有を継続することが妥当です。</p>
+      <p class="reasoning">前回分析時点から株価に大きな変動はなく中長期のトレンドも維持されているため、一時的な部品不足やコスト高による調整局面として引き続き保有を継続するのが妥当です。強力なブランド力と価格決定力を持つ企業のファンダメンタルズに大きな変化はなく、短期的な含み損にとらわれずじっくりと見守る方針が有効です。</p>
 
       
       <ul class="factors">
         
-        <li>中長期の騰落率（3ヶ月・6ヶ月・1年）がプラス圏を維持していること</li>
+        <li>1年・6ヶ月・3ヶ月の中長期騰落率が依然としてプラス圏にあること</li>
         
-        <li>メモリー高騰や売上高見通しの下振れによる一時的な調整と見られること</li>
+        <li>メモリー高騰や売上高見通しの下方修正は一時的な部品不足やコスト要因に起因する可能性が高いこと</li>
         
-        <li>企業の持つ高い価格決定力とブランド力に変わりがないこと</li>
+        <li>企業の持つ強力な価格決定力とファンダメンタルズに変化がないこと</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> メモリー高騰の長期化や予想を下回る業績の継続によって下落トレンドが長期化するリスクに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> マクロ経済のインフレ動向や地政学リスクに伴う原油高が長期化し、消費者の購買意欲や企業業績へさらに重くのしかかるリスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点から株価は横ばいで推移しており、短期的な下落要因の影響は継続しているものの、中長期トレンドに大きな変化はないため前回の保有継続という判断は妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時の「短期的な調整局面であり中長期トレンドは維持されているため保有継続」という判断は、株価の横ばい推移と中長期の上昇基調を踏まえると妥当であったと考えられます。短期間での株価変動に過敏に反応せず、引き続き中長期の視点を維持して判断します。</p>
       
 
       
@@ -1296,7 +1313,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5hWHE0Zm9TYXotd1B1bUdKc0VDWENKOVBXM2RFV0dxbldEN0RkTFlxZGxOcWxMeFVLUVBZSDktLThKN1Y3Q1M3SjI1cWV1WmxuX0hlYVVuTW5MZ3lWUWlTd3JqTGczVmdzN0U0bzBzR1dLcnVaTUpSQ3ZfQ3oySDQ?oc=5" target="_blank" rel="noopener">アップル株急落、部品不足で売上高見通しが市場予想に届かず（Bloomberg） - Yahoo!ニュース</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxQUnVQeVJBc2hja0dDaHY2c0J3ekg5MUFyb2MzaUx6QkJTUlNtZ2pQaUcwT0YwX1lscXpveVZ6akZHc2FwRmdVUlNTVDBYMDJaZXg2d0hVMXg2R1BnWmZXTVpWdmhxU1hQcjMySnByVHpKOXJIQWZ5dlgxSzItS0pxMDZpd3RSN015NTBJT093OTctRHM?oc=5" target="_blank" rel="noopener">アップル、最高値の株価に死角は？ 30日決算 メモリ高騰に不安 - ig.com</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPbjIxcUNTVy12WlpGS0k5V1ExdXVNblBHSTNaX3pQU3R1dldjeGNERFBiRm81SWxONmRIYTRhLUp6ai1sUDhvc0Q0SEN4M0RHOHF5Mm53RkdsMHprVzU2WTlWc0Z0SE0xano2UEd4UnlNTC1zdTM0ek9YTE1kTVNXODBfTGR2QdIBiwFBVV95cUxOaXBpRmNzalFsdjh4UDFoX1dYUUVfdmFMWGYydXo0eXE2anhJX1lNUG9fUFJBRzE0VXpGbnZqSzhvM2lzbkZBXzJ3N1VBSGxwMGtmV0ZWS3lDaW1CWVVwRFBkTk9HLVA5T1FyOUIwRnlkU0RGdTI5Y1ZNUlJPWEd2cmlpRFAweEtBQk9J?oc=5" target="_blank" rel="noopener">115％の上昇を記録したアップル（AAPL）株は、現在割高かもしれない - simplywall.st</a></li>
           
         </ul>
       </details>
@@ -1334,26 +1351,26 @@
         <span><span class="label">1年</span>▲ +33.59%</span>
       </div>
 
-      <p class="reasoning">直近の株価はメモリー高騰や売上高見通しの下振れ懸念により一時的な調整局面にあるものの、中長期的な1年・6ヶ月の騰落率は依然として堅調なプラスを維持しています。また、強固な価格決定力などの本質的な事業価値に大きな変化はなく、数日単位の短期的な下落のみを理由に売却を急ぐのではなく、中長期の成長トレンドを見据えて継続保有することが妥当です。</p>
+      <p class="reasoning">前回分析時点から株価は横ばいで推移しており、3ヶ月・6ヶ月・1年といった中長期の騰落率はいずれもプラスを維持しています。部品不足や売上高見通しの下振れによる一時的な調整局面にあるものの、強固なブランド力や価格決定力という事業の本質的価値に変化はなく、中長期の成長トレンドを信頼して継続保有することが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率が+33.59%と中長期のトレンドは依然として良好である点</li>
+        <li>1年騰落率が+33.59%と依然として良好な中長期の上昇トレンドにあること</li>
         
-        <li>メモリー高騰や売上見通しの懸念による下落は一時的な調整要因である可能性が高い点</li>
+        <li>部品不足や見通し下振れは一時的な悪材料であり、本質的な競争力は損なわれていないこと</li>
         
-        <li>企業が持つ高い価格決定力やブランド力といった強固な事業基盤に変化がない点</li>
+        <li>ウォーレン・バフェット流の価格決定力など、質の高い企業としての強みが評価されていること</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> メモリ価格の高騰長期化や地政学リスクに伴うマクロ環境の悪化が、予想以上に業績や株価の重しとなるリスクに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 部品不足の長期化やマクロ環境の悪化がさらに進んだ場合、一時的な調整が想定以上に長引くリスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点から株価は横ばい圏での推移となっており、中長期トレンドを重視して短期的な下落に惑わされず保有を継続した判断は、現在の状況に照らして妥当なものでした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時の株価は横ばいであり、中長期のトレンドが維持されているという判断は今回の株価推移とも整合的であるため、引き続き中長期目線での継続保有方針を維持します。</p>
       
 
       
@@ -1369,7 +1386,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5hWHE0Zm9TYXotd1B1bUdKc0VDWENKOVBXM2RFV0dxbldEN0RkTFlxZGxOcWxMeFVLUVBZSDktLThKN1Y3Q1M3SjI1cWV1WmxuX0hlYVVuTW5MZ3lWUWlTd3JqTGczVmdzN0U0bzBzR1dLcnVaTUpSQ3ZfQ3oySDQ?oc=5" target="_blank" rel="noopener">アップル株急落、部品不足で売上高見通しが市場予想に届かず（Bloomberg） - Yahoo!ニュース</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxQUnVQeVJBc2hja0dDaHY2c0J3ekg5MUFyb2MzaUx6QkJTUlNtZ2pQaUcwT0YwX1lscXpveVZ6akZHc2FwRmdVUlNTVDBYMDJaZXg2d0hVMXg2R1BnWmZXTVpWdmhxU1hQcjMySnByVHpKOXJIQWZ5dlgxSzItS0pxMDZpd3RSN015NTBJT093OTctRHM?oc=5" target="_blank" rel="noopener">アップル、最高値の株価に死角は？ 30日決算 メモリ高騰に不安 - ig.com</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPbjIxcUNTVy12WlpGS0k5V1ExdXVNblBHSTNaX3pQU3R1dldjeGNERFBiRm81SWxONmRIYTRhLUp6ai1sUDhvc0Q0SEN4M0RHOHF5Mm53RkdsMHprVzU2WTlWc0Z0SE0xano2UEd4UnlNTC1zdTM0ek9YTE1kTVNXODBfTGR2QdIBiwFBVV95cUxOaXBpRmNzalFsdjh4UDFoX1dYUUVfdmFMWGYydXo0eXE2anhJX1lNUG9fUFJBRzE0VXpGbnZqSzhvM2lzbkZBXzJ3N1VBSGxwMGtmV0ZWS3lDaW1CWVVwRFBkTk9HLVA5T1FyOUIwRnlkU0RGdTI5Y1ZNUlJPWEd2cmlpRFAweEtBQk9J?oc=5" target="_blank" rel="noopener">115％の上昇を記録したアップル（AAPL）株は、現在割高かもしれない - simplywall.st</a></li>
           
         </ul>
       </details>
@@ -1407,26 +1424,26 @@
         <span><span class="label">1年</span>▲ +44.23%</span>
       </div>
 
-      <p class="reasoning">直近の株価は横ばいで推移していますが、1ヶ月・3ヶ月・1年騰落率は堅調であり、中長期の上昇トレンドは維持されています。米軍兵器の補充に伴う売上高予想の引き上げや継続的な防衛需要がファンダメンタルズを支えているため、引き続き保有を続けることが妥当です。</p>
+      <p class="reasoning">前回の分析以降、株価はほぼ同水準で横ばいとなっており、短期的な値動きによる方向性の変化は見られません。中長期的な騰落率や防衛関連の需要・大型契約に関する好材料が継続して下値を支えているため、引き続き保有を継続することが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>米軍兵器補充に伴う業績予想の上方修正</li>
+        <li>1ヶ月および3ヶ月の騰落率が依然として堅調であること</li>
         
-        <li>証券会社による目標株価の引き上げ</li>
+        <li>大型契約の獲得や目標株価の引き上げなどファンダメンタルズを支持するニュースがあること</li>
         
-        <li>中長期的な堅調なトレンドの継続</li>
+        <li>地政学リスクを背景とした防衛関連セクターへの需要が中長期的に継続していること</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は地政学リスクやマクロ経済の変動による短期的な株価の乱高下に注意してください。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は中東情勢の急変やマクロ経済の金利動向による株価変動に注意し、売却検討の場合は利益確定のタイミングを慎重に見極める必要があります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の分析以降、株価はほぼ横ばいであり、中長期の強気トレンドや防衛需要を背景とした前回判断は結果として妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中長期の上昇トレンドと防衛需要に支えられた保有継続」という判断は、株価が横ばいで推移する中においても妥当な結果となりました。今回は前回同様に中長期トレンドとファンダメンタルズを重視し、短期的な横ばい推移を理由に判断を曲げず保有継続とします。</p>
       
 
       
@@ -1442,7 +1459,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxPRzVjYTRfZ3lmNG9TSjR3bWp5N0lJLV9WR0JSU05uZzNrUklfNFFya0FnTko3WlJKeEc0am5DbEppSlVuWHlHeGgzOVhiRVVBb0dQQjl4S3BDZ0poZWJOcHRHZ0w2ZlBzYXRFWUhTdFQ0NGZScXZCLWFLWDZHYzhicmJJWlUyUkx4TWNVLXVQbmZ0d3Nnd0t4WG5tMG8xalVpMjQ3SldHUU0yaUc4N1NJUkN5M1k?oc=5" target="_blank" rel="noopener">Lockheed Martin’s New Contracts Let It Keep the Savings. Here’s Where the Stock Could Go. - TIKR.com</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxNdzQ4Q0pzTHJaQ09ZOUVFcjJqWjc0NzgtSjFzeVltREthZzdxbHZGa0xGNGYwdk9DTmZjRmY1YnJXMkd2MTJaN0p2MkZoTjBtQjlyNDBvMENMQ044RzhualdkUkZWZ0EzX1dHQkVrdXNmUnVuUDRJTmZBaURCMVZGZQ?oc=5" target="_blank" rel="noopener">ロッキードとＲＴＸ、米軍兵器補充で26年売上高予想を引き上げ - ロイター</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMimwFBVV95cUxNYnlfUFZKck0ydEF0TUxkN3lYWW45SlgwS3dESmtHdVpMWXhSaEREQVJaVWIybi16SVRjV1lhYzE5X2NuV2dJQTZTSFVXNW1wWDRsbWF1ZGpuVlhsaHdfRklpTXBxZks4NmVGdnV1d19TcG1WcjRyOHFOcUxjdXZRQmMwM2kyc1lPdnZkd1F0Z2dhU2FRNWZIYjdtZ9IBoAFBVV95cUxORG9GWXdIZWsweEM5d1oxRVRQc3JtQlo1MTFvUFd0UldOUG4xT2hEUUF3MjZWYTAyc293dWY4QVpOUkdSQlZRY1NEdmQxVUYweTZNaXFIUndWMDF2eG1lR3p2N3E4a1JVRVhfWUs0YlJVUGFhaDZRUlktS21aMDUxNGFYSWFVVWxOQVZHendJRFMwd2NvZ19La3VOVmlTdWo3?oc=5" target="_blank" rel="noopener">ロッキード マーチン(LMT)が大型契約とAI試験で注目集める, 株価はまだ割安なのか? - simplywall.st</a></li>
           
         </ul>
       </details>
@@ -1480,26 +1497,26 @@
         <span><span class="label">1年</span>▲ +81.92%</span>
       </div>
 
-      <p class="reasoning">前回の分析以降、株価は横ばい圏で推移したものの、中東情勢の緊迫化に伴う原油高や自社株買いの発表などの好材料が継続しています。1ヶ月や6ヶ月、1年といった中長期の騰落率は堅調であり、外部環境を背景とした底入れ期待のトレンドに変化はないため、引き続き保有継続が妥当です。</p>
+      <p class="reasoning">前回の分析以降、株価は同値水準での推移となりましたが、中東情勢の緊迫化を背景としたWTI原油価格の上昇や1ヶ月および6ヶ月、1年の中長期的な堅調な騰落率に大きな変化はありません。外部環境や資源高のトレンドを考慮すると、現在の水準での保有継続が引き続き妥当であると判断されます。</p>
 
       
       <ul class="factors">
         
-        <li>中東情勢の緊迫化による原油価格の上昇トレンド継続</li>
+        <li>中東情勢の緊迫化による原油価格（WTI）の上昇基調</li>
         
-        <li>自社株買いの実施発表による株価を下支えする効果</li>
+        <li>1ヶ月（+10.59%）や6ヶ月（+6.15%）の中長期的な堅調な騰落率</li>
         
-        <li>1ヶ月および1年騰落率にみられる堅調な中長期の上昇基調</li>
+        <li>購入価格を上回る含み益（+3.83%）の維持</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は地政学リスクの急激な後退や原油価格の急落に注意し、売却検討の場合は利益確定後のさらなる上値追いの機会を逃すリスクに注意してください。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は中東情勢の急変や原油安への転換による下落リスク、売却検討の場合は今後のさらなる資源高や株価上昇の機会を逸するリスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の分析時点での保有継続の判断は、中東情勢の緊迫化や原油高、および中長期の堅調なトレンドを的確に捉えており、その後の株価横ばいの中でも利益圏を維持できていることから妥当な判断でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の分析時と同値の3717.0円での横ばい推移となったため、前回の「保有継続」という判断は短期的な値動きに対してブレることなく中長期トレンドに着目した点で妥当であった。</p>
       
 
       
@@ -1509,13 +1526,13 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE9pNEZzaHlWWWt0S1N4M2RBV1ZOdkRxdGJvZmtZVjd6MmxaMnIwb0tCV2JwOWdmQXVqa1hxN0FEQThmRmZobW5Nb3RGcndJd0haMFhiUl9jVnVPZzlCS1NB?oc=5" target="_blank" rel="noopener">(株)ＩＮＰＥＸ【1605】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
           
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE1FdllYaWZaLU9aOG56NGlHLXhxUmlWMWJkUXJ2MEVmRHltVjA2eEFicV9SX21BMk5XbXBMcU01XzdyN2VZTEZxRXhJN3JuRFdHaXc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが４日続伸、イラン情勢への警戒からＷＴＩは８３ドル台に上昇 - 株探</a></li>
+          
           <li><a href="https://news.google.com/rss/articles/CBMiRkFVX3lxTFBmM2ZUWS1tRjZYU1JndlZ4TDN0Vng3RjVmby1aY2ZwSGZ1N3hud2poaTBhTy0zSGlOdWhsNDROaUpnNkpCOGc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが４日続伸、イラン情勢への警戒からＷＴＩは８３ドル台に上昇 - みんかぶ</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiR0FVX3lxTFBoelZqYk9WeUZUQmhZZDNhaU9yZUpudUZWU05jREgtYnBfaWRudVMzb1JQd2NqV3NZR1gtMjZoWGs2UFBQb3dn?oc=5" target="_blank" rel="noopener">１１日のＡＤＲ動向＝円換算値で高安まちまち、ＩＮＰＥＸ、楽天グループ、三井金属など高い 速報 - kabushiki.jp</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE9CMWI4V0tXZ3FVLXRSNXBablk3aVdMR0d6ckVzMllrN2o3bWlvTlk2VFJGZ24zVGdVY3BDOW02QUhNb00xdDhrcmllbkFDTVRCTnc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸ、自社株買いの実施を発表 - 株探</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFA5SWxkY01aMzFoMUloWjdUcW5RcVBuS1JDWEh5RHZGQUJYd2E5WFVjSjhVZ0I3dkt0SFFpOWJXYjNPbVo2dms0RGRWaDROcEJQTmQyeWdQVjNGUktNVFBFNzh5VlBRU3Y2MHIwbA?oc=5" target="_blank" rel="noopener">INPEX株価が一時4.1%高 原油上昇、チャートは底入れ期待 - 日本経済新聞</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBxTWVxWHo0OGc0dnNicFJZc1Q1LWpGNlJaRDU1MDA1T1IwR0RmbkVSZkFXanZIeUVEWFlIQ0VHOGhIYkdYS04tbXB0RlFLU3FVVW96VUpiMm52UExwRFloLTUyS1ZTWTFaVDFhOA?oc=5" target="_blank" rel="noopener">INPEX株価が一時4.3%高 NY原油が上昇、中東緊迫で - 日本経済新聞</a></li>
           
         </ul>
       </details>
@@ -1553,26 +1570,26 @@
         <span><span class="label">1年</span>▲ +19.21%</span>
       </div>
 
-      <p class="reasoning">前回の分析以降、株価は横ばいで推移しているものの、中長期的な1年・6ヶ月騰落率は依然としてプラスを維持しており、AI関連の需要期待などのファンダメンタルズに大きな変化は見られません。したがって、短期的なボラティリティやマクロ経済の不確実性に過度に惑わされず、中長期的な成長トレンドに期待して保有を継続することが妥当です。</p>
+      <p class="reasoning">前回の分析以降、株価はほぼ横ばいで推移していますが、1年および6ヶ月の中長期騰落率は依然としてプラスを維持しており、AI需要を中心としたファンダメンタルズに大きな変化はありません。米国の金利動向や地政学リスクに伴うボラティリティには注意が必要なものの、短期的な価格の膠着だけで判断を変える段階ではなく、中長期的な成長トレンドに期待して保有を継続するのが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>中長期的な1年および6ヶ月騰落率のプラス維持</li>
+        <li>1年および6ヶ月の騰落率がプラスを維持する中長期的な上昇トレンド</li>
         
-        <li>フィジカルAI分野を含む半導体需要への根強い期待</li>
+        <li>AI関連の持続的な需要期待と半導体セクターのファンダメンタルズ</li>
         
-        <li>直近の株価は横ばいであり、中長期のトレンドが崩れていないこと</li>
+        <li>前回の判断から株価が横ばいで推移しており、投資方針を変更すべき悪材料の出現はないこと</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は原油高やマクロ経済の金利動向による全般的な株価下落リスク、売却検討の場合は今後のAI関連需要の成長機会を逃す機会損失に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合はマクロ経済環境の悪化や金利上昇によるハイテク株全体の調整リスクに注意し、売却検討の場合は早計な手放しによる今後の成長機会の逸失リスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の分析時点から終値に変化はなく、中長期トレンドを重視した保有継続の判断は引き続き妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点の判断（株価横ばい・中長期トレンドの維持を根拠とした保有継続）は、今回の直近終値が前回と変わらず同水準で推移していることから、短期的なノイズに惑わされない妥当な判断であったと考えられます。そのため、今回も同様に短期的な値動きではなく中長期のトレンドを重視する方針を維持します。</p>
       
 
       
@@ -1626,26 +1643,26 @@
         <span><span class="label">1年</span>▲ +54.39%</span>
       </div>
 
-      <p class="reasoning">前回分析時点から株価は横ばい推移ですが、1ヶ月騰落率や1年騰落率をはじめとする中長期の堅調な上昇トレンドは維持されています。中東情勢を背景とした原油価格の下支えやエネルギーセクターへの資金流入が引き続き期待できるため、短期の微動に惑わされず保有を継続するのが妥当です。</p>
+      <p class="reasoning">前回分析時点から株価は横ばいで推移していますが、1ヶ月・3ヶ月・6ヶ月・1年といった中長期の騰落率は依然として堅調なプラスを維持しています。中東情勢の継続や原油高を背景としたエネルギーセクターへの追い風も変わらないため、前回の継続判断は妥当であり、引き続き中長期のトレンドに沿って保有を継続することが適切です。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率が+54.39%と非常に強力な中長期の上昇トレンドを維持していること</li>
+        <li>1年騰落率が+50%を超えるなど、強固な中長期の上昇トレンドが継続している点</li>
         
-        <li>ホルムズ海峡の動向など地政学リスクに伴う原油価格の底堅さが追い風となっていること</li>
+        <li>ホルムズ海峡の動向など地政学リスクを背景とした原油価格の下支え要因がある点</li>
         
-        <li>前回分析から株価は同水準を維持しており、トレンドの崩れが見られないこと</li>
+        <li>短期的な株価の停滞はあっても、これまでの判断を覆すような企業固有の致命的な悪材料が見当たらない点</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の急激な鎮静化や原油需要の急低下によるエネルギー価格の下落リスクに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は中東情勢の急激な鎮静化や原油急落による株価下落リスク、売却検討の場合は早すぎる利益確定によるその後の上昇機会の逸失リスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時の「中長期の上昇トレンドと原油価格の底堅さを重視して保有継続とする」という判断は、その後の株価が横ばいで安定推移したことと照らし合わせて妥当でした。今回もこの中長期的なトレンドとセクターの優位性を根拠に判断を継続します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点での株価横ばいに対し、その後の株価も同水準で推移しており、中長期のトレンドを重視した前回の「保有継続」の判断は現状と照らし合わせても妥当であったと言えます。</p>
       
 
       
@@ -1699,26 +1716,26 @@
         <span><span class="label">1年</span>▲ +106.14%</span>
       </div>
 
-      <p class="reasoning">前回の分析から株価は同水準を維持しており、中長期的な強い上昇トレンドや最高益、自社株買い、高額品需要などのファンダメンタルズの好材料に変化はありません。日経平均が堅調に推移する中、短期的な小動きは許容範囲内であるため、引き続き保有を継続するのが妥当です。</p>
+      <p class="reasoning">前回分析から株価は同水準を維持しており、最高益や初の自社株買い、ポケカなどの高額品需要を背景とした中長期的な強い上昇トレンドに変化はありません。足元で日銀の利上げ方針やマクロ経済の不確実性は残るものの、銘柄固有の好材料が勝っているため引き続き保有継続が妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>中長期の強力な上昇トレンドと最高益・自社株買いの好材料が継続</li>
+        <li>最高益達成や初の自社株買いを好感した中長期の力強い上昇トレンド</li>
         
-        <li>ポケカ人気など高額品取扱による成長軌道への期待感</li>
+        <li>ポケカなどの高額品取扱いに伴う新たな成長軌道への期待感</li>
         
-        <li>日経平均の堅調な推移と地政学・マクロ環境の注視</li>
+        <li>前回から株価水準が安定しており短期的な値動きに大きな崩れがないこと</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続する場合は全体相場の地政学リスクや原油高による株式市場への悪影響に注意し、売却検討する場合は短期的なボラティリティや利益確定売りの動きに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合はマクロ経済の動向や金利上昇に伴うグロース株のボラティリティ拡大に注意し、売却検討の場合は利益確定のタイミングを逸するリスクに留意してください。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の分析時点から株価は同水準で横ばいとなっており、短期的な変化はないものの、中長期的な強気トレンドと業績好調の背景が引き続き機能しているため、前回の「保有継続」の判断は妥当であったと振り返ります。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回から株価は横ばいで推移しており、前回の「中長期のファンダメンタルズを信頼しての保有継続」という判断は値動きと照らし合わせても妥当であったため、今回も同様の強気トレンドを根拠に保有を継続します。</p>
       
 
       
@@ -1732,7 +1749,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE5qN2dIZWZtajlFekR6MEVNVmlaUmV5eUFXd09udUgxbVNLaTVmeU5NM0ZjWk11Nk96N3RqeFRWUDJBMlJublFTX19aTXJmMG9ZQlpZQ3QwS2pjTlpVamJVMg?oc=5" target="_blank" rel="noopener">話題株ピックアップ【夕刊】（1）：ユニチカ、オムロン、メルカリ - 株探</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qTkJaVV9XQ0ZiM1hZZFlncnJ1MVVKOTNtWEs4UEV4b0plcWRndjFvOTNTUUdGOG8yazBnZ3c5bW1vb3pUM1VwNHhydzk2ZnJnRFRCekFRbDBtWmda?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：企業情報（決算時期や平均年収、代表者名、IR動画など） - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE9oMkFja2pBWnV4YXFLWUdrMXdqY3JaclhNUGVQcndHanJnUV9DdDFuZExwWVRhZEtianhxcGZDakxTM2JFbE82b2tEZGZ2YXlUcHdHTlk5TjNmUQ?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：掲示板 - Yahoo!ファイナンス</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMifkFVX3lxTFBtRnJsZ2M1NERNMGdaU200WFg0T1BVbkNHWXNJLU1tU0RvV00zdTkyTDhqWWpZOG9HZ1diM2YzcmNYLWVtNVhiTTNndzNlNF80Q05HSEhsUmQ3WllNeTdmNVRibmplVmV6c2QwMVJJZFpZTnNyWjlTSTh4alZMUQ?oc=5" target="_blank" rel="noopener">メルカリ株、ポケカ人気で4割高 高額品で再び成長軌道へ - 日本経済新聞</a></li>
           
@@ -1772,26 +1789,26 @@
         <span><span class="label">1年</span>▲ +234.78%</span>
       </div>
 
-      <p class="reasoning">直近の好決算による大幅な上方修正やAIブームを背景とした強固な需要が確認されており、3ヶ月・6ヶ月・1年騰落率にみられる中長期の上昇トレンドは依然として健在です。足元の株価は高値圏で推移しボラティリティも伴っていますが、数日間の株価停滞のみで判断を曲げる必要はなく、優れた業績とマーケットの追い風を信頼して保有を継続するのが妥当です。</p>
+      <p class="reasoning">4〜6月期決算における大幅な上方修正やAI関連の強力な需要を背景に、3ヶ月・6ヶ月・1年騰落率で示される中長期の上昇トレンドは依然として堅調です。直近の株価は前回の分析時と同水準の横ばい推移となっていますが、短期的な値動きだけで中長期の優位性が損なわれたわけではなく、好調な業績と市場の押し上げ効果を信頼して保有を続けることが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>4〜6月期決算における大幅な上方修正と利益の上振れ</li>
+        <li>4〜6月期決算の好調な利益上方修正と強い業績モメンタム</li>
         
-        <li>3ヶ月・6ヶ月・1年を通じて極めて堅調な中長期の上昇トレンド</li>
+        <li>3ヶ月・6ヶ月・1年と長期にわたる一貫した上昇トレンドの継続</li>
         
-        <li>日経平均を大きく押し上げるほどの強い市場での存在感とAI関連需要の継続</li>
+        <li>日経平均への高い寄与度とAI関連ブームに支えられた買い需要</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は急激なボラティリティやマクロ経済の地政学リスクによる調整に注意し、売却検討の場合は早計な利益確定によりさらなる上昇局面を取り逃がすリスクに留意してください。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続する場合は地政学リスクや原油高、米国のマクロ経済動向によるハイテク株全体の急変動に注意が必要で、売却する場合は利益確定のタイミングを逸するリスクに留意します。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点での「保有継続」の判断は、その後の堅調な株価推移と強気な業績修正の背景に合致しており、短期的変動に惑わされず中長期トレンドを重視した判断として妥当であったと考えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の判断時点から株価は同水準で横ばいとなっており、中長期の上昇トレンドが継続していることから、前回示した好決算やAI需要を根拠とした「保有継続」の判断は妥当でした。</p>
       
 
       
@@ -1801,7 +1818,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1JVUFxNVVmeUVBczVGYnFXcDRxaDBSZXNlZlpLTzhlV0hwZGRlY2xKSGZ6NXA5RlhGakloeXE5c3l3b082Zi03UTFwNlM3TW9iLVRmTDNsa0U0OTVXRDcwWjFPSWwwTDZZdGZwaQ?oc=5" target="_blank" rel="noopener">アドバンテスト利益1945億円上振れ 株価動かした4〜6月期決算は - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxOZTliVGdTRjR2TVBoOE1hdGozdDVOTFhqci02Y3hZSl9ZWVlWTlRHeXlTNUt6V25STzVWNTc4Mkh5VVVvdFFOLVNKQXluamU4aHBMUk1YUUlnVzdpdmlpQmxwdWNYWHpsMk8tX1Rpd3RtZ0g2b3Zmal83N3Q1aFdyNEZGVW04UzQ?oc=5" target="_blank" rel="noopener">アドバンテスト：業績予想を大幅上方修正で目標株価引き上げ(トウシル) - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxQcHVXLXN5b2Exblk1VEc3cVkxenhSWWtJZl8xanRqMmF6c2Q0QV9VSzdIQ2h6ODdTTE9mNVpxcjlJZ3dmQnU1UmlXLTlYVm5OS2p4OVhrak5pOHctbllka2I1QUFFWFhkZjFtYW40N0hrT0ZVRFlRT25hcU5yeXF6U3F0SE1JQk0?oc=5" target="_blank" rel="noopener">日経平均寄与度ランキング（大引け）～日経平均は続伸、東エレクやアドバンテストが2銘柄で約218円分押し上げ(フィスコ) - Yahoo!ファイナンス</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNalk4WlNYUndtbW52MUpBTjhJb3FkUU9TaS1SSXNLQlZSYzNXOWlKYkJqZlY2UnVObnA5RTFmQUZRSHJOb2FjY2lzMVRRWXZ0QzBtZGtnbVVteDF5anBOTm1uZVE5bjBEWWVfamQtaFZidHpZMzhtYWh5U1Q0SkYzTlNkRHUtcDZrRHNQMDR4a094TzFVRXJNUw?oc=5" target="_blank" rel="noopener">アドバンテスト、急落株価の回復困難？ 29日決算 AIブーム継続に疑念 - ig.com</a></li>
           
@@ -1845,26 +1862,26 @@
         <span><span class="label">1年</span>▲ +18.38%</span>
       </div>
 
-      <p class="reasoning">前回分析時点からの株価の大きな変動はなく、1ヶ月騰落率がプラスに転じるなど足元では底堅い動きが見られます。エヌビディアとのAIデータセンター提携に伴う事業領域の拡大期待が引き続き中長期的な成長を支えており、直近の小幅な値動きだけで判断を変える必要性は低いと考えられます。</p>
+      <p class="reasoning">購入価格から約7%の含み益を維持しており、1ヶ月騰落率がプラスに転じるなど足元の下支えが見られます。エヌビディアとのAIデータセンター提携を契機とした新たな事業展開への期待が中長期的な成長を下支えしているため、地政学リスクやマクロ経済の不透明感はあるものの保有を続けるのが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>1ヶ月騰落率がプラスに転じ、足元で株価が持ち直していること</li>
+        <li>1ヶ月騰落率のプラス転換と底堅い足元の値動き</li>
         
-        <li>エヌビディアとの提携によるAI関連としての新たな成長期待</li>
+        <li>エヌビディアとのAIデータセンター提携報道による事業領域拡大期待</li>
         
-        <li>過去最高益水準にある強力な業績基盤と中長期のトレンド</li>
+        <li>過去最高水準の業績と防衛・AI関連としての長期的優位性</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は中東情勢や原油価格の高騰、地政学リスクに伴う市場全体のボラティリティ拡大に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 保有継続の場合は世界的な金利動向や地政学リスクに伴う市場全体の調整に注意し、売却検討の場合は急激な株価変動による利益幅の縮小に備える必要があります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点からの株価は同値水準で推移しており、前回の「保有継続」の判断はAIデータセンター関連の材料や足元の底堅い動きを捉える上で妥当なものであったと言えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点から終値に変化はなく、中長期トレンドに大きな変化は見られないため、前回の保有継続という判断は妥当でした。今回も短期的な株価の小動きに惑わされず、事業領域の拡大期待という中長期的なファンダメンタルズを重視して判断を継続します。</p>
       
 
       
@@ -1878,7 +1895,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE16YXVqQlNZVE1yMk9pSkM1dWx2aW9LTGptYlRPZTVtTFIxRmhpMlhkTTRtM1RjTkZaakM1a3F4QnVmbkJMRzBZUFI4a3pXYXpGMlctTURSVE4tNjZ4bHJ3bW0xMm1sWDVZdVVGWA?oc=5" target="_blank" rel="noopener">三菱重工業の株価反発 「エヌビディアとAIデータセンターで提携」報道 - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBQb2FBdGtETjlyUzRXZVMyMlhXTnRwc3ZHYzNWUzV3LUpxU2hVSVo2WVc3QjlWeXlNbHcxTWpad1dueWJzLTR6bVRvSFVMOFZZQmF5ampxQQ?oc=5" target="_blank" rel="noopener">防衛銘柄からAI銘柄へ変貌｢三菱重工｣は今後何で稼ぐか - shikiho.toyokeizai.net</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBQb2FBdGtETjlyUzRXZVMyMlhXTnRwc3ZHYzNWUzV3LUpxU2hVSVo2WVc3QjlWeXlNbHcxTWpad1dueWJzLTR6bVRvSFVMOFZZQmF5ampxQQ?oc=5" target="_blank" rel="noopener">防衛銘柄からAI銘柄へ変貌｢三菱重工｣は今後何で稼ぐか - 四季報オンライン</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE9UdmQ3VjJRSWpZcHlLSVdMbGM0QmVrSXdHVndaSE1nd1RHT09XZzBhanRrWlJBSmI3ZFBUeXVkQVIzeWE4c2JiV25tVVJpenR2OTFuMNIBV0FVX3lxTE5CaktCRG1wXzBLWXpaUUJ1a2xTWHIwclU3dEplQUZkZWxvTnpVd0liMFFOcUMxdENoUU5CbTdtdDZCWEJVUWNRMkk1d3daM29Lemp0Z0RlWQ?oc=5" target="_blank" rel="noopener">【日本株】三菱重工など2割下落…業績は過去最高なのになぜ？急落した「防衛関連株」の本当の実力 - マネクリ</a></li>
           
@@ -1907,8 +1924,8 @@
       </li>
       
       <li>
-        <a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTE1yY0QySXZ5VlRmYmE1SXJudjVwdElaYWRBY0JYSWlQMkJHSTNVOG9PeW9uZ3lXa0ZyU2JCRmR3SEhqU08zOVpCZDdhWUxDWDZQeEl6UHJR?oc=5" target="_blank" rel="noopener">金利を決めるだけではない、日銀総裁の一言で円・株価が動く理由と「独立した中央銀行」の実像 【やさしく解説】日銀総裁(1/6) - JBpress</a>
-        <div class="macro-source">JBpress ・ Tue, 11 Aug 2026 21:00:00 GMT</div>
+        <a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE4wYUJBRDlldTU2eFp2QVBJMG94Unk3R3ZKN2pnbmNjRnp6YUFRNEJvSFI2WS1ONW55UGpPbFlEcUdWREZUVFNOZ1VnRjZzSlJ3WlBNRQ?oc=5" target="_blank" rel="noopener">利上げペース早める可能性も 日銀金融政策の行方 - 日経CNBC online</a>
+        <div class="macro-source">日経CNBC online ・ Fri, 07 Aug 2026 01:54:29 GMT</div>
       </li>
       
       <li>
@@ -1961,26 +1978,26 @@
       </div>
       
 
-      <p class="reasoning">3ヶ月で+5.61%、1年で+30.98%という中長期の堅調な上昇トレンドが維持されている。米国の金融政策や原油高といった短期的な懸念材料は残るものの、S&amp;P500の長期的な成長力を背景とした投資妙味は変わらないため、引き続き買い候補とする。</p>
+      <p class="reasoning">1年騰落率+30.98%や3ヶ月騰落率+5.61%という中長期の堅調な上昇トレンドが継続しており、S&amp;P500の成長力に対する優位性は揺らいでいません。米国の金融政策の不透明感や原油価格の高騰といったマクロリスクは存在しますが、中長期的な資産形成の受け皿としての価値は高く維持されています。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月や1年など中長期の騰落率が依然として力強い水準にあること</li>
+        <li>3ヶ月で+5.61%、1年で+30.98%の中長期の強固な上昇トレンド</li>
         
-        <li>新NISAなどを通じた安定的な資金流入の継続</li>
+        <li>新NISAなどを背景とした米国株（S&amp;P500）への継続的な投資需要</li>
         
-        <li>米国の金融政策や地政学リスクによるボラティリティへの警戒</li>
+        <li>FRBの金融政策や中東情勢などのマクロリスクによる一時的なボラティリティ</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 米国のインフレ高止まりや原油価格の上昇に伴う、マクロ経済の急激な冷え込みリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 米国のインフレ再燃や地政学リスクの悪化に伴う急激な株価調整のリスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回提示した「買い候補（スコア+60）」という判断は、中長期の強力な上昇トレンドと一致しており、足元でも株価が高値圏を維持していることから妥当であったと言える。短期的な原油高やFRBの動向への警戒は継続しつつも、中長期的な強気姿勢をそのまま今回も維持する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の判断（買い候補・スコア+60）は、株価が横ばい圏で推移したものの、中長期的な上昇トレンドが依然として崩れていないため妥当であった。</p>
       
 
       
@@ -1994,9 +2011,9 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFB6dmRmai05Rm9yTVJlcElla0xKcE5VSUJWWkpVMkpsLXA5emJmSmF6Ym1RZnhfNk8wdzdiS2FhX1lybDF5RVBocXNnb3pmR05COEE?oc=5" target="_blank" rel="noopener">初任給から始めて金融資産8.5億円 たぱぞう氏が明かす、S&amp;P500が選ばれ続ける理由 - ログミーFinance</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBtSjhFenh2aTItMnBxNDYxLXdGTkN5U0FxQml4TzhFM2NXWWZDRlhxbmRBZzBGWjFmcWY4S3ZlaE5lZFBwNUMycUlGZzVCbHVnRUdlRXlWVzR6THB1ZEhj?oc=5" target="_blank" rel="noopener">新NISA初心者向け、日本株か米国株か？ETFの選び方と投資信託との賢い使い分け - BigGo ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMia0FVX3lxTE1iSkFqUW9SakthdlV5cWhLd3BIQjNvZHh4WVg5RDZKejhUbkNtLWhfbWxlZmVMX0xaNnpzQjhfZVp2U2E4Q3gxSTZlTGpqdGRETGN0bGFrREJuUk9HZlFlbktCMk5ZWXRwOThj?oc=5" target="_blank" rel="noopener">【楽天銀行証券担保ローン】ETF116銘柄を担保対象に追加！（2/24 18:00～） - 楽天証券</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMi-AFBVV95cUxPaEhGd0NoR05KdTdIZlRqMHJxMFpvVlRlSWhPbGM3eHdqcFUwTUxsemwyVnpVWEF2V2NkUmRPZ2o2b015c3BtNDlTTkJIaGZ2aDBpSlc2QjZjTEZKWHZQbTZ0UGcyUmZxYlhsNU1OYngybmN6TjN3UkxIVGZzTjhFRFRrT0tZUDJlREVSWkFGa3dqc1NDQURZVFpWQkZzSnpKLURIMDBvYVU4c3kzaS13QW55QzJCby1mYlBUb04xQnF6Zm1Pa1pkQTk5YkxFRWw1cktjZkJ3RnBQelJnNE0weHlOZTZFcWNyWlJ3ZE5KbWxadmFZVm9pNg?oc=5" target="_blank" rel="noopener">国内株式 Myメニュー - sbisec.co.jp</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBtSjhFenh2aTItMnBxNDYxLXdGTkN5U0FxQml4TzhFM2NXWWZDRlhxbmRBZzBGWjFmcWY4S3ZlaE5lZFBwNUMycUlGZzVCbHVnRUdlRXlWVzR6THB1ZEhj?oc=5" target="_blank" rel="noopener">新NISA初心者向け、日本株か米国株か？ETFの選び方と投資信託との賢い使い分け - BigGo ファイナンス</a></li>
           
         </ul>
       </details>
@@ -2022,8 +2039,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">+40</div>
-        <div class="score-track"><div class="score-fill" style="width: 40%;"></div></div>
+        <div class="score-value">+45</div>
+        <div class="score-track"><div class="score-fill" style="width: 45%;"></div></div>
       </div>
 
       
@@ -2037,26 +2054,28 @@
       </div>
       
 
-      <p class="reasoning">中長期の6ヶ月および1年騰落率はプラスを維持しているものの、3ヶ月騰落率のマイナスや高値からの乖離、さらに米半導体株売りや金利・原油高といったマクロ経済の不確実性が残存している。前回分析時から株価は横ばいで推移しており、中長期のトレンドと短期的なボラティリティの方向性が混在しているため、引き続き慎重な見極めが必要である。</p>
+      <p class="reasoning">中長期の6ヶ月および1年騰落率はプラス圏を維持しているものの、3ヶ月騰落率のマイナス傾向や高値からの乖離が続いており、中長期的な強弱の判断が分かれている。さらに、金利上昇や原油高などのマクロ経済リスクや半導体セクターのボラティリティを考慮し、現時点では慎重に様子見とするのが妥当である。</p>
 
       
       <ul class="factors">
         
-        <li>6ヶ月・1年騰落率がプラス圏を維持</li>
+        <li>6ヶ月および1年の堅調な中長期騰落率</li>
         
-        <li>米半導体株の売り圧力やオプション市場の影響による値動きの不安定さ</li>
+        <li>3ヶ月騰落率のマイナス継続と高値からの乖離</li>
         
-        <li>原油価格の上昇や米国のインフレ・金利動向といったマクロ環境の逆風</li>
+        <li>米金利上昇および原油高に伴うマクロ環境の不確実性</li>
+        
+        <li>AI・半導体関連の需要期待とオプション市場等の短期的なボラティリティの交錯</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化に伴う原油高や、米国の金利政策変更がハイテク株全般に与える下落圧力に注意が必要である。</p>
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化やインフレ高止まりに伴う金利上昇が、ハイテク株全体の重しとなるリスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、その後の株価が横ばいで推移し短期的な方向感に乏しかったことから妥当であった。中長期の成長トレンドは健在である一方、マクロ環境の不確実性が継続しているため、今回の様子見スタンスも前回から引き続き維持する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の「様子見」判断は、株価が横ばいで推移しマクロ環境の不確実性が継続したことから妥当であった。今回も短期の変動にとらわれず、中長期トレンドと外部環境のバランスを引き続き慎重に見極める。</p>
       
 
       
@@ -2113,26 +2132,26 @@
       </div>
       
 
-      <p class="reasoning">中長期のトレンドは依然としてプラス圏を維持していますが、短期的なメモリー高騰によるコスト負担や売上高見通しの下方修正が重石となっています。マクロ経済における金利や原油価格の上昇圧力も警戒されるため、株価の調整局面が続くリスクを考慮して引き続き慎重な姿勢が求められます。</p>
+      <p class="reasoning">中長期のトレンドでは依然として堅調な上昇を示しているものの、足元ではメモリー高騰や部品不足による売上見通しの下方修正が重石となっています。マクロ経済における金利や原油価格の上昇リスクも依然として意識されるため、短期的なボラティリティを考慮しつつ慎重な姿勢を維持すべき局面です。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月・6ヶ月・1年騰落率が示す堅調な中長期トレンド</li>
+        <li>3ヶ月・6ヶ月・1年の堅調な中長期トレンドの維持</li>
         
-        <li>メモリー高騰および部品不足による売上高見通しへの懸念</li>
+        <li>メモリー価格高騰や部品不足による売上見通しへの懸念</li>
         
-        <li>原油価格の上昇や金利動向などマクロ経済の不確実性</li>
+        <li>マクロ経済の金利・原油高に起因する株式市場全体の警戒感</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 部品コストの高騰が想定以上に利益率を圧迫し、さらなる株価調整を招くリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> サプライチェーンの制約長期化やマクロ経済のインフレ再燃によるさらなる株価調整リスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点から株価は横ばいで推移しており、メモリー高騰や見通し悪化に対する警戒感が継続していることから、様子見の判断は妥当でした。今回もこの中長期トレンドと短期的なコスト要因のバランスを維持し、慎重な姿勢を継続します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の「様子見」判断は、短期的な材料悪化と中長期の強さが拮抗する局面において妥当であった。今回もその中長期の基調と短期のコスト負担リスクのバランスを維持し、慎重姿勢を継続する。</p>
       
 
       
@@ -2148,7 +2167,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTE5hWHE0Zm9TYXotd1B1bUdKc0VDWENKOVBXM2RFV0dxbldEN0RkTFlxZGxOcWxMeFVLUVBZSDktLThKN1Y3Q1M3SjI1cWV1WmxuX0hlYVVuTW5MZ3lWUWlTd3JqTGczVmdzN0U0bzBzR1dLcnVaTUpSQ3ZfQ3oySDQ?oc=5" target="_blank" rel="noopener">アップル株急落、部品不足で売上高見通しが市場予想に届かず（Bloomberg） - Yahoo!ニュース</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMihgFBVV95cUxPbjIxcUNTVy12WlpGS0k5V1ExdXVNblBHSTNaX3pQU3R1dldjeGNERFBiRm81SWxONmRIYTRhLUp6ai1sUDhvc0Q0SEN4M0RHOHF5Mm53RkdsMHprVzU2WTlWc0Z0SE0xano2UEd4UnlNTC1zdTM0ek9YTE1kTVNXODBfTGR2QdIBiwFBVV95cUxOaXBpRmNzalFsdjh4UDFoX1dYUUVfdmFMWGYydXo0eXE2anhJX1lNUG9fUFJBRzE0VXpGbnZqSzhvM2lzbkZBXzJ3N1VBSGxwMGtmV0ZWS3lDaW1CWVVwRFBkTk9HLVA5T1FyOUIwRnlkU0RGdTI5Y1ZNUlJPWEd2cmlpRFAweEtBQk9J?oc=5" target="_blank" rel="noopener">115％の上昇を記録したアップル（AAPL）株は、現在割高かもしれない - simplywall.st</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMikwFBVV95cUxQUnVQeVJBc2hja0dDaHY2c0J3ekg5MUFyb2MzaUx6QkJTUlNtZ2pQaUcwT0YwX1lscXpveVZ6akZHc2FwRmdVUlNTVDBYMDJaZXg2d0hVMXg2R1BnWmZXTVpWdmhxU1hQcjMySnByVHpKOXJIQWZ5dlgxSzItS0pxMDZpd3RSN015NTBJT093OTctRHM?oc=5" target="_blank" rel="noopener">アップル、最高値の株価に死角は？ 30日決算 メモリ高騰に不安 - ig.com</a></li>
           
         </ul>
       </details>
@@ -2174,8 +2193,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">+15</div>
-        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
+        <div class="score-value">+20</div>
+        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
       </div>
 
       
@@ -2189,26 +2208,28 @@
       </div>
       
 
-      <p class="reasoning">前回の過度な調整警戒は足元の株価反発を受けやや慎重すぎたものの、1ヶ月および3ヶ月騰落率が依然としてマイナス圏にあるためトレンドの完全な回復には至っていません。一方で、6ヶ月・1年スパンでの強い上昇トレンドやアナリストの強気評価、AI関連の期待感が下値を支えており、金利や地政学リスクを睨みつつ中長期的な動向を慎重に見極める局面です。</p>
+      <p class="reasoning">中長期の1年・6ヶ月騰落率は依然として強いプラス圏にあり、アナリストによる強気評価や目標株価の引き上げが下値を支えています。一方で、1ヶ月や3ヶ月の騰落率がマイナス圏で推移していることや、原油高や日米の金利動向といったマクロ経済の不透明感が重荷となっており、本格的なトレンド再開には慎重な見極めが必要です。</p>
 
       
       <ul class="factors">
         
-        <li>6ヶ月および1年騰落率が示す力強い中長期の上昇トレンド</li>
+        <li>6ヶ月・1年スパンでの強い上昇トレンドの維持</li>
         
-        <li>欧州系大手証券による目標株価引き上げなどアナリストの強気評価</li>
+        <li>証券会社による強気レーティング継続と目標株価引き上げ</li>
         
-        <li>日米の金融政策や中東情勢などのマクロリスクによる上値の重さ</li>
+        <li>1ヶ月・3ヶ月騰落率のマイナス推移と52週高値からの乖離</li>
+        
+        <li>米国の金利動向や原油高などマクロ環境の不確実性</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 米国の金利動向や中東情勢に起因する原油高・地政学リスクがハイテク株全般の逆風となる恐れ。</p>
+      <p class="risks"><span class="label">留意点:</span> 金利上昇や地政学リスクに伴うグロース株・AI関連銘柄への下押し圧力に注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回は短期の調整圧力を重視しすぎて様子見としたが、中長期の6ヶ月・1年騰落率が示す高い上昇力を過小評価していた。今回の分析では、短期的な下押し圧力だけでなく中長期のトレンドや証券会社の目標株価引き上げといったポジティブな材料も加味し、スコアをやや上方修正しつつも慎重姿勢を継続する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回は中長期の強さと短期の調整懸念が交錯する中で慎重な様子見と判断しましたが、株価が横ばいで推移したことから判断はおおむね妥当でした。今回もその中長期の基調と短期のボラティリティを考慮し、引き続き慎重に動向を見極めるスタンスを継続します。</p>
       
 
       
@@ -2250,8 +2271,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-20</div>
-        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+        <div class="score-value">-15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
       </div>
 
       
@@ -2265,26 +2286,26 @@
       </div>
       
 
-      <p class="reasoning">中長期の6ヶ月騰落率が依然としてマイナス圏にあり、高値からの乖離も大きいため慎重な姿勢が求められます。日銀の利上げ方針や為替の不透明感、中東情勢を背景とした原油高などのマクロ環境が自動車セクターにとって逆風となっており、積極的な買いは推奨しにくい状況です。前回の様子見判断は株価の横ばい推移と照らし合わせて妥当であり、引き続き底固めを確認する方針を継続します。</p>
+      <p class="reasoning">中長期の6ヶ月騰落率がマイナス圏で推移しており、最高値からの乖離も大きいため引き続き慎重な姿勢が求められます。日銀の追加利上げ観測や為替の不確実性、原油価格の高止まりといったマクロ経済の逆風が自動車産業の収益を圧迫するリスクがあります。短期的には底固めの動きが見られるものの、上値を追うには中長期のトレンド回復を確認する必要があります。</p>
 
       
       <ul class="factors">
         
-        <li>6ヶ月騰落率がマイナス18.28%と中長期トレンドが弱い</li>
+        <li>6ヶ月騰落率が-18.28%と依然として中長期の下落トレンドにある点</li>
         
-        <li>日銀の追加利上げ観測や為替動向による輸出関連への影響</li>
+        <li>日銀の利上げ方針や為替動向といったマクロ経済の不透明感</li>
         
-        <li>地政学リスクに伴う原油高や米国金利上昇への警戒感</li>
+        <li>原油価格の上昇や地政学リスクがコスト面や需要に与える影響</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 為替の急激な円高進行やサプライチェーンの混乱による業績下振れリスクに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 急激な円高の進行や資源価格の高騰が業績悪化につながるリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の「様子見」判断は、株価が直近で大きな変化を見せず横ばいで推移したことと照らし合わせて、過度な売買を避けるという意味で妥当であったと言えます。中長期の下落トレンドやマクロ経済の不透明感が継続しているため、今回の判断でもその慎重な姿勢を維持しています。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は株価の横ばい・底固め継続という現実の値動きと概ね合致しており妥当でした。今回も中長期のトレンドやマクロ経済の逆風に変化が見られないため、慎重な様子見姿勢を継続します。</p>
       
 
       
@@ -2353,26 +2374,26 @@
       </div>
       
 
-      <p class="reasoning">中長期にわたる強力な株価上昇トレンドに加え、好決算および大幅な業績上方修正が引き続き株価を下支えしています。AI関連の半導体検査需要は堅調であり、マクロ環境における原油高や金利の不透明感は残るものの、それを補って余りあるファンダメンタルズの強さが確認されています。</p>
+      <p class="reasoning">3ヶ月から1年にわたる中長期的な上昇トレンドが継続しており、好決算や業績上方修正に裏付けられたファンダメンタルズの強さが確認されています。マクロ経済における原油高や金利動向には注意が必要ですが、半導体関連の需要は底堅く、株価を押し上げる原動力となっています。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月・6ヶ月・1年と続く堅調な中長期の上昇トレンド</li>
+        <li>1年で230%を超える強力な中長期の株価上昇トレンド</li>
         
-        <li>好決算を受けた業績の上方修正と高い市場寄与度</li>
+        <li>好決算や利益の上方修正による業績の裏付け</li>
         
-        <li>AIブームの継続に伴う半導体検査需要の安定</li>
+        <li>日経平均を牽引する高い市場寄与度とAI関連の検査需要</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 地政学リスクに起因する原油価格の上昇や金利動向が、株式市場全体の下押し圧力となるリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化に伴う原油価格の高騰や、国内外の金利上昇ペース加速が株式市場全体に与える下落圧力。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時の終値から価格は横ばいで推移しているものの、中長期の上昇トレンドや業績上方修正という根拠に変化はなく、前回の判断は妥当であったと考えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点からの株価は横ばい推移となっているが、中長期の強力なトレンドや好決算に基づく業績の強さに変化はなく、前回の判断はおおむね妥当であったため今回もこれを継続する。</p>
       
 
       
@@ -2382,7 +2403,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1JVUFxNVVmeUVBczVGYnFXcDRxaDBSZXNlZlpLTzhlV0hwZGRlY2xKSGZ6NXA5RlhGakloeXE5c3l3b082Zi03UTFwNlM3TW9iLVRmTDNsa0U0OTVXRDcwWjFPSWwwTDZZdGZwaQ?oc=5" target="_blank" rel="noopener">アドバンテスト利益1945億円上振れ 株価動かした4〜6月期決算は - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxOZTliVGdTRjR2TVBoOE1hdGozdDVOTFhqci02Y3hZSl9ZWVlWTlRHeXlTNUt6V25STzVWNTc4Mkh5VVVvdFFOLVNKQXluamU4aHBMUk1YUUlnVzdpdmlpQmxwdWNYWHpsMk8tX1Rpd3RtZ0g2b3Zmal83N3Q1aFdyNEZGVW04UzQ?oc=5" target="_blank" rel="noopener">アドバンテスト：業績予想を大幅上方修正で目標株価引き上げ(トウシル) - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxQcHVXLXN5b2Exblk1VEc3cVkxenhSWWtJZl8xanRqMmF6c2Q0QV9VSzdIQ2h6ODdTTE9mNVpxcjlJZ3dmQnU1UmlXLTlYVm5OS2p4OVhrak5pOHctbllka2I1QUFFWFhkZjFtYW40N0hrT0ZVRFlRT25hcU5yeXF6U3F0SE1JQk0?oc=5" target="_blank" rel="noopener">日経平均寄与度ランキング（大引け）～日経平均は続伸、東エレクやアドバンテストが2銘柄で約218円分押し上げ(フィスコ) - Yahoo!ファイナンス</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNalk4WlNYUndtbW52MUpBTjhJb3FkUU9TaS1SSXNLQlZSYzNXOWlKYkJqZlY2UnVObnA5RTFmQUZRSHJOb2FjY2lzMVRRWXZ0QzBtZGtnbVVteDF5anBOTm1uZVE5bjBEWWVfamQtaFZidHpZMzhtYWh5U1Q0SkYzTlNkRHUtcDZrRHNQMDR4a094TzFVRXJNUw?oc=5" target="_blank" rel="noopener">アドバンテスト、急落株価の回復困難？ 29日決算 AIブーム継続に疑念 - ig.com</a></li>
           
@@ -2429,26 +2450,26 @@
       </div>
       
 
-      <p class="reasoning">中東情勢の緊張など継続する地政学リスクを背景に、防衛・航空宇宙関連への需要が強く、3ヶ月や1年の優れた中長期上昇トレンドを維持しています。過去最高の受注残高を誇る強固なファンダメンタルズと見通しの上方修正も、引き続き強力な買い材料となっています。</p>
+      <p class="reasoning">中東情勢の緊張など長期化する地政学リスクを背景に、防衛・航空宇宙関連への需要が非常に堅調です。過去最高の受注残高や好調な決算実績に支えられ、中長期にわたる優れた上昇トレンドを維持しています。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率+46.86%など強固な中長期の上昇トレンド</li>
+        <li>過去最高の受注残高と好調な決算</li>
         
-        <li>過去最高の2,890億ドルに達する受注残高と好調な業績</li>
+        <li>地政学リスクの継続による防衛需要の強さ</li>
         
-        <li>世界的な地政学リスクの高まりによる防衛需要の継続</li>
+        <li>中長期の堅実な上昇トレンド</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 高値圏での推移となっているため、マクロ経済的な金利上昇や地政学リスクの急速な後退による一時的な利食い売りには注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 急ピッチな上昇による高値警戒感や、マクロ経済環境の変化によるセクターローテーションのリスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の判断（買い候補、スコア+75）は、株価が最高値圏を維持し堅調に推移したことから妥当であった。今回も中長期の強いトレンドと過去最高の受注残高というファンダメンタルズを重視し、同様の判断を継続する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中長期の上昇トレンドと過去最高の受注残高を根拠とした強気スタンス」は、足元の安定した株価推移と整合的であり妥当であった。今回もこのトレンドとファンダメンタルズを重視し判断を継続する。</p>
       
 
       
@@ -2460,11 +2481,11 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE55T3dabmo4akhWVWYtMmc0UnllejNDQWdJaHRWcG1XclBGTjBsM2FuSk9PWk9fbE52c1d2d3EwUWxtQWIzZmlqOG53WmxXUk12Qy1sYdIBV0FVX3lxTFBBUTJ0eF9jWjFHcEk5RU9jLUdGdGt2dUVKTzVOeExDMkhKQXNZR05McE55c2FlYVE0X2RGRnVtT2p6Wlhydm5xMEVCUVNvZl9nRUI1RFlmUQ?oc=5" target="_blank" rel="noopener">RTX［RTX］：世界最大級の航空宇宙・防衛システム企業 - マネクリ</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE9CNEY2Ql9BM1ZYVVZqY0s2dmpiZl9OWXJvaGpNamh0bXFGb2FSbHc2N1hlWFhDalVUREFOc2JjRDY1cTRxc2lBclFDbUlBUXUxVTE0WmthME5qWnZS?oc=5" target="_blank" rel="noopener">RTX|RTX Corp|株価:223.030|変動率:-0.280 - TradingKey</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTFAzTkt2a3VBazhKQXF1aGN4Q2hJQU1BQVBDUDJnLXVtYk0zbW1Ud1NFNnNkR3RYTHl6b3hUTUF3VldINGNNTnA0cHotaFVHcjlJZ0RRZU53?oc=5" target="_blank" rel="noopener">アール・ティー・エックス【RTX】：掲示板 - Yahoo!ファイナンス</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5HSmRucWQtYWgxSk1vX0FOTkpDaWdPMmtxdjRtdWdDN0hfXzNYQ3dQamFzbkpZZjNXb3UtdENYVm5lSFRVTnJhckNRaHlZUXg1MFNscVAwUUFOXzBNRk9STGREVmxPZ0pldjlaUUtQMWFTd3l2?oc=5" target="_blank" rel="noopener">RTX、第2四半期決算が予想を大幅に上回り2026年見通しを上方修正、受注残高は過去最高の2,890億ドルに - BigGo ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiVkFVX3lxTFAzTkt2a3VBazhKQXF1aGN4Q2hJQU1BQVBDUDJnLXVtYk0zbW1Ud1NFNnNkR3RYTHl6b3hUTUF3VldINGNNTnA0cHotaFVHcjlJZ0RRZU53?oc=5" target="_blank" rel="noopener">アール・ティー・エックス【RTX】：掲示板 - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE1WSmZnb1pHaHJZLTVpRlM5N0lYcTRla19BNFJodGRDQUdZZnZ6QUZteGJBMkJOQTBtNlhrTjZEMjNpdE16c1BWTnZ5b2l3T1E5YWNxR1N3LU9haE5WN3JZSFNMQWY?oc=5" target="_blank" rel="noopener">RTX、好調な決算と売上高見通しで株価3%超上昇 執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース</a></li>
           
         </ul>
       </details>
@@ -2473,13 +2494,13 @@
   
     
       
-    <div class="card status-good" id="ticker-8306.T">
+    <div class="card status-good" id="ticker-JPM">
       <div class="card-head">
         <div>
           <span class="rank">#3</span><br>
-          <span class="name">三菱UFJフィナンシャル・グループ</span>
-          <span class="symbol">8306.T</span>
-          <span class="market-tag">JP</span>
+          <span class="name">JPMorgan Chase &amp; Co.</span>
+          <span class="symbol">JPM</span>
+          <span class="market-tag">US</span>
           <span class="theme-tag">金融</span>
           <span class="nisa-tag">NISA成長投資枠 対象目安</span>
         </div>
@@ -2496,35 +2517,35 @@
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▲ +2.74%</span>
-        <span><span class="label">1週間</span>▲ +3.92%</span>
-        <span><span class="label">1ヶ月</span>▲ +4.19%</span>
-        <span><span class="label">3ヶ月</span>▲ +23.22%</span>
-        <span><span class="label">6ヶ月</span>▲ +24.60%</span>
-        <span><span class="label">1年</span>▲ +80.04%</span>
+        <span><span class="label">前日比</span>▲ +0.63%</span>
+        <span><span class="label">1週間</span>▲ +1.26%</span>
+        <span><span class="label">1ヶ月</span>▲ +8.22%</span>
+        <span><span class="label">3ヶ月</span>▲ +21.22%</span>
+        <span><span class="label">6ヶ月</span>▲ +13.48%</span>
+        <span><span class="label">1年</span>▲ +27.78%</span>
       </div>
       
 
-      <p class="reasoning">中長期の騰落率が引き続き非常に強く、日本銀行の利上げ方針や「金利ある世界」の定着を背景としたメガバンクの強い上昇トレンドに大きな狂いは見られません。前回の分析以降、株価自体は横ばい圏での推移となったものの、金利環境の追い風や時価総額首位浮上といった基礎的条件は維持されており、強気姿勢を継続する判断は妥当性を保っています。地政学リスクや海外金利動向に注意を払いつつも、中長期的な業績拡大期待を主軸とした投資妙味は健在です。</p>
+      <p class="reasoning">中長期の3ヶ月・6ヶ月・1年騰落率がいずれも二桁台の高い水準を維持しており、力強い上昇トレンドが継続しています。マクロ環境での金融セクターへの資金流入や良好な業績見通しが引き続き強力な追い風となっています。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月・6ヶ月・1年を通じた堅調な中長期の上昇トレンド</li>
+        <li>3ヶ月騰落率+21%超、1年騰落率+27%超の堅調な中長期トレンド</li>
         
-        <li>日銀の追加利上げ観測や「金利ある世界」による利ザヤ改善期待</li>
+        <li>利益予想の上方修正など良好なファンダメンタルズと目標株価の引き上げ</li>
         
-        <li>国内金融市場における時価総額首位の維持と信用環境の改善</li>
+        <li>金融セクターへの継続的な投資マネーの流入</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 米国のインフレ動向や地政学リスクに伴う海外金利・株式市場の急変動が国内市場へ波及するリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 地政学リスクや原油高を背景としたインフレ再燃と金利見通しの変動が市場全体に与える影響に注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の「買い候補（スコア+70）」という判断は、株価が短期的に横ばいとなったものの中長期の強いトレンドが維持されたため、方向性として妥当であった。今回はその見立てを引き継ぎつつ、マクロ経済の金利環境をより強固な根拠としてスコアを微上方修正する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の「買い候補（スコア+70）」という判断は、中長期の強力な上昇トレンドとセクターへの資金流入を踏まえており、今回の株価水準の維持と照らし合わせても妥当であったと言えます。今回の分析でもこの中長期の基調を維持しつつ判断を行いました。</p>
       
 
       
@@ -2532,15 +2553,15 @@
         <summary>関連ニュース（5件）</summary>
         <ul>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1UNHFKRmdJbVM3Z3JOeW9GQTRTNlJiNURfTlVNTUNLSklHb1FJc1JseWp6TzQ3YlYtRjB4T3RBSmpheTBBWGtpVGVYUlNESW5WZnppRXp1SzYwbmM0ZG9R?oc=5" target="_blank" rel="noopener">(株)三菱ＵＦＪフィナンシャル・グループ【8306】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxPQUpZbzU5cjEzWXVEdTE4aW1pdkRBNVF6VTVZckdZOE9YTW5YSEF5WnBQYjNIYWo3OURMcWxGUUh6SjRSUG0wVVlDUGpWN2pOX2xGT0RrNFZIV3psZ09oUEdQVlBOWk01SmdTOXlnY3NfS1BrZTdHdmJRVVhOMjN5bDQtSzhITm5NN0ZfTjNB?oc=5" target="_blank" rel="noopener">7月29日のJPMorgan Chase &amp; Co (JPM) 終値は3.25%下落：主な推進要因が明らかにされました - TradingKey</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTE1yVS1ZbFltR2RSV01QVzJjOGhTbWJmTlpFMnpoWVpYMjhac1RIb0dsSkdQamxjajBDd25heElDSVRlRUF5TW1uYVl1Y1BYbHJlWTdYSUhWNA?oc=5" target="_blank" rel="noopener">三菱ＵＦＪフィナンシャル・グループ (8306) の株価・株式 - QUICK Money World</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcGt6b1A5OFkzaFg1bThlUXM3VlBicGFuRHNIZFpsbWZqWlM4QlFtN2dWVHB6S2JSVFcyMUJtazN3MmpUZXdPMFFYNzRBNW1xREV1LW1TSkVsY0RzQUp2bWVlNWZlRXlGYVBfTFkyc0pkT1BDYmdZN1d4eXg3OTF2S3Y0a1B2a2ZudzdKeVNCQVlDX05iRXE5bkxBUTM5aWZLRC1zVmRFTFg5VWs?oc=5" target="_blank" rel="noopener">JPMorgan Posted $50.5 Billion in Revenue. The Dividend Barely Dented the Quarter. - TIKR.com</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1oNVRyU21seTRreG9UUWh2VU9PUkRfbHNWdWxFMHFIZnZ5dnNPTnR2dU8taVdGb0xkZEc5MkdnZ2tmY1VHc0dkODdqZXpnS01xZGtMMGhoYkg3OUUzamRF?oc=5" target="_blank" rel="noopener">(株)三菱ＵＦＪフィナンシャル・グループ【8306】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTFBzU0dEOHp4T0Qxa3h4RzQyQjJfYU8tTjhzRzhIbDRCLWxkSHEtZldSRUdmVDlhWEMxbGtEVlZ3dGhuT3A3dEJVRXl0UnREUzhNRHJ0T1VTUTRONHRhZVZNYWhNM3hlUnpmMmdMWk1XWllDZnhf?oc=5" target="_blank" rel="noopener">JPモルガン、S&amp;P500の年末目標を7800に引き上げ 利益予想の上方修正は「前例のない規模」と指摘 - BigGo ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE1kNEJqdXNMUHNyMU5RaUVyWnVpbGs3Mk40ajZ4ak8wQTdPanlleDltbkpnVnljYWxiZkxMWko0anVOcHpsMTRtTVJQeXV2UXBSMTV4eXdWWUsxVF9vQ09YdWxFUQ?oc=5" target="_blank" rel="noopener">三菱ＵＦＪ、時価総額で初の首位 ４２兆円、「金利ある世界」で株価上昇 - 時事ドットコム</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE40YkhwVTJrR0ZqODk3MjQtOUpGSnZUbjBkeHFqYUlOMjB0TnFObFpaZWV3YkZFZWx6SDBPUlBUY3NBNWE2SW5UN21qRFJMT09WVWU3bHJwZ3VOZGYyRmt6NDNLblBMa3JMVXZzZ2JIakM?oc=5" target="_blank" rel="noopener">JPM|JPMorgan Chase &amp; Co|株価:357.520|変動率:+1.190 - TradingKey</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTFBtNWw4UnpyM015Mll1eExNY3l1TVJ0VVZ6YkJvNGJYMHFYX1E1TUdEcjhfQmVVV29vNC1UUjlDVFNnTEVLWnVpZ0dyOEpBM1VnOEJPWGlsNnB2NU95YXVLOEZpYVQ4d0lvQWNlR3RaSlA?oc=5" target="_blank" rel="noopener">信用残ランキング【売り残減少】 ＡＲＣＨＩＯ、日本駐車場、ＪＭＨＤ(三菱ＵＦＪ) 2026年08月09日[株探] - みんかぶ</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTE8xS3BIczVzWXRYRmdtS3p5QjN2aGxhVzBaRXBqRlVsZkFqZHhtbTFXcTlKTWZaQklrc1RCLU5jRUJ5dmFQUnBvM2FpVTNRajVTLTJQY3RzRlVFZzZwZGRLc2dB0gFnQVVfeXFMTmZaQjdOdFZoWU50UVlrVGJHVnFxODBEYTNyQmp2RjlCNG4xVkF3MWk1aHNpRHV2elEwV1VaZXBiQm9hc0ZLdmlER1B3aUNsSk5fSHhPcHQzMDRLU3FVQ0lCWDFncVJtdw?oc=5" target="_blank" rel="noopener">JPMorgan Chase &amp; CoはAlphabetの株価目標を400ドルから445ドルに引き上げました - Bitget</a></li>
           
         </ul>
       </details>
@@ -2581,26 +2602,26 @@
       </div>
       
 
-      <p class="reasoning">中長期にわたる一貫した強い上昇トレンドと、継続的な値上げ浸透による業績上振れ・大幅増配が引き続き買いの主たる根拠となります。マクロ環境において地政学リスクや原油高、金利変動の不確実性が高まる中、生活必需品セクターとしてのディフェンシブな魅力も安定した投資判断を支えています。</p>
+      <p class="reasoning">中長期にわたる強固な上昇トレンドと、継続的な値上げの浸透や大幅な増配発表が引き続き株価を強力に下支えしています。マクロ環境において原油高や地政学リスクへの警戒感がくすぶる中、生活必需品セクターとしてのディフェンシブな特性も投資妙味を高めています。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率が70%を超える堅固な中長期の上昇トレンド</li>
+        <li>1年で70%を超える中長期の強い上昇トレンドの継続</li>
         
-        <li>値上げの浸透による業績上振れと連続増配・高配当利回りの魅力</li>
+        <li>値上げ浸透による業績上振れと積極的な増配姿勢</li>
         
-        <li>マクロ経済の不確実性に対する生活必需品セクターとしての耐性</li>
+        <li>マクロ経済の不透明感に対する生活必需品セクターのディフェンシブな強み</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 地政学リスクに伴う原油高やマクロ経済の金利変動が全般的な市場心理へ与える影響に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 為替変動リスクや原材料価格の高騰が想定以上に利益を圧迫する懸念に注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の買い評価時点から株価は高値圏を維持しており、中長期の上昇トレンドおよび値上げ・増配を評価した判断は引き続き妥当であったと考えられます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した買い候補という判断は、その後の株価が高値圏を維持したことと照らし合わせて妥当な結果となりました。引き続き中長期の上昇トレンドと好業績・増配のファンダメンタルズを主軸として判断を継続します。</p>
       
 
       
@@ -2612,7 +2633,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9OdW1mbnhvRVhQTlR5NU9oQXdCT0R0UWtwWWlRZXBUMFdGcHZaMTlESzRyUGhFUVk0d2l1OGlxTkdLWmJMNllDc21Uc0hfMzlJZ3RJWnJBempZRjlRZF83aG9QWWc4bkpuX3RwNg?oc=5" target="_blank" rel="noopener">日本たばこ産業株価、一時2.2%高 10月からの値上げを材料視 - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTE1jUHlwWWtqSHlKNDRITUNaMnZtUktSNXBOZ3JWd1REb0xncUJJNEduWkRHMHpNcW00aV9lZmo2NE1OQ015ejNoVlYtSHZZRjhVdjRJ?oc=5" target="_blank" rel="noopener">JT（2914）、2期連続となる「増配」を発表して、配当利回りが4.0％に！ 年間配当は2年で1.4倍に増加、2026年12月期は前期比38円増の｢1株あたり272円｣ - ダイヤモンド・オンライン</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTE1jUHlwWWtqSHlKNDRITUNaMnZtUktSNXBOZ3JWd1REb0xncUJJNEduWkRHMHpNcW00aV9lZmo2NE1OQ015ejNoVlYtSHZZRjhVdjRJ?oc=5" target="_blank" rel="noopener">JT（2914）、2期連続となる「増配」を発表して、配当利回りが4.0％に！ 年間配当は2年で1.4倍に増加、2026年12月期は前期比38円増の｢1株あたり272円｣ - diamond.jp</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE1scjgwZTB4YnVac0N3SHhlTWNTZUxrN3VQdUFwSmdzd2Fqd19rQUlyZU9Zc09CX2tDWFJDUkFCQ0lUUlc0V0s0RnVfWS01dEJiOTdpeUhybUdLUW5OOV9hZA?oc=5" target="_blank" rel="noopener">ＪＴが続伸し上場来高値、国内大手証券は目標株価７３００円に引き上げ - 株探</a></li>
           
@@ -2625,13 +2646,13 @@
   
     
       
-    <div class="card status-good" id="ticker-JPM">
+    <div class="card status-good" id="ticker-8306.T">
       <div class="card-head">
         <div>
           <span class="rank">#5</span><br>
-          <span class="name">JPMorgan Chase &amp; Co.</span>
-          <span class="symbol">JPM</span>
-          <span class="market-tag">US</span>
+          <span class="name">三菱UFJフィナンシャル・グループ</span>
+          <span class="symbol">8306.T</span>
+          <span class="market-tag">JP</span>
           <span class="theme-tag">金融</span>
           <span class="nisa-tag">NISA成長投資枠 対象目安</span>
         </div>
@@ -2648,35 +2669,35 @@
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▲ +0.63%</span>
-        <span><span class="label">1週間</span>▲ +1.26%</span>
-        <span><span class="label">1ヶ月</span>▲ +8.22%</span>
-        <span><span class="label">3ヶ月</span>▲ +21.22%</span>
-        <span><span class="label">6ヶ月</span>▲ +13.48%</span>
-        <span><span class="label">1年</span>▲ +27.78%</span>
+        <span><span class="label">前日比</span>▲ +2.74%</span>
+        <span><span class="label">1週間</span>▲ +3.92%</span>
+        <span><span class="label">1ヶ月</span>▲ +4.19%</span>
+        <span><span class="label">3ヶ月</span>▲ +23.22%</span>
+        <span><span class="label">6ヶ月</span>▲ +24.60%</span>
+        <span><span class="label">1年</span>▲ +80.04%</span>
       </div>
       
 
-      <p class="reasoning">中長期の3ヶ月・6ヶ月・1年騰落率が二桁台の力強い上昇トレンドを維持しており、株価は52週高値圏で底堅く推移しています。マクロ環境において金融セクターへの資金流入が意識されていることや、良好な業績基盤を背景にしたアナリストによる市場目標の引き上げも引き続き強力な追い風となっています。</p>
+      <p class="reasoning">中長期の堅調な上昇トレンドが継続しており、「金利ある世界」の到来や日銀の利上げ方針を背景とした業績拡大期待が引き続き強力な下支えとなっています。国内外の金利上昇や地政学リスクに伴うボラティリティには警戒が必要ですが、中核となる銀行セクターへの買い意欲は底堅く、買い姿勢を維持することが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月騰落率が+21.22%など明確な中長期の上昇トレンド</li>
+        <li>3ヶ月・6ヶ月・1年を通じた力強い中長期の上昇トレンド</li>
         
-        <li>S&amp;P500の年末目標引き上げや好調な収益を背景とした強気見通し</li>
+        <li>日銀の利上げ方針や「金利ある世界」の定着による収益環境の改善</li>
         
-        <li>金融セクターへの投資マネーの広がり</li>
+        <li>市場における銀行株への根強い買い意欲と時価総額の拡大</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化に伴う原油高やマクロのインフレ動向が株式市場全体に与える下落圧力に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 国内外の金利変動の激化や地政学リスクに起因する急激な株式市場全体の調整リスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の買い判断から株価は高値圏を維持しており、中長期のトレンドに則した前回分析は妥当であったため、今回も同方針を継続する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点での強気な見方は、その後の株価が安定して高値圏を維持したことから妥当な判断でした。今回も中長期のトレンドやマクロ経済の金利環境に大きな変化がないため、前回と同様の強気姿勢を継続します。</p>
       
 
       
@@ -2684,15 +2705,15 @@
         <summary>関連ニュース（5件）</summary>
         <ul>
           
-          <li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxPQUpZbzU5cjEzWXVEdTE4aW1pdkRBNVF6VTVZckdZOE9YTW5YSEF5WnBQYjNIYWo3OURMcWxGUUh6SjRSUG0wVVlDUGpWN2pOX2xGT0RrNFZIV3psZ09oUEdQVlBOWk01SmdTOXlnY3NfS1BrZTdHdmJRVVhOMjN5bDQtSzhITm5NN0ZfTjNB?oc=5" target="_blank" rel="noopener">7月29日のJPMorgan Chase &amp; Co (JPM) 終値は3.25%下落：主な推進要因が明らかにされました - TradingKey</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1UNHFKRmdJbVM3Z3JOeW9GQTRTNlJiNURfTlVNTUNLSklHb1FJc1JseWp6TzQ3YlYtRjB4T3RBSmpheTBBWGtpVGVYUlNESW5WZnppRXp1SzYwbmM0ZG9R?oc=5" target="_blank" rel="noopener">(株)三菱ＵＦＪフィナンシャル・グループ【8306】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcGt6b1A5OFkzaFg1bThlUXM3VlBicGFuRHNIZFpsbWZqWlM4QlFtN2dWVHB6S2JSVFcyMUJtazN3MmpUZXdPMFFYNzRBNW1xREV1LW1TSkVsY0RzQUp2bWVlNWZlRXlGYVBfTFkyc0pkT1BDYmdZN1d4eXg3OTF2S3Y0a1B2a2ZudzdKeVNCQVlDX05iRXE5bkxBUTM5aWZLRC1zVmRFTFg5VWs?oc=5" target="_blank" rel="noopener">JPMorgan Posted $50.5 Billion in Revenue. The Dividend Barely Dented the Quarter. - TIKR.com</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTE1yVS1ZbFltR2RSV01QVzJjOGhTbWJmTlpFMnpoWVpYMjhac1RIb0dsSkdQamxjajBDd25heElDSVRlRUF5TW1uYVl1Y1BYbHJlWTdYSUhWNA?oc=5" target="_blank" rel="noopener">三菱ＵＦＪフィナンシャル・グループ (8306) の株価・株式 - QUICK Money World</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTFBzU0dEOHp4T0Qxa3h4RzQyQjJfYU8tTjhzRzhIbDRCLWxkSHEtZldSRUdmVDlhWEMxbGtEVlZ3dGhuT3A3dEJVRXl0UnREUzhNRHJ0T1VTUTRONHRhZVZNYWhNM3hlUnpmMmdMWk1XWllDZnhf?oc=5" target="_blank" rel="noopener">JPモルガン、S&amp;P500の年末目標を7800に引き上げ 利益予想の上方修正は「前例のない規模」と指摘 - BigGo ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1oNVRyU21seTRreG9UUWh2VU9PUkRfbHNWdWxFMHFIZnZ5dnNPTnR2dU8taVdGb0xkZEc5MkdnZ2tmY1VHc0dkODdqZXpnS01xZGtMMGhoYkg3OUUzamRF?oc=5" target="_blank" rel="noopener">(株)三菱ＵＦＪフィナンシャル・グループ【8306】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE40YkhwVTJrR0ZqODk3MjQtOUpGSnZUbjBkeHFqYUlOMjB0TnFObFpaZWV3YkZFZWx6SDBPUlBUY3NBNWE2SW5UN21qRFJMT09WVWU3bHJwZ3VOZGYyRmt6NDNLblBMa3JMVXZzZ2JIakM?oc=5" target="_blank" rel="noopener">JPM|JPMorgan Chase &amp; Co|株価:357.520|変動率:+1.190 - TradingKey</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE1kNEJqdXNMUHNyMU5RaUVyWnVpbGs3Mk40ajZ4ak8wQTdPanlleDltbkpnVnljYWxiZkxMWko0anVOcHpsMTRtTVJQeXV2UXBSMTV4eXdWWUsxVF9vQ09YdWxFUQ?oc=5" target="_blank" rel="noopener">三菱ＵＦＪ、時価総額で初の首位 ４２兆円、「金利ある世界」で株価上昇 - 時事ドットコム</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiYkFVX3lxTE8xS3BIczVzWXRYRmdtS3p5QjN2aGxhVzBaRXBqRlVsZkFqZHhtbTFXcTlKTWZaQklrc1RCLU5jRUJ5dmFQUnBvM2FpVTNRajVTLTJQY3RzRlVFZzZwZGRLc2dB0gFnQVVfeXFMTmZaQjdOdFZoWU50UVlrVGJHVnFxODBEYTNyQmp2RjlCNG4xVkF3MWk1aHNpRHV2elEwV1VaZXBiQm9hc0ZLdmlER1B3aUNsSk5fSHhPcHQzMDRLU3FVQ0lCWDFncVJtdw?oc=5" target="_blank" rel="noopener">JPMorgan Chase &amp; CoはAlphabetの株価目標を400ドルから445ドルに引き上げました - Bitget</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTFBtNWw4UnpyM015Mll1eExNY3l1TVJ0VVZ6YkJvNGJYMHFYX1E1TUdEcjhfQmVVV29vNC1UUjlDVFNnTEVLWnVpZ0dyOEpBM1VnOEJPWGlsNnB2NU95YXVLOEZpYVQ4d0lvQWNlR3RaSlA?oc=5" target="_blank" rel="noopener">信用残ランキング【売り残減少】 ＡＲＣＨＩＯ、日本駐車場、ＪＭＨＤ(三菱ＵＦＪ) 2026年08月09日[株探] - みんかぶ</a></li>
           
         </ul>
       </details>
@@ -2701,14 +2722,14 @@
   
     
       
-    <div class="card status-good" id="ticker-5713.T">
+    <div class="card status-good" id="ticker-4385.T">
       <div class="card-head">
         <div>
           <span class="rank">#6</span><br>
-          <span class="name">住友金属鉱山</span>
-          <span class="symbol">5713.T</span>
+          <span class="name">メルカリ</span>
+          <span class="symbol">4385.T</span>
           <span class="market-tag">JP</span>
-          <span class="theme-tag">資源・エネルギー（貴金属）</span>
+          <span class="theme-tag">国内グロース</span>
           <span class="nisa-tag">NISA成長投資枠 対象目安</span>
         </div>
         <div class="status-chip">
@@ -2724,35 +2745,35 @@
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▼ -3.79%</span>
-        <span><span class="label">1週間</span>▲ +20.18%</span>
-        <span><span class="label">1ヶ月</span>▲ +33.11%</span>
-        <span><span class="label">3ヶ月</span>▼ -10.50%</span>
-        <span><span class="label">6ヶ月</span>▲ +5.95%</span>
-        <span><span class="label">1年</span>▲ +190.06%</span>
+        <span><span class="label">前日比</span>▼ -2.25%</span>
+        <span><span class="label">1週間</span>▲ +9.74%</span>
+        <span><span class="label">1ヶ月</span>▼ -1.09%</span>
+        <span><span class="label">3ヶ月</span>▲ +12.82%</span>
+        <span><span class="label">6ヶ月</span>▲ +48.42%</span>
+        <span><span class="label">1年</span>▲ +106.14%</span>
       </div>
       
 
-      <p class="reasoning">金属価格の上昇を背景とした業績上方修正や中長期の力強い上昇トレンドが継続しており、引き続き優位性が保たれています。地政学リスクに伴う資源・エネルギー市場の底堅さも同社の収益を後押しする要因となっています。短期的には高値圏での調整が見られるものの、中長期的な業績改善のモメンタムは損なわれていません。</p>
+      <p class="reasoning">3ヶ月および6ヶ月といった中長期の騰落率が引き続き高い水準にあり、最高益や初の自社株買い、高額品需要の拡大といった個社の強力な成長モメンタムが相場を牽引しています。足元のマクロ環境では金利上昇や原油高といったリスク要因が存在するものの、それを上回る企業価値の向上が評価されており、上昇トレンドは維持されています。</p>
 
       
       <ul class="factors">
         
-        <li>金属価格上昇を背景とした今期業績の上方修正</li>
+        <li>最高益計上と初の自社株買いによる株主還元姿勢の強化</li>
         
-        <li>1年騰落率の大幅なプラスを維持する中長期の上昇トレンド</li>
+        <li>ポケカ等の高額品取引が牽引する再成長軌道への期待</li>
         
-        <li>地政学リスクを受けた資源・エネルギー市場の底堅さ</li>
+        <li>3ヶ月（+12.82%）や6ヶ月（+48.42%）に示される強固な中長期の上昇トレンド</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 商品市況の急変動や為替の急激な変動が業績や株価に与える影響に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> マクロ環境における金利上昇や原油高が株式市場全体へ与えるネガティブな影響に注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点での業績上方修正や中長期トレンド着眼の判断は、その後の株価の底堅い推移と整合的であり妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中長期の強い上昇トレンドと企業の好材料を評価する」という判断は、その後の株価が高値圏を維持している点と整合しており妥当でした。今回もこの中長期的な成長モメンタムを主たる根拠として判断を継続します。</p>
       
 
       
@@ -2760,91 +2781,15 @@
         <summary>関連ニュース（5件）</summary>
         <ul>
           
-          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPcjlfclA2QVJFS2ZhNE9LWjU2NXhjaVZRRFFFaUhxTEtCeVUza0hGODhKVnZHX2JuRjNrSFRxRjN1LVBic2ctM0JEc1V6QUVpSTZUaTBSekhhLTFRY3FjZThUNmE5YXF6NGJuUUNlOTFfVklCRS05bWhUMUpNd3JpLVRiVmYzTms?oc=5" target="_blank" rel="noopener">【アナリスト評価】住友金属鉱山、レーティング中立を据置き、目標株価10,800円に引上げ（米系大手証券）(アイフィス株予報) - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE5lcVVrWExfWFdXQ3pCVWFPN2t6eGZFYTlWbW1ySGsyYm96MU9lSWpxTW1SRm5PcUVRWi1VQ2RQMkhMNU5vNEhBSm81S1Jka1BEZlpsbzhrbl9DQmRRbTcw?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE1fcHZkazQtZ0RSWkdsVHVQdUFsLW9KbVRCbWlHZzQtM280VzZpZElnMGFFNDZQeUVhYkprbklwODFSczBybDI4YnlGQ1NndVJZUnc?oc=5" target="_blank" rel="noopener">住友鉱、今期最終を一転23％増益に上方修正 - 株探</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5FODdMU3dSai1YaDlPT2ozSFFlQ09ZSWk5VmRtOWFLR0ZmcThQX1VPQXpKd251S19rLUM2a05yT01NZEdwdGlEZTlXcm1UNHZ0allKZGhhVWwxeVBxYXRaSlJhWGFGZUxMUnp0cQ?oc=5" target="_blank" rel="noopener">メルカリ株価、4年7カ月ぶり高値 最高益や初の自社株買いを好感 - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE95X3dvNVdVTGk0bm9uMkdQMC1jaS1YMm1HZk9FdlNMTFptRlhpLU5UTTBMVGhraS1Jc00yM3hWUXh5QkZkLURRMjU5ZHhMVEF1VjdrLTNkUm1kUVBmWXJxM2lNRlRacy1xSjZOaw?oc=5" target="_blank" rel="noopener">決算:住友金属鉱山が一転増益に 27年3月期23％増、金属価格上昇で - 日本経済新聞</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE5qN2dIZWZtajlFekR6MEVNVmlaUmV5eUFXd09udUgxbVNLaTVmeU5NM0ZjWk11Nk96N3RqeFRWUDJBMlJublFTX19aTXJmMG9ZQlpZQ3QwS2pjTlpVamJVMg?oc=5" target="_blank" rel="noopener">話題株ピックアップ【夕刊】（1）：ユニチカ、オムロン、メルカリ - 株探</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQY1RuR2xHNlA1aHlvbGxuc0JxMGlycTk5OWo3dXFKWWgzUFZmRnNjanlKaXNleHVYWGxFYUhtOGRsamQ4WVNKR19rWmdfOHA3UEZKZ2ZiZF95RzRvZG56c2p6QXdTdHBLY3g0RU9tVDM4eEtnVU9EaE44bHZEdDdfdTlpdlhmNUdtQy1pRTZDV0NaVlVmYmo0UWFwM0Y5WWdrTjlja0dRY9IBrAFBVV95cUxPWkIxVll2R2I2U1hnU3pJX2xldVQ4WXpzM0R1UFdwc1Z6WlRhd2diWVNia2dFZHlGc29KYmNpSU40MlhwUWkxWnJBYzczOU9RaDc0RDBZUnBQNlVtT1VNZXlBYUpZQ05aSmR5WUVoZk5TbTEwbUtyNzlmTXBwVUlrNzg2SlVucmh3eXVnMFo1a3ZhTVI2VERQZ25Yb1lBVHh1eHczTlZfZ0ZvZHVw?oc=5" target="_blank" rel="noopener">住友金属鉱山（東証：5713）、2027年度の業績予想を上方修正し株価が26.4％上昇――何が変化したのか - simplywall.st</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE9oMkFja2pBWnV4YXFLWUdrMXdqY3JaclhNUGVQcndHanJnUV9DdDFuZExwWVRhZEtianhxcGZDakxTM2JFbE82b2tEZGZ2YXlUcHdHTlk5TjNmUQ?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：掲示板 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1vZldGZFlwc1E1d0t0NWtNZnpZYjVzQ080Y0JKY1FIMjQtNWp6bUhGUWpjZF9vdGhManJjNW51SzZxTnVnd2hyR3YtRFJDRU5KUmphZVVzZzZkdFQ3eWVJ?oc=5" target="_blank" rel="noopener">住友金属鉱山(株)【5713】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
-          
-        </ul>
-      </details>
-      
-    </div>
-  
-    
-      
-    <div class="card status-good" id="ticker-LLY">
-      <div class="card-head">
-        <div>
-          <span class="rank">#7</span><br>
-          <span class="name">Eli Lilly and Company</span>
-          <span class="symbol">LLY</span>
-          <span class="market-tag">US</span>
-          <span class="theme-tag">ヘルスケア・製薬</span>
-          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
-        </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          ▲ 買い候補
-        </div>
-      </div>
-
-      <div class="score-row">
-        <div class="score-value">+65</div>
-        <div class="score-track"><div class="score-fill" style="width: 65%;"></div></div>
-      </div>
-
-      
-      <div class="price-row">
-        <span><span class="label">前日比</span>▼ -1.37%</span>
-        <span><span class="label">1週間</span>▲ +8.90%</span>
-        <span><span class="label">1ヶ月</span>▲ +2.80%</span>
-        <span><span class="label">3ヶ月</span>▲ +25.87%</span>
-        <span><span class="label">6ヶ月</span>▲ +16.70%</span>
-        <span><span class="label">1年</span>▲ +95.58%</span>
-      </div>
-      
-
-      <p class="reasoning">中長期の1年騰落率が+95%を超える強固な上昇トレンドを維持しており、GLP-1市場での優位性に対する期待も引き続き高いです。マクロ環境での金利や原油価格の高騰による米国株全体のボラティリティに留意しつつも、ヘルスケアセクターへの選別的な資金流入が下値を支えています。</p>
-
-      
-      <ul class="factors">
-        
-        <li>1年騰落率+95%超の力強い中長期トレンド</li>
-        
-        <li>GLP-1関連市場での高い優位性と業績期待</li>
-        
-        <li>ヘルスケアセクターへの継続的な投資マネーの流入</li>
-        
-      </ul>
-      
-
-      
-      <p class="risks"><span class="label">留意点:</span> 米国の金利動向や地政学リスクに起因する市場全体のボラティリティ拡大には注意が必要です。</p>
-      
-
-      
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時と株価はほぼ同水準で横ばいだが、中長期の強力な上昇トレンドとセクターへの資金流入という判断軸は引き続き妥当であった。</p>
-      
-
-      
-      <details class="news-detail">
-        <summary>関連ニュース（5件）</summary>
-        <ul>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE81Wmt5STZIYlFoSUUxLXZJVkN4NmNvR3NwT3UyUjYxR3dsZ25hR25sYUlyVmNjUU5CNmhBMDd4V3A5WjZtVm9DTjd6ck05dw?oc=5" target="_blank" rel="noopener">イーライ・リリー【LLY】：株価・株式情報 - Yahoo!ファイナンス</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPSWxwVWRSMEdURG1NOVJfM2gwdC0wNkJmRmprdHliSFZXZ2xMWnRsaExfeVRUV1Jfa3J3a0FLcnB1WHlISG8ySmlkcDJSbmxkSmpZakV2bFdjSFp2aVpJcG5uSUJfai1vQzdwd2VBdnpDUUxxamhhSzVtVmF0Ym8za0dBN05wRVljWnNiaGJEV1FVejFieHFSdmRxTkdRX0NYVTc2ZTZ30gGmAUFVX3lxTE9JbHBVZFIwR1REbU05Ul8zaDB0LTA2QmZGamt0eWJIVldnbExadGxoTF95VFRXUl9rcndrQUtycHVYeUhIbzJKaWRwMlJubGRKallqRXZsV2NIWnZpWklwbm5JQl9qLW9DN3B3ZUF2ekNRTHFqaGFLNW1WYXRibzNrR0E3TnBFWWNac2JoYkRXUVV6MWJ4cVJ2ZHFOR1FfQ1hVNzZlNnc?oc=5" target="_blank" rel="noopener">イーライ・リリー（LLY）の株価、業績見通しの上方修正を受け28％割安の可能性 - simplywall.st</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE5xM1poMGRzOGpLVUNGY0xVNUtHeEJHR2tzUDBGY0hINTlJYzNzMHp4UUZxclpvMUc1eVhQV21BLXNzb3p6MmN6TkxxZVM2V2RDZnZlalhLRVNUN0Q1?oc=5" target="_blank" rel="noopener">LLY|Eli Lilly and Co|株価:1222.204|変動率:-9.736 - TradingKey</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFA0N0VPbHJGeEppcXpwdFp0TDVBWkd6V0hCNmlVcVVRQkhraTdYb09UM1g1UUJtRWYtd3FoLUJYSGtBUkhNTTd3TVF3VExabF9oWk9TUS1LY3RsZw?oc=5" target="_blank" rel="noopener">イーライリリー株、今後3年間で約76％上昇し2090ドルに到達するか - Forbes JAPAN</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5sbFJ6SGpZVnNZQ2g2cUwtSTZCMDIwZEhLV18xZFVqb1ZncjV6dHpOOEVOSVlDaEpjdURSVFdQWnhLR09JV1ZMTUxqdHMycjIyYlN6RHRkV2VvUV9kdHA0RndiNEFza0FlZGpwbGs3Y0JhZHpN?oc=5" target="_blank" rel="noopener">バーンスタイン、ノボ ノルディスクに33%下落警告—イーライリリーがGLP-1市場の優位性を脅かす - BigGo ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMifkFVX3lxTFBtRnJsZ2M1NERNMGdaU200WFg0T1BVbkNHWXNJLU1tU0RvV00zdTkyTDhqWWpZOG9HZ1diM2YzcmNYLWVtNVhiTTNndzNlNF80Q05HSEhsUmQ3WllNeTdmNVRibmplVmV6c2QwMVJJZFpZTnNyWjlTSTh4alZMUQ?oc=5" target="_blank" rel="noopener">メルカリ株、ポケカ人気で4割高 高額品で再び成長軌道へ - 日本経済新聞</a></li>
           
         </ul>
       </details>
@@ -2856,7 +2801,7 @@
     <div class="card status-good" id="ticker-PLTR">
       <div class="card-head">
         <div>
-          <span class="rank">#8</span><br>
+          <span class="rank">#7</span><br>
           <span class="name">Palantir Technologies</span>
           <span class="symbol">PLTR</span>
           <span class="market-tag">US</span>
@@ -2885,26 +2830,26 @@
       </div>
       
 
-      <p class="reasoning">中長期の3ヶ月および6ヶ月騰落率が引き続きプラス圏にあり、AI事業の好調やアナリストによる目標株価引き上げなどファンダメンタルズの強さが維持されています。米国のマクロ環境において金利や原油高への警戒感はあるものの、AI関連の個別株に対する投資マネーの流入は継続しており、堅調なトレンドを支持する材料となっています。割高感への注意は必要であるものの、中長期的な成長期待を主たる根拠として買い候補の判断を継続します。</p>
+      <p class="reasoning">中長期の3ヶ月および6ヶ月騰落率が引き続きプラス圏を維持しており、AI事業の好調や目標株価の引き上げといった強いファンダメンタルズが確認されています。マクロ環境において金利上昇や原油高への警戒感は残るものの、AIセクターへの根強い投資マネーの流入が下支えとなっており、中長期的なトレンドは堅調です。割高感への留意は必要ですが、これまでの成長期待を主たる根拠として買い候補の判断を継続します。</p>
 
       
       <ul class="factors">
         
-        <li>AI事業の好調を背景としたアナリストによる目標株価の引き上げ</li>
+        <li>3ヶ月および6ヶ月騰落率がプラス圏を維持する中長期の堅調なトレンド</li>
         
-        <li>3ヶ月・6ヶ月騰落率で示される中長期的な上昇トレンドの維持</li>
+        <li>AI事業の好調を受けたアナリストによる目標株価引き上げ</li>
         
-        <li>米国株式市場におけるAI関連セクターへの継続的な資金流入</li>
+        <li>地政学リスクや防衛関連としての需要を背景にした事業の強さ</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 高値圏での推移に伴う割高感や、金利・原油高を警戒したマクロ環境の悪化による全体的な株価調整のリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 高めのバリュエーションによる割高感と、金利上昇・原油高に起因する米国株式市場全体のボラティリティ拡大に注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回提示した「好決算やAI需要を背景とした上向きトレンドの継続」という判断は、株価の横ばい推移の中でも中長期的な上昇基調が維持されていることから妥当であったと考えられます。今回はその強気を維持しつつ、マクロ的な金利・原油リスクへの配慮を継続します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点での株価水準がそのまま維持されており、中長期のトレンドやAI需要を背景とした強気な見立ては実際の値動きと整合的でした。短期的な価格の停滞は見られますが、中長期の成長基盤に変化はないため、前回の判断を踏襲しつつ慎重に買い姿勢を維持します。</p>
       
 
       
@@ -2914,13 +2859,13 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE5VTElnYlV3WmxIODRSQkFhTFdVZm1BWWRlbnpIVWVxMnFqSktTT3BaWmliWnlkb05vQllHUDRab3FwQktQY0FDaHZjUzVXeFE?oc=5" target="_blank" rel="noopener">パランティア・テクノロジーズ【PLTR】：株価・株式情報 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMisAFBVV95cUxQWmR3Zmx0RnZCNlBjTWdKYnJwaXN5NjZGalVCR1hMUDNaRHkxUXBubXNoTE1BQUxYZ1EwU1RyRjdFNHAzRWNDM0tUc0xNQUNuUFNEZGFqZzdKam10SzFlUERRSFRsNXU3NE5wVERVY0Y1eDB1ODJXOVF4QURaSGE2TzVXNnJIOE1wVGI2TzB5c0Fob01hUTZJYmJaSGZHakI5Z1ZkeldWSHh3RnpRTHF4RQ?oc=5" target="_blank" rel="noopener">フィリップ証券は、パランティア・テクノロジーズの目標株価を202ドルから215ドルに引き上げ、投資判断「買い」を維持しました。 - Moomoo</a></li>
-          
           <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE1JbE8xanlCTjFMTHpQMzRmbDJoRzRBZVhwZFlSSGd6QXo0WTc4RFFuZF8xVmlkYWh0VXgzbHZNMEVOWE1zSVl3dFdzcVdkYmNxVzdVSUpEZXVNMk1DdXdTa0ZCOE9weDZTRm5jQ1pGSlZVS2V5?oc=5" target="_blank" rel="noopener">フィリップ証券、AI事業の好調を受けPalantirの目標株価を引き上げ 執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxQZ1NOWnNVVFB2eEctWExOYzNFUW9nc3FsZE5FUUYzQklhNUpUNDFyRzBjRTdQS3paNGdLa2hNZ2gtVkZMbFQtY2J3YVNiQUVBYUd4MXIxby1KelNJMVZHQnpaNHlOVk5VTWFiSXhxbm5pdmRBZlZVMXpnUXVDWFBNVVMzVE54ZFZKbWt5UzVqNDdNTDRYLW1qRDNsYWw4X2c0bEhNNUp30gGmAUFVX3lxTFBnU05ac1VUUHZ4Ry1YTE5jM0VRb2dzcWxkTkVRRjNCSWE1SlQ0MXJHMGNFN1BLelo0Z0traE1naC1WRkxsVC1jYndhU2JBRUFhR3gxcjFvLUp6U0kxVkdCelo0eU5WTlVNYWJJeHFubml2ZEFmVlUxemdRdUNYUE1VUzNUTnhkVkpta3lTNWo0N01MNFgtbWpEM2xhbDhfZzRsSE01Snc?oc=5" target="_blank" rel="noopener">パランティール（PLTR）の株価、過去最高の決算を発表した後も割高感が見られる - simplywall.st</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxPMzM0VnF3WHNVd3RoOEhqSWZ5eng3RW9XOS16eHJQQi02bXFMUDZLaGN2TjhJZzFDbGRkVS1aTEdyU0tlQzRwRk9Uclk3alR2WWY5TVF1Z0Z6UTU5Tkg2RWQxbjYyZjIwX0RHcDNRWERLSWNJU2RsTUJtMzBCalRCMUZtQzczYkphYWNOZUg3QQ?oc=5" target="_blank" rel="noopener">8月7日のPalantir Technologies Inc (PLTR) 始値は3.78%上昇：どのようなシグナルを示しているのか？ - TradingKey</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQcDVJVTFaY0ZwX0xwWmdTWDJQemdkM2dBdXc3a3RGN1lpamx1d0Q2bm9fRy1BdC1BSzVmbkJWenpGR1NWOUg1eGowLWx2SzV5N2VfREZCa0ZfMkFXYXBmM0dfNFE1dGdLUldzYTI3RkpwcjItellzamRQRVFBR3Z1aF9vWkVNLXFZd3VOWXItbw?oc=5" target="_blank" rel="noopener">8月10日のPalantir Technologies Inc (PLTR) 値動きは3.92%上昇：値動きの背後にある要因 - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNX3lDc1hURkl3SHlwNkZieEJIc0NWcGlNZkRqR1R6aS03N1dyXzFuZE1PQ25oZnRUQ2o5STBPNFNIUklNdlpLQVBpajVVWTZkcTBtRkVTRkdNdzNxdUFaODA3RU1kZEZFdHFsWVB0dThXR2N5enRwdDhIZlQ0bE02eG1ERHdlRVJidVI4U1V3aFhaZDB3UmRvUXhBb0l4VUxSNk9ZR1h5Sm8?oc=5" target="_blank" rel="noopener">米防衛企業パランティアが決算で完勝、株価は一時30%超高。眠れない夜を過ごすのはあの名物投資家？ - Business Insider Japan</a></li>
           
         </ul>
       </details>
@@ -2932,7 +2877,7 @@
     <div class="card status-good" id="ticker-LMT">
       <div class="card-head">
         <div>
-          <span class="rank">#9</span><br>
+          <span class="rank">#8</span><br>
           <span class="name">Lockheed Martin</span>
           <span class="symbol">LMT</span>
           <span class="market-tag">US</span>
@@ -2961,26 +2906,26 @@
       </div>
       
 
-      <p class="reasoning">1ヶ月および3ヶ月騰落率が二桁台のプラスを維持しており、中長期の強力な上昇トレンドが継続しています。大型防衛契約の獲得や継続的な地政学リスクへの警戒感が、同セクターへの投資マネーを引き続き支えています。足元での目標株価の引き上げも追い風となっており、堅調な推移が期待されます。</p>
+      <p class="reasoning">中長期の1年騰落率が+44.23%と強力な上昇トレンドを維持しており、地政学リスクや大型防衛契約による底堅い需要が続いています。足元では目標株価の引き上げや割安感の指摘もあり、セクター選別の流れの中で引き続き堅調な推移が期待されます。</p>
 
       
       <ul class="factors">
         
-        <li>1ヶ月および3ヶ月騰落率が示す安定した中長期の上昇トレンド</li>
+        <li>1年騰落率が+44.23%と中長期で非常に強い上昇トレンドにある点</li>
         
-        <li>大型防衛契約の獲得やAI試験導入による収益性への期待</li>
+        <li>継続する地政学リスクを背景とした防衛関連の需要と大型契約の獲得</li>
         
-        <li>中東情勢などの地政学リスクを背景とした防衛関連需要の継続</li>
+        <li>アナリストによる目標株価引き上げや過小評価の指摘</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 米国の金利動向やマクロ経済の不確実性が株式市場全体に与える下落圧力には注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の急激な変化や原油価格の高止まりが株式市場全体へ与える悪影響には注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回提示した「買い候補（スコア +60）」の判断は、中長期の上昇モメンタムと防衛関連需要の強さを正しく捉えており、株価が横ばい圏で堅調さを維持したことから概ね妥当であったと考えます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中長期の上昇トレンド継続と防衛需要への期待」という判断は、その後の株価が横ばいながらも崩れていない点から妥当でした。今回もこの中長期的なトレンドとセクターの特性を主軸に判断を継続します。</p>
       
 
       
@@ -3008,7 +2953,7 @@
     <div class="card status-good" id="ticker-XOM">
       <div class="card-head">
         <div>
-          <span class="rank">#10</span><br>
+          <span class="rank">#9</span><br>
           <span class="name">Exxon Mobil</span>
           <span class="symbol">XOM</span>
           <span class="market-tag">US</span>
@@ -3037,26 +2982,26 @@
       </div>
       
 
-      <p class="reasoning">1年騰落率が+54.39%と強力な中長期の上昇トレンドを維持しており、中東情勢の緊迫化に伴う原油価格の上昇が引き続き追い風となっています。一部の利益下振れや目標株価の引き下げリスクは存在しつつも、マクロ経済の地政学リスクを背景としたエネルギーセクターへの投資マネー流入が評価を支えています。</p>
+      <p class="reasoning">1年騰落率が+54.39%と強固な中長期の上昇トレンドを維持しており、中東情勢の緊迫化やホルムズ海峡の動向に起因する原油高が追い風となっています。一部で利益の伸び悩みや目標株価の引き下げが見られるものの、地政学リスクを背景としたエネルギー需要とバリュー株への資金シフトが引き続き銘柄を支えています。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率+54.39%をはじめとする強固な中長期の上昇トレンド</li>
+        <li>1年騰落率+54.39%をはじめとする強固な中長期上昇トレンド</li>
         
-        <li>ホルムズ海峡の封鎖など中東情勢を受けた原油価格の高止まり・上昇圧力</li>
+        <li>中東情勢の緊迫化およびホルムズ海峡封鎖リスクに伴う原油価格の上昇</li>
         
-        <li>エネルギーセクターへの継続的な資金流入と地政学リスクへの耐性</li>
+        <li>インフレ高止まりや地政学リスクを意識したエネルギーセクターへの投資マネー流入</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 利益の予想を下振れするリスクや、目標株価の引き下げによる株価の一時的な調整圧力に注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 利益の予想を下振れるリスクや、今後の原油価格の急変動がパフォーマンスに影響を与える可能性があります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回（2026-08-12）の評価（買い候補、スコア+60）について、株価は横ばいで推移したものの中長期の強力な上昇トレンドと地政学リスクを背景とした原油高の構図に変化はないため、前回の判断は妥当であったと評価し、今回もこれを踏襲します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中長期の上昇トレンドと地政学リスクを背景とした原油高の追い風」という見立ては、株価が横ばい圏で推移しつつも崩れていないため、概ね妥当であったと考えられます。今回は引き続きその中長期トレンドとエネルギーセクターへの資金流入を評価の主軸とします。</p>
       
 
       
@@ -3081,14 +3026,14 @@
   
     
       
-    <div class="card status-good" id="ticker-4385.T">
+    <div class="card status-good" id="ticker-5713.T">
       <div class="card-head">
         <div>
-          <span class="rank">#11</span><br>
-          <span class="name">メルカリ</span>
-          <span class="symbol">4385.T</span>
+          <span class="rank">#10</span><br>
+          <span class="name">住友金属鉱山</span>
+          <span class="symbol">5713.T</span>
           <span class="market-tag">JP</span>
-          <span class="theme-tag">国内グロース</span>
+          <span class="theme-tag">資源・エネルギー（貴金属）</span>
           <span class="nisa-tag">NISA成長投資枠 対象目安</span>
         </div>
         <div class="status-chip">
@@ -3104,35 +3049,35 @@
 
       
       <div class="price-row">
-        <span><span class="label">前日比</span>▼ -2.25%</span>
-        <span><span class="label">1週間</span>▲ +9.74%</span>
-        <span><span class="label">1ヶ月</span>▼ -1.09%</span>
-        <span><span class="label">3ヶ月</span>▲ +12.82%</span>
-        <span><span class="label">6ヶ月</span>▲ +48.42%</span>
-        <span><span class="label">1年</span>▲ +106.14%</span>
+        <span><span class="label">前日比</span>▼ -3.79%</span>
+        <span><span class="label">1週間</span>▲ +20.18%</span>
+        <span><span class="label">1ヶ月</span>▲ +33.11%</span>
+        <span><span class="label">3ヶ月</span>▼ -10.50%</span>
+        <span><span class="label">6ヶ月</span>▲ +5.95%</span>
+        <span><span class="label">1年</span>▲ +190.06%</span>
       </div>
       
 
-      <p class="reasoning">3ヶ月および6ヶ月騰落率にみられる中長期の強い上昇トレンドは維持されており、最高益や初の自社株買いといった企業の好材料が引き続き評価されています。足元では短期的な横ばい推移やマクロ環境の不透明感があるものの、個社の成長モメンタムを背景に堅調な推移が続いています。</p>
+      <p class="reasoning">金属価格の上昇を背景とした今期業績の上方修正や1年を通じた力強い上昇トレンドが継続しており、中長期的な優位性は健在です。地政学リスクや資源価格の動向も資源関連銘柄の収益を支える要因となっていますが、高値圏でのボラティリティや為替の変動リスクには引き続き留意が必要です。</p>
 
       
       <ul class="factors">
         
-        <li>中長期の強力な上昇トレンドと最高益・自社株買いの継続</li>
+        <li>金属価格上昇に伴う業績の上方修正と増益見通し</li>
         
-        <li>高額品（ポケカなど）の取扱好調による成長軌道への回帰</li>
+        <li>1年騰落率が190%を超える強力な中長期の上昇トレンド</li>
         
-        <li>日銀の政策動向や海外市場のボラティリティなどのマクロ環境の不確実性</li>
+        <li>地政学リスクによる資源・エネルギー市場の下支え</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 金利上昇や中東情勢に起因するマクロ経済の悪化がグロース株全体のセンチメントに下押し圧力をかけるリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 急激な為替変動や資源価格の急反落、およびボラティリティの高まりによる短期的な調整リスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の判断（買い候補、スコア+60）は、株価が横ばいで推移したものの中長期の強いトレンドと個社の好材料が引き続き下支えとなったため、妥当なものだったと振り返ります。今回もこの成長モメンタムを重視して判断を維持します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点からの株価は横ばい推移で大きな変化はなかったものの、業績上方修正の裏付けがある中長期の強気トレンドは維持されており、前回の判断はおおむね妥当であったと考えられる。</p>
       
 
       
@@ -3140,15 +3085,15 @@
         <summary>関連ニュース（5件）</summary>
         <ul>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE5lcVVrWExfWFdXQ3pCVWFPN2t6eGZFYTlWbW1ySGsyYm96MU9lSWpxTW1SRm5PcUVRWi1VQ2RQMkhMNU5vNEhBSm81S1Jka1BEZlpsbzhrbl9DQmRRbTcw?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxPcjlfclA2QVJFS2ZhNE9LWjU2NXhjaVZRRFFFaUhxTEtCeVUza0hGODhKVnZHX2JuRjNrSFRxRjN1LVBic2ctM0JEc1V6QUVpSTZUaTBSekhhLTFRY3FjZThUNmE5YXF6NGJuUUNlOTFfVklCRS05bWhUMUpNd3JpLVRiVmYzTms?oc=5" target="_blank" rel="noopener">【アナリスト評価】住友金属鉱山、レーティング中立を据置き、目標株価10,800円に引上げ（米系大手証券）(アイフィス株予報) - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5FODdMU3dSai1YaDlPT2ozSFFlQ09ZSWk5VmRtOWFLR0ZmcThQX1VPQXpKd251S19rLUM2a05yT01NZEdwdGlEZTlXcm1UNHZ0allKZGhhVWwxeVBxYXRaSlJhWGFGZUxMUnp0cQ?oc=5" target="_blank" rel="noopener">メルカリ株価、4年7カ月ぶり高値 最高益や初の自社株買いを好感 - 日本経済新聞</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE1fcHZkazQtZ0RSWkdsVHVQdUFsLW9KbVRCbWlHZzQtM280VzZpZElnMGFFNDZQeUVhYkprbklwODFSczBybDI4YnlGQ1NndVJZUnc?oc=5" target="_blank" rel="noopener">住友鉱、今期最終を一転23％増益に上方修正 - 株探</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE5qN2dIZWZtajlFekR6MEVNVmlaUmV5eUFXd09udUgxbVNLaTVmeU5NM0ZjWk11Nk96N3RqeFRWUDJBMlJublFTX19aTXJmMG9ZQlpZQ3QwS2pjTlpVamJVMg?oc=5" target="_blank" rel="noopener">話題株ピックアップ【夕刊】（1）：ユニチカ、オムロン、メルカリ - 株探</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE95X3dvNVdVTGk0bm9uMkdQMC1jaS1YMm1HZk9FdlNMTFptRlhpLU5UTTBMVGhraS1Jc00yM3hWUXh5QkZkLURRMjU5ZHhMVEF1VjdrLTNkUm1kUVBmWXJxM2lNRlRacy1xSjZOaw?oc=5" target="_blank" rel="noopener">決算:住友金属鉱山が一転増益に 27年3月期23％増、金属価格上昇で - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qTkJaVV9XQ0ZiM1hZZFlncnJ1MVVKOTNtWEs4UEV4b0plcWRndjFvOTNTUUdGOG8yazBnZ3c5bW1vb3pUM1VwNHhydzk2ZnJnRFRCekFRbDBtWmda?oc=5" target="_blank" rel="noopener">(株)メルカリ【4385】：企業情報（決算時期や平均年収、代表者名、IR動画など） - Yahoo!ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE1vZldGZFlwc1E1d0t0NWtNZnpZYjVzQ080Y0JKY1FIMjQtNWp6bUhGUWpjZF9vdGhManJjNW51SzZxTnVnd2hyR3YtRFJDRU5KUmphZVVzZzZkdFQ3eWVJ?oc=5" target="_blank" rel="noopener">住友金属鉱山(株)【5713】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMifkFVX3lxTFBtRnJsZ2M1NERNMGdaU200WFg0T1BVbkNHWXNJLU1tU0RvV00zdTkyTDhqWWpZOG9HZ1diM2YzcmNYLWVtNVhiTTNndzNlNF80Q05HSEhsUmQ3WllNeTdmNVRibmplVmV6c2QwMVJJZFpZTnNyWjlTSTh4alZMUQ?oc=5" target="_blank" rel="noopener">メルカリ株、ポケカ人気で4割高 高額品で再び成長軌道へ - 日本経済新聞</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQY1RuR2xHNlA1aHlvbGxuc0JxMGlycTk5OWo3dXFKWWgzUFZmRnNjanlKaXNleHVYWGxFYUhtOGRsamQ4WVNKR19rWmdfOHA3UEZKZ2ZiZF95RzRvZG56c2p6QXdTdHBLY3g0RU9tVDM4eEtnVU9EaE44bHZEdDdfdTlpdlhmNUdtQy1pRTZDV0NaVlVmYmo0UWFwM0Y5WWdrTjlja0dRY9IBrAFBVV95cUxPWkIxVll2R2I2U1hnU3pJX2xldVQ4WXpzM0R1UFdwc1Z6WlRhd2diWVNia2dFZHlGc29KYmNpSU40MlhwUWkxWnJBYzczOU9RaDc0RDBZUnBQNlVtT1VNZXlBYUpZQ05aSmR5WUVoZk5TbTEwbUtyNzlmTXBwVUlrNzg2SlVucmh3eXVnMFo1a3ZhTVI2VERQZ25Yb1lBVHh1eHczTlZfZ0ZvZHVw?oc=5" target="_blank" rel="noopener">住友金属鉱山（東証：5713）、2027年度の業績予想を上方修正し株価が26.4％上昇――何が変化したのか - simplywall.st</a></li>
           
         </ul>
       </details>
@@ -3157,7 +3102,83 @@
   
     
       
-    <div class="card status-warning" id="ticker-TSM">
+    <div class="card status-good" id="ticker-LLY">
+      <div class="card-head">
+        <div>
+          <span class="rank">#11</span><br>
+          <span class="name">Eli Lilly and Company</span>
+          <span class="symbol">LLY</span>
+          <span class="market-tag">US</span>
+          <span class="theme-tag">ヘルスケア・製薬</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ▲ 買い候補
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+60</div>
+        <div class="score-track"><div class="score-fill" style="width: 60%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▼ -1.37%</span>
+        <span><span class="label">1週間</span>▲ +8.90%</span>
+        <span><span class="label">1ヶ月</span>▲ +2.80%</span>
+        <span><span class="label">3ヶ月</span>▲ +25.87%</span>
+        <span><span class="label">6ヶ月</span>▲ +16.70%</span>
+        <span><span class="label">1年</span>▲ +95.57%</span>
+      </div>
+      
+
+      <p class="reasoning">1年騰落率が+95%を超え、3ヶ月および6ヶ月の騰落率も非常に堅調であることから、中長期の強力な上昇トレンドが維持されています。GLP-1市場での優位性に対する期待が引き続き株価を下支えしており、マクロ経済の不確実性は残るもののヘルスケアセクターへの資金流入が追い風となっています。</p>
+
+      
+      <ul class="factors">
+        
+        <li>1年で+95%超の強固な中長期上昇トレンドの継続</li>
+        
+        <li>GLP-1市場における競合に対する優位性と業績上方修正の期待</li>
+        
+        <li>米国市場におけるヘルスケアセクターへの選別的な資金流入</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> マクロ経済における金利高止まりや原油価格の上昇に伴う、米国株式市場全体のボラティリティ拡大には警戒が必要です。</p>
+      
+
+      
+      <p class="reflection">🔁 前回からの振り返り: 前回の判断（買い候補、スコア+65）は、中長期の強固な上昇トレンドとセクターへの資金流入を的確に捉えており、株価が安定して推移したことから妥当な判断でした。今回もこの中長期的な優位性とトレンドを継続して評価の軸とします。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE81Wmt5STZIYlFoSUUxLXZJVkN4NmNvR3NwT3UyUjYxR3dsZ25hR25sYUlyVmNjUU5CNmhBMDd4V3A5WjZtVm9DTjd6ck05dw?oc=5" target="_blank" rel="noopener">イーライ・リリー【LLY】：株価・株式情報 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPSWxwVWRSMEdURG1NOVJfM2gwdC0wNkJmRmprdHliSFZXZ2xMWnRsaExfeVRUV1Jfa3J3a0FLcnB1WHlISG8ySmlkcDJSbmxkSmpZakV2bFdjSFp2aVpJcG5uSUJfai1vQzdwd2VBdnpDUUxxamhhSzVtVmF0Ym8za0dBN05wRVljWnNiaGJEV1FVejFieHFSdmRxTkdRX0NYVTc2ZTZ30gGmAUFVX3lxTE9JbHBVZFIwR1REbU05Ul8zaDB0LTA2QmZGamt0eWJIVldnbExadGxoTF95VFRXUl9rcndrQUtycHVYeUhIbzJKaWRwMlJubGRKallqRXZsV2NIWnZpWklwbm5JQl9qLW9DN3B3ZUF2ekNRTHFqaGFLNW1WYXRibzNrR0E3TnBFWWNac2JoYkRXUVV6MWJ4cVJ2ZHFOR1FfQ1hVNzZlNnc?oc=5" target="_blank" rel="noopener">イーライ・リリー（LLY）の株価、業績見通しの上方修正を受け28％割安の可能性 - simplywall.st</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiXEFVX3lxTE5xM1poMGRzOGpLVUNGY0xVNUtHeEJHR2tzUDBGY0hINTlJYzNzMHp4UUZxclpvMUc1eVhQV21BLXNzb3p6MmN6TkxxZVM2V2RDZnZlalhLRVNUN0Q1?oc=5" target="_blank" rel="noopener">LLY|Eli Lilly and Co|株価:1222.204|変動率:-9.736 - TradingKey</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFA0N0VPbHJGeEppcXpwdFp0TDVBWkd6V0hCNmlVcVVRQkhraTdYb09UM1g1UUJtRWYtd3FoLUJYSGtBUkhNTTd3TVF3VExabF9oWk9TUS1LY3RsZw?oc=5" target="_blank" rel="noopener">イーライリリー株、今後3年間で約76％上昇し2090ドルに到達するか - Forbes JAPAN</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5sbFJ6SGpZVnNZQ2g2cUwtSTZCMDIwZEhLV18xZFVqb1ZncjV6dHpOOEVOSVlDaEpjdURSVFdQWnhLR09JV1ZMTUxqdHMycjIyYlN6RHRkV2VvUV9kdHA0RndiNEFza0FlZGpwbGs3Y0JhZHpN?oc=5" target="_blank" rel="noopener">バーンスタイン、ノボ ノルディスクに33%下落警告—イーライリリーがGLP-1市場の優位性を脅かす - BigGo ファイナンス</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-good" id="ticker-TSM">
       <div class="card-head">
         <div>
           <span class="rank">#12</span><br>
@@ -3169,13 +3190,13 @@
         </div>
         <div class="status-chip">
           <span class="status-dot"></span>
-          ● 様子見
+          ▲ 買い候補
         </div>
       </div>
 
       <div class="score-row">
-        <div class="score-value">+50</div>
-        <div class="score-track"><div class="score-fill" style="width: 50%;"></div></div>
+        <div class="score-value">+55</div>
+        <div class="score-track"><div class="score-fill" style="width: 55%;"></div></div>
       </div>
 
       
@@ -3189,26 +3210,26 @@
       </div>
       
 
-      <p class="reasoning">3ヶ月や1年単位の騰落率が示す通り中長期の成長トレンドは依然として堅調であり、目標株価の引き上げや売上高の好調が下支えとなっています。一方で、マクロ環境における原油高や中東情勢の不確実性、さらに日米の金融政策動向をめぐる警戒感が上値を重くしているため、引き続き慎重な姿勢が妥当です。</p>
+      <p class="reasoning">中長期の堅調なトレンドや売上高の好調、目標株価の引き上げが引き続き強力な下支えとなっています。前回の慎重姿勢から、足元の中長期的な上昇モメンタムとAI関連の成長ドライバーへの期待をより重視し、買い候補へ微調整します。</p>
 
       
       <ul class="factors">
         
-        <li>3ヶ月・6ヶ月・1年騰落率に表れる中長期の強い上昇トレンド</li>
+        <li>半年で+19.37%、1年で+76.46%という力強い中長期トレンド</li>
         
-        <li>ソニーとの合弁による投資や目標株価引き上げなどのポジティブな個別材料</li>
+        <li>売上高が過去最高を記録するなど、事業ファンダメンタルズの強さ</li>
         
-        <li>地政学リスクや原油高、米国のインフレ警戒感に起因するマクロの不透明感</li>
+        <li>CPUに代わるGPU等の成長ドライバーに対する期待と目標株価の引き上げ</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の悪化やエネルギー価格の高騰が世界的な景気減速や半導体需要の冷え込みを招くリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化に伴う原油高や、日米の金融政策変更をめぐるマクロ経済の不確実性が短期的な調整リスクとなります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の「中長期の成長力を認めつつ、マクロリスクを考慮して様子見とする」という判断は、株価が横ばいで推移した直近の動きと整合的であり概ね妥当でした。今回はその判断を維持しつつ、堅調な企業業績とマクロの警戒感のバランスを見極めます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回は原油高やマクロの不確実性を重視して様子見としましたが、株価は横ばい圏を維持し中長期の強い上昇トレンドが継続したため、今後はマクロリスクに対する過度な警戒を和らげ、ファンダメンタルズの強さをより前向きに評価します。</p>
       
 
       
@@ -3233,86 +3254,10 @@
   
     
       
-    <div class="card status-good" id="ticker-1605.T">
-      <div class="card-head">
-        <div>
-          <span class="rank">#13</span><br>
-          <span class="name">INPEX</span>
-          <span class="symbol">1605.T</span>
-          <span class="market-tag">JP</span>
-          <span class="theme-tag">資源・エネルギー</span>
-          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
-        </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          ▲ 買い候補
-        </div>
-      </div>
-
-      <div class="score-row">
-        <div class="score-value">+50</div>
-        <div class="score-track"><div class="score-fill" style="width: 50%;"></div></div>
-      </div>
-
-      
-      <div class="price-row">
-        <span><span class="label">前日比</span>▲ +2.91%</span>
-        <span><span class="label">1週間</span>▲ +6.44%</span>
-        <span><span class="label">1ヶ月</span>▲ +10.59%</span>
-        <span><span class="label">3ヶ月</span>▼ -3.81%</span>
-        <span><span class="label">6ヶ月</span>▲ +6.15%</span>
-        <span><span class="label">1年</span>▲ +81.92%</span>
-      </div>
-      
-
-      <p class="reasoning">中東情勢の緊迫化に伴う原油価格の上昇や自社株買いの発表が継続して好材料となっており、中長期的な上昇トレンドの維持が期待されます。前回分析から株価の大きな崩れもなく、地政学リスクを背景とした資源セクターへの資金流入という根拠は引き続き妥当です。1年騰落率の大幅なプラスも維持されており、手堅い推移が見込まれます。</p>
-
-      
-      <ul class="factors">
-        
-        <li>イラン情勢など中東情勢の緊迫化による原油価格の高止まり</li>
-        
-        <li>自社株買いの実施発表による株主還元姿勢の評価</li>
-        
-        <li>1年騰落率が+80%を超える強固な中長期の上昇トレンド</li>
-        
-      </ul>
-      
-
-      
-      <p class="risks"><span class="label">留意点:</span> 地政学リスクの急激な緩和による原油価格の下落や、世界的な景気減速懸念による資源需要の低下には注意が必要です。</p>
-      
-
-      
-      <p class="reflection">🔁 前回からの振り返り: 前回の「買い候補」という判断は、中東情勢や原油高を背景とした底入れ期待のトレンドと一致しており、その後の株価も大きな崩れなく推移したため妥当であった。今回はその判断の根拠となった中長期的なエネルギー需給の引き締まりと株主還元策を引き続き重視して判断している。</p>
-      
-
-      
-      <details class="news-detail">
-        <summary>関連ニュース（5件）</summary>
-        <ul>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE9pNEZzaHlWWWt0S1N4M2RBV1ZOdkRxdGJvZmtZVjd6MmxaMnIwb0tCV2JwOWdmQXVqa1hxN0FEQThmRmZobW5Nb3RGcndJd0haMFhiUl9jVnVPZzlCS1NB?oc=5" target="_blank" rel="noopener">(株)ＩＮＰＥＸ【1605】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiRkFVX3lxTFBmM2ZUWS1tRjZYU1JndlZ4TDN0Vng3RjVmby1aY2ZwSGZ1N3hud2poaTBhTy0zSGlOdWhsNDROaUpnNkpCOGc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが４日続伸、イラン情勢への警戒からＷＴＩは８３ドル台に上昇 - みんかぶ</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiR0FVX3lxTFBoelZqYk9WeUZUQmhZZDNhaU9yZUpudUZWU05jREgtYnBfaWRudVMzb1JQd2NqV3NZR1gtMjZoWGs2UFBQb3dn?oc=5" target="_blank" rel="noopener">１１日のＡＤＲ動向＝円換算値で高安まちまち、ＩＮＰＥＸ、楽天グループ、三井金属など高い 速報 - kabushiki.jp</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE9CMWI4V0tXZ3FVLXRSNXBablk3aVdMR0d6ckVzMllrN2o3bWlvTlk2VFJGZ24zVGdVY3BDOW02QUhNb00xdDhrcmllbkFDTVRCTnc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸ、自社株買いの実施を発表 - 株探</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFA5SWxkY01aMzFoMUloWjdUcW5RcVBuS1JDWEh5RHZGQUJYd2E5WFVjSjhVZ0I3dkt0SFFpOWJXYjNPbVo2dms0RGRWaDROcEJQTmQyeWdQVjNGUktNVFBFNzh5VlBRU3Y2MHIwbA?oc=5" target="_blank" rel="noopener">INPEX株価が一時4.1%高 原油上昇、チャートは底入れ期待 - 日本経済新聞</a></li>
-          
-        </ul>
-      </details>
-      
-    </div>
-  
-    
-      
     <div class="card status-warning" id="ticker-4502.T">
       <div class="card-head">
         <div>
-          <span class="rank">#14</span><br>
+          <span class="rank">#13</span><br>
           <span class="name">武田薬品工業</span>
           <span class="symbol">4502.T</span>
           <span class="market-tag">JP</span>
@@ -3341,26 +3286,26 @@
       </div>
       
 
-      <p class="reasoning">中長期の1年騰落率が+35%超と堅調なトレンドを維持しており、3%台後半の高配当利回りやディフェンシブな特性が評価されています。一方で、訴訟引当金の計上や減益決算など個別要因による不透明感も残るため、継続して慎重な姿勢を保ちます。</p>
+      <p class="reasoning">中長期の1年騰落率が+35%を超えるなど堅調なトレンドを維持しており、ディフェンシブセクターとしての強みや高配当利回りが引き続き投資妙味となっています。一方で、訴訟引当金計上や減益決算といった業績上の不透明感も混在しているため、株価が横ばいで推移する中では引き続き慎重なスタンスが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率+35%超の堅調な中長期トレンド</li>
+        <li>中長期的な堅調なトレンドと高い配当利回り</li>
         
-        <li>配当利回り3%台後半のインカムゲイン妙味</li>
+        <li>ヘルスケアセクターへの資金流入期待</li>
         
-        <li>訴訟引当金計上や業績減速などの個別リスク</li>
+        <li>訴訟引当金や減益決算などの個別リスク</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 訴訟問題や業績のさらなる下方修正リスクに注意が必要です。</p>
+      <p class="risks"><span class="label">留意点:</span> 訴訟問題の長期化や業績の下振れが意識されると、株価の上値が重くなるリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時の予測以降、株価は横ばい推移となっており、中長期トレンドと個別リスクの綱引き状態を捉えた様子見の判断は妥当でした。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した様子見の判断は、株価がほぼ横ばいで推移したことと中長期トレンドの持続性を考慮すると妥当でした。今回もこの判断を継続し、個別要因の不透明感とバリュー株としての魅力のバランスを見極めます。</p>
       
 
       
@@ -3374,9 +3319,85 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9VbU1ab1FzazJFUTF6RTliR1gzZHJCWDFwZ256MURTMjZtQWVJam5CMFNYUDVEMEtOeUpST2xLQjJsLXVxS2NDZVNrdEtocmVHSkdOcWxZTDViYVpRM2w3Y1JHX1psWkFhakF5Qg?oc=5" target="_blank" rel="noopener">武田薬品工業株価続伸 26年3月期最終赤字に修正、訴訟引当金計上 - 日本経済新聞</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTFByNWhvTUIyYXM1elRDeG9DT05YNmQwQ3pFWDZ3b1d1QlNfYVRUY0QyUDdhQTQ2UFZWSGFUVjlXUmV3eVVGWHFUSVgycFdNSXY4OTVB?oc=5" target="_blank" rel="noopener">配当利回りが3％台後半まで上昇してお買い得になっている 超大型株の「トヨタ自動車」と「武田薬品工業」に注目！ - ダイヤモンド・オンライン</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiU0FVX3lxTFByNWhvTUIyYXM1elRDeG9DT05YNmQwQ3pFWDZ3b1d1QlNfYVRUY0QyUDdhQTQ2UFZWSGFUVjlXUmV3eVVGWHFUSVgycFdNSXY4OTVB?oc=5" target="_blank" rel="noopener">配当利回りが3％台後半まで上昇してお買い得になっている 超大型株の「トヨタ自動車」と「武田薬品工業」に注目！ - diamond.jp</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE43OXhza3VUbUlHTWxwQ3YwcS1aY0dOVnFzeWFvOXNGOURObUt2M1A5UEs0eS1HLWEyc2twcW9IMFdpR1RIY0RqRU41Nkc4b1hZZVE?oc=5" target="_blank" rel="noopener">武田、4-6月期(1Q)最終は9％減益で着地 - 株探</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-good" id="ticker-1605.T">
+      <div class="card-head">
+        <div>
+          <span class="rank">#14</span><br>
+          <span class="name">INPEX</span>
+          <span class="symbol">1605.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">資源・エネルギー</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ▲ 買い候補
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">+45</div>
+        <div class="score-track"><div class="score-fill" style="width: 45%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +2.91%</span>
+        <span><span class="label">1週間</span>▲ +6.44%</span>
+        <span><span class="label">1ヶ月</span>▲ +10.59%</span>
+        <span><span class="label">3ヶ月</span>▼ -3.81%</span>
+        <span><span class="label">6ヶ月</span>▲ +6.15%</span>
+        <span><span class="label">1年</span>▲ +81.92%</span>
+      </div>
+      
+
+      <p class="reasoning">中東情勢の緊迫化や地政学リスクを背景とした原油価格の上昇が継続しており、資源セクターの追い風となっています。中長期の1年騰落率は大幅なプラスを維持しているものの、直近の3ヶ月騰落率はマイナス圏にあるため、短期的な変動には引き続き留意しつつ押し目買いの検討が有効です。</p>
+
+      
+      <ul class="factors">
+        
+        <li>中東情勢の緊迫化に伴うWTI原油価格の上昇</li>
+        
+        <li>1年騰落率の大幅なプラスを維持する中長期の上昇トレンド</li>
+        
+        <li>資源・エネルギー関連銘柄への資金流入の継続</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 地政学リスクの急速な緩和や原油価格の急落による下落リスクに注意が必要です。</p>
+      
+
+      
+      <p class="reflection">🔁 前回からの振り返り: 前回提示した「中東情勢を背景とした原油高と中長期の上昇トレンド継続」という判断根拠は、今回のデータでも同様の環境が維持されているため妥当であったと言えます。株価は同値圏で推移しており、引き続き地政学リスクと資源価格の動向に注目して判断に反映させています。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE9pNEZzaHlWWWt0S1N4M2RBV1ZOdkRxdGJvZmtZVjd6MmxaMnIwb0tCV2JwOWdmQXVqa1hxN0FEQThmRmZobW5Nb3RGcndJd0haMFhiUl9jVnVPZzlCS1NB?oc=5" target="_blank" rel="noopener">(株)ＩＮＰＥＸ【1605】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTE1FdllYaWZaLU9aOG56NGlHLXhxUmlWMWJkUXJ2MEVmRHltVjA2eEFicV9SX21BMk5XbXBMcU01XzdyN2VZTEZxRXhJN3JuRFdHaXc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが４日続伸、イラン情勢への警戒からＷＴＩは８３ドル台に上昇 - 株探</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiRkFVX3lxTFBmM2ZUWS1tRjZYU1JndlZ4TDN0Vng3RjVmby1aY2ZwSGZ1N3hud2poaTBhTy0zSGlOdWhsNDROaUpnNkpCOGc?oc=5" target="_blank" rel="noopener">ＩＮＰＥＸが４日続伸、イラン情勢への警戒からＷＴＩは８３ドル台に上昇 - みんかぶ</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiR0FVX3lxTFBoelZqYk9WeUZUQmhZZDNhaU9yZUpudUZWU05jREgtYnBfaWRudVMzb1JQd2NqV3NZR1gtMjZoWGs2UFBQb3dn?oc=5" target="_blank" rel="noopener">１１日のＡＤＲ動向＝円換算値で高安まちまち、ＩＮＰＥＸ、楽天グループ、三井金属など高い 速報 - kabushiki.jp</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBxTWVxWHo0OGc0dnNicFJZc1Q1LWpGNlJaRDU1MDA1T1IwR0RmbkVSZkFXanZIeUVEWFlIQ0VHOGhIYkdYS04tbXB0RlFLU3FVVW96VUpiMm52UExwRFloLTUyS1ZTWTFaVDFhOA?oc=5" target="_blank" rel="noopener">INPEX株価が一時4.3%高 NY原油が上昇、中東緊迫で - 日本経済新聞</a></li>
           
         </ul>
       </details>
@@ -3402,8 +3423,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">+45</div>
-        <div class="score-track"><div class="score-fill" style="width: 45%;"></div></div>
+        <div class="score-value">+40</div>
+        <div class="score-track"><div class="score-fill" style="width: 40%;"></div></div>
       </div>
 
       
@@ -3417,26 +3438,28 @@
       </div>
       
 
-      <p class="reasoning">前回の判断時点から株価は横ばい圏で推移し、1ヶ月騰落率では依然としてマイナス圏にあるため、短期的な調整圧力を考慮して慎重に様子見とする。中長期の1年・6ヶ月騰落率が示す強い上昇トレンドやAI・CPU需要への期待は健在であるものの、マクロ経済の金利・原油高リスクやボラティリティの高さを踏まえ、積極的な買い増しは一旦控える局面といえる。</p>
+      <p class="reasoning">前回の予測以降も株価はほぼ横ばいで推移しており、短期的な調整圧力が継続しているため慎重な姿勢が求められます。中長期的な1年・6ヶ月騰落率の大幅なプラスやAI・CPU関連の成長期待は依然として強いものの、金利高や原油高などのマクロ経済リスクが重石となっています。したがって、方向性がより明確になるまでは引き続き様子見とするのが妥当です。</p>
 
       
       <ul class="factors">
         
-        <li>中長期での高い騰落率とAI関連の成長期待</li>
+        <li>半年〜1年単位の中長期的な強い上昇トレンドの継続</li>
         
-        <li>直近1ヶ月の調整局面と高ボラティリティ</li>
+        <li>AIチップ・CPU需要および買収による成長期待</li>
         
-        <li>マクロ環境における金利や地政学リスクの影響</li>
+        <li>マクロ経済における金利高・原油高による株価への上値抑制圧力</li>
+        
+        <li>直近1ヶ月の調整局面とボラティリティの高さ</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 米国の金利動向や中東情勢に起因する原油高が、ハイテク株全般の重しとなるリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 米国の金利動向や中東情勢に起因する原油高がハイテク株全体のさらなる下押し圧力となるリスク。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回は買い候補として強気な姿勢を維持したが、足元では株価の横ばいと短期的な下落圧力が継続しており、マクロの不安定要因を考慮するとやや早急な判断であった。今回はその反省を活かし、中長期の成長性を評価しつつも、足元の調整とボラティリティを慎重に見極めるため「様子見」にトーンを調整する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回は短期的調整を考慮して様子見としたが、実際には株価がほぼ横ばいで推移したため、この判断は現状維持の妥当なものであった。引き続き中長期の強気トレンドとマクロの不安定要因が拮抗している状態を反映させる。</p>
       
 
       
@@ -3446,89 +3469,13 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE1yRmVoUUdMUm45MVBvRDREX3l2RXlNMkdQYXMwZmxVV2p4cHcxOVk2V3gtY2xNbkNxc3diODlKajdMUlFrWlRFd1BFUV9RQTA?oc=5" target="_blank" rel="noopener">アドバンスト・マイクロ・デバイシズAMD株価リアルタイムチャート・掲示板・時間外取引 - Moomoo</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNcklTQXhNZUYzbndhbFBxUmhFdWdtZTNZWHBZNERrNXNaUW5oWjktRThuZUZ0MzRRRlpCckt5eURsUGFsem5zOGR3a2FhVGhVRE5MMkhKWFhJSGZCaEFMaFByRk9oMUhxWEhuT2JMNUdqTkxFUVdpWnM2ODlFY2o5V1FONjZ2Q1k1OHNDc3dxNWFYejFWd253aHpmRXlGazhQSDZUbnpyUjfSAa4BQVVfeXFMTnhhbkdQX2stTWlBRmV5RVZsY0hST3JyY0tOcV9RYTRCekdZd0ZrQjRHYXFkRjJrbjR5SS1LbFVEc3I5NC1jVGlFSUtfZTZOM0wyMzNmNTNaSWdYV29ud1NLN2N4MklXTldBWUZ5aHlkejFBY0QzcE5ncnh2RDhLeFhWdUZJXzlfLUNOcDJKQVBJVkRDVTlJbWFTQkljMENKS1VhOXpXOVlScTZIb3VB?oc=5" target="_blank" rel="noopener">アドバンスト マイクロ デバイセズ（AMD）は決算とAI発表で注目集める, 株価にはなお上値余地があるのか? - simplywall.st</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxOeGFuR1Bfay1NaUFGZXlFVmxjSFJPcnJjS05xX1FhNEJ6R1l3RmtCNEdhcWRGMmtuNHlJLUtsVURzcjk0LWNUaUVJS19lNk4zTDIzM2Y1M1pJZ1hXb253U0s3Y3gySVdOV0FZRnloeWR6MUFjRDNwTmdyeHZEOEt4WFZ1RklfOV8tQ05wMkpBUElWRENVOUltYVNCSWMwQ0pLVWE5elc5WVJxNkhvdUHSAa4BQVVfeXFMTnhhbkdQX2stTWlBRmV5RVZsY0hST3JyY0tOcV9RYTRCekdZd0ZrQjRHYXFkRjJrbjR5SS1LbFVEc3I5NC1jVGlFSUtfZTZOM0wyMzNmNTNaSWdYV29ud1NLN2N4MklXTldBWUZ5aHlkejFBY0QzcE5ncnh2RDhLeFhWdUZJXzlfLUNOcDJKQVBJVkRDVTlJbWFTQkljMENKS1VhOXpXOVlScTZIb3VB?oc=5" target="_blank" rel="noopener">アドバンスト マイクロ デバイセズ（AMD）は決算とAI発表で注目集める, 株価にはなお上値余地があるのか? - simplywall.st</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5oY0htbmRnOF9PRUl6ZzJFaHpwN1ZacmdXeEpseGF3ZDJCZ1ZkRlJjaTdfemhVVVRBLXR0NGVsTk9RM0dNMGVTdkdmWU5KRVh6U0NtbkZTRmQyRElzN1FnNVIzQkhZaGdDbktENg?oc=5" target="_blank" rel="noopener">決算:米AMD、1カ月で株価9割急騰 AIエージェント需要でCPU再評価 - 日本経済新聞</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxPcXBvZ2JzbXFDZzdHRGRNNHhDMUlmQmdmNTRoekFfX0g4VExVZ29UbFhUTC1OQjlSOVJTUDAzVFgwU2NFVDRUOElUZTA0TWJKTElUR1BmOWZJQWNzdVg1SkJtMlpOVWwxOTRCR2VYNjcxbWRpdmJzclcyeXdodzNOZjkweEhaaWVGZ3RyQXJBcFlGVWZjQ0QwWUc5WU40SG00ZlNfZlR5SVVIWnE0TUlLQTRMSEhRejBzaTI3WktwbGlJdw?oc=5" target="_blank" rel="noopener">AMD株価予測：エヌビディアに対抗するAI推論チップのスタートアップ、ターラス（Taalas）買収後の株価の動向は？ - TradingKey</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE1QU192c2ZCVFI3Qno2U3d6QWppTDVDSWF1TzhNQ2ZvWlFmU1E1eFNNYnlKanFYNFhycW5zUHZZMkNtdlZFQ0ZIZW5uejY?oc=5" target="_blank" rel="noopener">【分析】米AMD、過去最高決算でも株価9%安 SpaceXマスク氏の「Nvidia一本化」宣言受け (財経新聞) - newspicks.com</a></li>
-          
-        </ul>
-      </details>
-      
-    </div>
-  
-    
-      
-    <div class="card status-good" id="ticker-7011.T">
-      <div class="card-head">
-        <div>
-          <span class="rank">#16</span><br>
-          <span class="name">三菱重工業</span>
-          <span class="symbol">7011.T</span>
-          <span class="market-tag">JP</span>
-          <span class="theme-tag">防衛・地政学</span>
-          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
-        </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          ▲ 買い候補
-        </div>
-      </div>
-
-      <div class="score-row">
-        <div class="score-value">+30</div>
-        <div class="score-track"><div class="score-fill" style="width: 30%;"></div></div>
-      </div>
-
-      
-      <div class="price-row">
-        <span><span class="label">前日比</span>▲ +2.25%</span>
-        <span><span class="label">1週間</span>▲ +0.07%</span>
-        <span><span class="label">1ヶ月</span>▲ +7.23%</span>
-        <span><span class="label">3ヶ月</span>▼ -7.08%</span>
-        <span><span class="label">6ヶ月</span>▼ -13.67%</span>
-        <span><span class="label">1年</span>▲ +18.38%</span>
-      </div>
-      
-
-      <p class="reasoning">前回の様子見から株価は横ばい圏で推移しているものの、1ヶ月騰落率の回復やエヌビディアとのAIデータセンター提携といった新展開は中長期の成長期待を裏付ける材料となります。地政学リスクの継続による防衛需要の底堅さも加味し、前回の慎重姿勢から一歩踏み込んで買い候補と評価します。</p>
-
-      
-      <ul class="factors">
-        
-        <li>エヌビディアとのAIデータセンター提携による新たな収益期待</li>
-        
-        <li>中東情勢をはじめとする地政学リスクの高まりによる防衛関連への注目</li>
-        
-        <li>1ヶ月騰落率のプラス転換など短期的な底打ち感</li>
-        
-      </ul>
-      
-
-      
-      <p class="risks"><span class="label">留意点:</span> 高値からの乖離幅が依然として大きく、マクロ経済の金利変動や原油高が市場全体に与える影響には注意が必要です。</p>
-      
-
-      
-      <p class="reflection">🔁 前回からの振り返り: 前回は中長期のマイナスや高値からの乖離を重視して様子見としましたが、直近の株価が下値を切り上げつつAI関連などの新材料が評価されていることから、今回はより前向きな評価に調整しました。</p>
-      
-
-      
-      <details class="news-detail">
-        <summary>関連ニュース（5件）</summary>
-        <ul>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE5mQnVGLWRvYlY4c2VPV2NpMGppVHk0SmExTG1GMHV2Q2ZqRWtkRHlseEdDWHJHVVZXSGEydjR6ZVc3ZFZBY3FYQkpPS01fOUFzT2Y1NUxPNGliMFNlMjlj?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBGUW1ydkNlOFU2WlA5VVh2dWV2Skk2RzRvMHRyRFZCQjB1S2lRSkdoMmcxc2NVTkhOM0YwcmgyUElQd2NaQ1hxZGM1ZzlENzJJOURCUm44Tk1Jb1FCLVVn?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE16YXVqQlNZVE1yMk9pSkM1dWx2aW9LTGptYlRPZTVtTFIxRmhpMlhkTTRtM1RjTkZaakM1a3F4QnVmbkJMRzBZUFI4a3pXYXpGMlctTURSVE4tNjZ4bHJ3bW0xMm1sWDVZdVVGWA?oc=5" target="_blank" rel="noopener">三菱重工業の株価反発 「エヌビディアとAIデータセンターで提携」報道 - 日本経済新聞</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBQb2FBdGtETjlyUzRXZVMyMlhXTnRwc3ZHYzNWUzV3LUpxU2hVSVo2WVc3QjlWeXlNbHcxTWpad1dueWJzLTR6bVRvSFVMOFZZQmF5ampxQQ?oc=5" target="_blank" rel="noopener">防衛銘柄からAI銘柄へ変貌｢三菱重工｣は今後何で稼ぐか - shikiho.toyokeizai.net</a></li>
-          
-          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE9UdmQ3VjJRSWpZcHlLSVdMbGM0QmVrSXdHVndaSE1nd1RHT09XZzBhanRrWlJBSmI3ZFBUeXVkQVIzeWE4c2JiV25tVVJpenR2OTFuMNIBV0FVX3lxTE5CaktCRG1wXzBLWXpaUUJ1a2xTWHIwclU3dEplQUZkZWxvTnpVd0liMFFOcUMxdENoUU5CbTdtdDZCWEJVUWNRMkk1d3daM29Lemp0Z0RlWQ?oc=5" target="_blank" rel="noopener">【日本株】三菱重工など2割下落…業績は過去最高なのになぜ？急落した「防衛関連株」の本当の実力 - マネクリ</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE05Q25UeHY1RXVIamk5dE5KR28yYWpPWVFfUXo2NGpjejJaSUNQUzV2aHZmTjBoelIzVzgyOHUtaVdIRWRHTXlHek1zODhDejRnNmlSY2ZiU1Q4YklyYTJHY254ZGI2bllLQVFEcFFmYllhbUdM?oc=5" target="_blank" rel="noopener">AMD、買掛金23.6億ドル急増でキャッシュフローに懸念——過去最高益でも市場は冷ややか - BigGo ファイナンス</a></li>
           
         </ul>
       </details>
@@ -3540,7 +3487,7 @@
     <div class="card status-warning" id="ticker-4382.T">
       <div class="card-head">
         <div>
-          <span class="rank">#17</span><br>
+          <span class="rank">#16</span><br>
           <span class="name">HEROZ</span>
           <span class="symbol">4382.T</span>
           <span class="market-tag">JP</span>
@@ -3554,8 +3501,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-15</div>
-        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
+        <div class="score-value">-10</div>
+        <div class="score-track"><div class="score-fill" style="width: 10%;"></div></div>
       </div>
 
       
@@ -3569,26 +3516,26 @@
       </div>
       
 
-      <p class="reasoning">短期的な株価の反発や大幅な営業利益の伸びが見られるものの、1年・6ヶ月単位の中長期的な下落トレンドは依然として解消されていません。マクロ環境において金利や地政学リスクへの警戒感がくすぶる中、小型成長株に対する上値の重さが意識されるため、引き続き慎重な姿勢が求められます。</p>
+      <p class="reasoning">営業利益の大幅な伸びや親会社関連の材料による短期的な物色がみられるものの、1年騰落率や3ヶ月・6ヶ月騰落率は依然としてマイナス圏にあり、中長期の下落トレンドから完全に脱却したとは言えません。マクロ環境での金利動向や地政学リスクによる小型成長株への影響を考慮し、慎重な姿勢を継続します。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率が-28.80%と中長期の下落トレンドが継続</li>
+        <li>営業利益の大幅増益や関連ニュースによる一時的な注目度の高まり</li>
         
-        <li>営業利益の大幅増益といった個別企業の好材料が存在</li>
+        <li>3ヶ月・6ヶ月・1年騰落率が示す中長期の下落トレンドの継続</li>
         
-        <li>日米の金利動向や地政学リスクに起因するマクロ環境の不確実性</li>
+        <li>マクロ経済における金利上昇や原油高などの不安定要素</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中長期のトレンド転換が確認できないまま下落トレンドが再加速するリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 中長期的な下落トレンドが反転しないまま、地政学リスクや金利環境の悪化により小型成長株への売りが再び強まるリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回分析時点の終値から株価は横ばいとなっており、中長期の下落トレンドが継続している点を考慮した「様子見」の判断は妥当でした。今回もこの中長期の弱さと個別材料のバランスを慎重に見極める方針を維持します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、その後の株価が横ばいで推移したことと中長期の下落トレンドが継続している点から妥当でした。今回は短期的な好材料と中長期の軟調さが混在しているため、引き続き慎重な姿勢を維持します。</p>
       
 
       
@@ -3616,7 +3563,7 @@
     <div class="card status-warning" id="ticker-6920.T">
       <div class="card-head">
         <div>
-          <span class="rank">#18</span><br>
+          <span class="rank">#17</span><br>
           <span class="name">レーザーテック</span>
           <span class="symbol">6920.T</span>
           <span class="market-tag">JP</span>
@@ -3630,8 +3577,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-20</div>
-        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+        <div class="score-value">-15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
       </div>
 
       
@@ -3645,26 +3592,26 @@
       </div>
       
 
-      <p class="reasoning">前回分析から株価水準に変化はないものの、市場予想に届かなかった利益や割高感への懸念が引き続き上値を重くしています。中長期の1年騰落率は高い水準を維持しているものの、足元では1ヶ月・3ヶ月の調整局面が続いており、マクロの金利や地政学リスクも考慮すると積極的な買いは見送るべき局面です。</p>
+      <p class="reasoning">前回の予測以降、株価はほぼ横ばいで推移しており、市場予想に届かなかった利益や割高感への懸念から上値の重い展開が続いています。3ヶ月騰落率のマイナスや足元の調整局面を踏まえつつも、中長期的な1年・6ヶ月の強いトレンドが維持されている点を考慮し、引き続き慎重なスタンスをとるべき局面です。</p>
 
       
       <ul class="factors">
         
-        <li>純利益が市場予想に届かなかったことによる上値の重さ</li>
+        <li>市場予想に届かなかった利益と割高感への継続的な警戒感</li>
         
-        <li>3ヶ月・1ヶ月騰落率のマイナス継続など中短期の調整トレンド</li>
+        <li>足元での1ヶ月・3ヶ月騰落率の調整トレンド</li>
         
-        <li>米国の金利動向や地政学リスクに伴う半導体セクター全体の不透明感</li>
+        <li>中長期（6ヶ月・1年）における高い水準の騰落率の維持</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 高ボラティリティと半導体需要の急変によるさらなる株価の下振れリスク。</p>
+      <p class="risks"><span class="label">留意点:</span> マクロ環境における金利動向や地政学リスクの高まりが、ハイテク株全般の下押し圧力となるリスクに注意が必要です。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の様子見判断は、株価の横ばい推移と上値の重い展開を的確に捉えており妥当であった。今回もその慎重スタンスを継続する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の「様子見」判断は、株価の横ばい推移や上値の重い状況と合致しており妥当でした。今回も短期的な値動きに惑わされず、中長期の上昇トレンドと足元の利益・割高感の懸念を並行して評価する方針を継続します。</p>
       
 
       
@@ -3680,7 +3627,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9RQjE4eWx1VG9idm5qang3ZnphRTVmN1A2bHFlY3oxR2JYcTVKQjRHcGZtcy01bTRxVmZQTjhhUFE0b0gyemlTb1d6eTR6bTZwWkwxMWs4SGZIeFotOEVDTlNabXF4QUw0ZWZYQg?oc=5" target="_blank" rel="noopener">レーザーテックの投資分析｜EUV検査装置と受注変動を読む - d-sharing.jp</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE1GZC05Vk5KTXlNeUJ3d1k5aEd6VUdyTUcxZ0t5dV9kZ1BTcEEzUFFOVzdmWGpCTUYxYzhwSlpLOG52SkI2UzBDZF9YMVBITHpXd0ZYUE9jSHVEZkplQUhFS1NLWkpiSjIyWW5SdDBGVGV4N20z?oc=5" target="_blank" rel="noopener">レーザーテック目標株価7万円に、米系大手が強気継続—市場コンセンサスを大幅に上回る - BigGo ファイナンス</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5GWDlSbElteUltdy1tN2tDSFVsVzlFRmxtZU9GSlZRQkVvZmh1c1hTVThxemloME9Kak1vRTZpd04yeWVueUZRTTA2aU9YRUpiekNjd3I2TGI2WlVQVVhNaHVoRWc2X2l4RDIzVw?oc=5" target="_blank" rel="noopener">決算:レーザーテック純利益16%増で最高益 27年6月期、検査装置好調 - 日本経済新聞</a></li>
           
         </ul>
       </details>
@@ -3692,7 +3639,7 @@
     <div class="card status-warning" id="ticker-SOUN">
       <div class="card-head">
         <div>
-          <span class="rank">#19</span><br>
+          <span class="rank">#18</span><br>
           <span class="name">SoundHound AI</span>
           <span class="symbol">SOUN</span>
           <span class="market-tag">US</span>
@@ -3706,8 +3653,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-20</div>
-        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+        <div class="score-value">-15</div>
+        <div class="score-track"><div class="score-fill" style="width: 15%;"></div></div>
       </div>
 
       
@@ -3721,26 +3668,26 @@
       </div>
       
 
-      <p class="reasoning">直近の四半期業績や通期見通しの上方修正によって短期的な株価は持ち直しているものの、半年や1年単位の中長期的な騰落率は依然として大きくマイナス圏に沈んでいます。マクロ環境においても米国の金利高止まりや原油高、地政学リスクといった成長株にとって逆風となる要素が多く、本格的なトレンド転換を確認するにはまだ慎重にならざるを得ません。</p>
+      <p class="reasoning">直近の四半期最高収益や見通しの上方修正により短期的な株価は持ち直しているものの、3ヶ月・6ヶ月・1年といった中長期の騰落率は依然として大きくマイナス圏にあり、トレンド転換の判断には慎重さが求められます。また、米国の金利動向や原油高、地政学リスクといったマクロ環境の逆風も考慮すると、積極的な買いは推奨しづらい状況です。</p>
 
       
       <ul class="factors">
         
-        <li>過去最高収益と通期見通し上方修正による一時的な急騰</li>
+        <li>過去最高収益と通期見通し上方修正による一時的な株価の反発</li>
         
-        <li>1年騰落率が-45%を超えるなど継続する中長期の下落トレンド</li>
+        <li>半年から1年にわたる中長期的な下落トレンドの継続</li>
         
-        <li>米国市場における金利上昇や原油高などマクロ経済の逆風</li>
+        <li>米国の金利高止まりや原油高などのマクロ経済の逆風</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 高金利環境や地政学リスクの継続により、小型成長株全体の評価がさらに引き下げられるリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> 成長株にとって重荷となる金利の上昇や地政学リスクの悪化が、株価の下押し圧力として再び強く働くリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の様子見という判断は、株価の短期的な急騰に飛びつかず中長期の下落トレンドやマクロリスクを慎重に見極める観点において妥当でした。今回もその中長期トレンドの弱さとマクロ環境の不透明感を踏襲し、引き続き慎重姿勢を維持します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の判断（様子見）は、中長期の強い下落トレンドとマクロ環境の逆風を適切にとらえており妥当であった。短期的な好材料による急騰はあるものの、中長期トレンドが未だ弱いため、引き続き慎重姿勢を継続する。</p>
       
 
       
@@ -3757,6 +3704,82 @@
           <li><a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNQ2xyNVdfcjBzdzZkMkpvcmhhWERVbHZrTXhUbTcxMlhWWUI4VWRwaHdqMjRrblFhZzc4bTFZdVdEQjg5NjFadklUY2xvUmVoWXRBTldJMVlFQ3Z0NnNkRTRtd1d1cXVQNjlKTkM3NjlGNE42bTItWUpVWG9hbzgwQmF4Rlp3Yl8tZVdvYTFMVzVsSW94V1HSAZsBQVVfeXFMTTNQZW13QjBOendNY2xDT0Q0b1FmeDl6eXFRMm9fTElqSWxLazhuZUZnSWxQSE9tS0ZHV0RKeDJGYjE1MHJMNWFVbjNuUWdtQWRzZ3hhM2UtUVRPZW5za2xTRDdLNERoWktRekNvLU1BTENOWHVxanI5N2dRd0lLbXdIUl9BUXluUllJOGNWZTVhLVBxUG1CWVNCcmc?oc=5" target="_blank" rel="noopener">SoundHound AI（SOUN）、第2四半期の過去最高業績と2026年の売上高見通しの上方修正を受け、株価が12.8％上昇――何が変化したのか - simplywall.st</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMikAFBVV95cUxQUlZLb2VDUk1Wb3dBeHFzRFJCVUxBbk4xZnhya2pOcW9nMWxxaVpGUXVqWGZVZW9OZXBfdEl0M0RTYmxrd19QQmFGTVVmY1RwNWxpOFRjN1JHd296R202TUFYZUdQR2lzSGNPUGdXdEloa0NyUEFLZDdrMElRT3BueWF4SUNBS0NvdUgyR3JWYmk?oc=5" target="_blank" rel="noopener">SoundHound AI Stock Surges After Record Revenue and Raised Full Year Outlook Beat Expectations - TIKR.com</a></li>
+          
+        </ul>
+      </details>
+      
+    </div>
+  
+    
+      
+    <div class="card status-warning" id="ticker-7011.T">
+      <div class="card-head">
+        <div>
+          <span class="rank">#19</span><br>
+          <span class="name">三菱重工業</span>
+          <span class="symbol">7011.T</span>
+          <span class="market-tag">JP</span>
+          <span class="theme-tag">防衛・地政学</span>
+          <span class="nisa-tag">NISA成長投資枠 対象目安</span>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          ● 様子見
+        </div>
+      </div>
+
+      <div class="score-row">
+        <div class="score-value">-20</div>
+        <div class="score-track"><div class="score-fill" style="width: 20%;"></div></div>
+      </div>
+
+      
+      <div class="price-row">
+        <span><span class="label">前日比</span>▲ +2.25%</span>
+        <span><span class="label">1週間</span>▲ +0.07%</span>
+        <span><span class="label">1ヶ月</span>▲ +7.23%</span>
+        <span><span class="label">3ヶ月</span>▼ -7.08%</span>
+        <span><span class="label">6ヶ月</span>▼ -13.67%</span>
+        <span><span class="label">1年</span>▲ +18.38%</span>
+      </div>
+      
+
+      <p class="reasoning">前回の買い評価から株価は動意薄の横ばいとなっているが、3ヶ月や6ヶ月の騰落率がマイナス圏で推移し52週高値から大きく下落している中長期の下落トレンドを重視し、慎重な姿勢に引き戻すこととした。防衛需要の底堅さやAI関連の新たな材料はあるものの、金利上昇やマクロ経済の不確実性が上値を抑える要因となっており、まずはトレンドの立て直しを見極めるべきである。</p>
+
+      
+      <ul class="factors">
+        
+        <li>3ヶ月・6ヶ月騰落率が依然としてマイナス圏であり中長期の下落トレンドが継続</li>
+        
+        <li>エヌビディアとの提携などAI関連のポジティブな材料と業績の過去最高更新</li>
+        
+        <li>マクロ環境における金利上昇圧力や地政学・原油高を巡る不確実性</li>
+        
+      </ul>
+      
+
+      
+      <p class="risks"><span class="label">留意点:</span> 中長期の下降トレンドが長期化し、マクロ環境の悪化に伴ってさらなる下落圧力が加わるリスク。</p>
+      
+
+      
+      <p class="reflection">🔁 前回からの振り返り: 前回は1ヶ月の反発やAIデータセンター提携を評価して買い候補としたが、中長期の下降トレンドの深さを過小評価しており、株価は横ばいにとどまったため今回の判断を様子見に下方修正した。</p>
+      
+
+      
+      <details class="news-detail">
+        <summary>関連ニュース（5件）</summary>
+        <ul>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTE5mQnVGLWRvYlY4c2VPV2NpMGppVHk0SmExTG1GMHV2Q2ZqRWtkRHlseEdDWHJHVVZXSGEydjR6ZVc3ZFZBY3FYQkpPS01fOUFzT2Y1NUxPNGliMFNlMjlj?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBGUW1ydkNlOFU2WlA5VVh2dWV2Skk2RzRvMHRyRFZCQjB1S2lRSkdoMmcxc2NVTkhOM0YwcmgyUElQd2NaQ1hxZGM1ZzlENzJJOURCUm44Tk1Jb1FCLVVn?oc=5" target="_blank" rel="noopener">三菱重工業(株)【7011】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE16YXVqQlNZVE1yMk9pSkM1dWx2aW9LTGptYlRPZTVtTFIxRmhpMlhkTTRtM1RjTkZaakM1a3F4QnVmbkJMRzBZUFI4a3pXYXpGMlctTURSVE4tNjZ4bHJ3bW0xMm1sWDVZdVVGWA?oc=5" target="_blank" rel="noopener">三菱重工業の株価反発 「エヌビディアとAIデータセンターで提携」報道 - 日本経済新聞</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBQb2FBdGtETjlyUzRXZVMyMlhXTnRwc3ZHYzNWUzV3LUpxU2hVSVo2WVc3QjlWeXlNbHcxTWpad1dueWJzLTR6bVRvSFVMOFZZQmF5ampxQQ?oc=5" target="_blank" rel="noopener">防衛銘柄からAI銘柄へ変貌｢三菱重工｣は今後何で稼ぐか - 四季報オンライン</a></li>
+          
+          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE9UdmQ3VjJRSWpZcHlLSVdMbGM0QmVrSXdHVndaSE1nd1RHT09XZzBhanRrWlJBSmI3ZFBUeXVkQVIzeWE4c2JiV25tVVJpenR2OTFuMNIBV0FVX3lxTE5CaktCRG1wXzBLWXpaUUJ1a2xTWHIwclU3dEplQUZkZWxvTnpVd0liMFFOcUMxdENoUU5CbTdtdDZCWEJVUWNRMkk1d3daM29Lemp0Z0RlWQ?oc=5" target="_blank" rel="noopener">【日本株】三菱重工など2割下落…業績は過去最高なのになぜ？急落した「防衛関連株」の本当の実力 - マネクリ</a></li>
           
         </ul>
       </details>
@@ -3797,26 +3820,26 @@
       </div>
       
 
-      <p class="reasoning">前回分析から株価は横ばいで推移しており、中長期の6ヶ月・1年騰落率が引き続きマイナス圏にあることから、明確なトレンド転換は確認できていません。買収による成長模索の動きがある一方で、目標株価の引き下げやコア事業の伸び悩みへの懸念も残るため、引き続き慎重な姿勢が求められます。</p>
+      <p class="reasoning">中長期の6ヶ月および1年騰落率が引き続きマイナス圏にあり、明確な上昇トレンドが確認できないため様子見を継続します。コア事業の成長鈍化懸念や目標株価の引き下げが重しとなる一方で、ディフェンシブ銘柄としての安定感やキャッシュフローの健全性は維持されています。</p>
 
       
       <ul class="factors">
         
-        <li>6ヶ月および1年騰落率が依然としてマイナス圏にある中長期の軟調トレンド</li>
+        <li>6ヶ月・1年騰落率がマイナス圏で推移している中長期の停滞</li>
         
-        <li>大規模な買収による成長戦略の模索と、それに伴うコア事業への影響への懸念</li>
+        <li>コア事業の成長鈍化とM&amp;Aによる成長模索の継続</li>
         
-        <li>アナリストによる目標株価の引き下げ事例の存在</li>
+        <li>マクロ環境における原油高や金利上昇リスクに対する警戒感</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 中東情勢の緊迫化やインフレ高止まりに伴うコスト増加が、生活必需品セクターの利益率を圧迫するリスクがあります。</p>
+      <p class="risks"><span class="label">留意点:</span> インフレ高止まりや金利変動に伴うバリュエーションの低下、および消費財セクターにおける競争激化がリスクとなります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回指摘した売上高の成長懸念やマクロ環境の逆風は引き続き妥当であり、短期の株価も横ばいのため、前回の「様子見」判断は適切に機能したと考えられます。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回の様子見という判断は、株価が横ばいで中長期のトレンドに変化が見られなかったことから妥当でした。今回はその判断を維持しつつ、マクロ的な原油高・金利上昇への警戒も考慮した慎重な姿勢を継続します。</p>
       
 
       
@@ -3858,8 +3881,8 @@
       </div>
 
       <div class="score-row">
-        <div class="score-value">-40</div>
-        <div class="score-track"><div class="score-fill" style="width: 40%;"></div></div>
+        <div class="score-value">-45</div>
+        <div class="score-track"><div class="score-fill" style="width: 45%;"></div></div>
       </div>
 
       
@@ -3873,26 +3896,26 @@
       </div>
       
 
-      <p class="reasoning">前回分析時点から株価は横ばいで推移していますが、3ヶ月で-31.40%、1年で-52.15%という深刻な中長期の下落トレンドに変化は見られません。インフレ高止まりや金利・原油高を背景としたマクロ経済の不透明感が強まる中、暗号資産セクターへの資金流入は依然として限定的です。</p>
+      <p class="reasoning">前回分析から株価はほぼ横ばいで推移していますが、3ヶ月で-31.40%、1年で-52.15%という深刻な中長期の下落トレンドは継続しています。インフレ高止まりや金利・原油高を背景としたマクロ経済の不透明感が強まる環境下において、暗号資産セクター全体への資金流入は依然として慎重にならざるを得ません。</p>
 
       
       <ul class="factors">
         
-        <li>1年騰落率が-50%を超える深刻な中長期下落トレンドの継続</li>
+        <li>3ヶ月騰落率-31.40%、1年騰落率-52.15%という継続的な中長期の下落トレンド</li>
         
-        <li>インフレ高止まりや金利・原油高に伴うマクロ環境の逆風</li>
+        <li>インフレや原油高、金利上昇を警戒するマクロ経済環境によるリスクオフ姿勢</li>
         
-        <li>暗号資産市場全体の資金流入の鈍化と上値の重さ</li>
+        <li>暗号資産市場全体の伸び悩みとセクターへの資金流入の限定的さ</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 規制環境の急変やビットコイン価格の急回復による、予想外の株価急騰リスク。</p>
+      <p class="risks"><span class="label">留意点:</span> マクロ経済の急激な好転や暗号資産市場全体の予期せぬ急騰により、中長期のトレンドに反して短期的な踏み上げや反発が起こるリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回設定した「売り候補（スコア -45）」の判断以降、株価はほぼ同水準で横ばいとなっており、中長期の下落トレンドも継続していることから、当時の評価は妥当であったと判断します。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回指摘した中長期の下落トレンドとマクロ環境の不透明感はそのまま継続しており、株価も横ばい水準を維持したため、前回の売り候補という判断は妥当であったと考えます。</p>
       
 
       
@@ -3906,7 +3929,7 @@
           
           <li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOZm9NbUdxaGhVWkNxbzN5NE5rSjlEOG9YdkdUeVFOd3N2eTdYRTJOM19sYXl3cUttQWw4Um9hcXZGZ1pjaG5ocHZ1SURIbXJ2a1NiZ1JpYXZwcXZFZU50N3dEREN1XzFjM19Gc3JLQmxEXy1waVNacElsMzE3VXVLUlV1S25yX0JJbGRod3lLWlc5aHljeUNBYXFKOUN0ME9vX3ZuRldKMlFoZlnSAbABQVVfeXFMT2xFSmZ0YVBZOFlsOFdHbHR2VE9ycnVKdHUwRTVjczJaNkRZamR4X2QyZWl0Ty1tUXNmWE9QVy1Cd0dHRGJhdHJwb0NUU2VONWQzSE0xaGpSWDhJS29KVDgzZE5ycmM5cEVIcFhkVTJVcXpTcGJ4ak1VZUNEcFNZZUFvX3RPRWZLRmM0Qkdyb0JoTEZweDVBUGFma3NDMHc2THNRdUNvemtiRXBUMzEwNFE?oc=5" target="_blank" rel="noopener">コインベース（COIN）の株価、3年間で80％上昇した後、割高感が出ている - simplywall.st</a></li>
           
-          <li><a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxOa2s3R0VPSENuY1l3V0lxWm1CWTNyZU1FNUZucVA2a0tCYkF5VjJWVlJqdjFDS0VCbXNiWnZtYmJHQmFISjNmOHl0cldUaFE4d2JvM2RXckFHZUhmd2lPajRqcG5fVHRvUTIwZjZKTzQ5ai1CbnZYMXhaTTZnS0dtY1dPVjZMWGRzOG1DTFdKVQ?oc=5" target="_blank" rel="noopener">7月31日のCoinbase Global Inc (COIN) 値動きは8.03%下落：主な推進要因が明らかにされました - TradingKey</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiXkFVX3lxTE5CYWVHdEx6NkJ0QUpxT1duWWZ0Y0NmaFhlMC1CWVlweGhGbG1JVC1UbFlGMEpyWWFFX3JfOFZRQnU1WV92RjFKdGFmMUVpV2NZMXlwRHJDaGQ4NHFzY2c?oc=5" target="_blank" rel="noopener">COIN|Coinbase Global Inc|株価:148.595|変動率:-5.005 - TradingKey</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxNVmpXbUl6ZXgzOE5sMVk0VVpodnE3Q3psOUlReUU4QnAybVUzam9ha2lMSFBqUkhXU1k1a2w0OXREcy05aDJpd3JkWEtmT1dMdUNQcWJZdGNFX0hyNGZ0cHFGVHA5LVRRRzlzZS1XY1RYVDJaNGFvb0RhT0o3MlNBS1NVQjJxZHBORHNBZ3NmdUtDM2UzNHZFUlZIVVlxeGtnSDByV25kR1Fudm44cWE2Y0lHNHlCaV96?oc=5" target="_blank" rel="noopener">Coinbase Stock at $158 Against a $309 Target: The EBITDA Recovery Path and What Has to Hold - TIKR.com</a></li>
           
@@ -3954,21 +3977,21 @@
       
       <ul class="factors">
         
-        <li>3ヶ月および1年騰落率の大幅なマイナス継続</li>
+        <li>3ヶ月や1年の大幅なマイナス騰落率による中長期の下落トレンド</li>
         
-        <li>ビットコイン価格変動への高い依存性とボラティリティ</li>
+        <li>ビットコイン価格の変動やレバレッジ銘柄としての高いボラティリティ</li>
         
-        <li>マクロ経済における金利・原油高リスクの警戒感</li>
+        <li>米国の金利動向やインフレ懸念などマクロ経済の不確実性</li>
         
       </ul>
       
 
       
-      <p class="risks"><span class="label">留意点:</span> 暗号資産市場の急変やマクロ経済の悪化に伴う、レバレッジ銘柄特有の激しい下落リスク。</p>
+      <p class="risks"><span class="label">留意点:</span> 暗号資産市場の急落やマクロ経済環境の急変により、再び株価が大きく下落するリスクがあります。</p>
       
 
       
-      <p class="reflection">🔁 前回からの振り返り: 前回の「様子見」判断は、中長期の軟調なトレンドと一致しており妥当であった。今回もその中長期の下落基調やリスク要因を据え置き、慎重な姿勢を継続する。</p>
+      <p class="reflection">🔁 前回からの振り返り: 前回分析時点から株価は横ばいで推移しており、中長期の下落トレンドやマクロ経済の不確実性を重視した慎重姿勢の判断は妥当でした。今回もこの方針を継続します。</p>
       
 
       
@@ -3976,7 +3999,7 @@
         <summary>関連ニュース（5件）</summary>
         <ul>
           
-          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTFBqdXZEajhIRmg3U1FDdUdham5YTFVTRGNpUGNnSGtNdi02eldpMHk3eEVMUUliaklDeVNjNUJYNGUtcFUtVGphRl94TXUxSmJ3eFI5Nw?oc=5" target="_blank" rel="noopener">ストラテジー(マイクロストラテジー)とは？ビットコイン投資戦略や価格推移、注意点を徹底解説！ | CRYPTO INSIGHT powered by ダイヤモンド・ザイ - ダイヤモンド・オンライン</a></li>
+          <li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTFBqdXZEajhIRmg3U1FDdUdham5YTFVTRGNpUGNnSGtNdi02eldpMHk3eEVMUUliaklDeVNjNUJYNGUtcFUtVGphRl94TXUxSmJ3eFI5Nw?oc=5" target="_blank" rel="noopener">ストラテジー(マイクロストラテジー)とは？ビットコイン投資戦略や価格推移、注意点を徹底解説！ | CRYPTO INSIGHT powered by ダイヤモンド・ザイ - diamond.jp</a></li>
           
           <li><a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE9od3pqNW1GZXphS19qelYzOGEtb3lsQl81N2tHakt4ZlBLWG9STm5hUmdGSVVoRmIya3RlYnVLNWc1X05Ea0ZnYnljWi0?oc=5" target="_blank" rel="noopener">ストラテジー（マイクロストラテジー）とは？ビットコイン大量保有で注目される理由と株価が動く仕組み - coincheck.com</a></li>
           

@@ -465,6 +465,63 @@
     <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
   </section>
 
+  <section>
+    <h2>AIの的中率（過去の判定の検証）</h2>
+    <div class="risk-banner" style="border-left-color: var(--baseline);">
+      <strong>ℹ️ 検証方法:</strong>
+      「買い候補」「売り候補」「売却検討」の判定から7日後の株価と比較し、判定の方向（上昇/下落）と
+      実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
+      変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
+    </div>
+
+    {% if accuracy.overall_sample_size %}
+    <div class="allocation-box">
+      <h3>全体の的中率</h3>
+      <div class="score-row">
+        <div class="score-value">{{ "%.0f"|format(accuracy.overall_accuracy_pct) }}%</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.overall_accuracy_pct }}%;"></div></div>
+      </div>
+      <p class="allocation-note">
+        検証済み {{ accuracy.overall_sample_size }}件（様子見扱い{{ accuracy.overall_neutral }}件を除く）・
+        検証待ち {{ accuracy.pending_count }}件（判定から7日経過後に確定します）
+      </p>
+
+      {% for b in accuracy.breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ b.recommendation }}</span>
+        {% if b.accuracy_pct is not none %}
+        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct }}%;"></div></div>
+        <span class="allocation-amount">{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）</span>
+        {% else %}
+        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
+        <span class="allocation-amount">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if accuracy.recent_resolved %}
+    <details class="news-detail">
+      <summary>直近の検証結果（{{ accuracy.recent_resolved|length }}件）</summary>
+      <ul>
+        {% for r in accuracy.recent_resolved %}
+        <li>
+          {{ r.date }} {{ r.name }}（{{ r.symbol }}）: {{ r.recommendation }} →
+          {{ "%+.2f"|format(r.change_pct) }}%
+          {% if r.outcome == "correct" %}✅ 的中{% elif r.outcome == "incorrect" %}❌ 不的中{% else %}― 様子見扱い{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      検証にはまず判定から7日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
+      （検証待ち: {{ accuracy.pending_count }}件）。
+    </p>
+    {% endif %}
+  </section>
+
   {% macro ticker_card(t, rank) %}
     <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
       <div class="card-head">
