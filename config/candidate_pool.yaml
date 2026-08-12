@@ -11,7 +11,8 @@
 # 各項目の意味:
 #   symbol: ティッカーコード
 #   name: 表示名
-#   market: "JP" / "US"
+#   market: "JP" / "US" / "暗号資産"（現物の仮想通貨。BTC-USDのようにyfinanceがそのまま
+#     価格取得できるティッカーを使う）
 #   theme: どんなテーマに属するか（世界情勢との紐付けの手がかりとしてAIに渡される）
 #   risk_level: "high" 固定（このプールは高リスク銘柄用のため）
 #   nisa_growth_eligible: NISA成長投資枠の対象になりやすいかどうかの目安
@@ -55,6 +56,13 @@ candidates:
     risk_level: "high"
     nisa_growth_eligible: true
 
+  - symbol: "TSM"
+    name: "Taiwan Semiconductor Manufacturing"
+    market: "US"
+    theme: "半導体"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
   # --- 防衛・地政学関連 ---
   - symbol: "7011.T"
     name: "三菱重工業"
@@ -65,6 +73,13 @@ candidates:
 
   - symbol: "LMT"
     name: "Lockheed Martin"
+    market: "US"
+    theme: "防衛・地政学"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  - symbol: "RTX"
+    name: "RTX Corporation"
     market: "US"
     theme: "防衛・地政学"
     risk_level: "high"
@@ -85,7 +100,14 @@ candidates:
     risk_level: "high"
     nisa_growth_eligible: true
 
-  # --- 暗号資産関連 ---
+  - symbol: "5713.T"
+    name: "住友金属鉱山"
+    market: "JP"
+    theme: "資源・エネルギー（貴金属）"
+    risk_level: "high"
+    nisa_growth_eligible: true
+
+  # --- 暗号資産関連（関連銘柄） ---
   - symbol: "COIN"
     name: "Coinbase Global"
     market: "US"
@@ -99,6 +121,21 @@ candidates:
     theme: "暗号資産（ビットコイン保有）"
     risk_level: "high"
     nisa_growth_eligible: true
+
+  # --- 暗号資産関連（現物。購入タイミングの参考用） ---
+  - symbol: "BTC-USD"
+    name: "ビットコイン"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "ETH-USD"
+    name: "イーサリアム"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
 
   # --- 国内小型成長株 ---
   - symbol: "4385.T"
