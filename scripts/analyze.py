@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 DEFAULT_MODEL = "gemini-flash-lite-latest"
 # 低めに設定し、際どいスコアの銘柄で日によって判定が無意味にブレるのを抑える。
 _TEMPERATURE = 0.2
+# 的中率をプロンプトに含める最低件数。少数件でのブレを過大評価しないための閾値。
+_MIN_SAMPLE_FOR_PROMPT = 5
 
 _SYSTEM_INSTRUCTION = """\
 あなたは個人投資家向けの情報整理アシスタントです。
@@ -43,6 +45,7 @@ _SYSTEM_INSTRUCTION = """\
 - 前回分析がある場合、その振り返りは記録するだけで終わらせず、今回の判断そのものに反映させてください。
   振り返りと今回の判断が矛盾しないようにすること（例: 前回の判断が外れていたと振り返りながら、
   今回も同じ理由で同じ判断を繰り返すのは避ける）。
+- 【あなたの過去の判定的中率】が示されている場合は、その傾向も踏まえてスコアや確信度の付け方を調整してください。
 """
 
 _RESPONSE_SCHEMA = {
@@ -110,12 +113,45 @@ def _build_reflection_section(previous: dict | None, latest_close) -> str:
 """
 
 
+def _build_accuracy_section(accuracy_summary: dict | None, relevant: set[str]) -> str:
+    """判定タイプ別の過去の的中率をプロンプト用に整形する。
+
+    十分な件数（_MIN_SAMPLE_FOR_PROMPT件以上）が確定している判定タイプのみを対象にする。
+    少数件だけでAIが自分の傾向を過大評価しないようにするため。
+    """
+    if not accuracy_summary:
+        return ""
+
+    rows = [
+        b
+        for b in accuracy_summary.get("breakdown", [])
+        if b["recommendation"] in relevant and b["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT
+    ]
+    if not rows:
+        return ""
+
+    lines = "\n".join(
+        f"- {b['recommendation']}: 過去{b['sample_size']}件中{b['correct']}件が的中"
+        f"（的中率{b['accuracy_pct']:.0f}%）"
+        for b in rows
+    )
+
+    return f"""
+【あなたの過去の判定的中率（判定から7日後の値動きとの一致率、±1%以内の判定なしは除く）】
+{lines}
+
+的中率が低い判定タイプについては、これまでの判断の重み付けを見直すなど精度を上げる工夫をしてください。
+的中率が高い場合は、その判断の考え方を引き続き重視してよいです。
+"""
+
+
 def _build_prompt(
     ticker: dict,
     price_stats: dict | None,
     news: list[dict],
     macro_news: list[dict] | None = None,
     previous: dict | None = None,
+    accuracy_summary: dict | None = None,
 ) -> str:
     name = ticker["name"]
     symbol = ticker["symbol"]
@@ -154,6 +190,7 @@ def _build_prompt(
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"買い候補", "売り候補"})
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）
@@ -167,6 +204,7 @@ def _build_prompt(
 【世界情勢・マクロ経済ニュース】
 {macro_section}
 {reflection_section}
+{accuracy_section}
 
 上記をもとに、指定されたJSONスキーマに従って分析結果を出力してください。
 """
@@ -196,6 +234,7 @@ _HOLDING_SYSTEM_INSTRUCTION = """\
 - 前回分析がある場合、その振り返りは記録するだけで終わらせず、今回の判断そのものに反映させてください。
   振り返りと今回の判断が矛盾しないようにすること（例: 前回の判断が外れていたと振り返りながら、
   今回も同じ理由で同じ判断を繰り返すのは避ける）。
+- 【あなたの過去の判定的中率】が示されている場合は、その傾向も踏まえて判断の確信度を調整してください。
 """
 
 _HOLDING_RESPONSE_SCHEMA = {
@@ -262,6 +301,7 @@ def _build_holding_prompt(
     macro_news: list[dict] | None,
     holding_stats: dict,
     previous: dict | None = None,
+    accuracy_summary: dict | None = None,
 ) -> str:
     name = holding["name"]
     symbol = holding["symbol"]
@@ -303,6 +343,7 @@ def _build_holding_prompt(
         macro_section = "特筆すべき世界情勢・マクロ経済ニュースはありません。"
 
     reflection_section = _build_reflection_section(previous, holding_stats.get("latest_close"))
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"売却検討"})
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）
@@ -319,6 +360,7 @@ def _build_holding_prompt(
 【世界情勢・マクロ経済ニュース】
 {macro_section}
 {reflection_section}
+{accuracy_section}
 
 上記をもとに、指定されたJSONスキーマに従って「保有継続」か「売却検討」かの分析結果を出力してください。
 """
@@ -332,11 +374,14 @@ def analyze_holding(
     macro_news: list[dict] | None = None,
     model: str | None = None,
     previous: dict | None = None,
+    accuracy_summary: dict | None = None,
 ) -> dict:
     """1つの保有銘柄を分析し、結果の辞書を返す。失敗した場合は分析失敗を示す辞書を返す。"""
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
     holding_stats = _compute_holding_stats(holding, price_stats)
-    prompt = _build_holding_prompt(holding, price_stats, news, macro_news, holding_stats, previous)
+    prompt = _build_holding_prompt(
+        holding, price_stats, news, macro_news, holding_stats, previous, accuracy_summary
+    )
 
     for attempt in range(2):
         try:
@@ -387,6 +432,7 @@ def analyze_all_holdings(
     macro_news: list[dict] | None = None,
     history: dict | None = None,
     group: str = "holding",
+    accuracy_summary: dict | None = None,
 ) -> list[dict]:
     client = _get_client()
     results = []
@@ -402,6 +448,7 @@ def analyze_all_holdings(
             news_by_symbol.get(symbol, []),
             macro_news,
             previous=previous,
+            accuracy_summary=accuracy_summary,
         )
         results.append(result)
     return results
@@ -440,10 +487,11 @@ def analyze_ticker(
     macro_news: list[dict] | None = None,
     model: str | None = None,
     previous: dict | None = None,
+    accuracy_summary: dict | None = None,
 ) -> dict:
     """1銘柄を分析し、結果の辞書を返す。失敗した場合は分析失敗を示す辞書を返す。"""
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
-    prompt = _build_prompt(ticker, price_stats, news, macro_news, previous)
+    prompt = _build_prompt(ticker, price_stats, news, macro_news, previous, accuracy_summary)
 
     for attempt in range(2):
         try:
@@ -493,6 +541,7 @@ def analyze_all(
     macro_news: list[dict] | None = None,
     history: dict | None = None,
     group: str = "watchlist",
+    accuracy_summary: dict | None = None,
 ) -> list[dict]:
     client = _get_client()
     results = []
@@ -509,6 +558,7 @@ def analyze_all(
             news_by_symbol.get(symbol, []),
             macro_news,
             previous=previous,
+            accuracy_summary=accuracy_summary,
         )
         results.append(result)
     return results

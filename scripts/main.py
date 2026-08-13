@@ -50,6 +50,7 @@ def _analyze_group(
     macro_news: list[dict],
     history: dict,
     group: str,
+    accuracy_summary: dict,
     analyze_fn=analyze_all,
 ) -> list[dict]:
     if not tickers:
@@ -67,7 +68,13 @@ def _analyze_group(
 
     logger.info("[%s] Gemini APIで分析中...", label)
     return analyze_fn(
-        tickers, price_stats_by_symbol, news_by_symbol, macro_news, history=history, group=group
+        tickers,
+        price_stats_by_symbol,
+        news_by_symbol,
+        macro_news,
+        history=history,
+        group=group,
+        accuracy_summary=accuracy_summary,
     )
 
 
@@ -90,6 +97,9 @@ def main() -> None:
 
     history = load_history(_HISTORY_PATH)
     track_record = load_track_record(_TRACK_RECORD_PATH)
+    # 分析前（＝前回実行までに確定した分）の的中率をAIへの入力として使う。
+    # 今回の分析結果で確定する分は、今回のプロンプトには間に合わないため次回以降に反映される。
+    accuracy_summary_for_prompt = build_accuracy_summary(track_record)
 
     logger.info("マクロ経済ニュースを取得中...")
     macro_news = fetch_macro_news(
@@ -98,10 +108,22 @@ def main() -> None:
     )
 
     watchlist_results = _analyze_group(
-        "ウォッチリスト", tickers, max_per_ticker, macro_news, history, "watchlist"
+        "ウォッチリスト",
+        tickers,
+        max_per_ticker,
+        macro_news,
+        history,
+        "watchlist",
+        accuracy_summary_for_prompt,
     )
     candidate_results = _analyze_group(
-        "ハイリスク候補", candidates, max_per_ticker, macro_news, history, "candidate"
+        "ハイリスク候補",
+        candidates,
+        max_per_ticker,
+        macro_news,
+        history,
+        "candidate",
+        accuracy_summary_for_prompt,
     )
     portfolio_results = _analyze_group(
         "保有銘柄",
@@ -110,6 +132,7 @@ def main() -> None:
         macro_news,
         history,
         "holding",
+        accuracy_summary_for_prompt,
         analyze_fn=analyze_all_holdings,
     )
 
@@ -123,6 +146,7 @@ def main() -> None:
     record_predictions(track_record, "watchlist", watchlist_results)
     record_predictions(track_record, "candidate", candidate_results)
     record_predictions(track_record, "holding", portfolio_results)
+    # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
 
     logger.info("レポートを生成中...")
