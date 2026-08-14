@@ -379,6 +379,26 @@
       "date": "2026-08-14",
       "price_at_prediction": 14.5600004196167,
       "resolve_after": "2026-08-21"
+    },
+    {
+      "id": "watchlist:9984.T:2026-08-14",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-14",
+      "price_at_prediction": 5888.0,
+      "resolve_after": "2026-08-21"
+    },
+    {
+      "id": "candidate:4502.T:2026-08-14",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-14",
+      "price_at_prediction": 5622.0,
+      "resolve_after": "2026-08-21"
     }
   ],
   "summary": {},
