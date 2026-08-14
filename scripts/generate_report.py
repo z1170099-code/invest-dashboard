@@ -24,6 +24,10 @@ _HOLDING_STATUS_MAP = {
     "分析失敗": {"key": "muted", "icon": "×"},
 }
 
+# NISA成長投資枠の上限（2024年からの新NISA制度）。
+_NISA_ANNUAL_GROWTH_LIMIT = 2_400_000
+_NISA_LIFETIME_GROWTH_LIMIT = 12_000_000
+
 
 def _fmt_pct(value) -> str:
     if not isinstance(value, (int, float)):
@@ -148,6 +152,43 @@ def _build_theme_allocation(portfolio_results: list[dict]) -> tuple[list[dict], 
     return allocation, excluded_count
 
 
+def _build_nisa_usage(portfolio_results: list[dict]) -> dict | None:
+    """NISA成長投資枠の使用状況を集計する。
+
+    このアプリに登録された購入（すべてNISA成長投資枠で購入している前提）のみを
+    対象とした概算であり、証券会社側の正式な消化額とは異なる場合がある。
+    amount_invested_jpyが未入力の銘柄は集計から除外する。
+    """
+    current_year = dt.datetime.now(tz=_JST).year
+    annual_used = 0.0
+    lifetime_used = 0.0
+    excluded_count = 0
+
+    for r in portfolio_results:
+        amount = r.get("amount_invested_jpy")
+        if not isinstance(amount, (int, float)):
+            excluded_count += 1
+            continue
+        lifetime_used += amount
+        purchase_date = r.get("purchase_date")
+        if isinstance(purchase_date, str) and purchase_date[:4] == str(current_year):
+            annual_used += amount
+
+    if lifetime_used <= 0:
+        return None
+
+    return {
+        "current_year": current_year,
+        "annual_used": annual_used,
+        "annual_limit": _NISA_ANNUAL_GROWTH_LIMIT,
+        "annual_pct": min(100, annual_used / _NISA_ANNUAL_GROWTH_LIMIT * 100),
+        "lifetime_used": lifetime_used,
+        "lifetime_limit": _NISA_LIFETIME_GROWTH_LIMIT,
+        "lifetime_pct": min(100, lifetime_used / _NISA_LIFETIME_GROWTH_LIMIT * 100),
+        "excluded_count": excluded_count,
+    }
+
+
 def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
     buy_list = sorted(
         (t for t in combined if t["recommendation"] == "買い候補"),
@@ -180,6 +221,7 @@ def generate_report(
     ]
     summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
     theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
+    nisa_usage = _build_nisa_usage(portfolio_results)
 
     # 暗号資産（現物）は株式と資産クラスが異なるため、専用セクションに分けて表示する。
     crypto_view = [v for v in candidate_view if v["market"] == "暗号資産"]
@@ -200,6 +242,7 @@ def generate_report(
         summary_sell=summary_sell,
         theme_allocation=theme_allocation,
         theme_allocation_excluded_count=theme_allocation_excluded_count,
+        nisa_usage=nisa_usage,
         accuracy=accuracy_summary,
         generated_at=generated_at,
     )

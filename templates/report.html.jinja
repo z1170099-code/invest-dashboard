@@ -684,6 +684,27 @@
     </div>
     {% endif %}
 
+    {% if nisa_usage %}
+    <div class="allocation-box">
+      <h3>NISA成長投資枠の使用状況（概算）</h3>
+      <div class="allocation-row">
+        <span class="allocation-label">{{ nisa_usage.current_year }}年の年間枠</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ nisa_usage.annual_pct }}%;"></div></div>
+        <span class="allocation-amount">¥{{ "{:,.0f}".format(nisa_usage.annual_used) }} / ¥{{ "{:,.0f}".format(nisa_usage.annual_limit) }}</span>
+      </div>
+      <div class="allocation-row">
+        <span class="allocation-label">生涯投資枠（累計）</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ nisa_usage.lifetime_pct }}%;"></div></div>
+        <span class="allocation-amount">¥{{ "{:,.0f}".format(nisa_usage.lifetime_used) }} / ¥{{ "{:,.0f}".format(nisa_usage.lifetime_limit) }}</span>
+      </div>
+      <p class="allocation-note">
+        このアプリに登録した購入情報のみに基づく概算です（すべてNISA成長投資枠での購入という前提で計算しています）。
+        正式な枠の消化状況は必ず証券会社側でご確認ください。
+        {% if nisa_usage.excluded_count %}投資金額が未入力の保有銘柄が{{ nisa_usage.excluded_count }}件あり、この集計から除外されています。{% endif %}
+      </p>
+    </div>
+    {% endif %}
+
     {% if holdings %}
     <div class="portfolio-table-wrap">
       <table class="portfolio-table">
