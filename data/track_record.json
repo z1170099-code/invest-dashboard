@@ -421,6 +421,16 @@
       "resolve_after": "2026-08-22"
     },
     {
+      "id": "candidate:PLTR:2026-08-15",
+      "group": "candidate",
+      "symbol": "PLTR",
+      "name": "Palantir Technologies",
+      "recommendation": "買い候補",
+      "date": "2026-08-15",
+      "price_at_prediction": 174.0399932861328,
+      "resolve_after": "2026-08-22"
+    },
+    {
       "id": "candidate:TSM:2026-08-15",
       "group": "candidate",
       "symbol": "TSM",
@@ -428,6 +438,16 @@
       "recommendation": "買い候補",
       "date": "2026-08-15",
       "price_at_prediction": 426.3500061035156,
+      "resolve_after": "2026-08-22"
+    },
+    {
+      "id": "candidate:7011.T:2026-08-15",
+      "group": "candidate",
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-15",
+      "price_at_prediction": 4254.0,
       "resolve_after": "2026-08-22"
     },
     {
@@ -468,6 +488,16 @@
       "recommendation": "買い候補",
       "date": "2026-08-15",
       "price_at_prediction": 160.10000610351562,
+      "resolve_after": "2026-08-22"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-15",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "date": "2026-08-15",
+      "price_at_prediction": 9585.0,
       "resolve_after": "2026-08-22"
     },
     {
@@ -538,16 +568,6 @@
       "recommendation": "買い候補",
       "date": "2026-08-15",
       "price_at_prediction": 7132.0,
-      "resolve_after": "2026-08-22"
-    },
-    {
-      "id": "holding:4063.T:2026-06-26:2026-08-15",
-      "group": "holding",
-      "symbol": "4063.T",
-      "name": "信越化学工業",
-      "recommendation": "売却検討",
-      "date": "2026-08-15",
-      "price_at_prediction": 6372.0,
       "resolve_after": "2026-08-22"
     },
     {
