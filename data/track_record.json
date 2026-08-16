@@ -589,6 +589,216 @@
       "date": "2026-08-15",
       "price_at_prediction": 14.890000343322754,
       "resolve_after": "2026-08-22"
+    },
+    {
+      "id": "watchlist:9984.T:2026-08-16",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 5739.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "watchlist:NVDA:2026-08-16",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 225.16000366210938,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "watchlist:1655.T:2026-08-16",
+      "group": "watchlist",
+      "symbol": "1655.T",
+      "name": "S&P500連動ETF (iシェアーズ)",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 894.2000122070312,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:6857.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 36870.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:AMD:2026-08-16",
+      "group": "candidate",
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 514.3900146484375,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:PLTR:2026-08-16",
+      "group": "candidate",
+      "symbol": "PLTR",
+      "name": "Palantir Technologies",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 174.0399932861328,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:TSM:2026-08-16",
+      "group": "candidate",
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 426.3500061035156,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:7011.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 4254.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:LMT:2026-08-16",
+      "group": "candidate",
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 608.6799926757812,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:RTX:2026-08-16",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 222.97000122070312,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:1605.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 3782.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:XOM:2026-08-16",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 160.10000610351562,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 9585.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 4851.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:4502.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 5611.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:LLY:2026-08-16",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 1180.1600341796875,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 3686.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:JPM:2026-08-16",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 362.8399963378906,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "candidate:2914.T:2026-08-16",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "date": "2026-08-16",
+      "price_at_prediction": 7132.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-08-16",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "date": "2026-08-16",
+      "price_at_prediction": 53740.0,
+      "resolve_after": "2026-08-23"
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-08-16",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "date": "2026-08-16",
+      "price_at_prediction": 14.890000343322754,
+      "resolve_after": "2026-08-23"
     }
   ],
   "summary": {},
