@@ -1179,6 +1179,26 @@
       "date": "2026-08-19",
       "price_at_prediction": 15.020000457763672,
       "resolve_after": "2026-08-26"
+    },
+    {
+      "id": "watchlist:NVDA:2026-08-19",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "date": "2026-08-19",
+      "price_at_prediction": 219.74000549316406,
+      "resolve_after": "2026-08-26"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-19",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "date": "2026-08-19",
+      "price_at_prediction": 9738.0,
+      "resolve_after": "2026-08-26"
     }
   ],
   "summary": {
