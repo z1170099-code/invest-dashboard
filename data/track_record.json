@@ -1199,6 +1199,16 @@
       "date": "2026-08-19",
       "price_at_prediction": 9738.0,
       "resolve_after": "2026-08-26"
+    },
+    {
+      "id": "candidate:6920.T:2026-08-19",
+      "group": "candidate",
+      "symbol": "6920.T",
+      "name": "レーザーテック",
+      "recommendation": "売り候補",
+      "date": "2026-08-19",
+      "price_at_prediction": 35210.0,
+      "resolve_after": "2026-08-26"
     }
   ],
   "summary": {
