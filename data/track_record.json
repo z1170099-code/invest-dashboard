@@ -1319,6 +1319,46 @@
       "date": "2026-08-20",
       "price_at_prediction": 14.680000305175781,
       "resolve_after": "2026-08-27"
+    },
+    {
+      "id": "candidate:7011.T:2026-08-20",
+      "group": "candidate",
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-20",
+      "price_at_prediction": 4101.0,
+      "resolve_after": "2026-08-27"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-20",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "date": "2026-08-20",
+      "price_at_prediction": 4897.0,
+      "resolve_after": "2026-08-27"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-20",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-20",
+      "price_at_prediction": 3467.0,
+      "resolve_after": "2026-08-27"
+    },
+    {
+      "id": "candidate:JPM:2026-08-20",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "date": "2026-08-20",
+      "price_at_prediction": 357.260009765625,
+      "resolve_after": "2026-08-27"
     }
   ],
   "summary": {
