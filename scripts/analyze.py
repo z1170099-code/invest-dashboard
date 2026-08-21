@@ -438,7 +438,9 @@ def analyze_all_holdings(
     results = []
     for i, holding in enumerate(holdings):
         if i > 0:
-            time.sleep(4)
+            # 無料枠のレート制限（1分あたり15リクエスト）に対し、4秒間隔だと
+            # ちょうど15回/分で余裕が無くリトライ等で超過しやすいため、5秒に広げている。
+            time.sleep(5)
         symbol = holding["symbol"]
         previous = (history or {}).get(build_key(group, symbol, holding.get("purchase_date")))
         result = analyze_holding(
@@ -547,8 +549,9 @@ def analyze_all(
     results = []
     for i, ticker in enumerate(tickers):
         if i > 0:
-            # 無料枠のレート制限（1分あたりのリクエスト数）を超えないための間隔
-            time.sleep(4)
+            # 無料枠のレート制限（1分あたり15リクエスト）に対し、4秒間隔だと
+            # ちょうど15回/分で余裕が無くリトライ等で超過しやすいため、5秒に広げている。
+            time.sleep(5)
         symbol = ticker["symbol"]
         previous = (history or {}).get(build_key(group, symbol))
         result = analyze_ticker(

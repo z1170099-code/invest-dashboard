@@ -1079,6 +1079,36 @@
       "date": "2026-08-21",
       "price_at_prediction": 14.289999961853027,
       "resolve_after": "2026-08-28"
+    },
+    {
+      "id": "candidate:LMT:2026-08-21",
+      "group": "candidate",
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "recommendation": "買い候補",
+      "date": "2026-08-21",
+      "price_at_prediction": 571.47998046875,
+      "resolve_after": "2026-08-28"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-21",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "date": "2026-08-21",
+      "price_at_prediction": 4723.0,
+      "resolve_after": "2026-08-28"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-21",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-21",
+      "price_at_prediction": 3518.0,
+      "resolve_after": "2026-08-28"
     }
   ],
   "summary": {
