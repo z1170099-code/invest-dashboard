@@ -137,6 +137,48 @@ candidates:
     risk_level: "high"
     nisa_growth_eligible: false
 
+  - symbol: "SOL-USD"
+    name: "ソラナ"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "XRP-USD"
+    name: "リップル"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "BNB-USD"
+    name: "BNB"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "ADA-USD"
+    name: "カルダノ"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "DOGE-USD"
+    name: "ドージコイン"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
+  - symbol: "LINK-USD"
+    name: "チェーンリンク"
+    market: "暗号資産"
+    theme: "暗号資産（現物）"
+    risk_level: "high"
+    nisa_growth_eligible: false
+
   # --- 国内小型成長株 ---
   - symbol: "4385.T"
     name: "メルカリ"
