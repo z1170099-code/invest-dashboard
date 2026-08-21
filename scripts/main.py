@@ -12,7 +12,7 @@ from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import fetch_all_price_stats
 from generate_report import generate_report
 from history import apply_group_results, load_history, save_history
-from notify import find_newly_flagged, send_email_notification
+from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
 from track_record import (
     build_accuracy_summary,
     load_track_record,
@@ -161,9 +161,13 @@ def main() -> None:
         _OUTPUT_PATH,
     )
 
-    # historyを更新（＝前回状態を上書き）する前に、前回との比較で「新たに売却検討になった銘柄」を通知する。
-    newly_flagged = find_newly_flagged(portfolio_results, history)
-    send_email_notification(newly_flagged)
+    # historyを更新（＝前回状態を上書き）する前に、前回との比較で
+    # 「新たに売却検討になった銘柄」「新たにスコア70以上の買い候補になった銘柄」を通知する。
+    sell_alerts = find_newly_flagged_sell(portfolio_results, history)
+    buy_alerts = find_newly_strong_buy(watchlist_results, history, "watchlist") + find_newly_strong_buy(
+        candidate_results, history, "candidate"
+    )
+    send_notification_email(sell_alerts, buy_alerts)
 
     try:
         apply_group_results(history, "watchlist", watchlist_results)

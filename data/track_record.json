@@ -1001,173 +1001,13 @@
       "resolve_after": "2026-08-26"
     },
     {
-      "id": "candidate:6920.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "6920.T",
-      "name": "レーザーテック",
-      "recommendation": "売り候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 34350.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:6857.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "6857.T",
-      "name": "アドバンテスト",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 35700.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:RTX:2026-08-20",
-      "group": "candidate",
-      "symbol": "RTX",
-      "name": "RTX Corporation",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 220.35000610351562,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:1605.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "1605.T",
-      "name": "INPEX",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 3890.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:XOM:2026-08-20",
-      "group": "candidate",
-      "symbol": "XOM",
-      "name": "Exxon Mobil",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 164.77000427246094,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:5713.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "5713.T",
-      "name": "住友金属鉱山",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 10530.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:LLY:2026-08-20",
-      "group": "candidate",
-      "symbol": "LLY",
-      "name": "Eli Lilly and Company",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 1280.3399658203125,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:2914.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "2914.T",
-      "name": "日本たばこ産業",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 6927.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "holding:4063.T:2026-06-26:2026-08-20",
-      "group": "holding",
-      "symbol": "4063.T",
-      "name": "信越化学工業",
-      "recommendation": "売却検討",
-      "date": "2026-08-20",
-      "price_at_prediction": 6182.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "holding:285A.T:2026-06-05:2026-08-20",
-      "group": "holding",
-      "symbol": "285A.T",
-      "name": "キオクシア",
-      "recommendation": "売却検討",
-      "date": "2026-08-20",
-      "price_at_prediction": 51730.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "holding:PAYP:2026-03-19:2026-08-20",
-      "group": "holding",
-      "symbol": "PAYP",
-      "name": "PayPay Corporation",
-      "recommendation": "売却検討",
-      "date": "2026-08-20",
-      "price_at_prediction": 14.680000305175781,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:7011.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "7011.T",
-      "name": "三菱重工業",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 4101.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:4385.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "4385.T",
-      "name": "メルカリ",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 4897.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:8306.T:2026-08-20",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 3467.0,
-      "resolve_after": "2026-08-27"
-    },
-    {
-      "id": "candidate:JPM:2026-08-20",
-      "group": "candidate",
-      "symbol": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "recommendation": "買い候補",
-      "date": "2026-08-20",
-      "price_at_prediction": 357.260009765625,
-      "resolve_after": "2026-08-27"
-    },
-    {
       "id": "candidate:6857.T:2026-08-21",
       "group": "candidate",
       "symbol": "6857.T",
       "name": "アドバンテスト",
       "recommendation": "買い候補",
       "date": "2026-08-21",
-      "price_at_prediction": 35520.0,
-      "resolve_after": "2026-08-28"
-    },
-    {
-      "id": "candidate:AMD:2026-08-21",
-      "group": "candidate",
-      "symbol": "AMD",
-      "name": "Advanced Micro Devices",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 469.4549865722656,
+      "price_at_prediction": 35690.0,
       "resolve_after": "2026-08-28"
     },
     {
@@ -1181,6 +1021,16 @@
       "resolve_after": "2026-08-28"
     },
     {
+      "id": "candidate:5713.T:2026-08-21",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "date": "2026-08-21",
+      "price_at_prediction": 10750.0,
+      "resolve_after": "2026-08-28"
+    },
+    {
       "id": "candidate:LLY:2026-08-21",
       "group": "candidate",
       "symbol": "LLY",
@@ -1191,23 +1041,13 @@
       "resolve_after": "2026-08-28"
     },
     {
-      "id": "candidate:8306.T:2026-08-21",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 3464.0,
-      "resolve_after": "2026-08-28"
-    },
-    {
       "id": "candidate:2914.T:2026-08-21",
       "group": "candidate",
       "symbol": "2914.T",
       "name": "日本たばこ産業",
       "recommendation": "買い候補",
       "date": "2026-08-21",
-      "price_at_prediction": 6936.0,
+      "price_at_prediction": 6954.0,
       "resolve_after": "2026-08-28"
     },
     {
@@ -1217,7 +1057,7 @@
       "name": "信越化学工業",
       "recommendation": "売却検討",
       "date": "2026-08-21",
-      "price_at_prediction": 6078.0,
+      "price_at_prediction": 6081.0,
       "resolve_after": "2026-08-28"
     },
     {
@@ -1227,7 +1067,7 @@
       "name": "キオクシア",
       "recommendation": "売却検討",
       "date": "2026-08-21",
-      "price_at_prediction": 53290.0,
+      "price_at_prediction": 54890.0,
       "resolve_after": "2026-08-28"
     },
     {
@@ -1238,46 +1078,6 @@
       "recommendation": "売却検討",
       "date": "2026-08-21",
       "price_at_prediction": 14.289999961853027,
-      "resolve_after": "2026-08-28"
-    },
-    {
-      "id": "candidate:7011.T:2026-08-21",
-      "group": "candidate",
-      "symbol": "7011.T",
-      "name": "三菱重工業",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 3898.0,
-      "resolve_after": "2026-08-28"
-    },
-    {
-      "id": "candidate:LMT:2026-08-21",
-      "group": "candidate",
-      "symbol": "LMT",
-      "name": "Lockheed Martin",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 571.47998046875,
-      "resolve_after": "2026-08-28"
-    },
-    {
-      "id": "candidate:RTX:2026-08-21",
-      "group": "candidate",
-      "symbol": "RTX",
-      "name": "RTX Corporation",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 212.2899932861328,
-      "resolve_after": "2026-08-28"
-    },
-    {
-      "id": "candidate:JPM:2026-08-21",
-      "group": "candidate",
-      "symbol": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "recommendation": "買い候補",
-      "date": "2026-08-21",
-      "price_at_prediction": 351.54998779296875,
       "resolve_after": "2026-08-28"
     }
   ],
@@ -1309,8 +1109,8 @@
       "price_at_prediction": 5611.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 5760.0,
-      "change_pct": 2.655498128675826,
+      "price_at_resolution": 5757.0,
+      "change_pct": 2.6020317234004553,
       "outcome": "correct"
     },
     {
@@ -1337,8 +1137,8 @@
       "price_at_prediction": 49870.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 53290.0,
-      "change_pct": 6.857830358933237,
+      "price_at_resolution": 54890.0,
+      "change_pct": 10.066172047323029,
       "outcome": "incorrect"
     },
     {
@@ -1351,8 +1151,8 @@
       "price_at_prediction": 6410.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 6078.0,
-      "change_pct": -5.179407176287054,
+      "price_at_resolution": 6081.0,
+      "change_pct": -5.132605304212168,
       "outcome": "correct"
     },
     {
@@ -1365,8 +1165,8 @@
       "price_at_prediction": 7026.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 6936.0,
-      "change_pct": -1.2809564474807855,
+      "price_at_resolution": 6954.0,
+      "change_pct": -1.0247651579846306,
       "outcome": "incorrect"
     },
     {
@@ -1393,8 +1193,8 @@
       "price_at_prediction": 3606.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 3464.0,
-      "change_pct": -3.9378813089295583,
+      "price_at_resolution": 3506.0,
+      "change_pct": -2.773155851358844,
       "outcome": "incorrect"
     },
     {
@@ -1421,8 +1221,8 @@
       "price_at_prediction": 4733.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 4778.0,
-      "change_pct": 0.9507711810690989,
+      "price_at_resolution": 4764.0,
+      "change_pct": 0.6549757025142711,
       "outcome": "neutral"
     },
     {
@@ -1449,8 +1249,8 @@
       "price_at_prediction": 9684.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 10745.0,
-      "change_pct": 10.95621643948781,
+      "price_at_resolution": 10750.0,
+      "change_pct": 11.007847996695585,
       "outcome": "correct"
     },
     {
@@ -1477,8 +1277,8 @@
       "price_at_prediction": 3717.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 3903.0,
-      "change_pct": 5.004035512510097,
+      "price_at_resolution": 3925.0,
+      "change_pct": 5.595910680656435,
       "outcome": "correct"
     },
     {
@@ -1547,8 +1347,8 @@
       "price_at_prediction": 492.29998779296875,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 469.4549865722656,
-      "change_pct": -4.640463495260194,
+      "price_at_resolution": 469.4599914550781,
+      "change_pct": -4.639446862528818,
       "outcome": "incorrect"
     },
     {
@@ -1561,8 +1361,8 @@
       "price_at_prediction": 34550.0,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 35290.0,
-      "change_pct": 2.1418234442836415,
+      "price_at_resolution": 35660.0,
+      "change_pct": 3.212735166425462,
       "outcome": "correct"
     },
     {
@@ -1575,8 +1375,8 @@
       "price_at_prediction": 887.2999877929688,
       "resolve_after": "2026-08-21",
       "resolved_date": "2026-08-21",
-      "price_at_resolution": 876.0999755859375,
-      "change_pct": -1.2622576762217341,
+      "price_at_resolution": 876.0,
+      "change_pct": -1.2735250702612833,
       "outcome": "incorrect"
     }
   ]
