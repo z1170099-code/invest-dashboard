@@ -1099,6 +1099,26 @@
       "date": "2026-08-22",
       "price_at_prediction": 11.994999885559082,
       "resolve_after": "2026-08-29"
+    },
+    {
+      "id": "watchlist:AAPL:2026-08-22",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "date": "2026-08-22",
+      "price_at_prediction": 309.3500061035156,
+      "resolve_after": "2026-08-29"
+    },
+    {
+      "id": "candidate:SOL-USD:2026-08-22",
+      "group": "candidate",
+      "symbol": "SOL-USD",
+      "name": "ソラナ",
+      "recommendation": "買い候補",
+      "date": "2026-08-22",
+      "price_at_prediction": 93.9000015258789,
+      "resolve_after": "2026-08-29"
     }
   ],
   "summary": {
