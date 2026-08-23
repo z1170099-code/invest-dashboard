@@ -979,6 +979,86 @@
       "date": "2026-08-23",
       "price_at_prediction": 15.40999984741211,
       "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:6857.T:2026-08-23",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 35900.0,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:PLTR:2026-08-23",
+      "group": "candidate",
+      "symbol": "PLTR",
+      "name": "Palantir Technologies",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 179.94000244140625,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:7011.T:2026-08-23",
+      "group": "candidate",
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 3932.0,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:1605.T:2026-08-23",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 3954.0,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:XOM:2026-08-23",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 165.11000061035156,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:XRP-USD:2026-08-23",
+      "group": "candidate",
+      "symbol": "XRP-USD",
+      "name": "リップル",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 1.4842000007629395,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:LINK-USD:2026-08-23",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 11.54800033569336,
+      "resolve_after": "2026-08-30"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-23",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "date": "2026-08-23",
+      "price_at_prediction": 3508.0,
+      "resolve_after": "2026-08-30"
     }
   ],
   "summary": {
