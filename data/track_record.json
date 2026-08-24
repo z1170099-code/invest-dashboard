@@ -969,6 +969,36 @@
       "date": "2026-08-24",
       "price_at_prediction": 53610.0,
       "resolve_after": "2026-08-31"
+    },
+    {
+      "id": "candidate:6857.T:2026-08-24",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "date": "2026-08-24",
+      "price_at_prediction": 35600.0,
+      "resolve_after": "2026-08-31"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-24",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "date": "2026-08-24",
+      "price_at_prediction": 11490.0,
+      "resolve_after": "2026-08-31"
+    },
+    {
+      "id": "candidate:LINK-USD:2026-08-24",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "date": "2026-08-24",
+      "price_at_prediction": 11.366000175476074,
+      "resolve_after": "2026-08-31"
     }
   ],
   "summary": {
