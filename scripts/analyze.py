@@ -14,6 +14,7 @@ from google import genai
 from google.genai import types
 
 from history import build_key
+from track_record import HIGH_CONFIDENCE_ABS_SCORE
 
 logger = logging.getLogger(__name__)
 
@@ -113,35 +114,73 @@ def _build_reflection_section(previous: dict | None, latest_close) -> str:
 """
 
 
-def _build_accuracy_section(accuracy_summary: dict | None, relevant: set[str]) -> str:
-    """判定タイプ別の過去の的中率をプロンプト用に整形する。
+def _describe_trend(accuracy_pct: float) -> str:
+    if accuracy_pct < 50:
+        return "外れやすい傾向があるため、判断の重み付けを見直してください。"
+    if accuracy_pct >= 70:
+        return "的中しやすい傾向があるため、この判断軸は引き続き重視してよいです。"
+    return "的中率は平均的です。"
 
-    十分な件数（_MIN_SAMPLE_FOR_PROMPT件以上）が確定している判定タイプのみを対象にする。
+
+def _build_accuracy_section(
+    accuracy_summary: dict | None, relevant: set[str], theme: str | None = None
+) -> str:
+    """過去の的中率を、判定タイプ別・確信度別・テーマ別の傾向としてプロンプト用に整形する。
+
+    十分な件数（_MIN_SAMPLE_FOR_PROMPT件以上）が確定している内訳のみを対象にする。
     少数件だけでAIが自分の傾向を過大評価しないようにするため。
     """
     if not accuracy_summary:
         return ""
 
-    rows = [
-        b
-        for b in accuracy_summary.get("breakdown", [])
-        if b["recommendation"] in relevant and b["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT
-    ]
-    if not rows:
+    lines = []
+
+    for b in accuracy_summary.get("breakdown", []):
+        if b["recommendation"] in relevant and b["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT:
+            lines.append(
+                f"- {b['recommendation']}: 過去{b['sample_size']}件中{b['correct']}件が的中"
+                f"（的中率{b['accuracy_pct']:.0f}%）。{_describe_trend(b['accuracy_pct'])}"
+            )
+
+    for c in accuracy_summary.get("confidence_breakdown", []):
+        if c["sample_size"] < _MIN_SAMPLE_FOR_PROMPT:
+            continue
+        label = (
+            f"確信度が高い判定（|スコア|{HIGH_CONFIDENCE_ABS_SCORE}以上）"
+            if c["confidence"] == "high"
+            else "通常の確信度の判定"
+        )
+        lines.append(
+            f"- {label}: 過去{c['sample_size']}件中{c['correct']}件が的中"
+            f"（的中率{c['accuracy_pct']:.0f}%）。{_describe_trend(c['accuracy_pct'])}"
+        )
+
+    if theme:
+        theme_row = next(
+            (
+                t
+                for t in accuracy_summary.get("theme_breakdown", [])
+                if t["theme"] == theme and t["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT
+            ),
+            None,
+        )
+        if theme_row:
+            lines.append(
+                f"- この銘柄のテーマ「{theme}」: 過去{theme_row['sample_size']}件中{theme_row['correct']}件が的中"
+                f"（的中率{theme_row['accuracy_pct']:.0f}%）。{_describe_trend(theme_row['accuracy_pct'])}"
+            )
+
+    if not lines:
         return ""
 
-    lines = "\n".join(
-        f"- {b['recommendation']}: 過去{b['sample_size']}件中{b['correct']}件が的中"
-        f"（的中率{b['accuracy_pct']:.0f}%）"
-        for b in rows
-    )
-
+    joined = "\n".join(lines)
     return f"""
-【あなたの過去の判定的中率（判定から7日後の値動きとの一致率、±1%以内の判定なしは除く）】
-{lines}
+【あなたの過去の判定的中率と傾向（判定から7日後の値動きとの一致率、±1%以内の判定なしは除く）】
+{joined}
 
-的中率が低い判定タイプについては、これまでの判断の重み付けを見直すなど精度を上げる工夫をしてください。
-的中率が高い場合は、その判断の考え方を引き続き重視してよいです。
+上記の傾向を踏まえて、外れやすいと分かっている判定タイプ・確信度帯・テーマについては
+判断の重み付けを見直すなど精度を上げる工夫をしてください。的中しやすい部分は、
+その判断軸を引き続き重視してよいです。
 """
 
 
@@ -190,7 +229,7 @@ def _build_prompt(
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
-    accuracy_section = _build_accuracy_section(accuracy_summary, {"買い候補", "売り候補"})
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"買い候補", "売り候補"}, theme)
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）
@@ -306,6 +345,7 @@ def _build_holding_prompt(
     name = holding["name"]
     symbol = holding["symbol"]
     market = holding.get("market", "")
+    theme = holding.get("theme")
 
     def fmt(value):
         return f"{value:+.2f}%" if isinstance(value, (int, float)) else "データなし"
@@ -343,7 +383,7 @@ def _build_holding_prompt(
         macro_section = "特筆すべき世界情勢・マクロ経済ニュースはありません。"
 
     reflection_section = _build_reflection_section(previous, holding_stats.get("latest_close"))
-    accuracy_section = _build_accuracy_section(accuracy_summary, {"売却検討"})
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"売却検討"}, theme)
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）

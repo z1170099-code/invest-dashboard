@@ -586,22 +586,6 @@
     </div>
   {% endmacro %}
 
-  <section>
-    <h2>暗号資産</h2>
-    <div class="risk-banner">
-      <strong>⚠ 暗号資産について:</strong>
-      株式とは異なる資産クラスで、価格変動が非常に大きく、NISA成長投資枠の対象にもなりません。
-      楽天証券のような証券会社では購入できず、暗号資産交換業者（楽天ウォレット等）の口座が別途必要です。
-    </div>
-    {% if crypto %}
-    {% for t in crypto %}
-      {{ ticker_card(t, loop.index) }}
-    {% endfor %}
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">暗号資産の候補銘柄が登録されていません。</p>
-    {% endif %}
-  </section>
-
   {% macro holding_card(h) %}
     <div class="card status-{{ h.status_key }}" id="holding-{{ h.symbol }}-{{ h.purchase_date }}">
       <div class="card-head">
@@ -748,6 +732,22 @@
     <p style="color: var(--text-muted); font-size: 0.9rem;">
       まだ保有銘柄が登録されていません。<code>config/portfolio.yaml</code> に購入した銘柄・購入日・購入価格を登録すると、ここに売却タイミングの判断が表示されます。
     </p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>暗号資産</h2>
+    <div class="risk-banner">
+      <strong>⚠ 暗号資産について:</strong>
+      株式とは異なる資産クラスで、価格変動が非常に大きく、NISA成長投資枠の対象にもなりません。
+      楽天証券のような証券会社では購入できず、暗号資産交換業者（楽天ウォレット等）の口座が別途必要です。
+    </div>
+    {% if crypto %}
+    {% for t in crypto %}
+      {{ ticker_card(t, loop.index) }}
+    {% endfor %}
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">暗号資産の候補銘柄が登録されていません。</p>
     {% endif %}
   </section>
 

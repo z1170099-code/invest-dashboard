@@ -8,7 +8,12 @@
 「様子見」「保有継続」は方向性のある予測ではないため、そもそも記録しない。
 
 過去の全件を保持すると際限なく増え続けるため、確定した結果は
-種別ごとの件数（summary）にのみ集約し、個別の履歴は直近20件（recent_resolved）だけを残す。
+種別ごと・テーマごと・確信度ごとの件数（summary系）にのみ集約し、
+個別の履歴は直近20件（recent_resolved）だけを残す。
+
+テーマ別・確信度別の内訳を別に持つのは、AIに「どのテーマ／どの確信度帯で
+外れやすいか」という、より具体的な傾向を伝えるため（種別ごとの的中率だけでは
+「なぜ外れやすいか」が分からず、判断の改善につながりにくい）。
 """
 
 import datetime as dt
@@ -29,6 +34,21 @@ _BULLISH = {"買い候補"}
 _BEARISH = {"売り候補", "売却検討"}
 _TRACKED = _BULLISH | _BEARISH
 
+# |スコア|がこの値以上の判定を「確信度が高い」とみなす（売却検討はスコアが無いため対象外）。
+HIGH_CONFIDENCE_ABS_SCORE = 80
+
+_EMPTY_RECORD = {
+    "pending": [],
+    "summary": {},
+    "recent_resolved": [],
+    "summary_by_theme": {},
+    "summary_by_confidence": {},
+}
+
+
+def _empty_record() -> dict:
+    return {k: ([] if isinstance(v, list) else {}) for k, v in _EMPTY_RECORD.items()}
+
 
 def _today() -> dt.date:
     return dt.datetime.now(tz=_JST).date()
@@ -41,16 +61,15 @@ def _prediction_id(group: str, symbol: str, purchase_date, date_str: str) -> str
 
 def load_track_record(path: Path) -> dict:
     if not path.exists():
-        return {"pending": [], "summary": {}, "recent_resolved": []}
+        return _empty_record()
     try:
         with path.open(encoding="utf-8") as f:
             data = json.load(f)
     except Exception:
         logger.exception("的中率記録の読み込みに失敗したため、記録なしとして続行します: %s", path)
-        return {"pending": [], "summary": {}, "recent_resolved": []}
-    data.setdefault("pending", [])
-    data.setdefault("summary", {})
-    data.setdefault("recent_resolved", [])
+        return _empty_record()
+    for key, default in _EMPTY_RECORD.items():
+        data.setdefault(key, [] if isinstance(default, list) else {})
     return data
 
 
@@ -77,6 +96,7 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
         if pred_id in existing_ids:
             continue
 
+        score = r.get("score")
         record["pending"].append(
             {
                 "id": pred_id,
@@ -84,6 +104,8 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
                 "symbol": r["symbol"],
                 "name": r.get("name", r["symbol"]),
                 "recommendation": recommendation,
+                "theme": r.get("theme"),
+                "score": score if isinstance(score, int) else None,
                 "date": today_str,
                 "price_at_prediction": price,
                 "resolve_after": (_today() + dt.timedelta(days=_RESOLVE_AFTER_DAYS)).isoformat(),
@@ -131,6 +153,21 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
         )
         bucket[outcome] += 1
 
+        theme = p.get("theme")
+        if theme:
+            theme_bucket = record["summary_by_theme"].setdefault(
+                theme, {"correct": 0, "incorrect": 0, "neutral": 0}
+            )
+            theme_bucket[outcome] += 1
+
+        score = p.get("score")
+        if isinstance(score, int):
+            confidence_label = "high" if abs(score) >= HIGH_CONFIDENCE_ABS_SCORE else "normal"
+            confidence_bucket = record["summary_by_confidence"].setdefault(
+                confidence_label, {"correct": 0, "incorrect": 0, "neutral": 0}
+            )
+            confidence_bucket[outcome] += 1
+
         record["recent_resolved"].insert(
             0,
             {
@@ -146,21 +183,17 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
     record["recent_resolved"] = record["recent_resolved"][:_RECENT_RESOLVED_LIMIT]
 
 
-def build_accuracy_summary(record: dict) -> dict:
-    """レポート表示用に、判定種別ごと・全体の的中率を集計する。"""
+def _bucketed_breakdown(buckets: dict, label_key: str) -> list[dict]:
+    """{ラベル: {correct, incorrect, neutral}} 形式の集計を、的中率つきのリストに変換する。"""
     breakdown = []
-    total_correct = 0
-    total_incorrect = 0
-    total_neutral = 0
-
-    for recommendation, counts in record["summary"].items():
+    for label, counts in buckets.items():
         correct = counts.get("correct", 0)
         incorrect = counts.get("incorrect", 0)
         neutral = counts.get("neutral", 0)
         scored = correct + incorrect
         breakdown.append(
             {
-                "recommendation": recommendation,
+                label_key: label,
                 "correct": correct,
                 "incorrect": incorrect,
                 "neutral": neutral,
@@ -168,11 +201,19 @@ def build_accuracy_summary(record: dict) -> dict:
                 "sample_size": scored,
             }
         )
-        total_correct += correct
-        total_incorrect += incorrect
-        total_neutral += neutral
+    breakdown.sort(key=lambda b: b[label_key])
+    return breakdown
 
-    breakdown.sort(key=lambda b: b["recommendation"])
+
+def build_accuracy_summary(record: dict) -> dict:
+    """レポート表示用に、判定種別・テーマ別・確信度別、および全体の的中率を集計する。"""
+    breakdown = _bucketed_breakdown(record["summary"], "recommendation")
+    theme_breakdown = _bucketed_breakdown(record["summary_by_theme"], "theme")
+    confidence_breakdown = _bucketed_breakdown(record["summary_by_confidence"], "confidence")
+
+    total_correct = sum(b["correct"] for b in breakdown)
+    total_incorrect = sum(b["incorrect"] for b in breakdown)
+    total_neutral = sum(b["neutral"] for b in breakdown)
     total_scored = total_correct + total_incorrect
 
     return {
@@ -181,5 +222,7 @@ def build_accuracy_summary(record: dict) -> dict:
         "overall_neutral": total_neutral,
         "pending_count": len(record["pending"]),
         "breakdown": breakdown,
+        "theme_breakdown": theme_breakdown,
+        "confidence_breakdown": confidence_breakdown,
         "recent_resolved": record["recent_resolved"],
     }
