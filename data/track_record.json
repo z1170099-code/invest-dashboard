@@ -959,6 +959,36 @@
       "date": "2026-08-25",
       "price_at_prediction": 15.199999809265137,
       "resolve_after": "2026-09-01"
+    },
+    {
+      "id": "candidate:TSM:2026-08-25",
+      "group": "candidate",
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "recommendation": "買い候補",
+      "date": "2026-08-25",
+      "price_at_prediction": 410.1199951171875,
+      "resolve_after": "2026-09-01"
+    },
+    {
+      "id": "candidate:LINK-USD:2026-08-25",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "date": "2026-08-25",
+      "price_at_prediction": 11.744999885559082,
+      "resolve_after": "2026-09-01"
+    },
+    {
+      "id": "candidate:JPM:2026-08-25",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "date": "2026-08-25",
+      "price_at_prediction": 356.3900146484375,
+      "resolve_after": "2026-09-01"
     }
   ],
   "summary": {
