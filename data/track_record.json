@@ -885,6 +885,42 @@
       "date": "2026-08-26",
       "price_at_prediction": 51260.0,
       "resolve_after": "2026-09-02"
+    },
+    {
+      "id": "candidate:LINK-USD:2026-08-26",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 45,
+      "date": "2026-08-26",
+      "price_at_prediction": 11.281999588012695,
+      "resolve_after": "2026-09-02"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-26",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "theme": "国内グロース",
+      "score": 45,
+      "date": "2026-08-26",
+      "price_at_prediction": 4597.0,
+      "resolve_after": "2026-09-02"
+    },
+    {
+      "id": "candidate:LLY:2026-08-26",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 65,
+      "date": "2026-08-26",
+      "price_at_prediction": 1233.6600341796875,
+      "resolve_after": "2026-09-02"
     }
   ],
   "summary": {
