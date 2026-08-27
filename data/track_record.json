@@ -921,6 +921,54 @@
       "date": "2026-08-26",
       "price_at_prediction": 1233.6600341796875,
       "resolve_after": "2026-09-02"
+    },
+    {
+      "id": "candidate:ETH-USD:2026-08-27",
+      "group": "candidate",
+      "symbol": "ETH-USD",
+      "name": "イーサリアム",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 45,
+      "date": "2026-08-27",
+      "price_at_prediction": 2500.93994140625,
+      "resolve_after": "2026-09-03"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-27",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 45,
+      "date": "2026-08-27",
+      "price_at_prediction": 3563.0,
+      "resolve_after": "2026-09-03"
+    },
+    {
+      "id": "candidate:JPM:2026-08-27",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 30,
+      "date": "2026-08-27",
+      "price_at_prediction": 356.5,
+      "resolve_after": "2026-09-03"
+    },
+    {
+      "id": "candidate:2914.T:2026-08-27",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 40,
+      "date": "2026-08-27",
+      "price_at_prediction": 7026.0,
+      "resolve_after": "2026-09-03"
     }
   ],
   "summary": {
