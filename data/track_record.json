@@ -991,6 +991,54 @@
       "date": "2026-08-28",
       "price_at_prediction": 51020.0,
       "resolve_after": "2026-09-04"
+    },
+    {
+      "id": "watchlist:AAPL:2026-08-28",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 40,
+      "date": "2026-08-28",
+      "price_at_prediction": 314.5799865722656,
+      "resolve_after": "2026-09-04"
+    },
+    {
+      "id": "watchlist:1655.T:2026-08-28",
+      "group": "watchlist",
+      "symbol": "1655.T",
+      "name": "S&P500連動ETF (iシェアーズ)",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 55,
+      "date": "2026-08-28",
+      "price_at_prediction": 887.0,
+      "resolve_after": "2026-09-04"
+    },
+    {
+      "id": "candidate:AMD:2026-08-28",
+      "group": "candidate",
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "recommendation": "買い候補",
+      "theme": "半導体・AI",
+      "score": 45,
+      "date": "2026-08-28",
+      "price_at_prediction": 476.6700134277344,
+      "resolve_after": "2026-09-04"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-28",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー（貴金属）",
+      "score": 65,
+      "date": "2026-08-28",
+      "price_at_prediction": 11525.0,
+      "resolve_after": "2026-09-04"
     }
   ],
   "summary": {
