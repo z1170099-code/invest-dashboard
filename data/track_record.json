@@ -889,6 +889,18 @@
       "date": "2026-08-29",
       "price_at_prediction": 7001.0,
       "resolve_after": "2026-09-05"
+    },
+    {
+      "id": "watchlist:NVDA:2026-08-29",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 65,
+      "date": "2026-08-29",
+      "price_at_prediction": 227.97999572753906,
+      "resolve_after": "2026-09-05"
     }
   ],
   "summary": {
