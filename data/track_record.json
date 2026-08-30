@@ -787,6 +787,30 @@
       "date": "2026-08-30",
       "price_at_prediction": 6948.0,
       "resolve_after": "2026-09-06"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-30",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー（貴金属）",
+      "score": 45,
+      "date": "2026-08-30",
+      "price_at_prediction": 11525.0,
+      "resolve_after": "2026-09-06"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-30",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 25,
+      "date": "2026-08-30",
+      "price_at_prediction": 3658.0,
+      "resolve_after": "2026-09-06"
     }
   ],
   "summary": {
