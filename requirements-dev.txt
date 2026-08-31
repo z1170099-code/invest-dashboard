@@ -1,0 +1,3 @@
+# 本番実行（GitHub Actions）には不要な、開発・テスト時のみの依存パッケージ。
+# pip install -r requirements.txt -r requirements-dev.txt でまとめて入る。
+pytest>=8.0.0

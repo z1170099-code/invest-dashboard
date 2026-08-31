@@ -60,6 +60,26 @@ python main.py
 
 ---
 
+## 自動テストについて
+
+`scripts/main.py` をフル実行して動作確認する方法は、実際にGemini API・yfinanceを
+呼び出すため数分かかり、APIの呼び出し回数も消費します。的中率の計算・テーマ別配分・
+通知の判定ロジックなど、外部APIを呼ばずに検証できる部分（`track_record.py`・
+`notify.py`・`generate_report.py`・`history.py`・`analyze.py`のプロンプト整形部分）
+には`pytest`による自動テストを用意してあります。コードを変更したときは、まず
+こちらを実行すると数秒でロジックの崩れに気づけます。
+
+```powershell
+pip install -r requirements.txt -r requirements-dev.txt
+pytest
+```
+
+Gemini APIやyfinanceへの実際の問い合わせ部分（`analyze_ticker`等）はテスト対象外です
+（外部サービスへの依存が大きく、自動テストにはあまり向かないため）。そこは引き続き
+`python scripts/main.py` のフル実行で確認してください。
+
+---
+
 ## ステップ2: Gemini APIキーを取得する
 
 1. [Google AI Studio](https://aistudio.google.com/apikey) にGoogleアカウントでログインする
