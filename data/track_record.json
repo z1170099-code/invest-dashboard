@@ -695,6 +695,66 @@
       "date": "2026-08-31",
       "price_at_prediction": 0.08233000338077545,
       "resolve_after": "2026-09-07"
+    },
+    {
+      "id": "candidate:1605.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 35,
+      "date": "2026-08-31",
+      "price_at_prediction": 3970.0,
+      "resolve_after": "2026-09-07"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "theme": "国内グロース",
+      "score": 45,
+      "date": "2026-08-31",
+      "price_at_prediction": 4610.0,
+      "resolve_after": "2026-09-07"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 45,
+      "date": "2026-08-31",
+      "price_at_prediction": 3680.0,
+      "resolve_after": "2026-09-07"
+    },
+    {
+      "id": "candidate:2914.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 60,
+      "date": "2026-08-31",
+      "price_at_prediction": 6940.0,
+      "resolve_after": "2026-09-07"
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-08-31",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "date": "2026-08-31",
+      "price_at_prediction": 15.279999732971191,
+      "resolve_after": "2026-09-07"
     }
   ],
   "summary": {
