@@ -623,6 +623,18 @@
       "date": "2026-09-01",
       "price_at_prediction": 15.130000114440918,
       "resolve_after": "2026-09-08"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-01",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 45,
+      "date": "2026-09-01",
+      "price_at_prediction": 33360.0,
+      "resolve_after": "2026-09-08"
     }
   ],
   "summary": {
