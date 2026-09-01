@@ -124,3 +124,27 @@ holdings:
     purchase_price: 4453  # 単元未満株を2,000円分購入。当日終値を取得単価として使用。実際の約定価格が分かり次第、要修正
     theme: "国内グロース"
     amount_invested_jpy: 2000
+
+  - symbol: "MSTR"
+    name: "MicroStrategy (Strategy)"
+    market: "US"
+    purchase_date: "2026-07-30"
+    purchase_price: 97.74  # 単元未満株を5,000円分購入。当日終値を取得単価として使用。実際の約定価格が分かり次第、要修正
+    theme: "暗号資産（ビットコイン保有）"
+    amount_invested_jpy: 5000
+
+  - symbol: "RTX"
+    name: "RTX Corporation"
+    market: "US"
+    purchase_date: "2026-08-15"
+    purchase_price: 222.97  # 単元未満株を5,000円分購入。8/15は休場日のため直近の確定終値（8/14終値）を取得単価として使用。実際の約定価格が分かり次第、要修正
+    theme: "防衛・地政学"
+    amount_invested_jpy: 5000
+
+  - symbol: "JPM"
+    name: "JPMorgan Chase & Co."
+    market: "US"
+    purchase_date: "2026-08-15"
+    purchase_price: 362.84  # 単元未満株を3,000円分購入。8/15は休場日のため直近の確定終値（8/14終値）を取得単価として使用。実際の約定価格が分かり次第、要修正
+    theme: "金融"
+    amount_invested_jpy: 3000
