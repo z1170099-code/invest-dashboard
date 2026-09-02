@@ -539,6 +539,18 @@
       "date": "2026-09-02",
       "price_at_prediction": 124.87999725341797,
       "resolve_after": "2026-09-09"
+    },
+    {
+      "id": "candidate:RTX:2026-09-02",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 40,
+      "date": "2026-09-02",
+      "price_at_prediction": 205.16000366210938,
+      "resolve_after": "2026-09-09"
     }
   ],
   "summary": {
