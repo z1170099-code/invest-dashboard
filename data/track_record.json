@@ -539,6 +539,54 @@
       "date": "2026-09-03",
       "price_at_prediction": 124.87999725341797,
       "resolve_after": "2026-09-10"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-03",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 45,
+      "date": "2026-09-03",
+      "price_at_prediction": 32510.0,
+      "resolve_after": "2026-09-10"
+    },
+    {
+      "id": "candidate:SOL-USD:2026-09-03",
+      "group": "candidate",
+      "symbol": "SOL-USD",
+      "name": "ソラナ",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 35,
+      "date": "2026-09-03",
+      "price_at_prediction": 100.62000274658203,
+      "resolve_after": "2026-09-10"
+    },
+    {
+      "id": "candidate:LINK-USD:2026-09-03",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 35,
+      "date": "2026-09-03",
+      "price_at_prediction": 11.227999687194824,
+      "resolve_after": "2026-09-10"
+    },
+    {
+      "id": "candidate:4502.T:2026-09-03",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 65,
+      "date": "2026-09-03",
+      "price_at_prediction": 5896.0,
+      "resolve_after": "2026-09-10"
     }
   ],
   "summary": {
