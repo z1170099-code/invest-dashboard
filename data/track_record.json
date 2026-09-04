@@ -539,6 +539,42 @@
       "date": "2026-09-04",
       "price_at_prediction": 123.19000244140625,
       "resolve_after": "2026-09-11"
+    },
+    {
+      "id": "candidate:RTX:2026-09-04",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 45,
+      "date": "2026-09-04",
+      "price_at_prediction": 200.77999877929688,
+      "resolve_after": "2026-09-11"
+    },
+    {
+      "id": "candidate:XOM:2026-09-04",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 40,
+      "date": "2026-09-04",
+      "price_at_prediction": 164.14999389648438,
+      "resolve_after": "2026-09-11"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-04",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 65,
+      "date": "2026-09-04",
+      "price_at_prediction": 3744.0,
+      "resolve_after": "2026-09-11"
     }
   ],
   "summary": {
