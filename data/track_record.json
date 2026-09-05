@@ -575,6 +575,30 @@
       "date": "2026-09-05",
       "price_at_prediction": 144.82000732421875,
       "resolve_after": "2026-09-12"
+    },
+    {
+      "id": "candidate:XOM:2026-09-05",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 45,
+      "date": "2026-09-05",
+      "price_at_prediction": 159.47000122070312,
+      "resolve_after": "2026-09-12"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-05",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "date": "2026-09-05",
+      "price_at_prediction": 3785.0,
+      "resolve_after": "2026-09-12"
     }
   ],
   "summary": {
