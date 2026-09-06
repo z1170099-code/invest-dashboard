@@ -587,6 +587,42 @@
       "date": "2026-09-06",
       "price_at_prediction": 6803.0,
       "resolve_after": "2026-09-13"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 35,
+      "date": "2026-09-06",
+      "price_at_prediction": 33090.0,
+      "resolve_after": "2026-09-13"
+    },
+    {
+      "id": "candidate:4385.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "theme": "国内グロース",
+      "score": 45,
+      "date": "2026-09-06",
+      "price_at_prediction": 4443.0,
+      "resolve_after": "2026-09-13"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 65,
+      "date": "2026-09-06",
+      "price_at_prediction": 3785.0,
+      "resolve_after": "2026-09-13"
     }
   ],
   "summary": {
