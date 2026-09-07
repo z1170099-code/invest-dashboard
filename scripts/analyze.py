@@ -14,7 +14,7 @@ from google import genai
 from google.genai import types
 
 from history import build_key
-from track_record import HIGH_CONFIDENCE_ABS_SCORE
+from track_record import HIGH_CONFIDENCE_ABS_SCORE, MIN_STREAK_FOR_PROMPT, get_streak
 
 logger = logging.getLogger(__name__)
 
@@ -122,10 +122,29 @@ def _describe_trend(accuracy_pct: float) -> str:
     return "的中率は平均的です。"
 
 
+def _describe_streak(streak: dict | None) -> str | None:
+    """特定銘柄の連続的中/連続不的中を説明する1行を作る。件数が足りなければNone。"""
+    if not streak or streak["count"] < MIN_STREAK_FOR_PROMPT:
+        return None
+
+    if streak["outcome"] == "incorrect":
+        return (
+            f"- この銘柄は直近{streak['count']}回連続で判定が外れています。"
+            "同じ理由付けをそのまま繰り返さず、判断の根拠を根本的に見直してください。"
+        )
+    return (
+        f"- この銘柄は直近{streak['count']}回連続で判定が的中しています。"
+        "この判断の考え方は引き続き重視してよいです。"
+    )
+
+
 def _build_accuracy_section(
-    accuracy_summary: dict | None, relevant: set[str], theme: str | None = None
+    accuracy_summary: dict | None,
+    relevant: set[str],
+    theme: str | None = None,
+    streak: dict | None = None,
 ) -> str:
-    """過去の的中率を、判定タイプ別・確信度別・テーマ別の傾向としてプロンプト用に整形する。
+    """過去の的中率を、判定タイプ別・確信度別・テーマ別・銘柄別の傾向としてプロンプト用に整形する。
 
     十分な件数（_MIN_SAMPLE_FOR_PROMPT件以上）が確定している内訳のみを対象にする。
     少数件だけでAIが自分の傾向を過大評価しないようにするため。
@@ -170,15 +189,19 @@ def _build_accuracy_section(
                 f"（的中率{theme_row['accuracy_pct']:.0f}%）。{_describe_trend(theme_row['accuracy_pct'])}"
             )
 
+    streak_line = _describe_streak(streak)
+    if streak_line:
+        lines.append(streak_line)
+
     if not lines:
         return ""
 
     joined = "\n".join(lines)
     return f"""
-【あなたの過去の判定的中率と傾向（判定から7日後の値動きとの一致率、±1%以内の判定なしは除く）】
+【あなたの過去の判定的中率と傾向（判定から30日後の値動きとの一致率、±1%以内の判定なしは除く）】
 {joined}
 
-上記の傾向を踏まえて、外れやすいと分かっている判定タイプ・確信度帯・テーマについては
+上記の傾向を踏まえて、外れやすいと分かっている判定タイプ・確信度帯・テーマ・銘柄については
 判断の重み付けを見直すなど精度を上げる工夫をしてください。的中しやすい部分は、
 その判断軸を引き続き重視してよいです。
 """
@@ -191,6 +214,7 @@ def _build_prompt(
     macro_news: list[dict] | None = None,
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
+    streak: dict | None = None,
 ) -> str:
     name = ticker["name"]
     symbol = ticker["symbol"]
@@ -229,7 +253,7 @@ def _build_prompt(
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
-    accuracy_section = _build_accuracy_section(accuracy_summary, {"買い候補", "売り候補"}, theme)
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"買い候補", "売り候補"}, theme, streak)
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）
@@ -341,6 +365,7 @@ def _build_holding_prompt(
     holding_stats: dict,
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
+    streak: dict | None = None,
 ) -> str:
     name = holding["name"]
     symbol = holding["symbol"]
@@ -383,7 +408,7 @@ def _build_holding_prompt(
         macro_section = "特筆すべき世界情勢・マクロ経済ニュースはありません。"
 
     reflection_section = _build_reflection_section(previous, holding_stats.get("latest_close"))
-    accuracy_section = _build_accuracy_section(accuracy_summary, {"売却検討"}, theme)
+    accuracy_section = _build_accuracy_section(accuracy_summary, {"売却検討"}, theme, streak)
 
     return f"""\
 銘柄: {name}（{symbol}, {market}）
@@ -415,12 +440,13 @@ def analyze_holding(
     model: str | None = None,
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
+    streak: dict | None = None,
 ) -> dict:
     """1つの保有銘柄を分析し、結果の辞書を返す。失敗した場合は分析失敗を示す辞書を返す。"""
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
     holding_stats = _compute_holding_stats(holding, price_stats)
     prompt = _build_holding_prompt(
-        holding, price_stats, news, macro_news, holding_stats, previous, accuracy_summary
+        holding, price_stats, news, macro_news, holding_stats, previous, accuracy_summary, streak
     )
 
     for attempt in range(2):
@@ -482,7 +508,9 @@ def analyze_all_holdings(
             # ちょうど15回/分で余裕が無くリトライ等で超過しやすいため、5秒に広げている。
             time.sleep(5)
         symbol = holding["symbol"]
-        previous = (history or {}).get(build_key(group, symbol, holding.get("purchase_date")))
+        purchase_date = holding.get("purchase_date")
+        previous = (history or {}).get(build_key(group, symbol, purchase_date))
+        streak = get_streak(accuracy_summary, group, symbol, purchase_date)
         result = analyze_holding(
             client,
             holding,
@@ -491,6 +519,7 @@ def analyze_all_holdings(
             macro_news,
             previous=previous,
             accuracy_summary=accuracy_summary,
+            streak=streak,
         )
         results.append(result)
     return results
@@ -530,10 +559,11 @@ def analyze_ticker(
     model: str | None = None,
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
+    streak: dict | None = None,
 ) -> dict:
     """1銘柄を分析し、結果の辞書を返す。失敗した場合は分析失敗を示す辞書を返す。"""
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
-    prompt = _build_prompt(ticker, price_stats, news, macro_news, previous, accuracy_summary)
+    prompt = _build_prompt(ticker, price_stats, news, macro_news, previous, accuracy_summary, streak)
 
     for attempt in range(2):
         try:
@@ -594,6 +624,7 @@ def analyze_all(
             time.sleep(5)
         symbol = ticker["symbol"]
         previous = (history or {}).get(build_key(group, symbol))
+        streak = get_streak(accuracy_summary, group, symbol)
         result = analyze_ticker(
             client,
             ticker,
@@ -602,6 +633,7 @@ def analyze_all(
             macro_news,
             previous=previous,
             accuracy_summary=accuracy_summary,
+            streak=streak,
         )
         results.append(result)
     return results

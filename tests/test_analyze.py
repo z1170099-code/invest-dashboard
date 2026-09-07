@@ -112,3 +112,44 @@ def test_build_accuracy_section_no_theme_arg_omits_theme_line():
     }
     section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"})
     assert "半導体" not in section
+
+
+def test_describe_streak_none_when_no_streak():
+    assert analyze._describe_streak(None) is None
+
+
+def test_describe_streak_none_below_min_count():
+    assert analyze._describe_streak({"outcome": "incorrect", "count": 1}) is None
+
+
+def test_describe_streak_warns_on_incorrect_streak():
+    text = analyze._describe_streak({"outcome": "incorrect", "count": 4})
+    assert "4回連続" in text
+    assert "外れ" in text
+
+
+def test_describe_streak_praises_correct_streak():
+    text = analyze._describe_streak({"outcome": "correct", "count": 3})
+    assert "3回連続" in text
+    assert "的中" in text
+
+
+def test_build_accuracy_section_includes_streak_line():
+    streak = {"outcome": "incorrect", "count": 4}
+    section = analyze._build_accuracy_section(None, {"買い候補"}, streak=streak)
+    # accuracy_summaryがNoneの場合は全体が空文字のままになる（streak単独では表示しない仕様）
+    assert section == ""
+
+
+def test_build_accuracy_section_combines_streak_with_other_data():
+    summary = {
+        "breakdown": [
+            {"recommendation": "買い候補", "correct": 8, "incorrect": 4, "neutral": 0, "accuracy_pct": 66.7, "sample_size": 12},
+        ],
+        "confidence_breakdown": [],
+        "theme_breakdown": [],
+    }
+    streak = {"outcome": "incorrect", "count": 4}
+    section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"}, streak=streak)
+    assert "4回連続" in section
+    assert "買い候補" in section

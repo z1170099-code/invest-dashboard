@@ -1,9 +1,14 @@
 """AIの過去の判定（買い候補・売り候補・売却検討）が、その後の値動きと
 一致していたかを追跡し、的中率として集計するモジュール。
 
-判定日から7日後の株価と比較し、判定の方向（上昇を期待/下落を期待）と
+判定日から30日後の株価と比較し、判定の方向（上昇を期待/下落を期待）と
 実際の変化率の符号が一致していれば「的中」、逆であれば「不的中」とする。
 変化率が±1%以内の場合は判定なし（様子見扱い）として、的中率の集計対象から除外する。
+
+検証期間はもともと7日だったが、プロンプト側で「3ヶ月・6ヶ月・1年の中長期トレンドを
+判断の主たる根拠にする」よう指示しているのに対し、7日後の値動きで正解/不正解を
+判定するのは物差しとして短すぎ、短期的なノイズで「不正解」扱いになりやすかった。
+3ヶ月に合わせると検証に時間がかかりすぎるため、両者の中間として30日を採用している。
 
 「様子見」「保有継続」は方向性のある予測ではないため、そもそも記録しない。
 
@@ -14,6 +19,15 @@
 テーマ別・確信度別の内訳を別に持つのは、AIに「どのテーマ／どの確信度帯で
 外れやすいか」という、より具体的な傾向を伝えるため（種別ごとの的中率だけでは
 「なぜ外れやすいか」が分からず、判断の改善につながりにくい）。
+
+さらに、同一銘柄（同一ポジション）で判定が連続して外れ続けているケースを検知するため、
+銘柄ごとの直近の連続的中/連続不的中の回数（streak_by_position）も別途保持する。
+テーマ別の的中率は複数銘柄の平均であるため、「特定の1銘柄だけが繰り返し外れている」
+という状況を薄めてしまう。個別銘柄の連続外れをAIに直接伝えることで、
+「同じ理由付けで同じ判定を繰り返す」ことをより避けやすくする狙い。
+recent_resolvedは件数上限があり銘柄をまたいですぐに押し出されてしまうため、
+連続回数はrecent_resolvedから再集計するのではなく、専用のカウンタとして
+resolve_predictions実行のたびに更新・永続化する。
 """
 
 import datetime as dt
@@ -22,12 +36,14 @@ import logging
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from history import build_key
+
 logger = logging.getLogger(__name__)
 
 _JST = ZoneInfo("Asia/Tokyo")
 
 _NEUTRAL_BAND_PCT = 1.0
-_RESOLVE_AFTER_DAYS = 7
+_RESOLVE_AFTER_DAYS = 30
 _RECENT_RESOLVED_LIMIT = 20
 
 _BULLISH = {"買い候補"}
@@ -35,7 +51,13 @@ _BEARISH = {"売り候補", "売却検討"}
 _TRACKED = _BULLISH | _BEARISH
 
 # |スコア|がこの値以上の判定を「確信度が高い」とみなす（売却検討はスコアが無いため対象外）。
-HIGH_CONFIDENCE_ABS_SCORE = 80
+# 実際に出力されるスコアは25〜65程度に収まることが多く、80では「高確信度」がほぼ
+# 出現せず区分が機能しなかったため、60に引き下げている。
+HIGH_CONFIDENCE_ABS_SCORE = 60
+
+# 銘柄ごとの連続的中/不的中を「傾向」としてプロンプトに含める最低回数。
+# 1回だけでは既存の反省機能（前回1件の振り返り）と情報が重複するため、2回以上を対象にする。
+MIN_STREAK_FOR_PROMPT = 2
 
 _EMPTY_RECORD = {
     "pending": [],
@@ -43,6 +65,7 @@ _EMPTY_RECORD = {
     "recent_resolved": [],
     "summary_by_theme": {},
     "summary_by_confidence": {},
+    "streak_by_position": {},
 }
 
 
@@ -106,6 +129,9 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
                 "recommendation": recommendation,
                 "theme": r.get("theme"),
                 "score": score if isinstance(score, int) else None,
+                # 保有銘柄はsymbolだけでは一意にならない（同じ銘柄を複数回買った場合）ため、
+                # build_key()での照合（連続的中/不的中の集計キー）にpurchase_dateが必要。
+                "purchase_date": r.get("purchase_date"),
                 "date": today_str,
                 "price_at_prediction": price,
                 "resolve_after": (_today() + dt.timedelta(days=_RESOLVE_AFTER_DAYS)).isoformat(),
@@ -128,8 +154,28 @@ def _classify(recommendation: str, change_pct: float) -> str:
     return "neutral"
 
 
+def _update_streak(record: dict, position_key: str, p: dict, outcome: str) -> None:
+    """指定ポジションの連続的中/連続不的中カウンタを更新する（neutralは維持も更新もしない）。"""
+    if outcome == "neutral":
+        return
+
+    previous = record["streak_by_position"].get(position_key)
+    if previous and previous.get("outcome") == outcome:
+        count = previous["count"] + 1
+    else:
+        count = 1
+
+    record["streak_by_position"][position_key] = {
+        "outcome": outcome,
+        "count": count,
+        "symbol": p["symbol"],
+        "name": p.get("name"),
+        "theme": p.get("theme"),
+    }
+
+
 def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
-    """判定から7日経過した保留中の予測を、現在の株価と照らして確定させる。
+    """判定から30日経過した保留中の予測を、現在の株価と照らして確定させる。
 
     current_prices: symbol -> 最新終値 の辞書（今回の実行で価格取得できた銘柄のみ）。
     対象銘柄が今回のリストから外れて価格が取得できない場合は、取得できるまで保留し続ける。
@@ -167,6 +213,9 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
                 confidence_label, {"correct": 0, "incorrect": 0, "neutral": 0}
             )
             confidence_bucket[outcome] += 1
+
+        position_key = build_key(p["group"], p["symbol"], p.get("purchase_date"))
+        _update_streak(record, position_key, p, outcome)
 
         record["recent_resolved"].insert(
             0,
@@ -225,4 +274,12 @@ def build_accuracy_summary(record: dict) -> dict:
         "theme_breakdown": theme_breakdown,
         "confidence_breakdown": confidence_breakdown,
         "recent_resolved": record["recent_resolved"],
+        "streaks": record["streak_by_position"],
     }
+
+
+def get_streak(accuracy_summary: dict | None, group: str, symbol: str, purchase_date: str | None = None) -> dict | None:
+    """特定の銘柄（ポジション）の現在の連続的中/連続不的中を取得する。データが無ければNone。"""
+    if not accuracy_summary:
+        return None
+    return accuracy_summary.get("streaks", {}).get(build_key(group, symbol, purchase_date))

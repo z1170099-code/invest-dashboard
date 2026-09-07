@@ -138,7 +138,7 @@ def test_resolve_predictions_updates_summary_theme_and_confidence():
             "name": "AAA",
             "recommendation": "買い候補",
             "theme": "半導体",
-            "score": 85,  # |score| >= HIGH_CONFIDENCE_ABS_SCORE(80) -> "high"
+            "score": 85,  # |score| >= HIGH_CONFIDENCE_ABS_SCORE(60) -> "high"
             "date": "2026-01-01",
             "price_at_prediction": 100,
             "resolve_after": tr._today().isoformat(),
@@ -164,7 +164,7 @@ def test_resolve_predictions_normal_confidence_band():
             "name": "AAA",
             "recommendation": "買い候補",
             "theme": None,
-            "score": 60,  # < 80 -> "normal"
+            "score": 45,  # < HIGH_CONFIDENCE_ABS_SCORE(60) -> "normal"
             "date": "2026-01-01",
             "price_at_prediction": 100,
             "resolve_after": tr._today().isoformat(),
@@ -246,3 +246,116 @@ def test_build_accuracy_summary_handles_all_empty():
     assert summary["breakdown"] == []
     assert summary["theme_breakdown"] == []
     assert summary["confidence_breakdown"] == []
+    assert summary["streaks"] == {}
+
+
+def _pending_entry(symbol="AAA", group="candidate", date="2026-01-01", score=45, theme=None):
+    return {
+        "id": f"{group}:{symbol}:{date}",
+        "group": group,
+        "symbol": symbol,
+        "name": symbol,
+        "recommendation": "買い候補",
+        "theme": theme,
+        "score": score,
+        "date": date,
+        "price_at_prediction": 100,
+        "resolve_after": tr._today().isoformat(),
+    }
+
+
+def test_update_streak_starts_at_one_on_first_outcome():
+    record = tr._empty_record()
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    assert record["streak_by_position"]["candidate:AAA"]["count"] == 1
+    assert record["streak_by_position"]["candidate:AAA"]["outcome"] == "incorrect"
+
+
+def test_update_streak_extends_on_repeated_same_outcome():
+    record = tr._empty_record()
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    assert record["streak_by_position"]["candidate:AAA"]["count"] == 3
+
+
+def test_update_streak_resets_when_outcome_flips():
+    record = tr._empty_record()
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "correct")
+    entry = record["streak_by_position"]["candidate:AAA"]
+    assert entry["count"] == 1
+    assert entry["outcome"] == "correct"
+
+
+def test_update_streak_neutral_does_not_change_existing_streak():
+    record = tr._empty_record()
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "incorrect")
+    tr._update_streak(record, "candidate:AAA", _pending_entry(), "neutral")
+    entry = record["streak_by_position"]["candidate:AAA"]
+    assert entry["count"] == 2
+    assert entry["outcome"] == "incorrect"
+
+
+def test_resolve_predictions_builds_streak_over_multiple_runs():
+    record = tr._empty_record()
+
+    # 1日目: 買い候補判定 -> 不正解
+    record["pending"] = [_pending_entry(date="2026-01-01")]
+    tr.resolve_predictions(record, {"AAA": 90})  # -10% -> incorrect
+
+    # 2日目: 別の予測が同じ銘柄に対して再び不正解
+    record["pending"] = [_pending_entry(date="2026-01-02")]
+    tr.resolve_predictions(record, {"AAA": 90})
+
+    streak = record["streak_by_position"]["candidate:AAA"]
+    assert streak["count"] == 2
+    assert streak["outcome"] == "incorrect"
+
+
+def test_get_streak_returns_none_when_missing():
+    summary = {"streaks": {}}
+    assert tr.get_streak(summary, "candidate", "AAA") is None
+    assert tr.get_streak(None, "candidate", "AAA") is None
+
+
+def test_get_streak_returns_entry_for_matching_position():
+    summary = {"streaks": {"candidate:AAA": {"outcome": "incorrect", "count": 3}}}
+    streak = tr.get_streak(summary, "candidate", "AAA")
+    assert streak["count"] == 3
+
+
+def test_get_streak_uses_purchase_date_for_holdings():
+    summary = {"streaks": {"holding:AAA:2026-01-01": {"outcome": "incorrect", "count": 2}}}
+    assert tr.get_streak(summary, "holding", "AAA", "2026-01-01")["count"] == 2
+    assert tr.get_streak(summary, "holding", "AAA", "2026-02-01") is None
+
+
+def test_holding_streak_survives_record_and_resolve_roundtrip():
+    """record_predictions -> resolve_predictions -> build_accuracy_summary -> get_streak を
+    実際のホールディング結果で通し、streakのキーがpurchase_date込みで一致することを確認する
+    （record_predictionsがpurchase_dateを保存し忘れると、streak_by_positionのキーが
+    "holding:SYMBOL:None"になり、get_streak側の実際のpurchase_date指定のキーと
+    一致しなくなる回帰バグを防ぐ）。
+    """
+    record = tr._empty_record()
+    holding_result = {
+        "symbol": "PAYP",
+        "name": "PayPay Corporation",
+        "recommendation": "売却検討",
+        "purchase_date": "2026-03-19",
+        "theme": "フィンテック",
+        "price_stats": {"latest_close": 20.0},
+    }
+    tr.record_predictions(record, "holding", [holding_result])
+    # 期限を過ぎさせて確定させる
+    record["pending"][0]["resolve_after"] = tr._today().isoformat()
+    tr.resolve_predictions(record, {"PAYP": 18.0})  # 下落 -> 売却検討は的中
+
+    summary = tr.build_accuracy_summary(record)
+    streak = tr.get_streak(summary, "holding", "PAYP", "2026-03-19")
+    assert streak is not None
+    assert streak["count"] == 1
+    assert streak["outcome"] == "correct"

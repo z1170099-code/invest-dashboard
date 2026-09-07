@@ -469,7 +469,7 @@
     <h2>AIの的中率（過去の判定の検証）</h2>
     <div class="risk-banner" style="border-left-color: var(--baseline);">
       <strong>ℹ️ 検証方法:</strong>
-      「買い候補」「売り候補」「売却検討」の判定から7日後の株価と比較し、判定の方向（上昇/下落）と
+      「買い候補」「売り候補」「売却検討」の判定から30日後の株価と比較し、判定の方向（上昇/下落）と
       実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
       変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
     </div>
@@ -483,7 +483,7 @@
       </div>
       <p class="allocation-note">
         検証済み {{ accuracy.overall_sample_size }}件（様子見扱い{{ accuracy.overall_neutral }}件を除く）・
-        検証待ち {{ accuracy.pending_count }}件（判定から7日経過後に確定します）
+        検証待ち {{ accuracy.pending_count }}件（判定から30日経過後に確定します）
       </p>
 
       {% for b in accuracy.breakdown %}
@@ -516,7 +516,7 @@
     {% endif %}
     {% else %}
     <p style="color: var(--text-muted); font-size: 0.9rem;">
-      検証にはまず判定から7日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
+      検証にはまず判定から30日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
       （検証待ち: {{ accuracy.pending_count }}件）。
     </p>
     {% endif %}
