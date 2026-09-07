@@ -1,90 +1,6 @@
 {
   "pending": [
     {
-      "id": "candidate:5713.T:2026-08-31",
-      "group": "candidate",
-      "symbol": "5713.T",
-      "name": "住友金属鉱山",
-      "recommendation": "買い候補",
-      "theme": "資源・エネルギー（貴金属）",
-      "score": 30,
-      "date": "2026-08-31",
-      "price_at_prediction": 11195.0,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "candidate:DOGE-USD:2026-08-31",
-      "group": "candidate",
-      "symbol": "DOGE-USD",
-      "name": "ドージコイン",
-      "recommendation": "売り候補",
-      "theme": "暗号資産（現物）",
-      "score": -40,
-      "date": "2026-08-31",
-      "price_at_prediction": 0.08233000338077545,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "candidate:1605.T:2026-08-31",
-      "group": "candidate",
-      "symbol": "1605.T",
-      "name": "INPEX",
-      "recommendation": "買い候補",
-      "theme": "資源・エネルギー",
-      "score": 35,
-      "date": "2026-08-31",
-      "price_at_prediction": 3970.0,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "candidate:4385.T:2026-08-31",
-      "group": "candidate",
-      "symbol": "4385.T",
-      "name": "メルカリ",
-      "recommendation": "買い候補",
-      "theme": "国内グロース",
-      "score": 45,
-      "date": "2026-08-31",
-      "price_at_prediction": 4610.0,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "candidate:8306.T:2026-08-31",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 45,
-      "date": "2026-08-31",
-      "price_at_prediction": 3680.0,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "candidate:2914.T:2026-08-31",
-      "group": "candidate",
-      "symbol": "2914.T",
-      "name": "日本たばこ産業",
-      "recommendation": "買い候補",
-      "theme": "生活必需品",
-      "score": 60,
-      "date": "2026-08-31",
-      "price_at_prediction": 6940.0,
-      "resolve_after": "2026-09-07"
-    },
-    {
-      "id": "holding:PAYP:2026-03-19:2026-08-31",
-      "group": "holding",
-      "symbol": "PAYP",
-      "name": "PayPay Corporation",
-      "recommendation": "売却検討",
-      "theme": "フィンテック",
-      "score": null,
-      "date": "2026-08-31",
-      "price_at_prediction": 15.279999732971191,
-      "resolve_after": "2026-09-07"
-    },
-    {
       "id": "candidate:1605.T:2026-09-01",
       "group": "candidate",
       "symbol": "1605.T",
@@ -623,26 +539,162 @@
       "date": "2026-09-06",
       "price_at_prediction": 3785.0,
       "resolve_after": "2026-09-13"
+    },
+    {
+      "id": "watchlist:NVDA:2026-09-07",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 45,
+      "date": "2026-09-07",
+      "price_at_prediction": 230.36000061035156,
+      "resolve_after": "2026-09-14"
+    },
+    {
+      "id": "candidate:4502.T:2026-09-07",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 35,
+      "date": "2026-09-07",
+      "price_at_prediction": 5777.0,
+      "resolve_after": "2026-09-14"
     }
   ],
   "summary": {
     "買い候補": {
-      "correct": 61,
-      "incorrect": 118,
+      "correct": 62,
+      "incorrect": 122,
       "neutral": 45
     },
     "売り候補": {
       "correct": 1,
-      "incorrect": 2,
+      "incorrect": 3,
       "neutral": 1
     },
     "売却検討": {
       "correct": 12,
-      "incorrect": 12,
+      "incorrect": 13,
       "neutral": 7
     }
   },
   "recent_resolved": [
+    {
+      "id": "holding:PAYP:2026-03-19:2026-08-31",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "date": "2026-08-31",
+      "price_at_prediction": 15.279999732971191,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 17.040000915527344,
+      "change_pct": 11.518332547862698,
+      "outcome": "incorrect"
+    },
+    {
+      "id": "candidate:2914.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 60,
+      "date": "2026-08-31",
+      "price_at_prediction": 6940.0,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 6754.0,
+      "change_pct": -2.6801152737752187,
+      "outcome": "incorrect"
+    },
+    {
+      "id": "candidate:8306.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 45,
+      "date": "2026-08-31",
+      "price_at_prediction": 3680.0,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 3742.0,
+      "change_pct": 1.6847826086956452,
+      "outcome": "correct"
+    },
+    {
+      "id": "candidate:4385.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "theme": "国内グロース",
+      "score": 45,
+      "date": "2026-08-31",
+      "price_at_prediction": 4610.0,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 4341.0,
+      "change_pct": -5.835140997830801,
+      "outcome": "incorrect"
+    },
+    {
+      "id": "candidate:1605.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 35,
+      "date": "2026-08-31",
+      "price_at_prediction": 3970.0,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 3816.0,
+      "change_pct": -3.879093198992445,
+      "outcome": "incorrect"
+    },
+    {
+      "id": "candidate:DOGE-USD:2026-08-31",
+      "group": "candidate",
+      "symbol": "DOGE-USD",
+      "name": "ドージコイン",
+      "recommendation": "売り候補",
+      "theme": "暗号資産（現物）",
+      "score": -40,
+      "date": "2026-08-31",
+      "price_at_prediction": 0.08233000338077545,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 0.09105999767780304,
+      "change_pct": 10.603660802309767,
+      "outcome": "incorrect"
+    },
+    {
+      "id": "candidate:5713.T:2026-08-31",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー（貴金属）",
+      "score": 30,
+      "date": "2026-08-31",
+      "price_at_prediction": 11195.0,
+      "resolve_after": "2026-09-07",
+      "resolved_date": "2026-09-07",
+      "price_at_resolution": 10095.0,
+      "change_pct": -9.825815096025014,
+      "outcome": "incorrect"
+    },
     {
       "id": "candidate:8306.T:2026-08-30",
       "group": "candidate",
@@ -850,118 +902,6 @@
       "price_at_resolution": 457.05999755859375,
       "change_pct": -4.113960458331533,
       "outcome": "incorrect"
-    },
-    {
-      "id": "watchlist:1655.T:2026-08-28",
-      "group": "watchlist",
-      "symbol": "1655.T",
-      "name": "S&P500連動ETF (iシェアーズ)",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 55,
-      "date": "2026-08-28",
-      "price_at_prediction": 887.0,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 868.5999755859375,
-      "change_pct": -2.074410869680099,
-      "outcome": "incorrect"
-    },
-    {
-      "id": "watchlist:AAPL:2026-08-28",
-      "group": "watchlist",
-      "symbol": "AAPL",
-      "name": "Apple",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 40,
-      "date": "2026-08-28",
-      "price_at_prediction": 314.5799865722656,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 324.9599914550781,
-      "change_pct": 3.299639305066848,
-      "outcome": "correct"
-    },
-    {
-      "id": "holding:285A.T:2026-06-05:2026-08-28",
-      "group": "holding",
-      "symbol": "285A.T",
-      "name": "キオクシア",
-      "recommendation": "売却検討",
-      "theme": "半導体",
-      "score": null,
-      "date": "2026-08-28",
-      "price_at_prediction": 51020.0,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 53580.0,
-      "change_pct": 5.017640141121138,
-      "outcome": "incorrect"
-    },
-    {
-      "id": "candidate:JPM:2026-08-28",
-      "group": "candidate",
-      "symbol": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 45,
-      "date": "2026-08-28",
-      "price_at_prediction": 354.2200012207031,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 356.2200012207031,
-      "change_pct": 0.5646208551486787,
-      "outcome": "neutral"
-    },
-    {
-      "id": "candidate:8306.T:2026-08-28",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 25,
-      "date": "2026-08-28",
-      "price_at_prediction": 3624.0,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 3721.0,
-      "change_pct": 2.676600441501109,
-      "outcome": "correct"
-    },
-    {
-      "id": "candidate:SOL-USD:2026-08-28",
-      "group": "candidate",
-      "symbol": "SOL-USD",
-      "name": "ソラナ",
-      "recommendation": "買い候補",
-      "theme": "暗号資産（現物）",
-      "score": 45,
-      "date": "2026-08-28",
-      "price_at_prediction": 109.87000274658203,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 103.9000015258789,
-      "change_pct": -5.433695341278078,
-      "outcome": "incorrect"
-    },
-    {
-      "id": "candidate:RTX:2026-08-28",
-      "group": "candidate",
-      "symbol": "RTX",
-      "name": "RTX Corporation",
-      "recommendation": "買い候補",
-      "theme": "防衛・地政学",
-      "score": 60,
-      "date": "2026-08-28",
-      "price_at_prediction": 212.0800018310547,
-      "resolve_after": "2026-09-04",
-      "resolved_date": "2026-09-04",
-      "price_at_resolution": 200.77999877929688,
-      "change_pct": -5.328179438983371,
-      "outcome": "incorrect"
     }
   ],
   "summary_by_theme": {
@@ -977,27 +917,27 @@
     },
     "資源・エネルギー（貴金属）": {
       "correct": 0,
-      "incorrect": 5,
+      "incorrect": 6,
       "neutral": 0
     },
     "金融": {
-      "correct": 5,
+      "correct": 6,
       "incorrect": 0,
       "neutral": 3
     },
     "生活必需品": {
       "correct": 0,
-      "incorrect": 2,
+      "incorrect": 3,
       "neutral": 2
     },
     "暗号資産（現物）": {
       "correct": 0,
-      "incorrect": 5,
+      "incorrect": 6,
       "neutral": 0
     },
     "国内グロース": {
       "correct": 0,
-      "incorrect": 2,
+      "incorrect": 3,
       "neutral": 0
     },
     "ヘルスケア・製薬": {
@@ -1014,12 +954,22 @@
       "correct": 0,
       "incorrect": 1,
       "neutral": 0
+    },
+    "資源・エネルギー": {
+      "correct": 0,
+      "incorrect": 1,
+      "neutral": 0
+    },
+    "フィンテック": {
+      "correct": 0,
+      "incorrect": 1,
+      "neutral": 0
     }
   },
   "summary_by_confidence": {
     "normal": {
-      "correct": 7,
-      "incorrect": 24,
+      "correct": 8,
+      "incorrect": 29,
       "neutral": 7
     }
   }
