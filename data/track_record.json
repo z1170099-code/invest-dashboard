@@ -563,6 +563,18 @@
       "date": "2026-09-07",
       "price_at_prediction": 5777.0,
       "resolve_after": "2026-09-14"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-07",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "date": "2026-09-07",
+      "price_at_prediction": 3717.0,
+      "resolve_after": "2026-09-14"
     }
   ],
   "summary": {
