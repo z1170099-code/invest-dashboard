@@ -576,6 +576,58 @@
       "date": "2026-09-08",
       "price_at_prediction": 3785.0,
       "resolve_after": "2026-10-08"
+    },
+    {
+      "id": "watchlist:9984.T:2026-09-08",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-08",
+      "price_at_prediction": 6382.0,
+      "resolve_after": "2026-10-08"
+    },
+    {
+      "id": "candidate:AMD:2026-09-08",
+      "group": "candidate",
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "recommendation": "買い候補",
+      "theme": "半導体・AI",
+      "score": 40,
+      "purchase_date": null,
+      "date": "2026-09-08",
+      "price_at_prediction": 477.57000732421875,
+      "resolve_after": "2026-10-08"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-08",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-08",
+      "price_at_prediction": 3786.0,
+      "resolve_after": "2026-10-08"
+    },
+    {
+      "id": "candidate:JPM:2026-09-08",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 55,
+      "purchase_date": null,
+      "date": "2026-09-08",
+      "price_at_prediction": 358.6400146484375,
+      "resolve_after": "2026-10-08"
     }
   ],
   "summary": {
