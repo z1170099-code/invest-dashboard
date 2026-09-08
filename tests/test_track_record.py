@@ -359,3 +359,82 @@ def test_holding_streak_survives_record_and_resolve_roundtrip():
     assert streak is not None
     assert streak["count"] == 1
     assert streak["outcome"] == "correct"
+
+
+def test_simulated_return_pct_bullish_matches_change_pct():
+    assert tr._simulated_return_pct("買い候補", 8.0) == 8.0
+    assert tr._simulated_return_pct("買い候補", -8.0) == -8.0
+
+
+def test_simulated_return_pct_bearish_inverts_change_pct():
+    assert tr._simulated_return_pct("売り候補", -8.0) == 8.0
+    assert tr._simulated_return_pct("売却検討", 8.0) == -8.0
+
+
+def test_resolve_predictions_accumulates_simulated_pl_for_bullish():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry(date="2026-01-01")]  # 買い候補
+    tr.resolve_predictions(record, {"AAA": 110})  # +10%
+
+    bucket = record["simulated_pl"]["買い候補"]
+    assert bucket["trade_count"] == 1
+    assert round(bucket["total_return_pct"], 2) == 10.0
+    assert bucket["wins"] == 1
+    assert bucket["losses"] == 0
+    assert round(record["recent_resolved"][0]["sim_return_pct"], 2) == 10.0
+
+
+def test_resolve_predictions_accumulates_simulated_pl_for_bearish():
+    record = tr._empty_record()
+    record["pending"] = [
+        {
+            **_pending_entry(date="2026-01-01"),
+            "recommendation": "売却検討",
+        }
+    ]
+    tr.resolve_predictions(record, {"AAA": 90})  # -10% -> 売却検討にとっては得
+
+    bucket = record["simulated_pl"]["売却検討"]
+    assert bucket["trade_count"] == 1
+    assert round(bucket["total_return_pct"], 2) == 10.0
+    assert bucket["wins"] == 1
+    assert bucket["losses"] == 0
+
+
+def test_resolve_predictions_simulated_pl_accumulates_across_multiple_trades():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry(symbol="AAA", date="2026-01-01")]
+    tr.resolve_predictions(record, {"AAA": 110})  # +10%
+    record["pending"] = [_pending_entry(symbol="BBB", date="2026-01-02")]
+    tr.resolve_predictions(record, {"BBB": 95})  # -5%
+
+    bucket = record["simulated_pl"]["買い候補"]
+    assert bucket["trade_count"] == 2
+    assert round(bucket["total_return_pct"], 2) == 5.0
+    assert bucket["wins"] == 1
+    assert bucket["losses"] == 1
+
+
+def test_build_simulated_pl_summary_computes_average_and_overall():
+    record = tr._empty_record()
+    record["simulated_pl"] = {
+        "買い候補": {"trade_count": 2, "total_return_pct": 10.0, "wins": 1, "losses": 1},
+        "売却検討": {"trade_count": 1, "total_return_pct": 4.0, "wins": 1, "losses": 0},
+    }
+    summary = tr.build_accuracy_summary(record)
+    sim = summary["simulated_pl"]
+
+    assert sim["overall_trade_count"] == 3
+    assert round(sim["overall_avg_return_pct"], 2) == round(14.0 / 3, 2)
+
+    by_recommendation = {row["recommendation"]: row for row in sim["by_recommendation"]}
+    assert round(by_recommendation["買い候補"]["avg_return_pct"], 2) == 5.0
+    assert round(by_recommendation["売却検討"]["avg_return_pct"], 2) == 4.0
+
+
+def test_build_simulated_pl_summary_handles_empty():
+    summary = tr.build_accuracy_summary(tr._empty_record())
+    sim = summary["simulated_pl"]
+    assert sim["overall_trade_count"] == 0
+    assert sim["overall_avg_return_pct"] is None
+    assert sim["by_recommendation"] == []

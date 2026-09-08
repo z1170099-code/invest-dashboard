@@ -28,6 +28,14 @@
 recent_resolvedは件数上限があり銘柄をまたいですぐに押し出されてしまうため、
 連続回数はrecent_resolvedから再集計するのではなく、専用のカウンタとして
 resolve_predictions実行のたびに更新・永続化する。
+
+さらに、「的中したか外れたか」という二値の統計だけでは実際の損益感覚と結びつかないため、
+判定通りに行動していた場合の仮想的なリターン（simulated_pl）も種別ごとに集計する。
+買い候補は「判定時に買って30日後に売った場合」の値上がり率、売り候補・売却検討は
+「判定時に売った/買わなかった場合」に得をした割合（＝値動きの符号を反転させたもの）を
+そのままリターンとみなす、等金額・単利（複利しない）・手数料や税金は考慮しない単純な
+シミュレーションである。あくまで「このAIの判定を機械的に採用し続けたら平均してどうだったか」
+という振り返り指標であり、個別の売買を推奨するものではない。
 """
 
 import datetime as dt
@@ -66,6 +74,7 @@ _EMPTY_RECORD = {
     "summary_by_theme": {},
     "summary_by_confidence": {},
     "streak_by_position": {},
+    "simulated_pl": {},
 }
 
 
@@ -154,6 +163,31 @@ def _classify(recommendation: str, change_pct: float) -> str:
     return "neutral"
 
 
+def _simulated_return_pct(recommendation: str, change_pct: float) -> float:
+    """判定通りに行動していた場合の仮想リターン(%)を返す。
+
+    買い候補は「判定時に買って30日後に売った」場合の値上がり率をそのまま使う。
+    売り候補・売却検討は「判定時に売った/買わなかった」場合に得をした割合なので、
+    実際の値動きの符号を反転させる（値下がりすれば得＝プラス、値上がりすれば
+    機会損失＝マイナス）。
+    """
+    if recommendation in _BULLISH:
+        return change_pct
+    return -change_pct
+
+
+def _update_simulated_pl(record: dict, recommendation: str, sim_return_pct: float) -> None:
+    bucket = record["simulated_pl"].setdefault(
+        recommendation, {"trade_count": 0, "total_return_pct": 0.0, "wins": 0, "losses": 0}
+    )
+    bucket["trade_count"] += 1
+    bucket["total_return_pct"] += sim_return_pct
+    if sim_return_pct > 0:
+        bucket["wins"] += 1
+    elif sim_return_pct < 0:
+        bucket["losses"] += 1
+
+
 def _update_streak(record: dict, position_key: str, p: dict, outcome: str) -> None:
     """指定ポジションの連続的中/連続不的中カウンタを更新する（neutralは維持も更新もしない）。"""
     if outcome == "neutral":
@@ -217,6 +251,9 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
         position_key = build_key(p["group"], p["symbol"], p.get("purchase_date"))
         _update_streak(record, position_key, p, outcome)
 
+        sim_return_pct = _simulated_return_pct(p["recommendation"], change_pct)
+        _update_simulated_pl(record, p["recommendation"], sim_return_pct)
+
         record["recent_resolved"].insert(
             0,
             {
@@ -225,6 +262,7 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
                 "price_at_resolution": price_now,
                 "change_pct": change_pct,
                 "outcome": outcome,
+                "sim_return_pct": sim_return_pct,
             },
         )
 
@@ -254,6 +292,36 @@ def _bucketed_breakdown(buckets: dict, label_key: str) -> list[dict]:
     return breakdown
 
 
+def _build_simulated_pl_summary(record: dict) -> dict:
+    """判定通りに行動し続けた場合の仮想リターンを、種別ごと・全体で集計する。"""
+    by_recommendation = []
+    total_trades = 0
+    total_return_pct = 0.0
+
+    for recommendation, bucket in record["simulated_pl"].items():
+        count = bucket["trade_count"]
+        avg = (bucket["total_return_pct"] / count) if count else None
+        by_recommendation.append(
+            {
+                "recommendation": recommendation,
+                "trade_count": count,
+                "avg_return_pct": avg,
+                "wins": bucket["wins"],
+                "losses": bucket["losses"],
+            }
+        )
+        total_trades += count
+        total_return_pct += bucket["total_return_pct"]
+
+    by_recommendation.sort(key=lambda b: b["recommendation"])
+
+    return {
+        "by_recommendation": by_recommendation,
+        "overall_trade_count": total_trades,
+        "overall_avg_return_pct": (total_return_pct / total_trades) if total_trades else None,
+    }
+
+
 def build_accuracy_summary(record: dict) -> dict:
     """レポート表示用に、判定種別・テーマ別・確信度別、および全体の的中率を集計する。"""
     breakdown = _bucketed_breakdown(record["summary"], "recommendation")
@@ -275,6 +343,7 @@ def build_accuracy_summary(record: dict) -> dict:
         "confidence_breakdown": confidence_breakdown,
         "recent_resolved": record["recent_resolved"],
         "streaks": record["streak_by_position"],
+        "simulated_pl": _build_simulated_pl_summary(record),
     }
 
 

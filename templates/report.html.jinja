@@ -500,6 +500,36 @@
       {% endfor %}
     </div>
 
+    {% if accuracy.simulated_pl.overall_trade_count %}
+    <div class="allocation-box">
+      <h3>シミュレーション損益（判定通りに行動していた場合）</h3>
+      <div class="risk-banner" style="border-left-color: var(--baseline);">
+        <strong>ℹ️ 注意:</strong>
+        「買い候補」は判定時に買って30日後に売った場合、「売り候補」「売却検討」は判定時に
+        売った/買わなかった場合の仮想リターンです。等金額・単利（複利なし）で手数料や税金は
+        考慮していません。特定の売買を推奨するものではなく、あくまで判定を機械的に採用し
+        続けた場合の振り返り指標です。
+      </div>
+      <p class="allocation-note">
+        全シグナル平均リターン（1件あたり）:
+        <strong>{{ "%+.2f"|format(accuracy.simulated_pl.overall_avg_return_pct) }}%</strong>
+        （{{ accuracy.simulated_pl.overall_trade_count }}件）
+      </p>
+      {% for s in accuracy.simulated_pl.by_recommendation %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ s.recommendation }}</span>
+        {% if s.avg_return_pct is not none %}
+        <span class="allocation-amount">
+          {{ "%+.2f"|format(s.avg_return_pct) }}%（{{ s.trade_count }}件中 プラス{{ s.wins }}・マイナス{{ s.losses }}）
+        </span>
+        {% else %}
+        <span class="allocation-amount">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     {% if accuracy.recent_resolved %}
     <details class="news-detail">
       <summary>直近の検証結果（{{ accuracy.recent_resolved|length }}件）</summary>
@@ -509,6 +539,7 @@
           {{ r.date }} {{ r.name }}（{{ r.symbol }}）: {{ r.recommendation }} →
           {{ "%+.2f"|format(r.change_pct) }}%
           {% if r.outcome == "correct" %}✅ 的中{% elif r.outcome == "incorrect" %}❌ 不的中{% else %}― 様子見扱い{% endif %}
+          {% if r.sim_return_pct is not none %}（仮想リターン {{ "%+.2f"|format(r.sim_return_pct) }}%）{% endif %}
         </li>
         {% endfor %}
       </ul>
