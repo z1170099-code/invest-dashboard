@@ -1,42 +1,6 @@
 {
   "pending": [
     {
-      "id": "holding:285A.T:2026-06-05:2026-09-02",
-      "group": "holding",
-      "symbol": "285A.T",
-      "name": "キオクシア",
-      "recommendation": "売却検討",
-      "theme": "半導体",
-      "score": null,
-      "date": "2026-09-02",
-      "price_at_prediction": 50860.0,
-      "resolve_after": "2026-09-09"
-    },
-    {
-      "id": "holding:PAYP:2026-03-19:2026-09-02",
-      "group": "holding",
-      "symbol": "PAYP",
-      "name": "PayPay Corporation",
-      "recommendation": "売却検討",
-      "theme": "フィンテック",
-      "score": null,
-      "date": "2026-09-02",
-      "price_at_prediction": 14.989999771118164,
-      "resolve_after": "2026-09-09"
-    },
-    {
-      "id": "candidate:RTX:2026-09-02",
-      "group": "candidate",
-      "symbol": "RTX",
-      "name": "RTX Corporation",
-      "recommendation": "買い候補",
-      "theme": "防衛・地政学",
-      "score": 40,
-      "date": "2026-09-02",
-      "price_at_prediction": 205.16000366210938,
-      "resolve_after": "2026-09-09"
-    },
-    {
       "id": "candidate:LMT:2026-09-03",
       "group": "candidate",
       "symbol": "LMT",
@@ -580,12 +544,77 @@
       "date": "2026-09-08",
       "price_at_prediction": 6803.0,
       "resolve_after": "2026-10-08"
+    },
+    {
+      "id": "candidate:RTX:2026-09-09",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 200.7899932861328,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-09",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 3945.0,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:LLY:2026-09-09",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 1149.3599853515625,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-09",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 3633.0,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:2914.T:2026-09-09",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 6628.0,
+      "resolve_after": "2026-10-09"
     }
   ],
   "summary": {
     "買い候補": {
       "correct": 63,
-      "incorrect": 124,
+      "incorrect": 125,
       "neutral": 46
     },
     "売り候補": {
@@ -595,11 +624,62 @@
     },
     "売却検討": {
       "correct": 12,
-      "incorrect": 14,
+      "incorrect": 16,
       "neutral": 7
     }
   },
   "recent_resolved": [
+    {
+      "id": "candidate:RTX:2026-09-02",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 40,
+      "date": "2026-09-02",
+      "price_at_prediction": 205.16000366210938,
+      "resolve_after": "2026-09-09",
+      "resolved_date": "2026-09-09",
+      "price_at_resolution": 200.7899932861328,
+      "change_pct": -2.130049862532568,
+      "outcome": "incorrect",
+      "sim_return_pct": -2.130049862532568
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-09-02",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "date": "2026-09-02",
+      "price_at_prediction": 14.989999771118164,
+      "resolve_after": "2026-09-09",
+      "resolved_date": "2026-09-09",
+      "price_at_resolution": 17.040000915527344,
+      "change_pct": 13.675791699203344,
+      "outcome": "incorrect",
+      "sim_return_pct": -13.675791699203344
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-02",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "date": "2026-09-02",
+      "price_at_prediction": 50860.0,
+      "resolve_after": "2026-09-09",
+      "resolved_date": "2026-09-09",
+      "price_at_resolution": 57690.0,
+      "change_pct": 13.429020841525752,
+      "outcome": "incorrect",
+      "sim_return_pct": -13.429020841525752
+    },
     {
       "id": "candidate:6857.T:2026-09-01",
       "group": "candidate",
@@ -888,63 +968,12 @@
       "change_pct": -3.7686809616634176,
       "outcome": "incorrect",
       "sim_return_pct": -3.7686809616634176
-    },
-    {
-      "id": "watchlist:NVDA:2026-08-29",
-      "group": "watchlist",
-      "symbol": "NVDA",
-      "name": "NVIDIA",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 65,
-      "date": "2026-08-29",
-      "price_at_prediction": 227.97999572753906,
-      "resolve_after": "2026-09-05",
-      "resolved_date": "2026-09-05",
-      "price_at_resolution": 228.4499969482422,
-      "change_pct": 0.20615897425704244,
-      "outcome": "neutral",
-      "sim_return_pct": 0.20615897425704244
-    },
-    {
-      "id": "candidate:2914.T:2026-08-29",
-      "group": "candidate",
-      "symbol": "2914.T",
-      "name": "日本たばこ産業",
-      "recommendation": "買い候補",
-      "theme": "生活必需品",
-      "score": 65,
-      "date": "2026-08-29",
-      "price_at_prediction": 7001.0,
-      "resolve_after": "2026-09-05",
-      "resolved_date": "2026-09-05",
-      "price_at_resolution": 6803.0,
-      "change_pct": -2.8281674046564786,
-      "outcome": "incorrect",
-      "sim_return_pct": -2.8281674046564786
-    },
-    {
-      "id": "candidate:8306.T:2026-08-29",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 45,
-      "date": "2026-08-29",
-      "price_at_prediction": 3608.0,
-      "resolve_after": "2026-09-05",
-      "resolved_date": "2026-09-05",
-      "price_at_resolution": 3785.0,
-      "change_pct": 4.905764966740578,
-      "outcome": "correct",
-      "sim_return_pct": 4.905764966740578
     }
   ],
   "summary_by_theme": {
     "半導体": {
       "correct": 1,
-      "incorrect": 3,
+      "incorrect": 4,
       "neutral": 2
     },
     "AI・データ分析": {
@@ -984,7 +1013,7 @@
     },
     "防衛・地政学": {
       "correct": 0,
-      "incorrect": 1,
+      "incorrect": 2,
       "neutral": 0
     },
     "半導体・AI": {
@@ -999,14 +1028,14 @@
     },
     "フィンテック": {
       "correct": 0,
-      "incorrect": 2,
+      "incorrect": 3,
       "neutral": 0
     }
   },
   "summary_by_confidence": {
     "normal": {
       "correct": 9,
-      "incorrect": 31,
+      "incorrect": 32,
       "neutral": 8
     }
   },
@@ -1034,11 +1063,38 @@
     },
     "holding:PAYP:None": {
       "outcome": "incorrect",
-      "count": 1,
+      "count": 2,
       "symbol": "PAYP",
       "name": "PayPay Corporation",
       "theme": "フィンテック"
+    },
+    "holding:285A.T:None": {
+      "outcome": "incorrect",
+      "count": 1,
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "theme": "半導体"
+    },
+    "candidate:RTX": {
+      "outcome": "incorrect",
+      "count": 1,
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "theme": "防衛・地政学"
     }
   },
-  "simulated_pl": {}
+  "simulated_pl": {
+    "売却検討": {
+      "trade_count": 2,
+      "total_return_pct": -27.104812540729096,
+      "wins": 0,
+      "losses": 2
+    },
+    "買い候補": {
+      "trade_count": 1,
+      "total_return_pct": -2.130049862532568,
+      "wins": 0,
+      "losses": 1
+    }
+  }
 }
