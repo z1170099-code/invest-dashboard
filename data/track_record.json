@@ -609,6 +609,58 @@
       "date": "2026-09-09",
       "price_at_prediction": 6628.0,
       "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "watchlist:9984.T:2026-09-09",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 6782.0,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-09",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 50,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 32960.0,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:XOM:2026-09-09",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 160.66000366210938,
+      "resolve_after": "2026-10-09"
+    },
+    {
+      "id": "candidate:SOL-USD:2026-09-09",
+      "group": "candidate",
+      "symbol": "SOL-USD",
+      "name": "ソラナ",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-09",
+      "price_at_prediction": 104.19999694824219,
+      "resolve_after": "2026-10-09"
     }
   ],
   "summary": {
