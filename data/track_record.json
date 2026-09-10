@@ -606,6 +606,71 @@
       "date": "2026-09-10",
       "price_at_prediction": 5708.0,
       "resolve_after": "2026-10-10"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-10",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-10",
+      "price_at_prediction": 33680.0,
+      "resolve_after": "2026-10-10"
+    },
+    {
+      "id": "candidate:AMD:2026-09-10",
+      "group": "candidate",
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "recommendation": "買い候補",
+      "theme": "半導体・AI",
+      "score": 60,
+      "purchase_date": null,
+      "date": "2026-09-10",
+      "price_at_prediction": 521.0999755859375,
+      "resolve_after": "2026-10-10"
+    },
+    {
+      "id": "candidate:XOM:2026-09-10",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 65,
+      "purchase_date": null,
+      "date": "2026-09-10",
+      "price_at_prediction": 164.22999572753906,
+      "resolve_after": "2026-10-10"
+    },
+    {
+      "id": "candidate:SOL-USD:2026-09-10",
+      "group": "candidate",
+      "symbol": "SOL-USD",
+      "name": "ソラナ",
+      "recommendation": "売り候補",
+      "theme": "暗号資産（現物）",
+      "score": -20,
+      "purchase_date": null,
+      "date": "2026-09-10",
+      "price_at_prediction": 101.7699966430664,
+      "resolve_after": "2026-10-10"
+    },
+    {
+      "id": "candidate:JPM:2026-09-10",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "purchase_date": null,
+      "date": "2026-09-10",
+      "price_at_prediction": 354.7099914550781,
+      "resolve_after": "2026-10-10"
     }
   ],
   "summary": {
