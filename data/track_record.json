@@ -641,6 +641,19 @@
       "date": "2026-09-11",
       "price_at_prediction": 53850.0,
       "resolve_after": "2026-10-11"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-11",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 45,
+      "purchase_date": null,
+      "date": "2026-09-11",
+      "price_at_prediction": 3981.0,
+      "resolve_after": "2026-10-11"
     }
   ],
   "summary": {
