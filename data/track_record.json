@@ -1,90 +1,6 @@
 {
   "pending": [
     {
-      "id": "candidate:LINK-USD:2026-09-06",
-      "group": "candidate",
-      "symbol": "LINK-USD",
-      "name": "チェーンリンク",
-      "recommendation": "買い候補",
-      "theme": "暗号資産（現物）",
-      "score": 35,
-      "date": "2026-09-06",
-      "price_at_prediction": 12.086000442504883,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:LLY:2026-09-06",
-      "group": "candidate",
-      "symbol": "LLY",
-      "name": "Eli Lilly and Company",
-      "recommendation": "買い候補",
-      "theme": "ヘルスケア・製薬",
-      "score": 45,
-      "date": "2026-09-06",
-      "price_at_prediction": 1149.3599853515625,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:JPM:2026-09-06",
-      "group": "candidate",
-      "symbol": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 60,
-      "date": "2026-09-06",
-      "price_at_prediction": 358.6400146484375,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:2914.T:2026-09-06",
-      "group": "candidate",
-      "symbol": "2914.T",
-      "name": "日本たばこ産業",
-      "recommendation": "買い候補",
-      "theme": "生活必需品",
-      "score": 60,
-      "date": "2026-09-06",
-      "price_at_prediction": 6803.0,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:6857.T:2026-09-06",
-      "group": "candidate",
-      "symbol": "6857.T",
-      "name": "アドバンテスト",
-      "recommendation": "買い候補",
-      "theme": "半導体",
-      "score": 35,
-      "date": "2026-09-06",
-      "price_at_prediction": 33090.0,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:4385.T:2026-09-06",
-      "group": "candidate",
-      "symbol": "4385.T",
-      "name": "メルカリ",
-      "recommendation": "買い候補",
-      "theme": "国内グロース",
-      "score": 45,
-      "date": "2026-09-06",
-      "price_at_prediction": 4443.0,
-      "resolve_after": "2026-09-13"
-    },
-    {
-      "id": "candidate:8306.T:2026-09-06",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 65,
-      "date": "2026-09-06",
-      "price_at_prediction": 3785.0,
-      "resolve_after": "2026-09-13"
-    },
-    {
       "id": "watchlist:NVDA:2026-09-07",
       "group": "watchlist",
       "symbol": "NVDA",
@@ -700,13 +616,130 @@
       "date": "2026-09-12",
       "price_at_prediction": 54030.0,
       "resolve_after": "2026-10-12"
+    },
+    {
+      "id": "watchlist:NVDA:2026-09-13",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 218.2899932861328,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:LMT:2026-09-13",
+      "group": "candidate",
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 524.1900024414062,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:RTX:2026-09-13",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 25,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 197.67999267578125,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-13",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 3930.0,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:LLY:2026-09-13",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 1115.699951171875,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-13",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 3661.0,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "holding:4063.T:2026-06-26:2026-09-13",
+      "group": "holding",
+      "symbol": "4063.T",
+      "name": "信越化学工業",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-26",
+      "date": "2026-09-13",
+      "price_at_prediction": 5738.0,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-13",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-13",
+      "price_at_prediction": 54030.0,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "holding:4385.T:2026-07-27:2026-09-13",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-09-13",
+      "price_at_prediction": 3826.0,
+      "resolve_after": "2026-10-13"
     }
   ],
   "summary": {
     "買い候補": {
       "correct": 66,
-      "incorrect": 140,
-      "neutral": 49
+      "incorrect": 146,
+      "neutral": 50
     },
     "売り候補": {
       "correct": 1,
@@ -720,6 +753,125 @@
     }
   },
   "recent_resolved": [
+    {
+      "id": "candidate:8306.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 65,
+      "date": "2026-09-06",
+      "price_at_prediction": 3785.0,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 3661.0,
+      "change_pct": -3.2760898282694795,
+      "outcome": "incorrect",
+      "sim_return_pct": -3.2760898282694795
+    },
+    {
+      "id": "candidate:4385.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "買い候補",
+      "theme": "国内グロース",
+      "score": 45,
+      "date": "2026-09-06",
+      "price_at_prediction": 4443.0,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 3826.0,
+      "change_pct": -13.887013279315774,
+      "outcome": "incorrect",
+      "sim_return_pct": -13.887013279315774
+    },
+    {
+      "id": "candidate:6857.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 35,
+      "date": "2026-09-06",
+      "price_at_prediction": 33090.0,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 31720.0,
+      "change_pct": -4.140223632517381,
+      "outcome": "incorrect",
+      "sim_return_pct": -4.140223632517381
+    },
+    {
+      "id": "candidate:2914.T:2026-09-06",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 60,
+      "date": "2026-09-06",
+      "price_at_prediction": 6803.0,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 6693.0,
+      "change_pct": -1.616933705718071,
+      "outcome": "incorrect",
+      "sim_return_pct": -1.616933705718071
+    },
+    {
+      "id": "candidate:JPM:2026-09-06",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "date": "2026-09-06",
+      "price_at_prediction": 358.6400146484375,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 356.2300109863281,
+      "change_pct": -0.6719840407300337,
+      "outcome": "neutral",
+      "sim_return_pct": -0.6719840407300337
+    },
+    {
+      "id": "candidate:LLY:2026-09-06",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 45,
+      "date": "2026-09-06",
+      "price_at_prediction": 1149.3599853515625,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 1115.699951171875,
+      "change_pct": -2.928589354830524,
+      "outcome": "incorrect",
+      "sim_return_pct": -2.928589354830524
+    },
+    {
+      "id": "candidate:LINK-USD:2026-09-06",
+      "group": "candidate",
+      "symbol": "LINK-USD",
+      "name": "チェーンリンク",
+      "recommendation": "買い候補",
+      "theme": "暗号資産（現物）",
+      "score": 35,
+      "date": "2026-09-06",
+      "price_at_prediction": 12.086000442504883,
+      "resolve_after": "2026-09-13",
+      "resolved_date": "2026-09-13",
+      "price_at_resolution": 11.496000289916992,
+      "change_pct": -4.881682367915008,
+      "outcome": "incorrect",
+      "sim_return_pct": -4.881682367915008
+    },
     {
       "id": "candidate:8306.T:2026-09-05",
       "group": "candidate",
@@ -940,131 +1092,12 @@
       "change_pct": -2.5394950538904504,
       "outcome": "incorrect",
       "sim_return_pct": -2.5394950538904504
-    },
-    {
-      "id": "candidate:LLY:2026-09-04",
-      "group": "candidate",
-      "symbol": "LLY",
-      "name": "Eli Lilly and Company",
-      "recommendation": "買い候補",
-      "theme": "ヘルスケア・製薬",
-      "score": 65,
-      "date": "2026-09-04",
-      "price_at_prediction": 1160.0799560546875,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 1124.2099609375,
-      "change_pct": -3.092027832217503,
-      "outcome": "incorrect",
-      "sim_return_pct": -3.092027832217503
-    },
-    {
-      "id": "candidate:LINK-USD:2026-09-04",
-      "group": "candidate",
-      "symbol": "LINK-USD",
-      "name": "チェーンリンク",
-      "recommendation": "買い候補",
-      "theme": "暗号資産（現物）",
-      "score": 30,
-      "date": "2026-09-04",
-      "price_at_prediction": 11.850000381469727,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 11.472999572753906,
-      "change_pct": -3.181441321346712,
-      "outcome": "incorrect",
-      "sim_return_pct": -3.181441321346712
-    },
-    {
-      "id": "watchlist:NVDA:2026-09-04",
-      "group": "watchlist",
-      "symbol": "NVDA",
-      "name": "NVIDIA",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 65,
-      "date": "2026-09-04",
-      "price_at_prediction": 224.41000366210938,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 223.6699981689453,
-      "change_pct": -0.3297560184876036,
-      "outcome": "neutral",
-      "sim_return_pct": -0.3297560184876036
-    },
-    {
-      "id": "candidate:4502.T:2026-09-03",
-      "group": "candidate",
-      "symbol": "4502.T",
-      "name": "武田薬品工業",
-      "recommendation": "買い候補",
-      "theme": "ヘルスケア・製薬",
-      "score": 65,
-      "date": "2026-09-03",
-      "price_at_prediction": 5896.0,
-      "resolve_after": "2026-09-10",
-      "resolved_date": "2026-09-10",
-      "price_at_resolution": 5595.0,
-      "change_pct": -5.105156037991854,
-      "outcome": "incorrect",
-      "sim_return_pct": -5.105156037991854
-    },
-    {
-      "id": "candidate:LINK-USD:2026-09-03",
-      "group": "candidate",
-      "symbol": "LINK-USD",
-      "name": "チェーンリンク",
-      "recommendation": "買い候補",
-      "theme": "暗号資産（現物）",
-      "score": 35,
-      "date": "2026-09-03",
-      "price_at_prediction": 11.227999687194824,
-      "resolve_after": "2026-09-10",
-      "resolved_date": "2026-09-10",
-      "price_at_resolution": 11.734999656677246,
-      "change_pct": 4.515496825856169,
-      "outcome": "correct",
-      "sim_return_pct": 4.515496825856169
-    },
-    {
-      "id": "candidate:SOL-USD:2026-09-03",
-      "group": "candidate",
-      "symbol": "SOL-USD",
-      "name": "ソラナ",
-      "recommendation": "買い候補",
-      "theme": "暗号資産（現物）",
-      "score": 35,
-      "date": "2026-09-03",
-      "price_at_prediction": 100.62000274658203,
-      "resolve_after": "2026-09-10",
-      "resolved_date": "2026-09-10",
-      "price_at_resolution": 101.12000274658203,
-      "change_pct": 0.49691908800606477,
-      "outcome": "neutral",
-      "sim_return_pct": 0.49691908800606477
-    },
-    {
-      "id": "candidate:6857.T:2026-09-03",
-      "group": "candidate",
-      "symbol": "6857.T",
-      "name": "アドバンテスト",
-      "recommendation": "買い候補",
-      "theme": "半導体",
-      "score": 45,
-      "date": "2026-09-03",
-      "price_at_prediction": 32510.0,
-      "resolve_after": "2026-09-10",
-      "resolved_date": "2026-09-10",
-      "price_at_resolution": 32930.0,
-      "change_pct": 1.291910181482625,
-      "outcome": "correct",
-      "sim_return_pct": 1.291910181482625
     }
   ],
   "summary_by_theme": {
     "半導体": {
       "correct": 2,
-      "incorrect": 6,
+      "incorrect": 7,
       "neutral": 4
     },
     "AI・データ分析": {
@@ -1079,27 +1112,27 @@
     },
     "金融": {
       "correct": 7,
-      "incorrect": 4,
-      "neutral": 3
+      "incorrect": 5,
+      "neutral": 4
     },
     "生活必需品": {
       "correct": 0,
-      "incorrect": 7,
+      "incorrect": 8,
       "neutral": 2
     },
     "暗号資産（現物）": {
       "correct": 1,
-      "incorrect": 7,
+      "incorrect": 8,
       "neutral": 1
     },
     "国内グロース": {
       "correct": 0,
-      "incorrect": 3,
+      "incorrect": 4,
       "neutral": 0
     },
     "ヘルスケア・製薬": {
       "correct": 0,
-      "incorrect": 6,
+      "incorrect": 7,
       "neutral": 0
     },
     "防衛・地政学": {
@@ -1126,13 +1159,13 @@
   "summary_by_confidence": {
     "normal": {
       "correct": 12,
-      "incorrect": 40,
+      "incorrect": 44,
       "neutral": 10
     },
     "high": {
       "correct": 0,
-      "incorrect": 7,
-      "neutral": 1
+      "incorrect": 9,
+      "neutral": 2
     }
   },
   "streak_by_position": {
@@ -1145,14 +1178,14 @@
     },
     "candidate:8306.T": {
       "outcome": "incorrect",
-      "count": 3,
+      "count": 4,
       "symbol": "8306.T",
       "name": "三菱UFJフィナンシャル・グループ",
       "theme": "金融"
     },
     "candidate:2914.T": {
       "outcome": "incorrect",
-      "count": 4,
+      "count": 5,
       "symbol": "2914.T",
       "name": "日本たばこ産業",
       "theme": "生活必需品"
@@ -1187,21 +1220,21 @@
     },
     "candidate:LLY": {
       "outcome": "incorrect",
-      "count": 2,
+      "count": 3,
       "symbol": "LLY",
       "name": "Eli Lilly and Company",
       "theme": "ヘルスケア・製薬"
     },
     "candidate:6857.T": {
       "outcome": "incorrect",
-      "count": 1,
+      "count": 2,
       "symbol": "6857.T",
       "name": "アドバンテスト",
       "theme": "半導体"
     },
     "candidate:LINK-USD": {
       "outcome": "incorrect",
-      "count": 1,
+      "count": 2,
       "symbol": "LINK-USD",
       "name": "チェーンリンク",
       "theme": "暗号資産（現物）"
@@ -1233,6 +1266,13 @@
       "symbol": "XOM",
       "name": "Exxon Mobil",
       "theme": "資源・エネルギー"
+    },
+    "candidate:4385.T": {
+      "outcome": "incorrect",
+      "count": 1,
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "theme": "国内グロース"
     }
   },
   "simulated_pl": {
@@ -1243,10 +1283,10 @@
       "losses": 6
     },
     "買い候補": {
-      "trade_count": 22,
-      "total_return_pct": -40.97657793065573,
+      "trade_count": 29,
+      "total_return_pct": -72.379094139952,
       "wins": 5,
-      "losses": 17
+      "losses": 24
     }
   }
 }
