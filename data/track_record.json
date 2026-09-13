@@ -733,6 +733,45 @@
       "date": "2026-09-13",
       "price_at_prediction": 3826.0,
       "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "watchlist:9984.T:2026-09-13",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 6540.0,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:TSM:2026-09-13",
+      "group": "candidate",
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 433.239990234375,
+      "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:2914.T:2026-09-13",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-13",
+      "price_at_prediction": 6693.0,
+      "resolve_after": "2026-10-13"
     }
   ],
   "summary": {
