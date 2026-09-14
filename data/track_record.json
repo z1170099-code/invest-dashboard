@@ -788,6 +788,71 @@
       "date": "2026-09-14",
       "price_at_prediction": 49140.0,
       "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "watchlist:AAPL:2026-09-14",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 332.2699890136719,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "candidate:SOUN:2026-09-14",
+      "group": "candidate",
+      "symbol": "SOUN",
+      "name": "SoundHound AI",
+      "recommendation": "売り候補",
+      "theme": "AI（小型成長株）",
+      "score": -70,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 6.260000228881836,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "candidate:RTX:2026-09-14",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 197.67999267578125,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "candidate:XOM:2026-09-14",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 165.99000549316406,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "candidate:JPM:2026-09-14",
+      "group": "candidate",
+      "symbol": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 356.2300109863281,
+      "resolve_after": "2026-10-14"
     }
   ],
   "summary": {
