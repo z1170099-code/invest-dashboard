@@ -1,42 +1,6 @@
 {
   "pending": [
     {
-      "id": "watchlist:NVDA:2026-09-07",
-      "group": "watchlist",
-      "symbol": "NVDA",
-      "name": "NVIDIA",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 45,
-      "date": "2026-09-07",
-      "price_at_prediction": 230.36000061035156,
-      "resolve_after": "2026-09-14"
-    },
-    {
-      "id": "candidate:4502.T:2026-09-07",
-      "group": "candidate",
-      "symbol": "4502.T",
-      "name": "武田薬品工業",
-      "recommendation": "買い候補",
-      "theme": "ヘルスケア・製薬",
-      "score": 35,
-      "date": "2026-09-07",
-      "price_at_prediction": 5777.0,
-      "resolve_after": "2026-09-14"
-    },
-    {
-      "id": "candidate:8306.T:2026-09-07",
-      "group": "candidate",
-      "symbol": "8306.T",
-      "name": "三菱UFJフィナンシャル・グループ",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 60,
-      "date": "2026-09-07",
-      "price_at_prediction": 3717.0,
-      "resolve_after": "2026-09-14"
-    },
-    {
       "id": "watchlist:NVDA:2026-09-08",
       "group": "watchlist",
       "symbol": "NVDA",
@@ -772,13 +736,65 @@
       "date": "2026-09-13",
       "price_at_prediction": 6693.0,
       "resolve_after": "2026-10-13"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-14",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 4077.0,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "candidate:8306.T:2026-09-14",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-14",
+      "price_at_prediction": 3705.0,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "holding:4063.T:2026-06-26:2026-09-14",
+      "group": "holding",
+      "symbol": "4063.T",
+      "name": "信越化学工業",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-26",
+      "date": "2026-09-14",
+      "price_at_prediction": 5644.0,
+      "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-14",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-14",
+      "price_at_prediction": 49140.0,
+      "resolve_after": "2026-10-14"
     }
   ],
   "summary": {
     "買い候補": {
       "correct": 66,
-      "incorrect": 146,
-      "neutral": 50
+      "incorrect": 148,
+      "neutral": 51
     },
     "売り候補": {
       "correct": 1,
@@ -792,6 +808,57 @@
     }
   },
   "recent_resolved": [
+    {
+      "id": "candidate:8306.T:2026-09-07",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 60,
+      "date": "2026-09-07",
+      "price_at_prediction": 3717.0,
+      "resolve_after": "2026-09-14",
+      "resolved_date": "2026-09-14",
+      "price_at_resolution": 3705.0,
+      "change_pct": -0.32284100080710587,
+      "outcome": "neutral",
+      "sim_return_pct": -0.32284100080710587
+    },
+    {
+      "id": "candidate:4502.T:2026-09-07",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 35,
+      "date": "2026-09-07",
+      "price_at_prediction": 5777.0,
+      "resolve_after": "2026-09-14",
+      "resolved_date": "2026-09-14",
+      "price_at_resolution": 5712.0,
+      "change_pct": -1.125151462696905,
+      "outcome": "incorrect",
+      "sim_return_pct": -1.125151462696905
+    },
+    {
+      "id": "watchlist:NVDA:2026-09-07",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 45,
+      "date": "2026-09-07",
+      "price_at_prediction": 230.36000061035156,
+      "resolve_after": "2026-09-14",
+      "resolved_date": "2026-09-14",
+      "price_at_resolution": 218.2899932861328,
+      "change_pct": -5.239628100468218,
+      "outcome": "incorrect",
+      "sim_return_pct": -5.239628100468218
+    },
     {
       "id": "candidate:8306.T:2026-09-06",
       "group": "candidate",
@@ -1080,57 +1147,6 @@
       "change_pct": -1.6087238505711698,
       "outcome": "incorrect",
       "sim_return_pct": -1.6087238505711698
-    },
-    {
-      "id": "holding:PAYP:2026-03-19:2026-09-04",
-      "group": "holding",
-      "symbol": "PAYP",
-      "name": "PayPay Corporation",
-      "recommendation": "売却検討",
-      "theme": "フィンテック",
-      "score": null,
-      "date": "2026-09-04",
-      "price_at_prediction": 15.729999542236328,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 17.579999923706055,
-      "change_pct": 11.76096907379003,
-      "outcome": "incorrect",
-      "sim_return_pct": -11.76096907379003
-    },
-    {
-      "id": "holding:285A.T:2026-06-05:2026-09-04",
-      "group": "holding",
-      "symbol": "285A.T",
-      "name": "キオクシア",
-      "recommendation": "売却検討",
-      "theme": "半導体",
-      "score": null,
-      "date": "2026-09-04",
-      "price_at_prediction": 53580.0,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 53850.0,
-      "change_pct": 0.50391937290033,
-      "outcome": "neutral",
-      "sim_return_pct": -0.50391937290033
-    },
-    {
-      "id": "candidate:2914.T:2026-09-04",
-      "group": "candidate",
-      "symbol": "2914.T",
-      "name": "日本たばこ産業",
-      "recommendation": "買い候補",
-      "theme": "生活必需品",
-      "score": 45,
-      "date": "2026-09-04",
-      "price_at_prediction": 6773.0,
-      "resolve_after": "2026-09-11",
-      "resolved_date": "2026-09-11",
-      "price_at_resolution": 6601.0,
-      "change_pct": -2.5394950538904504,
-      "outcome": "incorrect",
-      "sim_return_pct": -2.5394950538904504
     }
   ],
   "summary_by_theme": {
@@ -1152,7 +1168,7 @@
     "金融": {
       "correct": 7,
       "incorrect": 5,
-      "neutral": 4
+      "neutral": 5
     },
     "生活必需品": {
       "correct": 0,
@@ -1171,7 +1187,7 @@
     },
     "ヘルスケア・製薬": {
       "correct": 0,
-      "incorrect": 7,
+      "incorrect": 8,
       "neutral": 0
     },
     "防衛・地政学": {
@@ -1198,13 +1214,13 @@
   "summary_by_confidence": {
     "normal": {
       "correct": 12,
-      "incorrect": 44,
+      "incorrect": 46,
       "neutral": 10
     },
     "high": {
       "correct": 0,
       "incorrect": 9,
-      "neutral": 2
+      "neutral": 3
     }
   },
   "streak_by_position": {
@@ -1280,14 +1296,14 @@
     },
     "candidate:4502.T": {
       "outcome": "incorrect",
-      "count": 1,
+      "count": 2,
       "symbol": "4502.T",
       "name": "武田薬品工業",
       "theme": "ヘルスケア・製薬"
     },
     "watchlist:NVDA": {
       "outcome": "incorrect",
-      "count": 1,
+      "count": 2,
       "symbol": "NVDA",
       "name": "NVIDIA",
       "theme": null
@@ -1322,10 +1338,10 @@
       "losses": 6
     },
     "買い候補": {
-      "trade_count": 29,
-      "total_return_pct": -72.379094139952,
+      "trade_count": 32,
+      "total_return_pct": -79.06671470392423,
       "wins": 5,
-      "losses": 24
+      "losses": 27
     }
   }
 }
