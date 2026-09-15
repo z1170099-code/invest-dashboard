@@ -853,6 +853,71 @@
       "date": "2026-09-14",
       "price_at_prediction": 356.2300109863281,
       "resolve_after": "2026-10-14"
+    },
+    {
+      "id": "watchlist:AAPL:2026-09-15",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-15",
+      "price_at_prediction": 332.2699890136719,
+      "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-15",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-15",
+      "price_at_prediction": 3930.0,
+      "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "candidate:XOM:2026-09-15",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 25,
+      "purchase_date": null,
+      "date": "2026-09-15",
+      "price_at_prediction": 165.99000549316406,
+      "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "candidate:2914.T:2026-09-15",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 40,
+      "purchase_date": null,
+      "date": "2026-09-15",
+      "price_at_prediction": 6756.0,
+      "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-15",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-15",
+      "price_at_prediction": 51560.0,
+      "resolve_after": "2026-10-15"
     }
   ],
   "summary": {
