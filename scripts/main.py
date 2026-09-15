@@ -86,10 +86,12 @@ def main() -> None:
     candidate_pool = _load_yaml(_CONFIG_DIR / "candidate_pool.yaml")
     portfolio = _load_yaml(_CONFIG_DIR / "portfolio.yaml")
     news_config = _load_yaml(_CONFIG_DIR / "news_sources.yaml")
+    tsumitate_config = _load_yaml(_CONFIG_DIR / "nisa_tsumitate.yaml")
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
     holdings = portfolio.get("holdings", []) if portfolio else []
+    tsumitate_entries = (tsumitate_config or {}).get("tsumitate", [])
 
     if not tickers:
         raise RuntimeError("config/watchlist.yaml に銘柄が1件も登録されていません。")
@@ -159,6 +161,7 @@ def main() -> None:
         accuracy_summary,
         _TEMPLATES_DIR,
         _OUTPUT_PATH,
+        tsumitate_entries,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で

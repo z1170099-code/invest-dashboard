@@ -21,7 +21,13 @@ def test_build_reflection_section_includes_previous_details():
 
 
 def test_describe_trend_low_accuracy_warns():
-    assert "外れやすい" in analyze._describe_trend(30)
+    assert "外れやすい" in analyze._describe_trend(40)
+
+
+def test_describe_trend_severely_low_accuracy_warns_more_strongly():
+    text = analyze._describe_trend(30)
+    assert "偶然" in text
+    assert "外れやすい" not in text  # より強い警告文言に置き換わっている
 
 
 def test_describe_trend_high_accuracy_praises():
@@ -98,6 +104,33 @@ def test_build_accuracy_section_includes_matching_theme_only():
 
     non_matching = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"}, "資源・エネルギー")
     assert non_matching == ""
+
+
+def test_build_accuracy_section_warns_when_high_confidence_underperforms_normal():
+    summary = {
+        "breakdown": [],
+        "confidence_breakdown": [
+            {"confidence": "high", "correct": 0, "incorrect": 9, "neutral": 3, "accuracy_pct": 0.0, "sample_size": 9},
+            {"confidence": "normal", "correct": 12, "incorrect": 46, "neutral": 10, "accuracy_pct": 20.7, "sample_size": 58},
+        ],
+        "theme_breakdown": [],
+    }
+    section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"})
+    assert "警告" in section
+    assert "確信度スコアが実際の正しさを反映できていない" in section
+
+
+def test_build_accuracy_section_no_warning_when_high_confidence_outperforms_normal():
+    summary = {
+        "breakdown": [],
+        "confidence_breakdown": [
+            {"confidence": "high", "correct": 8, "incorrect": 2, "neutral": 0, "accuracy_pct": 80.0, "sample_size": 10},
+            {"confidence": "normal", "correct": 3, "incorrect": 7, "neutral": 0, "accuracy_pct": 30.0, "sample_size": 10},
+        ],
+        "theme_breakdown": [],
+    }
+    section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"})
+    assert "警告" not in section
 
 
 def test_build_accuracy_section_no_theme_arg_omits_theme_line():

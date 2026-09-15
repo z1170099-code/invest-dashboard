@@ -36,6 +36,12 @@ _SYSTEM_INSTRUCTION = """\
 - 3ヶ月・6ヶ月・1年騰落率など中長期のトレンドを、判断の主たる根拠にしてください。
 - 短期的な値動き（数日単位のプラス/マイナス）だけを理由に、中長期のトレンドと矛盾する
   判断をしないよう注意してください。
+- |スコア|60以上の「確信度が高い」判定は、中長期トレンド・ニュース内容・マクロ経済動向のうち
+  複数の独立した根拠が同じ方向を示している場合に限定してください。直近の値上がり/値下がりの
+  勢いが強いという理由だけで高いスコアを付けるのは避けてください（過去の実績上、確信度が
+  高い判定ほど的中率が低いという逆転現象が確認されており、モメンタムへの過信が一因と
+  考えられます）。根拠が弱い、あるいは材料が入り混じっている場合は、無理に「買い候補」
+  「売り候補」と判定せず「様子見」を選んでください。
 
 厳守事項:
 - あなたの出力は投資助言ではなく、あくまで個人が判断材料として参考にするための情報整理です。
@@ -115,6 +121,8 @@ def _build_reflection_section(previous: dict | None, latest_close) -> str:
 
 
 def _describe_trend(accuracy_pct: float) -> str:
+    if accuracy_pct < 35:
+        return "偶然（五分五分）よりも明確に悪い結果であり、判断の根拠を根本的に見直す必要があります。"
     if accuracy_pct < 50:
         return "外れやすい傾向があるため、判断の重み付けを見直してください。"
     if accuracy_pct >= 70:
@@ -161,9 +169,11 @@ def _build_accuracy_section(
                 f"（的中率{b['accuracy_pct']:.0f}%）。{_describe_trend(b['accuracy_pct'])}"
             )
 
+    confidence_rows = {}
     for c in accuracy_summary.get("confidence_breakdown", []):
         if c["sample_size"] < _MIN_SAMPLE_FOR_PROMPT:
             continue
+        confidence_rows[c["confidence"]] = c
         label = (
             f"確信度が高い判定（|スコア|{HIGH_CONFIDENCE_ABS_SCORE}以上）"
             if c["confidence"] == "high"
@@ -172,6 +182,23 @@ def _build_accuracy_section(
         lines.append(
             f"- {label}: 過去{c['sample_size']}件中{c['correct']}件が的中"
             f"（的中率{c['accuracy_pct']:.0f}%）。{_describe_trend(c['accuracy_pct'])}"
+        )
+
+    high_row = confidence_rows.get("high")
+    normal_row = confidence_rows.get("normal")
+    if (
+        high_row
+        and normal_row
+        and high_row["accuracy_pct"] is not None
+        and normal_row["accuracy_pct"] is not None
+        and high_row["accuracy_pct"] < normal_row["accuracy_pct"]
+    ):
+        lines.append(
+            "- 警告: 確信度が高い判定の的中率（"
+            f"{high_row['accuracy_pct']:.0f}%）が、通常の確信度の判定（{normal_row['accuracy_pct']:.0f}%）"
+            "より低くなっています。確信度スコアが実際の正しさを反映できていないということです。"
+            "直近の値動きの勢いが強いというだけの理由で高いスコアを付けるのは避け、"
+            "根拠が弱い場合は無理に高いスコアを付けないでください。"
         )
 
     if theme:

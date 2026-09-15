@@ -500,6 +500,27 @@
       {% endfor %}
     </div>
 
+    {% if accuracy.accuracy_since_improvement.sample_size %}
+    <div class="allocation-box">
+      <h3>改善施策後の的中率（{{ accuracy.accuracy_since_improvement.cohort_start }}以降に記録した判定のみ）</h3>
+      <div class="risk-banner" style="border-left-color: var(--baseline);">
+        <strong>ℹ️ 注意:</strong>
+        判定の確定には30日かかるため、上の「全体の的中率」には検証期間の延長・確信度基準の
+        見直し・銘柄別の連続外れ検知といった改善策の導入前に記録された判定が多く含まれ、
+        改善の効果がすぐには反映されません。ここでは改善策の導入日以降に記録された判定だけを
+        別集計し、実際に効果が出ているかを早めに確認できるようにしています。
+      </div>
+      <div class="score-row">
+        <div class="score-value">{{ "%.0f"|format(accuracy.accuracy_since_improvement.accuracy_pct) }}%</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.accuracy_since_improvement.accuracy_pct }}%;"></div></div>
+      </div>
+      <p class="allocation-note">
+        検証済み {{ accuracy.accuracy_since_improvement.sample_size }}件
+        （様子見扱い{{ accuracy.accuracy_since_improvement.neutral }}件を除く）
+      </p>
+    </div>
+    {% endif %}
+
     {% if accuracy.simulated_pl.overall_trade_count %}
     <div class="allocation-box">
       <h3>シミュレーション損益（判定通りに行動していた場合）</h3>
@@ -708,7 +729,7 @@
         <span class="allocation-amount">¥{{ "{:,.0f}".format(nisa_usage.annual_used) }} / ¥{{ "{:,.0f}".format(nisa_usage.annual_limit) }}</span>
       </div>
       <div class="allocation-row">
-        <span class="allocation-label">生涯投資枠（累計）</span>
+        <span class="allocation-label">生涯投資枠（成長投資枠の上限1,200万円分）</span>
         <div class="score-track"><div class="score-fill" style="width: {{ nisa_usage.lifetime_pct }}%;"></div></div>
         <span class="allocation-amount">¥{{ "{:,.0f}".format(nisa_usage.lifetime_used) }} / ¥{{ "{:,.0f}".format(nisa_usage.lifetime_limit) }}</span>
       </div>
@@ -717,6 +738,66 @@
         正式な枠の消化状況は必ず証券会社側でご確認ください。
         {% if nisa_usage.excluded_count %}投資金額が未入力の保有銘柄が{{ nisa_usage.excluded_count }}件あり、この集計から除外されています。{% endif %}
       </p>
+    </div>
+    {% endif %}
+
+    {% if tsumitate_usage %}
+    <div class="allocation-box">
+      <h3>NISAつみたて投資枠の使用状況（概算）</h3>
+      <div class="allocation-row">
+        <span class="allocation-label">{{ tsumitate_usage.current_year }}年の年間枠</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ tsumitate_usage.annual_pct }}%;"></div></div>
+        <span class="allocation-amount">¥{{ "{:,.0f}".format(tsumitate_usage.annual_used) }} / ¥{{ "{:,.0f}".format(tsumitate_usage.annual_limit) }}</span>
+      </div>
+      <div class="allocation-row">
+        <span class="allocation-label">生涯投資枠 合計（成長投資枠＋つみたて投資枠）</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ tsumitate_usage.combined_lifetime_pct }}%;"></div></div>
+        <span class="allocation-amount">¥{{ "{:,.0f}".format(tsumitate_usage.combined_lifetime_used) }} / ¥{{ "{:,.0f}".format(tsumitate_usage.combined_lifetime_limit) }}</span>
+      </div>
+
+      {% if tsumitate_usage.suggested_monthly_to_fill_annual %}
+      <p class="allocation-note">
+        {% if tsumitate_usage.has_entries %}
+        今のペースのまま{{ tsumitate_usage.current_year }}年の年間枠（120万円）を使い切るには、
+        {% else %}
+        まだ積立の登録がありません。仮に今から{{ tsumitate_usage.current_year }}年の年間枠（120万円）を
+        使い切ろうとする場合、
+        {% endif %}
+        残り{{ tsumitate_usage.months_remaining_this_year }}ヶ月、月あたり目安
+        <strong>¥{{ "{:,.0f}".format(tsumitate_usage.suggested_monthly_to_fill_annual) }}</strong>
+        の積立が必要な計算になります（単純な残り枠÷残り月数の目安であり、必ず埋めるべきという
+        意味ではありません）。
+      </p>
+      {% endif %}
+
+      <div class="risk-banner" style="border-left-color: var(--baseline);">
+        <strong>ℹ️ 注意:</strong>
+        <code>config/nisa_tsumitate.yaml</code> に登録した積立設定（開始日・月額）のみに基づく
+        概算です。証券会社側の正式な消化額とは異なる場合があるため、必ず証券会社側でご確認ください。
+        年間枠を使い切ることを推奨するものではなく、あくまで目安の計算です。
+        {% if tsumitate_usage.excluded_count %}日付や金額が不正な登録が{{ tsumitate_usage.excluded_count }}件あり、この集計から除外されています。{% endif %}
+      </div>
+
+      <details class="news-detail">
+        <summary>つみたて投資枠の対象になりやすいファンドの種類（一般的な分類の例）</summary>
+        <p class="allocation-note">
+          特定の商品名を推奨するものではなく、あくまで一般的に知られている資産クラスの
+          分類です。実際にどれを選ぶかは、ご自身のリスク許容度や目的に応じて証券会社等で
+          ご確認ください。
+        </p>
+        <ul>
+          <li><strong>全世界株式（オール・カントリー）型</strong>: 先進国・新興国を含む世界中の株式に、
+            1本でまとめて分散投資するタイプ。特定の国・地域への依存度を下げたい場合に選ばれます。</li>
+          <li><strong>米国株式（S&amp;P500など）型</strong>: 米国の主要企業に集中投資するタイプ。
+            過去の実績は良好な一方、米国一国への集中度が高くなります。</li>
+          <li><strong>先進国株式型</strong>: 米国を含む先進国の株式に分散投資するタイプ。
+            新興国を含む全世界型より値動きがやや穏やかになりやすい傾向があります。</li>
+          <li><strong>バランス型</strong>: 株式だけでなく債券・REIT等にも分散するタイプ。
+            値動きの幅を抑えたい場合に選ばれますが、期待リターンも抑えめになりやすい傾向があります。</li>
+          <li><strong>国内株式型</strong>: 日本国内の株式に投資するタイプ。為替変動の影響を受けにくい
+            一方、日本経済への依存度が高くなります。</li>
+        </ul>
+      </details>
     </div>
     {% endif %}
 

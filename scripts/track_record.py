@@ -36,6 +36,12 @@ resolve_predictions実行のたびに更新・永続化する。
 そのままリターンとみなす、等金額・単利（複利しない）・手数料や税金は考慮しない単純な
 シミュレーションである。あくまで「このAIの判定を機械的に採用し続けたら平均してどうだったか」
 という振り返り指標であり、個別の売買を推奨するものではない。
+
+なお、判定から解決まで30日かかるため、検証期間の延長・確信度閾値の引き下げ・銘柄別連続記録の
+フィードバックといった改善施策を導入しても、その効果は全期間の的中率にはすぐ反映されない
+（改善前に記録された判定がまだ大量に残っているため）。そこで、施策導入日
+（_IMPROVEMENT_COHORT_START）以降に記録された判定だけの的中率も別途集計
+（summary_since_improvement）し、改善が実際に効いているかをより早く確認できるようにしている。
 """
 
 import datetime as dt
@@ -67,6 +73,13 @@ HIGH_CONFIDENCE_ABS_SCORE = 60
 # 1回だけでは既存の反省機能（前回1件の振り返り）と情報が重複するため、2回以上を対象にする。
 MIN_STREAK_FOR_PROMPT = 2
 
+# 検証期間の30日延長・確信度閾値の引き下げ・銘柄別連続記録フィードバックを導入した日。
+# 判定から解決まで30日かかるため、この日以降に「記録」された判定でなければ、これらの
+# 改善の効果は反映されていない。全期間の的中率だけを見ると改善前の判定に引きずられて
+# 低く出続けてしまうため、この日以降に記録された判定だけの的中率も別途集計し、
+# 「改善が実際に効いているか」を全期間より早く確認できるようにしている。
+_IMPROVEMENT_COHORT_START = "2026-09-08"
+
 _EMPTY_RECORD = {
     "pending": [],
     "summary": {},
@@ -75,6 +88,7 @@ _EMPTY_RECORD = {
     "summary_by_confidence": {},
     "streak_by_position": {},
     "simulated_pl": {},
+    "summary_since_improvement": {},
 }
 
 
@@ -233,6 +247,10 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
         )
         bucket[outcome] += 1
 
+        if p.get("date", "") >= _IMPROVEMENT_COHORT_START:
+            since_bucket = record["summary_since_improvement"]
+            since_bucket[outcome] = since_bucket.get(outcome, 0) + 1
+
         theme = p.get("theme")
         if theme:
             theme_bucket = record["summary_by_theme"].setdefault(
@@ -322,6 +340,23 @@ def _build_simulated_pl_summary(record: dict) -> dict:
     }
 
 
+def _build_accuracy_since_improvement(record: dict) -> dict:
+    """改善施策（30日検証・確信度60・銘柄別連続記録）導入日以降に記録された判定だけの的中率。"""
+    bucket = record.get("summary_since_improvement", {})
+    correct = bucket.get("correct", 0)
+    incorrect = bucket.get("incorrect", 0)
+    neutral = bucket.get("neutral", 0)
+    scored = correct + incorrect
+    return {
+        "cohort_start": _IMPROVEMENT_COHORT_START,
+        "correct": correct,
+        "incorrect": incorrect,
+        "neutral": neutral,
+        "accuracy_pct": (correct / scored * 100) if scored else None,
+        "sample_size": scored,
+    }
+
+
 def build_accuracy_summary(record: dict) -> dict:
     """レポート表示用に、判定種別・テーマ別・確信度別、および全体の的中率を集計する。"""
     breakdown = _bucketed_breakdown(record["summary"], "recommendation")
@@ -344,6 +379,7 @@ def build_accuracy_summary(record: dict) -> dict:
         "recent_resolved": record["recent_resolved"],
         "streaks": record["streak_by_position"],
         "simulated_pl": _build_simulated_pl_summary(record),
+        "accuracy_since_improvement": _build_accuracy_since_improvement(record),
     }
 
 

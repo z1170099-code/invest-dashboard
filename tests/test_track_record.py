@@ -438,3 +438,50 @@ def test_build_simulated_pl_summary_handles_empty():
     assert sim["overall_trade_count"] == 0
     assert sim["overall_avg_return_pct"] is None
     assert sim["by_recommendation"] == []
+
+
+def test_resolve_predictions_counts_since_improvement_when_recorded_after_cutoff():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry(date="2026-09-10")]  # cutoffは2026-09-08
+    tr.resolve_predictions(record, {"AAA": 110})  # +10% -> correct
+
+    assert record["summary_since_improvement"] == {"correct": 1}
+
+
+def test_resolve_predictions_ignores_since_improvement_when_recorded_before_cutoff():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry(date="2026-01-01")]  # cutoffより前
+    tr.resolve_predictions(record, {"AAA": 90})  # -10% -> incorrect
+
+    assert record["summary_since_improvement"] == {}
+    # 全期間の集計には引き続き反映される
+    assert record["summary"]["買い候補"]["incorrect"] == 1
+
+
+def test_build_accuracy_since_improvement_computes_accuracy_pct():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry(symbol="AAA", date="2026-09-10")]
+    tr.resolve_predictions(record, {"AAA": 110})  # correct
+    record["pending"] = [_pending_entry(symbol="BBB", date="2026-09-11")]
+    tr.resolve_predictions(record, {"BBB": 90})  # incorrect
+    record["pending"] = [_pending_entry(symbol="CCC", date="2026-09-12")]
+    tr.resolve_predictions(record, {"CCC": 100.3})  # neutral
+
+    summary = tr.build_accuracy_summary(record)
+    since = summary["accuracy_since_improvement"]
+    assert since["cohort_start"] == "2026-09-08"
+    assert since["correct"] == 1
+    assert since["incorrect"] == 1
+    assert since["neutral"] == 1
+    assert since["sample_size"] == 2
+    assert round(since["accuracy_pct"], 2) == 50.0
+
+
+def test_build_accuracy_since_improvement_handles_empty():
+    summary = tr.build_accuracy_summary(tr._empty_record())
+    since = summary["accuracy_since_improvement"]
+    assert since["sample_size"] == 0
+    assert since["accuracy_pct"] is None
+    assert since["correct"] == 0
+    assert since["incorrect"] == 0
+    assert since["neutral"] == 0

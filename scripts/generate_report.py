@@ -28,6 +28,10 @@ _HOLDING_STATUS_MAP = {
 _NISA_ANNUAL_GROWTH_LIMIT = 2_400_000
 _NISA_LIFETIME_GROWTH_LIMIT = 12_000_000
 
+# NISAつみたて投資枠の年間上限、および成長投資枠と合算した生涯の総枠上限。
+_NISA_ANNUAL_TSUMITATE_LIMIT = 1_200_000
+_NISA_LIFETIME_TOTAL_LIMIT = 18_000_000
+
 
 def _fmt_pct(value) -> str:
     if not isinstance(value, (int, float)):
@@ -189,6 +193,72 @@ def _build_nisa_usage(portfolio_results: list[dict]) -> dict | None:
     }
 
 
+def _parse_date(value) -> dt.date | None:
+    if not value:
+        return None
+    try:
+        return dt.date.fromisoformat(str(value))
+    except ValueError:
+        return None
+
+
+def _months_overlap(range_start: dt.date, range_end: dt.date, entry_start: dt.date, entry_end: dt.date) -> int:
+    """[range_start, range_end]と[entry_start, entry_end]が重なる月数（両端の月を含む）を数える。"""
+    lo = max(range_start, entry_start)
+    hi = min(range_end, entry_end)
+    if lo > hi:
+        return 0
+    return (hi.year - lo.year) * 12 + (hi.month - lo.month) + 1
+
+
+def _build_tsumitate_usage(entries: list[dict], growth_lifetime_used: float) -> dict:
+    """つみたて投資枠の使用状況（年間・生涯）と、年内に年間枠を使い切るための月額目安を計算する。
+
+    config/nisa_tsumitate.yamlの積立設定（開始日・月額）から概算する。証券会社側の
+    正式な消化額とは異なる場合がある。まだ積立を始めていない場合（entriesが空）でも、
+    月額目安は「0円から始めた場合の目安」として意味があるため、Noneは返さず常に計算する。
+    """
+    today = dt.datetime.now(tz=_JST).date()
+    year_start = dt.date(today.year, 1, 1)
+
+    annual_used = 0.0
+    lifetime_used = 0.0
+    excluded_count = 0
+
+    for e in entries:
+        amount = e.get("monthly_amount_jpy")
+        start = _parse_date(e.get("start_date"))
+        if not isinstance(amount, (int, float)) or start is None:
+            excluded_count += 1
+            continue
+        end = _parse_date(e.get("end_date")) or today
+
+        lifetime_used += _months_overlap(start, today, start, end) * amount
+        annual_used += _months_overlap(year_start, today, start, end) * amount
+
+    remaining_annual = max(0.0, _NISA_ANNUAL_TSUMITATE_LIMIT - annual_used)
+    months_remaining = 12 - today.month + 1  # 今月を含めた年末までの残り月数
+    suggested_monthly = (remaining_annual / months_remaining) if months_remaining > 0 else None
+
+    combined_lifetime_used = lifetime_used + growth_lifetime_used
+
+    return {
+        "current_year": today.year,
+        "annual_used": annual_used,
+        "annual_limit": _NISA_ANNUAL_TSUMITATE_LIMIT,
+        "annual_pct": min(100, annual_used / _NISA_ANNUAL_TSUMITATE_LIMIT * 100),
+        "lifetime_used": lifetime_used,
+        "combined_lifetime_used": combined_lifetime_used,
+        "combined_lifetime_limit": _NISA_LIFETIME_TOTAL_LIMIT,
+        "combined_lifetime_pct": min(100, combined_lifetime_used / _NISA_LIFETIME_TOTAL_LIMIT * 100),
+        "months_remaining_this_year": max(0, months_remaining),
+        "remaining_annual": remaining_annual,
+        "suggested_monthly_to_fill_annual": suggested_monthly,
+        "has_entries": bool(entries),
+        "excluded_count": excluded_count,
+    }
+
+
 def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
     buy_list = sorted(
         (t for t in combined if t["recommendation"] == "買い候補"),
@@ -209,6 +279,7 @@ def generate_report(
     accuracy_summary: dict,
     templates_dir: Path,
     output_path: Path,
+    tsumitate_entries: list[dict] | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -222,6 +293,9 @@ def generate_report(
     summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
     theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
     nisa_usage = _build_nisa_usage(portfolio_results)
+    tsumitate_usage = _build_tsumitate_usage(
+        tsumitate_entries or [], nisa_usage["lifetime_used"] if nisa_usage else 0.0
+    )
 
     # 暗号資産（現物）は株式と資産クラスが異なるため、専用セクションに分けて表示する。
     crypto_view = [v for v in candidate_view if v["market"] == "暗号資産"]
@@ -243,6 +317,7 @@ def generate_report(
         theme_allocation=theme_allocation,
         theme_allocation_excluded_count=theme_allocation_excluded_count,
         nisa_usage=nisa_usage,
+        tsumitate_usage=tsumitate_usage,
         accuracy=accuracy_summary,
         generated_at=generated_at,
     )
