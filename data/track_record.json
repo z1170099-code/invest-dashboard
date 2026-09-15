@@ -957,6 +957,19 @@
       "date": "2026-09-15",
       "price_at_prediction": 18.68000030517578,
       "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "holding:7011.T:2026-07-16:2026-09-15",
+      "group": "holding",
+      "symbol": "7011.T",
+      "name": "三菱重工業",
+      "recommendation": "売却検討",
+      "theme": "防衛・地政学",
+      "score": null,
+      "purchase_date": "2026-07-16",
+      "date": "2026-09-15",
+      "price_at_prediction": 3614.0,
+      "resolve_after": "2026-10-15"
     }
   ],
   "summary": {
