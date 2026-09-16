@@ -970,6 +970,58 @@
       "date": "2026-09-15",
       "price_at_prediction": 3614.0,
       "resolve_after": "2026-10-15"
+    },
+    {
+      "id": "candidate:1605.T:2026-09-16",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-09-16",
+      "price_at_prediction": 4040.0,
+      "resolve_after": "2026-10-16"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-16",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-16",
+      "price_at_prediction": 50030.0,
+      "resolve_after": "2026-10-16"
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-09-16",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "purchase_date": "2026-03-19",
+      "date": "2026-09-16",
+      "price_at_prediction": 18.68000030517578,
+      "resolve_after": "2026-10-16"
+    },
+    {
+      "id": "holding:4385.T:2026-07-27:2026-09-16",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-09-16",
+      "price_at_prediction": 3709.0,
+      "resolve_after": "2026-10-16"
     }
   ],
   "summary": {
