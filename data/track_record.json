@@ -1022,6 +1022,19 @@
       "date": "2026-09-16",
       "price_at_prediction": 3709.0,
       "resolve_after": "2026-10-16"
+    },
+    {
+      "id": "holding:6857.T:2026-06-26:2026-09-16",
+      "group": "holding",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-26",
+      "date": "2026-09-16",
+      "price_at_prediction": 30330.0,
+      "resolve_after": "2026-10-16"
     }
   ],
   "summary": {
