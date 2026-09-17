@@ -1035,6 +1035,32 @@
       "date": "2026-09-16",
       "price_at_prediction": 30330.0,
       "resolve_after": "2026-10-16"
+    },
+    {
+      "id": "candidate:SOUN:2026-09-17",
+      "group": "candidate",
+      "symbol": "SOUN",
+      "name": "SoundHound AI",
+      "recommendation": "売り候補",
+      "theme": "AI（小型成長株）",
+      "score": -45,
+      "purchase_date": null,
+      "date": "2026-09-17",
+      "price_at_prediction": 6.150000095367432,
+      "resolve_after": "2026-10-17"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-17",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-17",
+      "price_at_prediction": 50860.0,
+      "resolve_after": "2026-10-17"
     }
   ],
   "summary": {
