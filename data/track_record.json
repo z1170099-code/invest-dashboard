@@ -1100,6 +1100,19 @@
       "date": "2026-09-17",
       "price_at_prediction": 3659.0,
       "resolve_after": "2026-10-17"
+    },
+    {
+      "id": "candidate:SOUN:2026-09-18",
+      "group": "candidate",
+      "symbol": "SOUN",
+      "name": "SoundHound AI",
+      "recommendation": "売り候補",
+      "theme": "AI（小型成長株）",
+      "score": -40,
+      "purchase_date": null,
+      "date": "2026-09-18",
+      "price_at_prediction": 5.929999828338623,
+      "resolve_after": "2026-10-18"
     }
   ],
   "summary": {
