@@ -1165,6 +1165,19 @@
       "date": "2026-09-19",
       "price_at_prediction": 3699.0,
       "resolve_after": "2026-10-19"
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-09-19",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "purchase_date": "2026-03-19",
+      "date": "2026-09-19",
+      "price_at_prediction": 17.709999084472656,
+      "resolve_after": "2026-10-19"
     }
   ],
   "summary": {
