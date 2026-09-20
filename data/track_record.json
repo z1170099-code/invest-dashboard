@@ -1178,6 +1178,32 @@
       "date": "2026-09-19",
       "price_at_prediction": 17.709999084472656,
       "resolve_after": "2026-10-19"
+    },
+    {
+      "id": "holding:4063.T:2026-06-26:2026-09-20",
+      "group": "holding",
+      "symbol": "4063.T",
+      "name": "信越化学工業",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-26",
+      "date": "2026-09-20",
+      "price_at_prediction": 5844.0,
+      "resolve_after": "2026-10-20"
+    },
+    {
+      "id": "holding:4385.T:2026-07-27:2026-09-20",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-09-20",
+      "price_at_prediction": 3699.0,
+      "resolve_after": "2026-10-20"
     }
   ],
   "summary": {
