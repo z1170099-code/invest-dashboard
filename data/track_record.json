@@ -1230,6 +1230,19 @@
       "date": "2026-09-20",
       "price_at_prediction": 17.709999084472656,
       "resolve_after": "2026-10-20"
+    },
+    {
+      "id": "holding:4385.T:2026-07-27:2026-09-21",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-09-21",
+      "price_at_prediction": 3699.0,
+      "resolve_after": "2026-10-21"
     }
   ],
   "summary": {
