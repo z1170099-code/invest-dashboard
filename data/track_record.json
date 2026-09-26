@@ -1477,6 +1477,19 @@
       "date": "2026-09-26",
       "price_at_prediction": 3635.0,
       "resolve_after": "2026-10-26"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-26",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-26",
+      "price_at_prediction": 55780.0,
+      "resolve_after": "2026-10-26"
     }
   ],
   "summary": {
