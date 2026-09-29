@@ -1971,6 +1971,32 @@
       "date": "2026-09-29",
       "price_at_prediction": 343.05999755859375,
       "resolve_after": "2026-10-29"
+    },
+    {
+      "id": "candidate:6920.T:2026-09-29",
+      "group": "candidate",
+      "symbol": "6920.T",
+      "name": "レーザーテック",
+      "recommendation": "売り候補",
+      "theme": "半導体",
+      "score": -25,
+      "purchase_date": null,
+      "date": "2026-09-29",
+      "price_at_prediction": 40930.0,
+      "resolve_after": "2026-10-29"
+    },
+    {
+      "id": "candidate:6857.T:2026-09-29",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 15,
+      "purchase_date": null,
+      "date": "2026-09-29",
+      "price_at_prediction": 33290.0,
+      "resolve_after": "2026-10-29"
     }
   ],
   "summary": {
