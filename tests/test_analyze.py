@@ -1,6 +1,36 @@
 import analyze
 
 
+def test_fmt_pct_formats_number_and_handles_missing():
+    assert analyze._fmt_pct(5.0) == "+5.00%"
+    assert analyze._fmt_pct(-5.0) == "-5.00%"
+    assert analyze._fmt_pct(None) == "データなし"
+    assert analyze._fmt_pct("N/A") == "データなし"
+
+
+def test_format_price_section_handles_missing_price_stats():
+    assert analyze._format_price_section(None) == "株価データは取得できませんでした。"
+
+
+def test_format_price_section_includes_relative_when_present():
+    price_stats = {
+        "latest_close": 100,
+        "change_1d_pct": 1.0,
+        "change_1w_pct": -5.0,
+        "change_1w_pct_relative": -4.0,
+        "benchmark_symbol": "^GSPC",
+    }
+    section = analyze._format_price_section(price_stats)
+    assert "1週間騰落率: -5.00%（^GSPC比 -4.00%）" in section
+
+
+def test_format_price_section_omits_relative_when_absent():
+    price_stats = {"latest_close": 100, "change_1w_pct": -5.0}
+    section = analyze._format_price_section(price_stats)
+    assert "1週間騰落率: -5.00%\n" in section
+    assert "（" not in section  # 指数比の注記が付かない
+
+
 def test_build_reflection_section_empty_when_no_previous():
     assert analyze._build_reflection_section(None, 100) == ""
 

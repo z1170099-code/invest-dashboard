@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from analyze import analyze_all, analyze_all_holdings
 from fetch_news import fetch_macro_news, fetch_ticker_news
-from fetch_prices import fetch_all_price_stats
+from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks
 from generate_report import generate_report
 from history import apply_group_results, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
@@ -52,6 +52,7 @@ def _analyze_group(
     history: dict,
     group: str,
     accuracy_summary: dict,
+    benchmarks: dict,
     analyze_fn=analyze_all,
 ) -> list[dict]:
     if not tickers:
@@ -61,6 +62,10 @@ def _analyze_group(
 
     logger.info("[%s] 株価データを取得中...", label)
     price_stats_by_symbol = fetch_all_price_stats(tickers)
+    for ticker in tickers:
+        attach_relative_performance(
+            price_stats_by_symbol.get(ticker["symbol"]), ticker.get("market"), benchmarks
+        )
 
     logger.info("[%s] 個別銘柄のニュースを取得中...", label)
     news_by_symbol = {
@@ -110,6 +115,9 @@ def main() -> None:
         news_config.get("max_articles_per_query", 3),
     )
 
+    logger.info("ベンチマーク指数（S&P500・日経225）を取得中...")
+    benchmarks = fetch_benchmarks()
+
     watchlist_results = _analyze_group(
         "ウォッチリスト",
         tickers,
@@ -118,6 +126,7 @@ def main() -> None:
         history,
         "watchlist",
         accuracy_summary_for_prompt,
+        benchmarks,
     )
     candidate_results = _analyze_group(
         "ハイリスク候補",
@@ -127,6 +136,7 @@ def main() -> None:
         history,
         "candidate",
         accuracy_summary_for_prompt,
+        benchmarks,
     )
     portfolio_results = _analyze_group(
         "保有銘柄",
@@ -136,6 +146,7 @@ def main() -> None:
         history,
         "holding",
         accuracy_summary_for_prompt,
+        benchmarks,
         analyze_fn=analyze_all_holdings,
     )
 

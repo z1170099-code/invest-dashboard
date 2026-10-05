@@ -44,6 +44,10 @@ _SYSTEM_INSTRUCTION = """\
 - ただしこれは「安易に極端な高スコアを付けない」という注意であり、「様子見を多用すべき」
   という意味ではありません。中長期トレンドや材料に緩やかにでも方向性があれば、無理のない
   範囲のスコア（絶対値20〜50程度）で「買い候補」「売り候補」と判定してください。
+- 騰落率に「指数比」（ベンチマーク指数との比較値）が付記されている場合、それも判断に
+  活用してください。たとえば1ヶ月で-5%でも指数比が-1%程度なら「市場全体の地合いが悪い
+  中での平均的な動き」であり、銘柄固有の悪材料とは言えません。逆に指数比が-8%のように
+  大きく市場を下回っている場合は、銘柄固有の弱さを示す材料として重視してください。
   「様子見」は、上昇材料と下降材料が本当に拮抗していて方向性を見出せない場合に限定し、
   判断を避けるための安全な選択肢として多用しないでください。
 
@@ -238,6 +242,43 @@ def _build_accuracy_section(
 """
 
 
+def _fmt_pct(value) -> str:
+    return f"{value:+.2f}%" if isinstance(value, (int, float)) else "データなし"
+
+
+def _format_price_section(price_stats: dict | None) -> str:
+    """価格統計をプロンプト用のテキストに整形する。
+
+    1週間〜1年の騰落率には、可能ならベンチマーク比（attach_relative_performanceで
+    付加された値）も併記する。個別銘柄の値動きが「市場全体と一緒に動いただけ」なのか
+    「銘柄固有の動き」なのかをAIが区別しやすくするため。
+    """
+    if price_stats is None:
+        return "株価データは取得できませんでした。"
+
+    benchmark_symbol = price_stats.get("benchmark_symbol")
+
+    def fmt_period(key: str, label: str) -> str:
+        value = price_stats.get(key)
+        text = _fmt_pct(value)
+        relative = price_stats.get(f"{key}_relative")
+        if isinstance(relative, (int, float)) and benchmark_symbol:
+            text += f"（{benchmark_symbol}比 {relative:+.2f}%）"
+        return f"{label}: {text}\n"
+
+    return (
+        f"直近終値: {price_stats.get('latest_close')}\n"
+        f"前日比: {_fmt_pct(price_stats.get('change_1d_pct'))}\n"
+        + fmt_period("change_1w_pct", "1週間騰落率")
+        + fmt_period("change_1m_pct", "1ヶ月騰落率")
+        + fmt_period("change_3m_pct", "3ヶ月騰落率")
+        + fmt_period("change_6m_pct", "6ヶ月騰落率")
+        + fmt_period("change_1y_pct", "1年騰落率")
+        + f"直近20日ボラティリティ: {_fmt_pct(price_stats.get('volatility_20d_pct'))}\n"
+        f"52週高値からの乖離: {_fmt_pct(price_stats.get('off_52w_high_pct'))}\n"
+    )
+
+
 def _build_prompt(
     ticker: dict,
     price_stats: dict | None,
@@ -252,23 +293,7 @@ def _build_prompt(
     market = ticker.get("market", "")
     theme = ticker.get("theme")
 
-    if price_stats is None:
-        price_section = "株価データは取得できませんでした。"
-    else:
-        def fmt(value):
-            return f"{value:+.2f}%" if isinstance(value, (int, float)) else "データなし"
-
-        price_section = (
-            f"直近終値: {price_stats.get('latest_close')}\n"
-            f"前日比: {fmt(price_stats.get('change_1d_pct'))}\n"
-            f"1週間騰落率: {fmt(price_stats.get('change_1w_pct'))}\n"
-            f"1ヶ月騰落率: {fmt(price_stats.get('change_1m_pct'))}\n"
-            f"3ヶ月騰落率: {fmt(price_stats.get('change_3m_pct'))}\n"
-            f"6ヶ月騰落率: {fmt(price_stats.get('change_6m_pct'))}\n"
-            f"1年騰落率: {fmt(price_stats.get('change_1y_pct'))}\n"
-            f"直近20日ボラティリティ: {fmt(price_stats.get('volatility_20d_pct'))}\n"
-            f"52週高値からの乖離: {fmt(price_stats.get('off_52w_high_pct'))}\n"
-        )
+    price_section = _format_price_section(price_stats)
 
     if news:
         news_section = "\n".join(f"- {a['title']}（{a.get('source', '')}）" for a in news)
@@ -403,29 +428,13 @@ def _build_holding_prompt(
     market = holding.get("market", "")
     theme = holding.get("theme")
 
-    def fmt(value):
-        return f"{value:+.2f}%" if isinstance(value, (int, float)) else "データなし"
-
-    if price_stats is None:
-        price_section = "株価データは取得できませんでした。"
-    else:
-        price_section = (
-            f"直近終値: {price_stats.get('latest_close')}\n"
-            f"前日比: {fmt(price_stats.get('change_1d_pct'))}\n"
-            f"1週間騰落率: {fmt(price_stats.get('change_1w_pct'))}\n"
-            f"1ヶ月騰落率: {fmt(price_stats.get('change_1m_pct'))}\n"
-            f"3ヶ月騰落率: {fmt(price_stats.get('change_3m_pct'))}\n"
-            f"6ヶ月騰落率: {fmt(price_stats.get('change_6m_pct'))}\n"
-            f"1年騰落率: {fmt(price_stats.get('change_1y_pct'))}\n"
-            f"直近20日ボラティリティ: {fmt(price_stats.get('volatility_20d_pct'))}\n"
-            f"52週高値からの乖離: {fmt(price_stats.get('off_52w_high_pct'))}\n"
-        )
+    price_section = _format_price_section(price_stats)
 
     holding_section = (
         f"購入日: {holding_stats['purchase_date']}\n"
         f"購入価格: {holding_stats['purchase_price']}\n"
         f"保有日数: {holding_stats['holding_days']}日\n"
-        f"購入価格からの含み損益: {fmt(holding_stats['gain_loss_pct'])}\n"
+        f"購入価格からの含み損益: {_fmt_pct(holding_stats['gain_loss_pct'])}\n"
     )
 
     if news:
