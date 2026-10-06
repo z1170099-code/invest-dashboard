@@ -4857,6 +4857,32 @@
       "date": "2026-10-06",
       "price_at_prediction": 3631.0,
       "resolve_after": "2026-11-05"
+    },
+    {
+      "id": "candidate:5713.T:2026-10-06",
+      "group": "candidate",
+      "symbol": "5713.T",
+      "name": "住友金属鉱山",
+      "recommendation": "売り候補",
+      "theme": "資源・エネルギー（貴金属）",
+      "score": -25,
+      "purchase_date": null,
+      "date": "2026-10-06",
+      "price_at_prediction": 9815.0,
+      "resolve_after": "2026-11-05"
+    },
+    {
+      "id": "candidate:ADA-USD:2026-10-06",
+      "group": "candidate",
+      "symbol": "ADA-USD",
+      "name": "カルダノ",
+      "recommendation": "売り候補",
+      "theme": "暗号資産（現物）",
+      "score": -20,
+      "purchase_date": null,
+      "date": "2026-10-06",
+      "price_at_prediction": 0.27013999223709106,
+      "resolve_after": "2026-11-05"
     }
   ],
   "summary": {
