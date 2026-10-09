@@ -280,6 +280,7 @@ def generate_report(
     templates_dir: Path,
     output_path: Path,
     tsumitate_entries: list[dict] | None = None,
+    profit_taking: dict | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -318,6 +319,7 @@ def generate_report(
         theme_allocation_excluded_count=theme_allocation_excluded_count,
         nisa_usage=nisa_usage,
         tsumitate_usage=tsumitate_usage,
+        profit_taking=profit_taking,
         accuracy=accuracy_summary,
         generated_at=generated_at,
     )

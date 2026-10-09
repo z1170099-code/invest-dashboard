@@ -385,6 +385,47 @@ _HOLDING_RESPONSE_SCHEMA = {
 }
 
 
+def active_profit_taking(sell_policy: dict | None, today: dt.date | None = None) -> dict | None:
+    """利確優先モードが有効なら {"until": 期限日(str), "days_left": 残り日数} を返す。無効ならNone。"""
+    until_str = (sell_policy or {}).get("profit_taking_until")
+    if not until_str:
+        return None
+    try:
+        until = dt.date.fromisoformat(str(until_str))
+    except ValueError:
+        logger.warning("sell_policy.yamlのprofit_taking_untilが日付として読めません: %s", until_str)
+        return None
+    today = today or dt.date.today()
+    if today > until:
+        return None
+    return {"until": until.isoformat(), "days_left": (until - today).days}
+
+
+def _build_profit_taking_section(profit_taking: dict | None, gain_loss_pct) -> str:
+    if not profit_taking:
+        return ""
+    until = profit_taking["until"]
+    days_left = profit_taking["days_left"]
+
+    if isinstance(gain_loss_pct, (int, float)) and gain_loss_pct > 0:
+        return f"""
+【ユーザーの売却方針（{until}まで・利確優先、残り{days_left}日）】
+ユーザーは{until}までに、含み益が出ている銘柄をなるべく利益確定したいと考えています。
+この銘柄は現在、購入価格から{gain_loss_pct:+.2f}%の含み益です。
+今後の値下がりが見込まれる材料（中長期トレンドの鈍化、指数比での弱さ、悪材料のニュース、
+52週高値からの反落、直近の下落基調など）が一つでもあれば「売却検討」としてください。
+「保有継続」とするのは、期限までの残り期間でさらに上昇が続くと考えられる明確な根拠が
+ある場合に限ってください。その場合も、含み益が消えるリスクをrisksに必ず記載してください。
+この方針は通常の「中長期トレンドを主たる根拠にする」という判断軸より優先してください。
+"""
+    return f"""
+【ユーザーの売却方針（{until}まで・利確優先、残り{days_left}日）】
+ユーザーは{until}までに含み益のある銘柄を優先的に利益確定したいと考えています。
+この銘柄は現在含み益が出ていないため、利確の対象ではありません。通常どおり判断し、
+期限までに含み益に転じる見込みがあるかどうかも理由に含めてください。
+"""
+
+
 def _compute_holding_stats(holding: dict, price_stats: dict | None) -> dict:
     purchase_price = holding.get("purchase_price")
     purchase_date_str = holding.get("purchase_date")
@@ -422,6 +463,7 @@ def _build_holding_prompt(
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
     streak: dict | None = None,
+    profit_taking: dict | None = None,
 ) -> str:
     name = holding["name"]
     symbol = holding["symbol"]
@@ -429,6 +471,8 @@ def _build_holding_prompt(
     theme = holding.get("theme")
 
     price_section = _format_price_section(price_stats)
+    # 的中率フィードバック（売却検討は外れやすい等）より後ろに置き、ユーザーの方針を優先させる。
+    profit_taking_section = _build_profit_taking_section(profit_taking, holding_stats.get("gain_loss_pct"))
 
     holding_section = (
         f"購入日: {holding_stats['purchase_date']}\n"
@@ -466,6 +510,7 @@ def _build_holding_prompt(
 {macro_section}
 {reflection_section}
 {accuracy_section}
+{profit_taking_section}
 
 上記をもとに、指定されたJSONスキーマに従って「保有継続」か「売却検討」かの分析結果を出力してください。
 """
@@ -481,12 +526,21 @@ def analyze_holding(
     previous: dict | None = None,
     accuracy_summary: dict | None = None,
     streak: dict | None = None,
+    profit_taking: dict | None = None,
 ) -> dict:
     """1つの保有銘柄を分析し、結果の辞書を返す。失敗した場合は分析失敗を示す辞書を返す。"""
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
     holding_stats = _compute_holding_stats(holding, price_stats)
     prompt = _build_holding_prompt(
-        holding, price_stats, news, macro_news, holding_stats, previous, accuracy_summary, streak
+        holding,
+        price_stats,
+        news,
+        macro_news,
+        holding_stats,
+        previous,
+        accuracy_summary,
+        streak,
+        profit_taking,
     )
 
     for attempt in range(2):
@@ -539,6 +593,7 @@ def analyze_all_holdings(
     history: dict | None = None,
     group: str = "holding",
     accuracy_summary: dict | None = None,
+    profit_taking: dict | None = None,
 ) -> list[dict]:
     client = _get_client()
     results = []
@@ -560,6 +615,7 @@ def analyze_all_holdings(
             previous=previous,
             accuracy_summary=accuracy_summary,
             streak=streak,
+            profit_taking=profit_taking,
         )
         results.append(result)
     return results

@@ -1,4 +1,49 @@
+import datetime as dt
+
 import analyze
+
+
+def test_active_profit_taking_none_without_policy():
+    assert analyze.active_profit_taking(None, dt.date(2026, 10, 9)) is None
+    assert analyze.active_profit_taking({}, dt.date(2026, 10, 9)) is None
+
+
+def test_active_profit_taking_active_before_deadline():
+    result = analyze.active_profit_taking({"profit_taking_until": "2026-12-31"}, dt.date(2026, 10, 9))
+    assert result == {"until": "2026-12-31", "days_left": 83}
+
+
+def test_active_profit_taking_active_on_deadline_day():
+    result = analyze.active_profit_taking({"profit_taking_until": "2026-12-31"}, dt.date(2026, 12, 31))
+    assert result["days_left"] == 0
+
+
+def test_active_profit_taking_expires_after_deadline():
+    assert analyze.active_profit_taking({"profit_taking_until": "2026-12-31"}, dt.date(2027, 1, 1)) is None
+
+
+def test_active_profit_taking_invalid_date_is_ignored():
+    assert analyze.active_profit_taking({"profit_taking_until": "someday"}, dt.date(2026, 10, 9)) is None
+
+
+def test_profit_taking_section_empty_when_inactive():
+    assert analyze._build_profit_taking_section(None, 10.0) == ""
+
+
+def test_profit_taking_section_pushes_sell_for_gains():
+    section = analyze._build_profit_taking_section({"until": "2026-12-31", "days_left": 83}, 14.8)
+    assert "+14.80%の含み益" in section
+    assert "売却検討" in section
+
+
+def test_profit_taking_section_normal_judgment_for_losses():
+    section = analyze._build_profit_taking_section({"until": "2026-12-31", "days_left": 83}, -5.0)
+    assert "利確の対象ではありません" in section
+
+
+def test_profit_taking_section_treats_unknown_gain_as_not_profitable():
+    section = analyze._build_profit_taking_section({"until": "2026-12-31", "days_left": 83}, None)
+    assert "利確の対象ではありません" in section
 
 
 def test_fmt_pct_formats_number_and_handles_missing():

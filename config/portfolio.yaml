@@ -61,14 +61,6 @@ holdings:
     theme: "半導体"
     amount_invested_jpy: 3000
 
-  - symbol: "6857.T"
-    name: "アドバンテスト"
-    market: "JP"
-    purchase_date: "2026-06-26"
-    purchase_price: 32440  # 単元未満株を2,500円分購入。当日終値を取得単価として使用
-    theme: "半導体"
-    amount_invested_jpy: 2500
-
   - symbol: "PAYP"
     name: "PayPay Corporation"
     market: "US"

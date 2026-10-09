@@ -1,13 +1,16 @@
 """エントリーポイント: ウォッチリスト読み込み→株価取得→ニュース取得→AI分析→レポート生成 を実行する。"""
 
+import datetime as dt
+import functools
 import logging
 import sys
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 from dotenv import load_dotenv
 
-from analyze import analyze_all, analyze_all_holdings
+from analyze import active_profit_taking, analyze_all, analyze_all_holdings
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks
 from generate_report import generate_report
@@ -92,11 +95,16 @@ def main() -> None:
     portfolio = _load_yaml(_CONFIG_DIR / "portfolio.yaml")
     news_config = _load_yaml(_CONFIG_DIR / "news_sources.yaml")
     tsumitate_config = _load_yaml(_CONFIG_DIR / "nisa_tsumitate.yaml")
+    sell_policy_path = _CONFIG_DIR / "sell_policy.yaml"
+    sell_policy = _load_yaml(sell_policy_path) if sell_policy_path.exists() else None
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
     holdings = portfolio.get("holdings", []) if portfolio else []
     tsumitate_entries = (tsumitate_config or {}).get("tsumitate", [])
+    profit_taking = active_profit_taking(sell_policy, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date())
+    if profit_taking:
+        logger.info("利確優先モード有効（%sまで、残り%d日）", profit_taking["until"], profit_taking["days_left"])
 
     if not tickers:
         raise RuntimeError("config/watchlist.yaml に銘柄が1件も登録されていません。")
@@ -147,7 +155,7 @@ def main() -> None:
         "holding",
         accuracy_summary_for_prompt,
         benchmarks,
-        analyze_fn=analyze_all_holdings,
+        analyze_fn=functools.partial(analyze_all_holdings, profit_taking=profit_taking),
     )
 
     all_results = watchlist_results + candidate_results + portfolio_results
@@ -173,6 +181,7 @@ def main() -> None:
         _TEMPLATES_DIR,
         _OUTPUT_PATH,
         tsumitate_entries,
+        profit_taking,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で

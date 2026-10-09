@@ -702,6 +702,15 @@
   <section>
     <h2>保有銘柄の売却タイミング</h2>
 
+    {% if profit_taking %}
+    <div class="risk-banner">
+      <strong>💰 利確優先モード適用中（{{ profit_taking.until }}まで・残り{{ profit_taking.days_left }}日）:</strong>
+      含み益が出ている銘柄は、今後の値下がりが見込まれる材料が少しでもあればAIが「売却検討」と
+      判定するように設定しています。含み損の銘柄は通常どおりの判断です。
+      期限を過ぎると自動で通常の判断に戻ります（設定は <code>config/sell_policy.yaml</code>）。
+    </div>
+    {% endif %}
+
     {% if theme_allocation %}
     <div class="allocation-box">
       <h3>テーマ別配分</h3>
