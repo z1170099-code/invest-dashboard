@@ -401,6 +401,28 @@
     border-top: 1px solid var(--gridline);
     padding-top: 16px;
   }
+
+  .back-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+  }
+  .back-to-top.visible { opacity: 1; visibility: visible; }
+  .back-to-top:hover { background: var(--gridline); }
 </style>
 </head>
 <body>
@@ -917,7 +939,17 @@
   </footer>
 
 </div>
+<button type="button" class="back-to-top" id="back-to-top" aria-label="ページの一番上へ戻る" title="一番上へ">▲</button>
 <script>
+  (function () {
+    var button = document.getElementById("back-to-top");
+    window.addEventListener("scroll", function () {
+      button.classList.toggle("visible", window.scrollY > 400);
+    }, { passive: true });
+    button.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  })();
   (function () {
     var root = document.documentElement;
     var key = "invest-dashboard-theme";
