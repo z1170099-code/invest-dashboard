@@ -1,6 +1,7 @@
 """分析結果からJinja2テンプレートを使って docs/index.html を生成する。"""
 
 import datetime as dt
+import json
 import logging
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -31,6 +32,62 @@ _NISA_LIFETIME_GROWTH_LIMIT = 12_000_000
 # NISAつみたて投資枠の年間上限、および成長投資枠と合算した生涯の総枠上限。
 _NISA_ANNUAL_TSUMITATE_LIMIT = 1_200_000
 _NISA_LIFETIME_TOTAL_LIMIT = 18_000_000
+
+
+_CHART_WIDTH = 600
+_CHART_HEIGHT = 140
+
+
+def _fmt_price(value: float) -> str:
+    return f"{value:,.0f}" if value >= 1000 else f"{value:,.2f}"
+
+
+def _build_price_chart(
+    price_stats: dict | None, purchase_price=None, purchase_date: str | None = None
+) -> dict | None:
+    """1年の株価推移チャート（SVG折れ線）の描画用データを作る。データ不足ならNone。
+
+    保有銘柄では取得単価の水平線と購入日の縦線も描くため、取得単価が範囲外でも
+    見えるように縦軸の範囲に含める。
+    """
+    history = (price_stats or {}).get("history_1y") or []
+    if len(history) < 2:
+        return None
+
+    closes = [c for _, c in history]
+    has_purchase = isinstance(purchase_price, (int, float)) and purchase_price > 0
+    values = closes + ([purchase_price] if has_purchase else [])
+    lo, hi = min(values), max(values)
+    pad = (hi - lo) * 0.08 or abs(hi) * 0.05 or 1.0
+    lo, hi = lo - pad, hi + pad
+
+    def y(v: float) -> float:
+        return round(_CHART_HEIGHT - (v - lo) / (hi - lo) * _CHART_HEIGHT, 2)
+
+    last = len(history) - 1
+    points = [[d, c, y(c)] for d, c in history]
+    path = "M" + " L".join(f"{round(i / last * _CHART_WIDTH, 2)},{p[2]}" for i, p in enumerate(points))
+
+    purchase_x_pct = None
+    if purchase_date and history[0][0] <= str(purchase_date) <= history[-1][0]:
+        index = next(i for i, (d, _) in enumerate(history) if d >= str(purchase_date))
+        purchase_x_pct = round(index / last * 100, 2)
+
+    return {
+        "width": _CHART_WIDTH,
+        "height": _CHART_HEIGHT,
+        "path": path,
+        "points_json": json.dumps(points, ensure_ascii=False),
+        "start_date": history[0][0],
+        "end_date": history[-1][0],
+        "max_display": _fmt_price(max(closes)),
+        "min_display": _fmt_price(min(closes)),
+        "latest_display": _fmt_price(closes[-1]),
+        "purchase_y": y(purchase_price) if has_purchase else None,
+        "purchase_y_pct": round(y(purchase_price) / _CHART_HEIGHT * 100, 2) if has_purchase else None,
+        "purchase_display": _fmt_price(purchase_price) if has_purchase else None,
+        "purchase_x_pct": purchase_x_pct,
+    }
 
 
 def _fmt_pct(value) -> str:
@@ -71,6 +128,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "change_6m": _fmt_pct(price_stats.get("change_6m_pct")),
         "change_1y": _fmt_pct(price_stats.get("change_1y_pct")),
         "price_available": bool(price_stats),
+        "chart": _build_price_chart(price_stats),
         "news": result.get("news") or [],
         "nisa_tag": (
             "NISA成長投資枠 対象目安"
@@ -110,6 +168,7 @@ def _build_holding_view_model(result: dict) -> dict:
         "change_6m": _fmt_pct(price_stats.get("change_6m_pct")),
         "change_1y": _fmt_pct(price_stats.get("change_1y_pct")),
         "price_available": bool(price_stats),
+        "chart": _build_price_chart(price_stats, result.get("purchase_price"), result.get("purchase_date")),
         "news": result.get("news") or [],
     }
 

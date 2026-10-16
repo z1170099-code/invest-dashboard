@@ -9008,6 +9008,19 @@
       "date": "2026-10-16",
       "price_at_prediction": 186.9499969482422,
       "resolve_after": "2026-11-15"
+    },
+    {
+      "id": "holding:LMT:2026-07-24:2026-10-16",
+      "group": "holding",
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "recommendation": "売却検討",
+      "theme": "防衛・地政学",
+      "score": null,
+      "purchase_date": "2026-07-24",
+      "date": "2026-10-16",
+      "price_at_prediction": 532.6400146484375,
+      "resolve_after": "2026-11-15"
     }
   ],
   "summary": {

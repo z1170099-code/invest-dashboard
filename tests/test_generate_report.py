@@ -104,6 +104,52 @@ def test_sort_by_score_puts_missing_scores_last():
     assert [r["score"] for r in sorted_results] == [90, 10, None]
 
 
+_HISTORY = [["2026-01-05", 100.0], ["2026-01-12", 110.0], ["2026-01-19", 90.0], ["2026-01-26", 105.0]]
+
+
+def test_build_price_chart_none_without_enough_history():
+    assert gr._build_price_chart(None) is None
+    assert gr._build_price_chart({"history_1y": [["2026-01-05", 100.0]]}) is None
+
+
+def test_build_price_chart_path_spans_full_width_and_stays_in_bounds():
+    chart = gr._build_price_chart({"history_1y": _HISTORY})
+    coords = [tuple(map(float, seg.split(","))) for seg in chart["path"][1:].split(" L")]
+    assert coords[0][0] == 0
+    assert coords[-1][0] == chart["width"]
+    assert all(0 <= y <= chart["height"] for _, y in coords)
+    # 最高値(110)が一番上(yが最小)、最安値(90)が一番下に描かれる
+    assert min(coords, key=lambda c: c[1]) == coords[1]
+    assert max(coords, key=lambda c: c[1]) == coords[2]
+    assert chart["max_display"] == "110.00"
+    assert chart["min_display"] == "90.00"
+    assert chart["purchase_y"] is None
+    assert chart["purchase_x_pct"] is None
+
+
+def test_build_price_chart_includes_out_of_range_purchase_price():
+    chart = gr._build_price_chart({"history_1y": _HISTORY}, purchase_price=200.0)
+    # 取得単価が株価より大きく上でも、チャート内に収まるよう縦軸を広げる
+    assert 0 <= chart["purchase_y"] <= chart["height"]
+    assert chart["purchase_display"] == "200.00"
+
+
+def test_build_price_chart_marks_purchase_date_within_range():
+    chart = gr._build_price_chart({"history_1y": _HISTORY}, purchase_price=100.0, purchase_date="2026-01-15")
+    # 2026-01-15以降で最初の点は3点目(index 2)、全4点なので2/3の位置
+    assert chart["purchase_x_pct"] == round(2 / 3 * 100, 2)
+
+
+def test_build_price_chart_ignores_purchase_date_outside_range():
+    chart = gr._build_price_chart({"history_1y": _HISTORY}, purchase_date="2025-06-01")
+    assert chart["purchase_x_pct"] is None
+
+
+def test_fmt_price_uses_no_decimals_for_large_values():
+    assert gr._fmt_price(33180.0) == "33,180"
+    assert gr._fmt_price(230.36) == "230.36"
+
+
 def test_parse_date_valid():
     assert gr._parse_date("2026-03-19") == dt.date(2026, 3, 19)
 

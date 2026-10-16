@@ -44,6 +44,11 @@ def fetch_price_stats(symbol: str) -> dict | None:
     low_52w = float(one_year.min())
     off_high_pct = (latest / high_52w - 1) * 100 if high_52w else None
 
+    # レポートの1年チャート用。日次252点×銘柄数だとHTMLが重くなるため、
+    # 最新日を起点に5営業日おき（≒週次）に間引く。
+    weekly = one_year.iloc[::-1].iloc[::5].iloc[::-1]
+    history_1y = [[d.date().isoformat(), round(float(v), 4)] for d, v in weekly.items()]
+
     return {
         "symbol": symbol,
         "latest_close": float(latest),
@@ -58,6 +63,7 @@ def fetch_price_stats(symbol: str) -> dict | None:
         "high_52w": high_52w,
         "low_52w": low_52w,
         "off_52w_high_pct": off_high_pct,
+        "history_1y": history_1y,
     }
 
 

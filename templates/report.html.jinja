@@ -18,6 +18,7 @@
     --status-good:     #0ca30c;
     --status-warning:  #fab219;
     --status-critical: #d03b3b;
+    --series-1:        #2a78d6;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
@@ -30,6 +31,7 @@
       --gridline:       #2c2c2a;
       --baseline:       #383835;
       --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
     }
   }
   :root[data-theme="dark"] {
@@ -42,6 +44,7 @@
     --gridline:       #2c2c2a;
     --baseline:       #383835;
     --border:         rgba(255,255,255,0.10);
+    --series-1:       #3987e5;
   }
 
   * { box-sizing: border-box; }
@@ -356,6 +359,96 @@
   }
   .price-row span.label { color: var(--text-muted); margin-right: 4px; }
 
+  .price-chart { margin: 4px 0 14px; }
+  .price-chart-title { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+  .price-chart-plot {
+    position: relative;
+    height: 120px;
+    border-bottom: 1px solid var(--baseline);
+    cursor: crosshair;
+    touch-action: pan-y;
+    outline: none;
+  }
+  .price-chart-plot:focus-visible { box-shadow: 0 0 0 2px var(--series-1); border-radius: 2px; }
+  .price-chart-plot svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .price-line {
+    fill: none;
+    stroke: var(--series-1);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .purchase-line { stroke: var(--text-secondary); stroke-width: 1; stroke-dasharray: 4 3; }
+  .purchase-label {
+    position: absolute;
+    left: 0;
+    transform: translateY(-115%);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+  .purchase-label.below { transform: translateY(15%); }
+  .purchase-date-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dotted var(--text-muted);
+    pointer-events: none;
+  }
+  .purchase-date-label {
+    position: absolute;
+    top: 0;
+    padding-left: 3px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .chart-crosshair {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid var(--text-muted);
+    display: none;
+    pointer-events: none;
+  }
+  .chart-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--series-1);
+    box-shadow: 0 0 0 2px var(--surface-1);
+    transform: translate(-50%, -50%);
+    display: none;
+    pointer-events: none;
+  }
+  .chart-tooltip {
+    position: absolute;
+    top: -6px;
+    transform: translate(-50%, -100%);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    display: none;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .chart-tooltip strong { display: block; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .chart-tooltip span { color: var(--text-secondary); }
+  .price-chart-axis {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 3px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
   .reasoning { font-size: 0.92rem; margin: 8px 0; }
   .risks { font-size: 0.85rem; color: var(--text-secondary); }
   .risks .label { color: var(--text-muted); }
@@ -596,6 +689,38 @@
     {% endif %}
   </section>
 
+  {% macro price_chart(c, name) %}
+    {% if c %}
+    <div class="price-chart" data-points="{{ c.points_json }}" data-height="{{ c.height }}">
+      <div class="price-chart-title">1年の株価推移（週次）</div>
+      <div class="price-chart-plot" tabindex="0"
+           aria-label="{{ name }}の1年の株価推移。{{ c.start_date }}から{{ c.end_date }}、最高値{{ c.max_display }}、最安値{{ c.min_display }}、直近{{ c.latest_display }}{% if c.purchase_display %}、取得単価{{ c.purchase_display }}{% endif %}。左右キーで日付ごとの値を確認できます。">
+        <svg viewBox="0 0 {{ c.width }} {{ c.height }}" preserveAspectRatio="none" aria-hidden="true">
+          {% if c.purchase_y is not none %}
+          <line class="purchase-line" x1="0" x2="{{ c.width }}" y1="{{ c.purchase_y }}" y2="{{ c.purchase_y }}" vector-effect="non-scaling-stroke"></line>
+          {% endif %}
+          <path class="price-line" d="{{ c.path }}" vector-effect="non-scaling-stroke"></path>
+        </svg>
+        {% if c.purchase_y_pct is not none %}
+        <span class="purchase-label{% if c.purchase_y_pct < 20 %} below{% endif %}" style="top: {{ c.purchase_y_pct }}%;">取得単価 {{ c.purchase_display }}</span>
+        {% endif %}
+        {% if c.purchase_x_pct is not none %}
+        <div class="purchase-date-line" style="left: {{ c.purchase_x_pct }}%;"></div>
+        <span class="purchase-date-label" style="left: {{ c.purchase_x_pct }}%;">購入</span>
+        {% endif %}
+        <div class="chart-crosshair"></div>
+        <div class="chart-dot"></div>
+        <div class="chart-tooltip"></div>
+      </div>
+      <div class="price-chart-axis">
+        <span>{{ c.start_date }}</span>
+        <span>最高 {{ c.max_display }} ・ 最安 {{ c.min_display }}</span>
+        <span>{{ c.end_date }}</span>
+      </div>
+    </div>
+    {% endif %}
+  {% endmacro %}
+
   {% macro ticker_card(t, rank) %}
     <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
       <div class="card-head">
@@ -628,6 +753,8 @@
         <span><span class="label">1年</span>{{ t.change_1y }}</span>
       </div>
       {% endif %}
+
+      {{ price_chart(t.chart, t.name) }}
 
       <p class="reasoning">{{ t.reasoning }}</p>
 
@@ -689,6 +816,8 @@
         <span><span class="label">6ヶ月</span>{{ h.change_6m }}</span>
         <span><span class="label">1年</span>{{ h.change_1y }}</span>
       </div>
+
+      {{ price_chart(h.chart, h.name) }}
 
       <p class="reasoning">{{ h.reasoning }}</p>
 
@@ -941,6 +1070,60 @@
 </div>
 <button type="button" class="back-to-top" id="back-to-top" aria-label="ページの一番上へ戻る" title="一番上へ">▲</button>
 <script>
+  (function () {
+    function fmt(v) {
+      return v >= 1000
+        ? v.toLocaleString("ja-JP", { maximumFractionDigits: 0 })
+        : v.toLocaleString("ja-JP", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    document.querySelectorAll(".price-chart").forEach(function (chart) {
+      var points = JSON.parse(chart.dataset.points);
+      var viewHeight = Number(chart.dataset.height);
+      var plot = chart.querySelector(".price-chart-plot");
+      var cross = plot.querySelector(".chart-crosshair");
+      var dot = plot.querySelector(".chart-dot");
+      var tip = plot.querySelector(".chart-tooltip");
+      var last = points.length - 1;
+      var current = last;
+
+      function show(index) {
+        current = Math.max(0, Math.min(last, index));
+        var p = points[current];
+        var rect = plot.getBoundingClientRect();
+        var x = current / last * rect.width;
+        var y = p[2] / viewHeight * rect.height;
+        cross.style.left = x + "px";
+        dot.style.left = x + "px";
+        dot.style.top = y + "px";
+        tip.textContent = "";
+        var value = document.createElement("strong");
+        value.textContent = fmt(p[1]);
+        var date = document.createElement("span");
+        date.textContent = p[0];
+        tip.appendChild(value);
+        tip.appendChild(date);
+        cross.style.display = dot.style.display = tip.style.display = "block";
+        var half = tip.offsetWidth / 2;
+        tip.style.left = Math.max(half, Math.min(rect.width - half, x)) + "px";
+      }
+      function hide() {
+        cross.style.display = dot.style.display = tip.style.display = "none";
+      }
+      function indexAt(clientX) {
+        var rect = plot.getBoundingClientRect();
+        return Math.round((clientX - rect.left) / rect.width * last);
+      }
+      plot.addEventListener("pointermove", function (e) { show(indexAt(e.clientX)); });
+      plot.addEventListener("pointerdown", function (e) { show(indexAt(e.clientX)); });
+      plot.addEventListener("pointerleave", hide);
+      plot.addEventListener("focus", function () { show(current); });
+      plot.addEventListener("blur", hide);
+      plot.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { show(current - 1); e.preventDefault(); }
+        if (e.key === "ArrowRight") { show(current + 1); e.preventDefault(); }
+      });
+    });
+  })();
   (function () {
     var button = document.getElementById("back-to-top");
     window.addEventListener("scroll", function () {
