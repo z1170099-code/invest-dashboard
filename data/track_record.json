@@ -1,58 +1,6 @@
 {
   "pending": [
     {
-      "id": "candidate:SOUN:2026-09-18",
-      "group": "candidate",
-      "symbol": "SOUN",
-      "name": "SoundHound AI",
-      "recommendation": "売り候補",
-      "theme": "AI（小型成長株）",
-      "score": -40,
-      "purchase_date": null,
-      "date": "2026-09-18",
-      "price_at_prediction": 5.929999828338623,
-      "resolve_after": "2026-10-18"
-    },
-    {
-      "id": "holding:285A.T:2026-06-05:2026-09-18",
-      "group": "holding",
-      "symbol": "285A.T",
-      "name": "キオクシア",
-      "recommendation": "売却検討",
-      "theme": "半導体",
-      "score": null,
-      "purchase_date": "2026-06-05",
-      "date": "2026-09-18",
-      "price_at_prediction": 53480.0,
-      "resolve_after": "2026-10-18"
-    },
-    {
-      "id": "holding:PAYP:2026-03-19:2026-09-18",
-      "group": "holding",
-      "symbol": "PAYP",
-      "name": "PayPay Corporation",
-      "recommendation": "売却検討",
-      "theme": "フィンテック",
-      "score": null,
-      "purchase_date": "2026-03-19",
-      "date": "2026-09-18",
-      "price_at_prediction": 17.90999984741211,
-      "resolve_after": "2026-10-18"
-    },
-    {
-      "id": "holding:4385.T:2026-07-27:2026-09-18",
-      "group": "holding",
-      "symbol": "4385.T",
-      "name": "メルカリ",
-      "recommendation": "売却検討",
-      "theme": "国内グロース",
-      "score": null,
-      "purchase_date": "2026-07-27",
-      "date": "2026-09-18",
-      "price_at_prediction": 3725.0,
-      "resolve_after": "2026-10-18"
-    },
-    {
       "id": "holding:4385.T:2026-07-27:2026-09-19",
       "group": "holding",
       "symbol": "4385.T",
@@ -9515,6 +9463,422 @@
       "date": "2026-10-17",
       "price_at_prediction": 339.7200012207031,
       "resolve_after": "2026-11-16"
+    },
+    {
+      "id": "watchlist:7203.T:2026-10-18",
+      "group": "watchlist",
+      "symbol": "7203.T",
+      "name": "トヨタ自動車",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 15,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 3094.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "watchlist:9984.T:2026-10-18",
+      "group": "watchlist",
+      "symbol": "9984.T",
+      "name": "ソフトバンクグループ",
+      "recommendation": "売り候補",
+      "theme": null,
+      "score": -20,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 4944.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "watchlist:AAPL:2026-10-18",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 343.4599914550781,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "watchlist:NVDA:2026-10-18",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 10,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 214.1300048828125,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "watchlist:1655.T:2026-10-18",
+      "group": "watchlist",
+      "symbol": "1655.T",
+      "name": "S&P500連動ETF (iシェアーズ)",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 15,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 882.0999755859375,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:6920.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "6920.T",
+      "name": "レーザーテック",
+      "recommendation": "売り候補",
+      "theme": "半導体",
+      "score": -20,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 41200.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:6857.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "6857.T",
+      "name": "アドバンテスト",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 20,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 34530.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:AMD:2026-10-18",
+      "group": "candidate",
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices",
+      "recommendation": "買い候補",
+      "theme": "半導体・AI",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 528.75,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:SOUN:2026-10-18",
+      "group": "candidate",
+      "symbol": "SOUN",
+      "name": "SoundHound AI",
+      "recommendation": "売り候補",
+      "theme": "AI（小型成長株）",
+      "score": -35,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 4.71999979019165,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:TSM:2026-10-18",
+      "group": "candidate",
+      "symbol": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "recommendation": "買い候補",
+      "theme": "半導体",
+      "score": 15,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 412.6099853515625,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:LMT:2026-10-18",
+      "group": "candidate",
+      "symbol": "LMT",
+      "name": "Lockheed Martin",
+      "recommendation": "売り候補",
+      "theme": "防衛・地政学",
+      "score": -25,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 552.0900268554688,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:RTX:2026-10-18",
+      "group": "candidate",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "買い候補",
+      "theme": "防衛・地政学",
+      "score": 15,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 193.9199981689453,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:1605.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 3670.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:XOM:2026-10-18",
+      "group": "candidate",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "買い候補",
+      "theme": "資源・エネルギー",
+      "score": 35,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 178.97999572753906,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:MSTR:2026-10-18",
+      "group": "candidate",
+      "symbol": "MSTR",
+      "name": "MicroStrategy (Strategy)",
+      "recommendation": "売り候補",
+      "theme": "暗号資産（ビットコイン保有）",
+      "score": -20,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 136.8300018310547,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:ETH-USD:2026-10-18",
+      "group": "candidate",
+      "symbol": "ETH-USD",
+      "name": "イーサリアム",
+      "recommendation": "売り候補",
+      "theme": "暗号資産（現物）",
+      "score": -15,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 2397.2900390625,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:4382.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "4382.T",
+      "name": "HEROZ",
+      "recommendation": "買い候補",
+      "theme": "AI（国内小型成長株）",
+      "score": 25,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 1754.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:4502.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "4502.T",
+      "name": "武田薬品工業",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 6223.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:LLY:2026-10-18",
+      "group": "candidate",
+      "symbol": "LLY",
+      "name": "Eli Lilly and Company",
+      "recommendation": "買い候補",
+      "theme": "ヘルスケア・製薬",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 1257.030029296875,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:8306.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "8306.T",
+      "name": "三菱UFJフィナンシャル・グループ",
+      "recommendation": "買い候補",
+      "theme": "金融",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 3475.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:2914.T:2026-10-18",
+      "group": "candidate",
+      "symbol": "2914.T",
+      "name": "日本たばこ産業",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 30,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 7484.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "candidate:PG:2026-10-18",
+      "group": "candidate",
+      "symbol": "PG",
+      "name": "Procter & Gamble",
+      "recommendation": "買い候補",
+      "theme": "生活必需品",
+      "score": 25,
+      "purchase_date": null,
+      "date": "2026-10-18",
+      "price_at_prediction": 159.35000610351562,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:NVDA:2026-07-16:2026-10-18",
+      "group": "holding",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "売却検討",
+      "theme": "半導体・AI",
+      "score": null,
+      "purchase_date": "2026-07-16",
+      "date": "2026-10-18",
+      "price_at_prediction": 214.1300048828125,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:4063.T:2026-06-26:2026-10-18",
+      "group": "holding",
+      "symbol": "4063.T",
+      "name": "信越化学工業",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-26",
+      "date": "2026-10-18",
+      "price_at_prediction": 5978.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-10-18",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-10-18",
+      "price_at_prediction": 13375.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-10-18",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "purchase_date": "2026-03-19",
+      "date": "2026-10-18",
+      "price_at_prediction": 15.680000305175781,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:XOM:2026-07-21:2026-10-18",
+      "group": "holding",
+      "symbol": "XOM",
+      "name": "Exxon Mobil",
+      "recommendation": "売却検討",
+      "theme": "資源・エネルギー",
+      "score": null,
+      "purchase_date": "2026-07-21",
+      "date": "2026-10-18",
+      "price_at_prediction": 178.97999572753906,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:1605.T:2026-07-21:2026-10-18",
+      "group": "holding",
+      "symbol": "1605.T",
+      "name": "INPEX",
+      "recommendation": "売却検討",
+      "theme": "資源・エネルギー",
+      "score": null,
+      "purchase_date": "2026-07-21",
+      "date": "2026-10-18",
+      "price_at_prediction": 3670.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:AAPL:2026-07-22:2026-10-18",
+      "group": "holding",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "売却検討",
+      "theme": "テクノロジー（総合）",
+      "score": null,
+      "purchase_date": "2026-07-22",
+      "date": "2026-10-18",
+      "price_at_prediction": 343.4599914550781,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:AAPL:2026-07-25:2026-10-18",
+      "group": "holding",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "売却検討",
+      "theme": "テクノロジー（総合）",
+      "score": null,
+      "purchase_date": "2026-07-25",
+      "date": "2026-10-18",
+      "price_at_prediction": 343.4599914550781,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:4385.T:2026-07-27:2026-10-18",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-10-18",
+      "price_at_prediction": 3821.0,
+      "resolve_after": "2026-11-17"
+    },
+    {
+      "id": "holding:RTX:2026-08-15:2026-10-18",
+      "group": "holding",
+      "symbol": "RTX",
+      "name": "RTX Corporation",
+      "recommendation": "売却検討",
+      "theme": "防衛・地政学",
+      "score": null,
+      "purchase_date": "2026-08-15",
+      "date": "2026-10-18",
+      "price_at_prediction": 193.9199981689453,
+      "resolve_after": "2026-11-17"
     }
   ],
   "summary": {
@@ -9524,17 +9888,89 @@
       "neutral": 51
     },
     "売り候補": {
-      "correct": 3,
+      "correct": 4,
       "incorrect": 9,
       "neutral": 1
     },
     "売却検討": {
-      "correct": 25,
-      "incorrect": 30,
+      "correct": 27,
+      "incorrect": 31,
       "neutral": 9
     }
   },
   "recent_resolved": [
+    {
+      "id": "holding:4385.T:2026-07-27:2026-09-18",
+      "group": "holding",
+      "symbol": "4385.T",
+      "name": "メルカリ",
+      "recommendation": "売却検討",
+      "theme": "国内グロース",
+      "score": null,
+      "purchase_date": "2026-07-27",
+      "date": "2026-09-18",
+      "price_at_prediction": 3725.0,
+      "resolve_after": "2026-10-18",
+      "resolved_date": "2026-10-18",
+      "price_at_resolution": 3821.0,
+      "change_pct": 2.5771812080536805,
+      "outcome": "incorrect",
+      "sim_return_pct": -2.5771812080536805
+    },
+    {
+      "id": "holding:PAYP:2026-03-19:2026-09-18",
+      "group": "holding",
+      "symbol": "PAYP",
+      "name": "PayPay Corporation",
+      "recommendation": "売却検討",
+      "theme": "フィンテック",
+      "score": null,
+      "purchase_date": "2026-03-19",
+      "date": "2026-09-18",
+      "price_at_prediction": 17.90999984741211,
+      "resolve_after": "2026-10-18",
+      "resolved_date": "2026-10-18",
+      "price_at_resolution": 15.680000305175781,
+      "change_pct": -12.451142162117602,
+      "outcome": "correct",
+      "sim_return_pct": 12.451142162117602
+    },
+    {
+      "id": "holding:285A.T:2026-06-05:2026-09-18",
+      "group": "holding",
+      "symbol": "285A.T",
+      "name": "キオクシア",
+      "recommendation": "売却検討",
+      "theme": "半導体",
+      "score": null,
+      "purchase_date": "2026-06-05",
+      "date": "2026-09-18",
+      "price_at_prediction": 53480.0,
+      "resolve_after": "2026-10-18",
+      "resolved_date": "2026-10-18",
+      "price_at_resolution": 13375.0,
+      "change_pct": -74.990650710546,
+      "outcome": "correct",
+      "sim_return_pct": 74.990650710546
+    },
+    {
+      "id": "candidate:SOUN:2026-09-18",
+      "group": "candidate",
+      "symbol": "SOUN",
+      "name": "SoundHound AI",
+      "recommendation": "売り候補",
+      "theme": "AI（小型成長株）",
+      "score": -40,
+      "purchase_date": null,
+      "date": "2026-09-18",
+      "price_at_prediction": 5.929999828338623,
+      "resolve_after": "2026-10-18",
+      "resolved_date": "2026-10-18",
+      "price_at_resolution": 4.71999979019165,
+      "change_pct": -20.404722987757186,
+      "outcome": "correct",
+      "sim_return_pct": 20.404722987757186
+    },
     {
       "id": "holding:4385.T:2026-07-27:2026-09-17",
       "group": "holding",
@@ -9822,83 +10258,11 @@
       "change_pct": 9.78389579632919,
       "outcome": "correct",
       "sim_return_pct": 9.78389579632919
-    },
-    {
-      "id": "candidate:XOM:2026-09-15",
-      "group": "candidate",
-      "symbol": "XOM",
-      "name": "Exxon Mobil",
-      "recommendation": "買い候補",
-      "theme": "資源・エネルギー",
-      "score": 25,
-      "purchase_date": null,
-      "date": "2026-09-15",
-      "price_at_prediction": 165.99000549316406,
-      "resolve_after": "2026-10-15",
-      "resolved_date": "2026-10-15",
-      "price_at_resolution": 177.00999450683594,
-      "change_pct": 6.638947315491062,
-      "outcome": "correct",
-      "sim_return_pct": 6.638947315491062
-    },
-    {
-      "id": "candidate:1605.T:2026-09-15",
-      "group": "candidate",
-      "symbol": "1605.T",
-      "name": "INPEX",
-      "recommendation": "買い候補",
-      "theme": "資源・エネルギー",
-      "score": 30,
-      "purchase_date": null,
-      "date": "2026-09-15",
-      "price_at_prediction": 3930.0,
-      "resolve_after": "2026-10-15",
-      "resolved_date": "2026-10-15",
-      "price_at_resolution": 3686.0,
-      "change_pct": -6.208651399491094,
-      "outcome": "incorrect",
-      "sim_return_pct": -6.208651399491094
-    },
-    {
-      "id": "watchlist:AAPL:2026-09-15",
-      "group": "watchlist",
-      "symbol": "AAPL",
-      "name": "Apple",
-      "recommendation": "買い候補",
-      "theme": null,
-      "score": 30,
-      "purchase_date": null,
-      "date": "2026-09-15",
-      "price_at_prediction": 332.2699890136719,
-      "resolve_after": "2026-10-15",
-      "resolved_date": "2026-10-15",
-      "price_at_resolution": 342.9599914550781,
-      "change_pct": 3.21726391033359,
-      "outcome": "correct",
-      "sim_return_pct": 3.21726391033359
-    },
-    {
-      "id": "candidate:JPM:2026-09-14",
-      "group": "candidate",
-      "symbol": "JPM",
-      "name": "JPMorgan Chase & Co.",
-      "recommendation": "買い候補",
-      "theme": "金融",
-      "score": 35,
-      "purchase_date": null,
-      "date": "2026-09-14",
-      "price_at_prediction": 356.2300109863281,
-      "resolve_after": "2026-10-14",
-      "resolved_date": "2026-10-14",
-      "price_at_resolution": 334.29998779296875,
-      "change_pct": -6.15614140219114,
-      "outcome": "incorrect",
-      "sim_return_pct": -6.15614140219114
     }
   ],
   "summary_by_theme": {
     "半導体": {
-      "correct": 14,
+      "correct": 15,
       "incorrect": 17,
       "neutral": 4
     },
@@ -9929,7 +10293,7 @@
     },
     "国内グロース": {
       "correct": 2,
-      "incorrect": 7,
+      "incorrect": 8,
       "neutral": 0
     },
     "ヘルスケア・製薬": {
@@ -9953,19 +10317,19 @@
       "neutral": 1
     },
     "フィンテック": {
-      "correct": 3,
+      "correct": 4,
       "incorrect": 5,
       "neutral": 0
     },
     "AI（小型成長株）": {
-      "correct": 2,
+      "correct": 3,
       "incorrect": 0,
       "neutral": 0
     }
   },
   "summary_by_confidence": {
     "normal": {
-      "correct": 37,
+      "correct": 38,
       "incorrect": 68,
       "neutral": 10
     },
@@ -10125,7 +10489,7 @@
     },
     "holding:285A.T:2026-06-05": {
       "outcome": "correct",
-      "count": 7,
+      "count": 8,
       "symbol": "285A.T",
       "name": "キオクシア",
       "theme": "半導体"
@@ -10146,7 +10510,7 @@
     },
     "holding:4385.T:2026-07-27": {
       "outcome": "incorrect",
-      "count": 2,
+      "count": 3,
       "symbol": "4385.T",
       "name": "メルカリ",
       "theme": "国内グロース"
@@ -10160,7 +10524,7 @@
     },
     "candidate:SOUN": {
       "outcome": "correct",
-      "count": 2,
+      "count": 3,
       "symbol": "SOUN",
       "name": "SoundHound AI",
       "theme": "AI（小型成長株）"
@@ -10174,7 +10538,7 @@
     },
     "holding:PAYP:2026-03-19": {
       "outcome": "correct",
-      "count": 3,
+      "count": 4,
       "symbol": "PAYP",
       "name": "PayPay Corporation",
       "theme": "フィンテック"
@@ -10189,10 +10553,10 @@
   },
   "simulated_pl": {
     "売却検討": {
-      "trade_count": 31,
-      "total_return_pct": 404.86030232168577,
-      "wins": 14,
-      "losses": 17
+      "trade_count": 34,
+      "total_return_pct": 489.7249139862957,
+      "wins": 16,
+      "losses": 18
     },
     "買い候補": {
       "trade_count": 85,
@@ -10201,14 +10565,14 @@
       "losses": 51
     },
     "売り候補": {
-      "trade_count": 8,
-      "total_return_pct": -46.665368387938386,
-      "wins": 2,
+      "trade_count": 9,
+      "total_return_pct": -26.2606454001812,
+      "wins": 3,
       "losses": 6
     }
   },
   "summary_since_improvement": {
-    "correct": 44,
-    "incorrect": 41
+    "correct": 47,
+    "incorrect": 42
   }
 }
