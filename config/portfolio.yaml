@@ -69,14 +69,6 @@ holdings:
     theme: "フィンテック"
     amount_invested_jpy: 1000
 
-  - symbol: "XOM"
-    name: "Exxon Mobil"
-    market: "US"
-    purchase_date: "2026-07-21"
-    purchase_price: 151.71  # 単元未満株を5,000円分購入。当日終値をUSD換算の取得単価として使用
-    theme: "資源・エネルギー"
-    amount_invested_jpy: 5000
-
   - symbol: "1605.T"
     name: "INPEX"
     market: "JP"
