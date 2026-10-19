@@ -10,6 +10,10 @@
 判定するのは物差しとして短すぎ、短期的なノイズで「不正解」扱いになりやすかった。
 3ヶ月に合わせると検証に時間がかかりすぎるため、両者の中間として30日を採用している。
 
+その後、ウォッチリスト・候補の判定ごとにAIが見込む期間（horizon: 短期=1〜3ヶ月 /
+中長期=半年〜1年以上）を出すようにしたため、短期は30日後、中長期は180日後で検証する。
+期間別の的中率もsummary_by_horizonに分けて集計する。
+
 「様子見」「保有継続」は方向性のある予測ではないため、そもそも記録しない。
 
 過去の全件を保持すると際限なく増え続けるため、確定した結果は
@@ -58,6 +62,10 @@ _JST = ZoneInfo("Asia/Tokyo")
 
 _NEUTRAL_BAND_PCT = 1.0
 _RESOLVE_AFTER_DAYS = 30
+# 判定が見込む期間（horizon）ごとの検証タイミング。「半年〜1年以上」を見込んだ中長期の判定を
+# 30日後の値動きで採点すると、物差しが短すぎて的中率が実態より低く出てしまうため、
+# 中長期は180日後で検証する。horizonの無い判定（保有銘柄・導入前の記録）は従来どおり30日。
+_RESOLVE_AFTER_DAYS_BY_HORIZON = {"短期": 30, "中長期": 180}
 _RECENT_RESOLVED_LIMIT = 20
 
 _BULLISH = {"買い候補"}
@@ -89,6 +97,7 @@ _EMPTY_RECORD = {
     "streak_by_position": {},
     "simulated_pl": {},
     "summary_since_improvement": {},
+    "summary_by_horizon": {},
 }
 
 
@@ -143,6 +152,8 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
             continue
 
         score = r.get("score")
+        horizon = r.get("horizon") if r.get("horizon") in _RESOLVE_AFTER_DAYS_BY_HORIZON else None
+        resolve_days = _RESOLVE_AFTER_DAYS_BY_HORIZON.get(horizon, _RESOLVE_AFTER_DAYS)
         record["pending"].append(
             {
                 "id": pred_id,
@@ -152,12 +163,13 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
                 "recommendation": recommendation,
                 "theme": r.get("theme"),
                 "score": score if isinstance(score, int) else None,
+                "horizon": horizon,
                 # 保有銘柄はsymbolだけでは一意にならない（同じ銘柄を複数回買った場合）ため、
                 # build_key()での照合（連続的中/不的中の集計キー）にpurchase_dateが必要。
                 "purchase_date": r.get("purchase_date"),
                 "date": today_str,
                 "price_at_prediction": price,
-                "resolve_after": (_today() + dt.timedelta(days=_RESOLVE_AFTER_DAYS)).isoformat(),
+                "resolve_after": (_today() + dt.timedelta(days=resolve_days)).isoformat(),
             }
         )
 
@@ -257,6 +269,13 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
                 theme, {"correct": 0, "incorrect": 0, "neutral": 0}
             )
             theme_bucket[outcome] += 1
+
+        horizon = p.get("horizon")
+        if horizon:
+            horizon_bucket = record["summary_by_horizon"].setdefault(
+                horizon, {"correct": 0, "incorrect": 0, "neutral": 0}
+            )
+            horizon_bucket[outcome] += 1
 
         score = p.get("score")
         if isinstance(score, int):
@@ -362,6 +381,7 @@ def build_accuracy_summary(record: dict) -> dict:
     breakdown = _bucketed_breakdown(record["summary"], "recommendation")
     theme_breakdown = _bucketed_breakdown(record["summary_by_theme"], "theme")
     confidence_breakdown = _bucketed_breakdown(record["summary_by_confidence"], "confidence")
+    horizon_breakdown = _bucketed_breakdown(record["summary_by_horizon"], "horizon")
 
     total_correct = sum(b["correct"] for b in breakdown)
     total_incorrect = sum(b["incorrect"] for b in breakdown)
@@ -376,6 +396,7 @@ def build_accuracy_summary(record: dict) -> dict:
         "breakdown": breakdown,
         "theme_breakdown": theme_breakdown,
         "confidence_breakdown": confidence_breakdown,
+        "horizon_breakdown": horizon_breakdown,
         "recent_resolved": record["recent_resolved"],
         "streaks": record["streak_by_position"],
         "simulated_pl": _build_simulated_pl_summary(record),

@@ -208,6 +208,26 @@ def test_build_accuracy_section_no_warning_when_high_confidence_outperforms_norm
     assert "警告" not in section
 
 
+def test_build_accuracy_section_includes_horizon_breakdown_above_min_sample():
+    summary = {
+        "breakdown": [],
+        "confidence_breakdown": [],
+        "theme_breakdown": [],
+        "horizon_breakdown": [
+            {"horizon": "短期", "correct": 2, "incorrect": 6, "neutral": 0, "accuracy_pct": 25.0, "sample_size": 8},
+            {"horizon": "中長期", "correct": 1, "incorrect": 1, "neutral": 0, "accuracy_pct": 50.0, "sample_size": 2},
+        ],
+    }
+    section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"})
+    assert "期間「短期」の判定: 過去8件中2件" in section
+    assert "中長期" not in section.split("】", 1)[1].split("上記の傾向")[0]  # 件数不足の中長期は出さない
+
+
+def test_response_schema_requires_horizon():
+    assert "horizon" in analyze._RESPONSE_SCHEMA["required"]
+    assert analyze._RESPONSE_SCHEMA["properties"]["horizon"]["enum"] == ["中長期", "短期"]
+
+
 def test_build_accuracy_section_no_theme_arg_omits_theme_line():
     summary = {
         "breakdown": [

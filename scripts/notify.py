@@ -76,7 +76,8 @@ def _build_buy_section(buy_alerts: list[dict]) -> str:
     for r in buy_alerts:
         score = r.get("score")
         score_display = f"{score:+d}" if isinstance(score, int) else "—"
-        lines.append(f"・{r.get('name')}（{r.get('symbol')}） スコア {score_display}")
+        horizon = f" [{r['horizon']}]" if r.get("horizon") else ""
+        lines.append(f"・{r.get('name')}（{r.get('symbol')}） スコア {score_display}{horizon}")
         lines.append(f"  理由: {r.get('reasoning', '（記録なし）')}")
         lines.append("")
     return "\n".join(lines)

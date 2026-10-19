@@ -194,6 +194,23 @@
   @media (max-width: 560px) {
     .summary-grid { grid-template-columns: 1fr; }
   }
+  .summary-horizon + .summary-horizon {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gridline);
+  }
+  .summary-horizon-title { font-size: 0.95rem; margin: 0 0 2px; }
+  .summary-horizon-note { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 10px; }
+  .horizon-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 8px;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
   .summary-heading {
     font-size: 0.85rem;
     font-weight: 600;
@@ -546,46 +563,52 @@
 
   <section>
     <h2>AIによる売買サマリー</h2>
-    <div class="summary-grid">
-      <div>
-        <h3 class="summary-heading buy">▲ 買い候補</h3>
-        {% if summary_buy %}
-        <ul class="summary-list">
-          {% for t in summary_buy %}
-          <li>
-            <a class="summary-link" href="#ticker-{{ t.symbol }}">
-              <span class="summary-score buy">{{ t.score_display }}</span>
-              <span class="summary-name">{{ t.name }}</span>
-              <span class="summary-symbol">{{ t.symbol }}</span>
-              <span class="summary-group">{{ t.group }}</span>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p class="summary-empty">本日は買い候補に該当する銘柄がありません。</p>
-        {% endif %}
-      </div>
-      <div>
-        <h3 class="summary-heading sell">▼ 売り候補</h3>
-        {% if summary_sell %}
-        <ul class="summary-list">
-          {% for t in summary_sell %}
-          <li>
-            <a class="summary-link" href="#ticker-{{ t.symbol }}">
-              <span class="summary-score sell">{{ t.score_display }}</span>
-              <span class="summary-name">{{ t.name }}</span>
-              <span class="summary-symbol">{{ t.symbol }}</span>
-              <span class="summary-group">{{ t.group }}</span>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p class="summary-empty">本日は売り候補に該当する銘柄がありません。</p>
-        {% endif %}
+    {% for s in summary_sections %}
+    <div class="summary-horizon" id="summary-{{ s.key }}">
+      <h3 class="summary-horizon-title">{{ s.label }}</h3>
+      <p class="summary-horizon-note">{{ s.note }}</p>
+      <div class="summary-grid">
+        <div>
+          <h4 class="summary-heading buy">▲ 買い候補</h4>
+          {% if s.buy %}
+          <ul class="summary-list">
+            {% for t in s.buy %}
+            <li>
+              <a class="summary-link" href="#ticker-{{ t.symbol }}">
+                <span class="summary-score buy">{{ t.score_display }}</span>
+                <span class="summary-name">{{ t.name }}</span>
+                <span class="summary-symbol">{{ t.symbol }}</span>
+                <span class="summary-group">{{ t.group }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="summary-empty">本日は該当する銘柄がありません。</p>
+          {% endif %}
+        </div>
+        <div>
+          <h4 class="summary-heading sell">▼ 売り候補</h4>
+          {% if s.sell %}
+          <ul class="summary-list">
+            {% for t in s.sell %}
+            <li>
+              <a class="summary-link" href="#ticker-{{ t.symbol }}">
+                <span class="summary-score sell">{{ t.score_display }}</span>
+                <span class="summary-name">{{ t.name }}</span>
+                <span class="summary-symbol">{{ t.symbol }}</span>
+                <span class="summary-group">{{ t.group }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="summary-empty">本日は該当する銘柄がありません。</p>
+          {% endif %}
+        </div>
       </div>
     </div>
+    {% endfor %}
     <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
   </section>
 
@@ -593,8 +616,9 @@
     <h2>AIの的中率（過去の判定の検証）</h2>
     <div class="risk-banner" style="border-left-color: var(--baseline);">
       <strong>ℹ️ 検証方法:</strong>
-      「買い候補」「売り候補」「売却検討」の判定から30日後の株価と比較し、判定の方向（上昇/下落）と
+      「買い候補」「売り候補」「売却検討」の判定を、その後の株価と比較し、判定の方向（上昇/下落）と
       実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
+      比較するタイミングは、短期の判定と保有銘柄の判定は30日後、中長期の判定は180日後です。
       変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
     </div>
 
@@ -607,8 +631,20 @@
       </div>
       <p class="allocation-note">
         検証済み {{ accuracy.overall_sample_size }}件（様子見扱い{{ accuracy.overall_neutral }}件を除く）・
-        検証待ち {{ accuracy.pending_count }}件（判定から30日経過後に確定します）
+        検証待ち {{ accuracy.pending_count }}件（短期は30日後・中長期は180日後に確定します）
       </p>
+      {% for h in accuracy.horizon_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">期間: {{ h.horizon }}</span>
+        {% if h.accuracy_pct is not none %}
+        <div class="score-track"><div class="score-fill" style="width: {{ h.accuracy_pct }}%;"></div></div>
+        <span class="allocation-amount">{{ "%.0f"|format(h.accuracy_pct) }}%（{{ h.sample_size }}件）</span>
+        {% else %}
+        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
+        <span class="allocation-amount">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
 
       {% for b in accuracy.breakdown %}
       <div class="allocation-row">
@@ -650,8 +686,8 @@
       <h3>シミュレーション損益（判定通りに行動していた場合）</h3>
       <div class="risk-banner" style="border-left-color: var(--baseline);">
         <strong>ℹ️ 注意:</strong>
-        「買い候補」は判定時に買って30日後に売った場合、「売り候補」「売却検討」は判定時に
-        売った/買わなかった場合の仮想リターンです。等金額・単利（複利なし）で手数料や税金は
+        「買い候補」は判定時に買って検証時点（短期30日後・中長期180日後）に売った場合、
+        「売り候補」「売却検討」は判定時に売った/買わなかった場合の仮想リターンです。等金額・単利（複利なし）で手数料や税金は
         考慮していません。特定の売買を推奨するものではなく、あくまで判定を機械的に採用し
         続けた場合の振り返り指標です。
       </div>
@@ -744,6 +780,7 @@
         <div class="status-chip">
           <span class="status-dot"></span>
           {{ t.status_icon }} {{ t.recommendation }}
+          {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
         </div>
       </div>
 

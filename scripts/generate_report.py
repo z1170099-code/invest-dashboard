@@ -110,6 +110,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "theme": result.get("theme", ""),
         "group": group,
         "recommendation": result.get("recommendation", "分析失敗"),
+        "horizon": result.get("horizon"),
         "status_key": status["key"],
         "status_icon": status["icon"],
         "score": score,
@@ -330,6 +331,24 @@ def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
     return buy_list, sell_list
 
 
+def _build_summary_by_horizon(combined: list[dict]) -> list[dict]:
+    """売買サマリーを中長期・短期に分ける。
+
+    horizonが無い判定（導入前の記録や分析失敗）は、それまでのプロンプトが
+    中長期トレンドを主軸にしていたため中長期側に入れる。
+    """
+    short = [t for t in combined if t.get("horizon") == "短期"]
+    long = [t for t in combined if t.get("horizon") != "短期"]
+    sections = []
+    for key, label, note, items in (
+        ("long", "中長期（半年〜1年以上）", "時間をかけて効いてくる業績・テーマ・中長期トレンドに基づく判定", long),
+        ("short", "短期（1〜3ヶ月）", "決算・イベント・直近のニュースや値動きに基づく判定。値動きが大きくなりやすい点に注意", short),
+    ):
+        buy, sell = _build_summary(items)
+        sections.append({"key": key, "label": label, "note": note, "buy": buy, "sell": sell})
+    return sections
+
+
 def generate_report(
     watchlist_results: list[dict],
     candidate_results: list[dict],
@@ -350,7 +369,7 @@ def generate_report(
     holding_view = [
         _build_holding_view_model(r) for r in _sort_holdings(portfolio_results)
     ]
-    summary_buy, summary_sell = _build_summary(watchlist_view + candidate_view)
+    summary_sections = _build_summary_by_horizon(watchlist_view + candidate_view)
     theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
     nisa_usage = _build_nisa_usage(portfolio_results)
     tsumitate_usage = _build_tsumitate_usage(
@@ -372,8 +391,7 @@ def generate_report(
         crypto=crypto_view,
         holdings=holding_view,
         macro_news=macro_news,
-        summary_buy=summary_buy,
-        summary_sell=summary_sell,
+        summary_sections=summary_sections,
         theme_allocation=theme_allocation,
         theme_allocation_excluded_count=theme_allocation_excluded_count,
         nisa_usage=nisa_usage,

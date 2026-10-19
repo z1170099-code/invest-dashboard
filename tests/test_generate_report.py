@@ -88,6 +88,28 @@ def test_build_summary_buy_sorted_descending_sell_sorted_ascending():
     assert [s["score"] for s in sell_list] == [-90, -30]
 
 
+def test_build_summary_by_horizon_splits_long_and_short():
+    combined = [
+        {"symbol": "L1", "recommendation": "買い候補", "score": 40, "horizon": "中長期"},
+        {"symbol": "S1", "recommendation": "買い候補", "score": 30, "horizon": "短期"},
+        {"symbol": "S2", "recommendation": "売り候補", "score": -20, "horizon": "短期"},
+        {"symbol": "N1", "recommendation": "買い候補", "score": 20},  # horizon無しは中長期側
+        {"symbol": "W1", "recommendation": "様子見", "score": 0, "horizon": "短期"},
+    ]
+    sections = {s["key"]: s for s in gr._build_summary_by_horizon(combined)}
+
+    assert [t["symbol"] for t in sections["long"]["buy"]] == ["L1", "N1"]
+    assert sections["long"]["sell"] == []
+    assert [t["symbol"] for t in sections["short"]["buy"]] == ["S1"]
+    assert [t["symbol"] for t in sections["short"]["sell"]] == ["S2"]
+
+
+def test_build_summary_by_horizon_orders_long_section_first():
+    sections = gr._build_summary_by_horizon([])
+    assert [s["key"] for s in sections] == ["long", "short"]
+    assert all(s["buy"] == [] and s["sell"] == [] for s in sections)
+
+
 def test_sort_holdings_prioritizes_sell_candidates():
     results = [
         {"recommendation": "保有継続", "gain_loss_pct": 20},

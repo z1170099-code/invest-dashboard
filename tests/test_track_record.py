@@ -485,3 +485,61 @@ def test_build_accuracy_since_improvement_handles_empty():
     assert since["correct"] == 0
     assert since["incorrect"] == 0
     assert since["neutral"] == 0
+
+
+def _record_one(horizon):
+    record = tr._empty_record()
+    result = {"symbol": "AAA", "recommendation": "買い候補", "score": 30, "price_stats": {"latest_close": 100}}
+    if horizon is not None:
+        result["horizon"] = horizon
+    tr.record_predictions(record, "candidate", [result])
+    return record["pending"][0]
+
+
+def _days_until_resolve(entry):
+    return (dt.date.fromisoformat(entry["resolve_after"]) - tr._today()).days
+
+
+def test_record_predictions_long_horizon_resolves_after_180_days():
+    entry = _record_one("中長期")
+    assert entry["horizon"] == "中長期"
+    assert _days_until_resolve(entry) == 180
+
+
+def test_record_predictions_short_horizon_resolves_after_30_days():
+    entry = _record_one("短期")
+    assert entry["horizon"] == "短期"
+    assert _days_until_resolve(entry) == 30
+
+
+def test_record_predictions_missing_or_unknown_horizon_uses_default_window():
+    assert _days_until_resolve(_record_one(None)) == 30
+    unknown = _record_one("超長期")
+    assert unknown["horizon"] is None
+    assert _days_until_resolve(unknown) == 30
+
+
+def test_resolve_predictions_tracks_accuracy_by_horizon():
+    record = tr._empty_record()
+    record["pending"] = [
+        {**_pending_entry(symbol="AAA"), "horizon": "中長期"},
+        {**_pending_entry(symbol="BBB"), "horizon": "短期"},
+        _pending_entry(symbol="CCC"),  # horizon無し（導入前の記録）は期間別の集計に入れない
+    ]
+    tr.resolve_predictions(record, {"AAA": 110, "BBB": 90, "CCC": 110})
+
+    assert record["summary_by_horizon"]["中長期"] == {"correct": 1, "incorrect": 0, "neutral": 0}
+    assert record["summary_by_horizon"]["短期"] == {"correct": 0, "incorrect": 1, "neutral": 0}
+    assert len(record["summary_by_horizon"]) == 2
+
+    rows = {r["horizon"]: r for r in tr.build_accuracy_summary(record)["horizon_breakdown"]}
+    assert rows["中長期"]["accuracy_pct"] == 100.0
+    assert rows["短期"]["accuracy_pct"] == 0.0
+
+
+def test_load_track_record_adds_horizon_bucket_to_old_files(tmp_path):
+    path = tmp_path / "track_record.json"
+    path.write_text('{"pending": [], "summary": {}, "recent_resolved": []}', encoding="utf-8")
+    record = tr.load_track_record(path)
+    assert record["summary_by_horizon"] == {}
+    assert tr.build_accuracy_summary(record)["horizon_breakdown"] == []
