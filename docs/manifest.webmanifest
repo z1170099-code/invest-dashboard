@@ -1,0 +1,16 @@
+{
+  "name": "AI投資分析ダッシュボード",
+  "short_name": "AI投資分析",
+  "description": "保有銘柄・注目銘柄のAI分析レポート（毎朝自動更新）",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
