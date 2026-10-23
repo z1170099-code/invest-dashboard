@@ -1180,6 +1180,22 @@
     });
   })();
   (function () {
+    // ホーム画面アプリには再読み込みボタンがなく、開き直しても前回の画面が
+    // メモリから復元されるだけのことがある。読み込みから30分以上たって
+    // 画面に戻ってきたら、最新のレポートを取り直す。
+    var STALE_MS = 30 * 60 * 1000;
+    var loadedAt = Date.now();
+    function reloadIfStale() {
+      if (document.visibilityState === "visible" && Date.now() - loadedAt > STALE_MS) {
+        location.reload();
+      }
+    }
+    document.addEventListener("visibilitychange", reloadIfStale);
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) reloadIfStale();
+    });
+  })();
+  (function () {
     var root = document.documentElement;
     var key = "invest-dashboard-theme";
     var saved = localStorage.getItem(key);
