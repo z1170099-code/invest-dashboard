@@ -97,10 +97,13 @@ def main() -> None:
     tsumitate_config = _load_yaml(_CONFIG_DIR / "nisa_tsumitate.yaml")
     sell_policy_path = _CONFIG_DIR / "sell_policy.yaml"
     sell_policy = _load_yaml(sell_policy_path) if sell_policy_path.exists() else None
+    yutai_path = _CONFIG_DIR / "yutai.yaml"
+    yutai_config = (_load_yaml(yutai_path) if yutai_path.exists() else None) or {}
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
     holdings = portfolio.get("holdings", []) if portfolio else []
+    yutai_stocks = yutai_config.get("stocks") or []
     tsumitate_entries = (tsumitate_config or {}).get("tsumitate", [])
     profit_taking = active_profit_taking(sell_policy, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date())
     if profit_taking:
@@ -146,6 +149,16 @@ def main() -> None:
         accuracy_summary_for_prompt,
         benchmarks,
     )
+    yutai_results = _analyze_group(
+        "株主優待",
+        yutai_stocks,
+        max_per_ticker,
+        macro_news,
+        history,
+        "yutai",
+        accuracy_summary_for_prompt,
+        benchmarks,
+    )
     portfolio_results = _analyze_group(
         "保有銘柄",
         holdings,
@@ -158,7 +171,7 @@ def main() -> None:
         analyze_fn=functools.partial(analyze_all_holdings, profit_taking=profit_taking),
     )
 
-    all_results = watchlist_results + candidate_results + portfolio_results
+    all_results = watchlist_results + candidate_results + yutai_results + portfolio_results
     current_prices = {
         r["symbol"]: r["price_stats"]["latest_close"]
         for r in all_results
@@ -167,6 +180,7 @@ def main() -> None:
     resolve_predictions(track_record, current_prices)
     record_predictions(track_record, "watchlist", watchlist_results)
     record_predictions(track_record, "candidate", candidate_results)
+    record_predictions(track_record, "yutai", yutai_results)
     record_predictions(track_record, "holding", portfolio_results)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
@@ -182,19 +196,24 @@ def main() -> None:
         _OUTPUT_PATH,
         tsumitate_entries,
         profit_taking,
+        yutai_results,
+        yutai_config,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
     # 「新たに売却検討になった銘柄」「新たにスコア70以上の買い候補になった銘柄」を通知する。
     sell_alerts = find_newly_flagged_sell(portfolio_results, history)
-    buy_alerts = find_newly_strong_buy(watchlist_results, history, "watchlist") + find_newly_strong_buy(
-        candidate_results, history, "candidate"
+    buy_alerts = (
+        find_newly_strong_buy(watchlist_results, history, "watchlist")
+        + find_newly_strong_buy(candidate_results, history, "candidate")
+        + find_newly_strong_buy(yutai_results, history, "yutai")
     )
     send_notification_email(sell_alerts, buy_alerts)
 
     try:
         apply_group_results(history, "watchlist", watchlist_results)
         apply_group_results(history, "candidate", candidate_results)
+        apply_group_results(history, "yutai", yutai_results)
         apply_group_results(history, "holding", portfolio_results)
         save_history(_HISTORY_PATH, history)
     except Exception:

@@ -1,0 +1,116 @@
+# 「株主優待がもらえて、少ない金額で買えて、株価の上昇も期待できるか」を見るための
+# 株主優待銘柄のリストです。
+#
+# ここに登録した銘柄は毎日Gemini APIで分析され、レポート内の「株主優待銘柄」セクションに
+# 買い/売りスコア付きで表示されます。優待の内容もAIに渡し、権利確定月の前後の値動き
+# （権利付き最終日に向けて買われ、権利落ち日に下がりやすい等）も判断材料にさせます。
+#
+# ⚠ 株主優待は原則「単元株（ほとんどの銘柄で100株）」以上を株主名簿に載った状態で
+#   持っている人が対象です。単元未満株（1株単位や金額指定の買い方）では、ほぼすべての銘柄で
+#   優待はもらえません。
+# ⚠ 優待は会社の判断で変更・廃止されることがあります。checked_on の日付時点で
+#   Webで確認した内容なので、購入前に必ず各社のIRサイトで最新の内容を確認してください。
+#
+# 各項目の意味:
+#   max_min_investment_jpy: 「安く買える」とみなす最低投資金額（株価×必要株数）の上限（円）。
+#     これを超える銘柄もレポートには表示されますが、「予算オーバー」と表示されます。
+#   symbol / name / market / theme / nisa_growth_eligible: candidate_pool.yaml と同じ
+#   yutai:
+#     content: 優待の内容（AIへの入力とレポート表示に使う）
+#     shares: 優待をもらうのに必要な株数
+#     months: 権利確定月（その月の末日時点の株主が対象）
+#     annual_value_jpy: （任意）必要株数で1年間にもらえる優待の金額の目安（円）。
+#       入力すると「優待利回り」（優待の金額÷最低投資金額）を計算して表示します。
+#       金額に換算しにくい優待（割引・無料プラン等）や、毎年はもらえない優待は空欄（null）。
+
+max_min_investment_jpy: 150000
+checked_on: "2026-10-25"
+
+stocks:
+  - symbol: "9432.T"
+    name: "NTT"
+    market: "JP"
+    theme: "通信"
+    nisa_growth_eligible: true
+    yutai:
+      content: "dポイント。100株以上を2年以上継続保有で1,500ポイント、5年以上で3,000ポイント（専用サイトで申請が必要）"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+
+  - symbol: "9434.T"
+    name: "ソフトバンク"
+    market: "JP"
+    theme: "通信"
+    nisa_growth_eligible: true
+    yutai:
+      content: "PayPayマネーライト1,000円分。100株以上を1年以上継続保有が条件（専用サイトで申請が必要）"
+      shares: 100
+      months: [3]
+      annual_value_jpy: 1000
+
+  - symbol: "4755.T"
+    name: "楽天グループ"
+    market: "JP"
+    theme: "ネット・通信"
+    nisa_growth_eligible: true
+    yutai:
+      content: "楽天モバイル（音声+データ30GB/月）が6ヶ月無料。翌年6月末も継続保有していれば、さらに6ヶ月無料（最大1年間）"
+      shares: 100
+      months: [12]
+      annual_value_jpy: null
+
+  - symbol: "9831.T"
+    name: "ヤマダホールディングス"
+    market: "JP"
+    theme: "小売"
+    nisa_growth_eligible: true
+    yutai:
+      content: "ヤマダデンキの優待割引券（500円券）。3月末に1枚、9月末に2枚。税込1,000円ごとに1枚使える"
+      shares: 100
+      months: [3, 9]
+      annual_value_jpy: 1500
+
+  - symbol: "3048.T"
+    name: "ビックカメラ"
+    market: "JP"
+    theme: "小売"
+    nisa_growth_eligible: true
+    yutai:
+      content: "買物優待券（1,000円券）。2月末に2枚、8月末に1枚。1年以上の継続保有で8月末に1枚、2年以上で2枚追加。ソフマップ・コジマでも使える"
+      shares: 100
+      months: [2, 8]
+      annual_value_jpy: 3000
+
+  - symbol: "8267.T"
+    name: "イオン"
+    market: "JP"
+    theme: "小売"
+    nisa_growth_eligible: true
+    yutai:
+      content: "オーナーズカード。イオン等での買い物金額の一定割合（100株で3%、保有株数に応じて1〜7%）が半年ごとに返金される"
+      shares: 100
+      months: [2, 8]
+      annual_value_jpy: null
+
+  - symbol: "9603.T"
+    name: "エイチ・アイ・エス"
+    market: "JP"
+    theme: "旅行・インバウンド"
+    nisa_growth_eligible: true
+    yutai:
+      content: "HIS株主優待券（100株で1,000円分）。3年以上の継続保有で3,000円分上乗せ"
+      shares: 100
+      months: [4, 10]
+      annual_value_jpy: null
+
+  - symbol: "3134.T"
+    name: "Hamee"
+    market: "JP"
+    theme: "EC・スマホアクセサリー"
+    nisa_growth_eligible: true
+    yutai:
+      content: "自社の通販サイト4つで使える1,000円分クーポン（各サイト1枚ずつ）"
+      shares: 100
+      months: [4, 10]
+      annual_value_jpy: null

@@ -300,6 +300,21 @@ def _format_price_section(price_stats: dict | None) -> str:
     )
 
 
+def _build_yutai_section(yutai: dict | None) -> str:
+    """株主優待銘柄の優待内容と権利確定月をプロンプト用に整形する。優待情報がなければ空文字。"""
+    if not yutai:
+        return ""
+    months = "・".join(f"{m}月" for m in yutai.get("months") or [])
+    return f"""
+【株主優待】
+内容: {yutai.get("content", "")}
+必要株数: {yutai.get("shares", 100)}株 / 権利確定月: {months}末
+株主優待のある銘柄は、権利確定月に向けて優待目当ての買いで株価が上がりやすく、
+権利落ち日（権利確定日の前営業日）の後に下がりやすい傾向があります。この傾向も踏まえつつ、
+優待の有無ではなく株価そのものの上昇が見込めるかを中心に判定してください。
+"""
+
+
 def _build_prompt(
     ticker: dict,
     price_stats: dict | None,
@@ -327,6 +342,7 @@ def _build_prompt(
         macro_section = "特筆すべき世界情勢・マクロ経済ニュースはありません。"
 
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
+    theme_line += _build_yutai_section(ticker.get("yutai"))
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
@@ -652,7 +668,7 @@ def _get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
-_PASSTHROUGH_FIELDS = ("theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy")
+_PASSTHROUGH_FIELDS = ("theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai")
 
 
 def _base_fields(ticker: dict) -> dict:

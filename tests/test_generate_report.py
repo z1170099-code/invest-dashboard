@@ -241,3 +241,52 @@ def test_build_tsumitate_usage_excludes_invalid_entries():
     assert usage["excluded_count"] == 2
     assert usage["annual_used"] == 0
     assert usage["lifetime_used"] == 0
+
+
+def test_next_record_month_picks_upcoming_or_wraps_to_next_year():
+    assert gr._next_record_month([3, 9], dt.date(2026, 10, 25)) == dt.date(2027, 3, 1)
+    assert gr._next_record_month([4, 10], dt.date(2026, 10, 25)) == dt.date(2026, 10, 1)
+    assert gr._next_record_month([2, 8], dt.date(2026, 5, 1)) == dt.date(2026, 8, 1)
+    assert gr._next_record_month([], dt.date(2026, 5, 1)) is None
+
+
+def _yutai_result(latest=500, annual_value=1500, history=None):
+    return {
+        "symbol": "9831.T",
+        "name": "ヤマダホールディングス",
+        "yutai": {"content": "優待割引券", "shares": 100, "months": [3, 9], "annual_value_jpy": annual_value},
+        "price_stats": {
+            "latest_close": latest,
+            "history_1y": history if history is not None else [["2026-01-01", 400], ["2026-06-01", 600], ["2026-10-01", latest]],
+        },
+    }
+
+
+def test_build_yutai_info_computes_investment_yield_and_range():
+    info = gr._build_yutai_info(_yutai_result(), 100000, dt.date(2026, 10, 25))
+    assert info["min_investment"] == 50000
+    assert info["min_investment_display"] == "約50,000円"
+    assert info["within_budget"] is True
+    assert info["yield_display"] == "3.00%"
+    assert info["range_position_pct"] == 50.0
+    assert info["range_label"] == "中間"
+    assert info["months_display"] == "3月・9月"
+    assert info["next_record_display"] == "2027年3月末"
+    assert info["next_record_is_this_month"] is False
+
+
+def test_build_yutai_info_flags_over_budget_and_low_range():
+    history = [["2026-01-01", 2000], ["2026-06-01", 1500], ["2026-10-01", 1100]]
+    info = gr._build_yutai_info(_yutai_result(latest=1100, annual_value=None, history=history), 100000, dt.date(2026, 10, 25))
+    assert info["within_budget"] is False
+    assert info["yield_display"] is None
+    assert info["range_label"] == "安値圏"
+
+
+def test_build_yutai_info_handles_missing_price():
+    result = _yutai_result()
+    result["price_stats"] = None
+    info = gr._build_yutai_info(result, 100000, dt.date(2026, 10, 25))
+    assert info["min_investment_display"] == "—"
+    assert info["within_budget"] is None
+    assert info["range_position_pct"] is None

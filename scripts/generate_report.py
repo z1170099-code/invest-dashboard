@@ -139,6 +139,71 @@ def _build_view_model(result: dict, group: str = "") -> dict:
     }
 
 
+def _next_record_month(months: list[int], today: dt.date) -> dt.date | None:
+    """次に来る権利確定月の1日を返す（今月が権利確定月なら今月）。"""
+    if not months:
+        return None
+    upcoming = sorted(m for m in months if m >= today.month)
+    if upcoming:
+        return dt.date(today.year, upcoming[0], 1)
+    return dt.date(today.year + 1, min(months), 1)
+
+
+def _build_yutai_info(result: dict, budget_jpy: float | None, today: dt.date) -> dict:
+    """株主優待銘柄のカードに出す情報（最低投資金額・優待利回り・1年の値幅での位置など）を作る。"""
+    yutai = result.get("yutai") or {}
+    price_stats = result.get("price_stats") or {}
+    latest = price_stats.get("latest_close")
+    shares = yutai.get("shares") or 100
+
+    min_investment = latest * shares if isinstance(latest, (int, float)) else None
+    annual_value = yutai.get("annual_value_jpy")
+    yield_pct = (
+        round(annual_value / min_investment * 100, 2)
+        if isinstance(annual_value, (int, float)) and min_investment
+        else None
+    )
+
+    # 1年の値幅（最安値=0%、最高値=100%）の中で、現在の株価がどのあたりにあるか
+    closes = [c for _, c in price_stats.get("history_1y") or []]
+    range_position_pct = None
+    if len(closes) >= 2 and isinstance(latest, (int, float)) and max(closes) > min(closes):
+        lo, hi = min(closes), max(closes)
+        range_position_pct = round(min(100.0, max(0.0, (latest - lo) / (hi - lo) * 100)), 1)
+    if range_position_pct is None:
+        range_label = None
+    elif range_position_pct <= 33:
+        range_label = "安値圏"
+    elif range_position_pct >= 67:
+        range_label = "高値圏"
+    else:
+        range_label = "中間"
+
+    next_record = _next_record_month(yutai.get("months") or [], today)
+    return {
+        "content": yutai.get("content", ""),
+        "shares": shares,
+        "months_display": "・".join(f"{m}月" for m in yutai.get("months") or []),
+        "next_record_display": f"{next_record.year}年{next_record.month}月末" if next_record else None,
+        "next_record_is_this_month": bool(next_record and next_record.month == today.month and next_record.year == today.year),
+        "min_investment": min_investment,
+        "min_investment_display": f"約{min_investment:,.0f}円" if min_investment else "—",
+        "within_budget": None if min_investment is None or not budget_jpy else min_investment <= budget_jpy,
+        "yield_display": f"{yield_pct:.2f}%" if yield_pct is not None else None,
+        "range_position_pct": range_position_pct,
+        "range_label": range_label,
+    }
+
+
+def _build_yutai_view(results: list[dict], budget_jpy: float | None, today: dt.date) -> list[dict]:
+    views = []
+    for r in _sort_by_score(results):
+        view = _build_view_model(r, group="株主優待")
+        view["yutai"] = _build_yutai_info(r, budget_jpy, today)
+        views.append(view)
+    return views
+
+
 def _build_holding_view_model(result: dict) -> dict:
     price_stats = result.get("price_stats") or {}
     status = _HOLDING_STATUS_MAP.get(result.get("recommendation"), _HOLDING_STATUS_MAP["分析失敗"])
@@ -359,6 +424,8 @@ def generate_report(
     output_path: Path,
     tsumitate_entries: list[dict] | None = None,
     profit_taking: dict | None = None,
+    yutai_results: list[dict] | None = None,
+    yutai_config: dict | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -383,7 +450,11 @@ def generate_report(
     env = Environment(loader=FileSystemLoader(str(templates_dir)), autoescape=True)
     template = env.get_template("report.html.jinja")
 
-    generated_at = dt.datetime.now(tz=_JST).strftime("%Y年%m月%d日 %H:%M (JST)")
+    now = dt.datetime.now(tz=_JST)
+    generated_at = now.strftime("%Y年%m月%d日 %H:%M (JST)")
+    yutai_config = yutai_config or {}
+    yutai_budget = yutai_config.get("max_min_investment_jpy")
+    yutai_view = _build_yutai_view(yutai_results or [], yutai_budget, now.date())
 
     html = template.render(
         tickers=watchlist_view,
@@ -397,6 +468,9 @@ def generate_report(
         nisa_usage=nisa_usage,
         tsumitate_usage=tsumitate_usage,
         profit_taking=profit_taking,
+        yutai=yutai_view,
+        yutai_budget_display=f"{yutai_budget:,.0f}円" if yutai_budget else None,
+        yutai_checked_on=yutai_config.get("checked_on"),
         accuracy=accuracy_summary,
         generated_at=generated_at,
     )

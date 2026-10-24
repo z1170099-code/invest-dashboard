@@ -281,3 +281,20 @@ def test_build_accuracy_section_combines_streak_with_other_data():
     section = analyze._build_accuracy_section(summary, {"買い候補", "売り候補"}, streak=streak)
     assert "4回連続" in section
     assert "買い候補" in section
+
+
+def test_build_yutai_section_empty_without_yutai():
+    assert analyze._build_yutai_section(None) == ""
+
+
+def test_build_prompt_includes_yutai_details():
+    ticker = {
+        "symbol": "9434.T",
+        "name": "ソフトバンク",
+        "market": "JP",
+        "yutai": {"content": "PayPayマネーライト1,000円分", "shares": 100, "months": [3, 9]},
+    }
+    prompt = analyze._build_prompt(ticker, None, [])
+    assert "【株主優待】" in prompt
+    assert "PayPayマネーライト1,000円分" in prompt
+    assert "権利確定月: 3月・9月末" in prompt

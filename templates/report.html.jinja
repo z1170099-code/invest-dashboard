@@ -185,6 +185,54 @@
     color: var(--text-secondary);
   }
   .risk-banner strong { color: var(--text-primary); }
+  .risk-banner.info { border-left-color: var(--series-1); }
+  .risk-banner ul { margin: 6px 0 0; padding-left: 1.2em; }
+
+  .yutai-box {
+    border: 1px solid var(--gridline);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 4px 0 12px;
+    font-size: 0.85rem;
+  }
+  .yutai-content { color: var(--text-primary); margin-bottom: 8px; }
+  .yutai-content .label { color: var(--text-muted); margin-right: 4px; }
+  .yutai-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px 16px;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .yutai-stats .label { display: block; font-size: 0.72rem; color: var(--text-muted); }
+  .yutai-flag {
+    display: inline-block;
+    font-size: 0.72rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 8px;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+  .range-meter {
+    position: relative;
+    height: 6px;
+    margin-top: 5px;
+    border-radius: 3px;
+    background: var(--gridline);
+  }
+  .range-meter-dot {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    border-radius: 50%;
+    background: var(--series-1);
+    border: 2px solid var(--surface-1);
+    transform: translateY(-50%);
+  }
+  .range-meter-ends { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
 
   .summary-grid {
     display: grid;
@@ -800,6 +848,40 @@
       </div>
       {% endif %}
 
+      {% if t.yutai %}
+      <div class="yutai-box">
+        <div class="yutai-content"><span class="label">🎁 優待:</span>{{ t.yutai.content }}</div>
+        <div class="yutai-stats">
+          <div>
+            <span class="label">最低投資金額（{{ t.yutai.shares }}株）</span>
+            {{ t.yutai.min_investment_display }}
+            {% if t.yutai.within_budget is not none %}<span class="yutai-flag">{{ "予算内" if t.yutai.within_budget else "予算オーバー" }}</span>{% endif %}
+          </div>
+          <div>
+            <span class="label">権利確定月</span>
+            {{ t.yutai.months_display }}末
+            {% if t.yutai.next_record_display %}<span class="yutai-flag">次回 {{ t.yutai.next_record_display }}{% if t.yutai.next_record_is_this_month %}（今月）{% endif %}</span>{% endif %}
+          </div>
+          {% if t.yutai.yield_display %}
+          <div>
+            <span class="label">優待利回り（年間の目安）</span>
+            {{ t.yutai.yield_display }}
+          </div>
+          {% endif %}
+          {% if t.yutai.range_position_pct is not none %}
+          <div>
+            <span class="label">1年の値幅の中での位置</span>
+            {{ t.yutai.range_label }}（{{ t.yutai.range_position_pct }}%）
+            <div class="range-meter" role="img" aria-label="1年の最安値を0%、最高値を100%としたときの現在位置: {{ t.yutai.range_position_pct }}%">
+              <span class="range-meter-dot" style="left: {{ t.yutai.range_position_pct }}%;"></span>
+            </div>
+            <div class="range-meter-ends"><span>1年の最安値</span><span>最高値</span></div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
       {{ price_chart(t.chart, t.name) }}
 
       <p class="reasoning">{{ t.reasoning }}</p>
@@ -1050,6 +1132,28 @@
     <p style="color: var(--text-muted); font-size: 0.9rem;">
       まだ保有銘柄が登録されていません。<code>config/portfolio.yaml</code> に購入した銘柄・購入日・購入価格を登録すると、ここに売却タイミングの判断が表示されます。
     </p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>株主優待銘柄（少額で買える優待株）</h2>
+    <div class="risk-banner info">
+      <strong>🎁 このセクションについて:</strong>
+      株主優待がある銘柄の中から、少ない金額で買えるものを集め、株価そのものの上昇が見込めるかをAIがスコア順に整理しています。
+      <ul>
+        <li><strong>優待は原則100株（単元株）以上が対象です。</strong>単元未満株（1株単位・金額指定）での購入では、ほぼすべての銘柄で優待はもらえません。</li>
+        <li>権利確定月の末日に株主名簿に載っている必要があります。実際には、その2営業日前の「権利付き最終日」までに買っておく必要があります。</li>
+        <li>権利確定日の直後（権利落ち日）は、優待目当ての売りで株価が下がりやすい傾向があります。</li>
+        <li>「1年の値幅の中での位置」は、1年間の最安値を0%、最高値を100%としたときの今の株価の位置です。安値圏でも、下がり続けている途中のこともあります。</li>
+        <li>優待内容は{{ yutai_checked_on or "登録時" }}時点の確認内容です。変更・廃止されることがあるため、購入前に各社のIRサイトで最新情報を確認してください。{% if yutai_budget_display %}「予算内」は最低投資金額が{{ yutai_budget_display }}以下かどうかの目安です。{% endif %}</li>
+      </ul>
+    </div>
+    {% if yutai %}
+    {% for t in yutai %}
+      {{ ticker_card(t, loop.index) }}
+    {% endfor %}
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">株主優待銘柄が登録されていません。<code>config/yutai.yaml</code> に銘柄を登録すると、ここに表示されます。</p>
     {% endif %}
   </section>
 
