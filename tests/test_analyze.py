@@ -306,3 +306,24 @@ def test_build_prompt_includes_sector_instruction_only_for_sector_etfs():
     assert "【業種別ETF】" in prompt
     assert "「医薬品」業種全体" in prompt
     assert analyze._build_sector_section(None) == ""
+
+
+def test_build_sector_peer_table_lists_only_sector_etfs():
+    tickers = [
+        {"symbol": "1621.T", "name": "医薬品", "sector": "医薬品"},
+        {"symbol": "1631.T", "name": "銀行", "sector": "銀行"},
+        {"symbol": "AAPL", "name": "Apple"},
+    ]
+    stats = {"1621.T": {"change_1m_pct": 2.0, "change_3m_pct": 8.5}, "1631.T": None}
+    table = analyze.build_sector_peer_table(tickers, stats)
+    assert "- 医薬品: 1ヶ月 +2.00% / 3ヶ月 +8.50% / 6ヶ月 データなし" in table
+    assert "- 銀行: 1ヶ月 データなし" in table
+    assert "Apple" not in table
+    assert analyze.build_sector_peer_table([{"symbol": "AAPL", "name": "Apple"}], {}) == ""
+
+
+def test_build_prompt_includes_sector_peer_table_when_given():
+    ticker = {"symbol": "1621.T", "name": "医薬品", "market": "JP", "sector": "医薬品", "sector_peers": "- 医薬品: 1ヶ月 +2.00%"}
+    prompt = analyze._build_prompt(ticker, None, [])
+    assert "【全業種の騰落率（比較用）】" in prompt
+    assert "- 医薬品: 1ヶ月 +2.00%" in prompt

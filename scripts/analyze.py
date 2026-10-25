@@ -315,16 +315,39 @@ def _build_yutai_section(yutai: dict | None) -> str:
 """
 
 
-def _build_sector_section(sector: str | None) -> str:
+def build_sector_peer_table(tickers: list[dict], price_stats_by_symbol: dict[str, dict | None]) -> str:
+    """業種別ETF全体の騰落率を1つの比較表にする。1業種ずつ判定するAIに、他業種との比較材料を渡すため。"""
+    rows = []
+    for t in tickers:
+        if not t.get("sector"):
+            continue
+        ps = price_stats_by_symbol.get(t["symbol"]) or {}
+        rows.append(
+            f"- {t['name']}: 1ヶ月 {_fmt_pct(ps.get('change_1m_pct'))} / 3ヶ月 {_fmt_pct(ps.get('change_3m_pct'))}"
+            f" / 6ヶ月 {_fmt_pct(ps.get('change_6m_pct'))} / 1年 {_fmt_pct(ps.get('change_1y_pct'))}"
+        )
+    return "\n".join(rows)
+
+
+def _build_sector_section(sector: str | None, peer_table: str | None = None) -> str:
     """業種別ETFの場合に、個別企業ではなく業種全体として判定するよう指示する。業種でなければ空文字。"""
     if not sector:
         return ""
-    return f"""
+    section = f"""
 【業種別ETF】
 この銘柄は、東証上場企業のうち「{sector}」業種全体の値動きに連動するETFです。
 特定の1社の材料ではなく、業種全体の業績・需要・金利や為替などのマクロ環境への感応度をもとに、
 この業種が他の業種と比べて強そうか弱そうかという観点で判定してください。
 """
+    if peer_table:
+        section += f"""
+【全業種の騰落率（比較用）】
+{peer_table}
+この表とマクロ環境から見て、この業種がほかの業種より相対的に強いか弱いかを判定の中心にしてください。
+全業種がほぼ同じスコアになると比較の意味がなくなるため、相対的に強い業種ほど高く、弱い業種ほど低い
+スコアにして、業種間の差をはっきりつけてください。
+"""
+    return section
 
 
 def _build_prompt(
@@ -355,7 +378,7 @@ def _build_prompt(
 
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
     theme_line += _build_yutai_section(ticker.get("yutai"))
-    theme_line += _build_sector_section(ticker.get("sector"))
+    theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"))
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )

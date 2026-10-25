@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 import yaml
 from dotenv import load_dotenv
 
-from analyze import active_profit_taking, analyze_all, analyze_all_holdings
+from analyze import active_profit_taking, analyze_all, analyze_all_holdings, build_sector_peer_table
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks
 from generate_report import generate_report
@@ -69,6 +69,10 @@ def _analyze_group(
         attach_relative_performance(
             price_stats_by_symbol.get(ticker["symbol"]), ticker.get("market"), benchmarks
         )
+    # 業種別ETFは1業種ずつ判定されるため、全業種の騰落率の比較表を各業種のプロンプトに添える。
+    peer_table = build_sector_peer_table(tickers, price_stats_by_symbol)
+    if peer_table:
+        tickers = [{**t, "sector_peers": peer_table} if t.get("sector") else t for t in tickers]
 
     logger.info("[%s] 個別銘柄のニュースを取得中...", label)
     news_by_symbol = {
