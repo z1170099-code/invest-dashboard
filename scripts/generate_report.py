@@ -426,6 +426,7 @@ def generate_report(
     profit_taking: dict | None = None,
     yutai_results: list[dict] | None = None,
     yutai_config: dict | None = None,
+    sector_results: list[dict] | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -455,6 +456,7 @@ def generate_report(
     yutai_config = yutai_config or {}
     yutai_budget = yutai_config.get("max_min_investment_jpy")
     yutai_view = _build_yutai_view(yutai_results or [], yutai_budget, now.date())
+    sector_view = [_build_view_model(r, group="業種別ETF") for r in _sort_by_score(sector_results or [])]
 
     html = template.render(
         tickers=watchlist_view,
@@ -469,6 +471,7 @@ def generate_report(
         tsumitate_usage=tsumitate_usage,
         profit_taking=profit_taking,
         yutai=yutai_view,
+        sectors=sector_view,
         yutai_budget_display=f"{yutai_budget:,.0f}円" if yutai_budget else None,
         yutai_checked_on=yutai_config.get("checked_on"),
         accuracy=accuracy_summary,

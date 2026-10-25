@@ -1,0 +1,155 @@
+# 業種（セクター）ごとの強さを同じ物差しで比べるための、TOPIX-17業種別ETFのリストです。
+#
+# 東証の上場企業を17の業種に分け、それぞれの業種全体の値動きに連動するETF
+# （野村アセットマネジメントの「NEXT FUNDS TOPIX-17」シリーズ）を毎日Gemini APIで分析し、
+# レポート内の「業種別の強さ」セクションにスコア順で表示します。
+#
+# watchlist.yaml や candidate_pool.yaml は人が選んだ銘柄なので、どうしても分野が偏ります。
+# このリストは全業種を1つずつ並べているので、「どの業種が強そうか」を偏りなく比べられます。
+#
+# ⚠ これらのETFは1日の売買量が少ないものが多く、買値と売値の差が広がりやすいです。
+#   実際に売買するよりも、業種の強さを比べる物差しとして使うことを主な目的にしています。
+#
+# 各項目の意味:
+#   symbol / market / nisa_growth_eligible: candidate_pool.yaml と同じ
+#   name: 表示名（業種名）
+#   sector: 業種名（AIへの入力に使う。「個別企業ではなく業種全体として判定する」よう指示する）
+#   theme: 的中率を業種ごとに集計するためのテーマ名（sectorと同じにしている）
+#   news_query: 関連ニュースの検索語（ETFの正式名称では業種のニュースが見つからないため）
+
+sectors:
+  - symbol: "1617.T"
+    name: "食品"
+    sector: "食品"
+    theme: "食品"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "食品株"
+
+  - symbol: "1618.T"
+    name: "エネルギー資源"
+    sector: "エネルギー資源（石油・石炭・鉱業）"
+    theme: "エネルギー資源"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "石油株 資源株"
+
+  - symbol: "1619.T"
+    name: "建設・資材"
+    sector: "建設・資材"
+    theme: "建設・資材"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "建設株"
+
+  - symbol: "1620.T"
+    name: "素材・化学"
+    sector: "素材・化学"
+    theme: "素材・化学"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "化学株"
+
+  - symbol: "1621.T"
+    name: "医薬品"
+    sector: "医薬品"
+    theme: "医薬品"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "医薬品株"
+
+  - symbol: "1622.T"
+    name: "自動車・輸送機"
+    sector: "自動車・輸送機"
+    theme: "自動車・輸送機"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "自動車株"
+
+  - symbol: "1623.T"
+    name: "鉄鋼・非鉄"
+    sector: "鉄鋼・非鉄金属"
+    theme: "鉄鋼・非鉄"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "鉄鋼株 非鉄株"
+
+  - symbol: "1624.T"
+    name: "機械"
+    sector: "機械"
+    theme: "機械"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "機械株"
+
+  - symbol: "1625.T"
+    name: "電機・精密"
+    sector: "電機・精密機器"
+    theme: "電機・精密"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "電機株"
+
+  - symbol: "1626.T"
+    name: "情報通信・サービス"
+    sector: "情報通信・サービスその他"
+    theme: "情報通信・サービス"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "情報通信株"
+
+  - symbol: "1627.T"
+    name: "電力・ガス"
+    sector: "電力・ガス"
+    theme: "電力・ガス"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "電力株"
+
+  - symbol: "1628.T"
+    name: "運輸・物流"
+    sector: "運輸・物流（陸運・海運・空運・倉庫）"
+    theme: "運輸・物流"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "運輸株 海運株"
+
+  - symbol: "1629.T"
+    name: "商社・卸売"
+    sector: "商社・卸売"
+    theme: "商社・卸売"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "商社株"
+
+  - symbol: "1630.T"
+    name: "小売"
+    sector: "小売"
+    theme: "小売"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "小売株"
+
+  - symbol: "1631.T"
+    name: "銀行"
+    sector: "銀行"
+    theme: "銀行"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "銀行株"
+
+  - symbol: "1632.T"
+    name: "金融（除く銀行）"
+    sector: "金融（証券・保険・その他金融。銀行を除く）"
+    theme: "金融（除く銀行）"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "証券株 保険株"
+
+  - symbol: "1633.T"
+    name: "不動産"
+    sector: "不動産"
+    theme: "不動産"
+    market: "JP"
+    nisa_growth_eligible: true
+    news_query: "不動産株"

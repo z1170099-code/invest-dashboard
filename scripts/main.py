@@ -72,7 +72,7 @@ def _analyze_group(
 
     logger.info("[%s] 個別銘柄のニュースを取得中...", label)
     news_by_symbol = {
-        t["symbol"]: fetch_ticker_news(t["name"], max_per_ticker) for t in tickers
+        t["symbol"]: fetch_ticker_news(t.get("news_query") or t["name"], max_per_ticker) for t in tickers
     }
 
     logger.info("[%s] Gemini APIで分析中...", label)
@@ -99,11 +99,14 @@ def main() -> None:
     sell_policy = _load_yaml(sell_policy_path) if sell_policy_path.exists() else None
     yutai_path = _CONFIG_DIR / "yutai.yaml"
     yutai_config = (_load_yaml(yutai_path) if yutai_path.exists() else None) or {}
+    sectors_path = _CONFIG_DIR / "sectors.yaml"
+    sectors_config = (_load_yaml(sectors_path) if sectors_path.exists() else None) or {}
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
     holdings = portfolio.get("holdings", []) if portfolio else []
     yutai_stocks = yutai_config.get("stocks") or []
+    sector_etfs = sectors_config.get("sectors") or []
     tsumitate_entries = (tsumitate_config or {}).get("tsumitate", [])
     profit_taking = active_profit_taking(sell_policy, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date())
     if profit_taking:
@@ -159,6 +162,16 @@ def main() -> None:
         accuracy_summary_for_prompt,
         benchmarks,
     )
+    sector_results = _analyze_group(
+        "業種別ETF",
+        sector_etfs,
+        max_per_ticker,
+        macro_news,
+        history,
+        "sector",
+        accuracy_summary_for_prompt,
+        benchmarks,
+    )
     portfolio_results = _analyze_group(
         "保有銘柄",
         holdings,
@@ -171,7 +184,7 @@ def main() -> None:
         analyze_fn=functools.partial(analyze_all_holdings, profit_taking=profit_taking),
     )
 
-    all_results = watchlist_results + candidate_results + yutai_results + portfolio_results
+    all_results = watchlist_results + candidate_results + yutai_results + sector_results + portfolio_results
     current_prices = {
         r["symbol"]: r["price_stats"]["latest_close"]
         for r in all_results
@@ -181,6 +194,7 @@ def main() -> None:
     record_predictions(track_record, "watchlist", watchlist_results)
     record_predictions(track_record, "candidate", candidate_results)
     record_predictions(track_record, "yutai", yutai_results)
+    record_predictions(track_record, "sector", sector_results)
     record_predictions(track_record, "holding", portfolio_results)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
@@ -198,6 +212,7 @@ def main() -> None:
         profit_taking,
         yutai_results,
         yutai_config,
+        sector_results,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
@@ -207,6 +222,7 @@ def main() -> None:
         find_newly_strong_buy(watchlist_results, history, "watchlist")
         + find_newly_strong_buy(candidate_results, history, "candidate")
         + find_newly_strong_buy(yutai_results, history, "yutai")
+        + find_newly_strong_buy(sector_results, history, "sector")
     )
     send_notification_email(sell_alerts, buy_alerts)
 
@@ -214,6 +230,7 @@ def main() -> None:
         apply_group_results(history, "watchlist", watchlist_results)
         apply_group_results(history, "candidate", candidate_results)
         apply_group_results(history, "yutai", yutai_results)
+        apply_group_results(history, "sector", sector_results)
         apply_group_results(history, "holding", portfolio_results)
         save_history(_HISTORY_PATH, history)
     except Exception:

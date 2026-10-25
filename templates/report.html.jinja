@@ -321,6 +321,41 @@
     font-size: 0.72rem;
     flex: none;
   }
+  .sector-list {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .sector-row { border-bottom: 1px solid var(--gridline); }
+  .sector-row:last-child { border-bottom: none; }
+  .sector-row > summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.88rem;
+  }
+  .sector-row > summary::-webkit-details-marker { display: none; }
+  .sector-row > summary:hover { background: var(--page); }
+  .sector-row > summary:focus-visible { outline: 2px solid var(--series-1); outline-offset: -2px; }
+  .sector-row > summary::after { content: "▸"; color: var(--text-muted); flex: none; }
+  .sector-row[open] > summary::after { content: "▾"; }
+  .sector-rank { color: var(--text-muted); font-variant-numeric: tabular-nums; width: 1.6em; flex: none; }
+  .sector-name { font-weight: 600; flex: 1; min-width: 0; }
+  .sector-score { font-variant-numeric: tabular-nums; font-weight: 600; width: 3em; flex: none; text-align: right; }
+  .sector-score.status-good { color: var(--status-good); }
+  .sector-score.status-critical { color: var(--status-critical); }
+  .sector-score.status-warning, .sector-score.status-muted { color: var(--text-secondary); }
+  .sector-rec { font-size: 0.78rem; color: var(--text-secondary); width: 5.5em; flex: none; }
+  .sector-change { font-size: 0.78rem; color: var(--text-secondary); font-variant-numeric: tabular-nums; width: 7.5em; flex: none; text-align: right; }
+  .sector-change .label { color: var(--text-muted); margin-right: 3px; }
+  .sector-row .card { margin: 0 10px 10px; }
+  @media (max-width: 480px) {
+    .sector-change { display: none; }
+  }
   .summary-empty {
     font-size: 0.85rem;
     color: var(--text-muted);
@@ -620,6 +655,7 @@
   <div class="updated">最終更新: {{ generated_at }}</div>
   <nav class="quick-links" aria-label="セクションへ移動">
     <a class="quick-link" href="#yutai">🎁 株主優待銘柄へ</a>
+    <a class="quick-link" href="#sectors">📊 業種別の強さへ</a>
   </nav>
 
   <div class="disclaimer">
@@ -1175,6 +1211,37 @@
     {% endfor %}
     {% else %}
     <p style="color: var(--text-muted); font-size: 0.9rem;">株主優待銘柄が登録されていません。<code>config/yutai.yaml</code> に銘柄を登録すると、ここに表示されます。</p>
+    {% endif %}
+  </section>
+
+  <section id="sectors">
+    <h2>業種別の強さ（TOPIX-17業種ETF）</h2>
+    <div class="risk-banner info">
+      <strong>📊 このセクションについて:</strong>
+      東証の上場企業を17の業種に分け、業種全体の値動きに連動するETFをAIが同じ物差しでスコア付けし、強そうな順に並べています。
+      ほかのセクションは人が選んだ銘柄なので分野が偏りますが、ここでは全業種を偏りなく比べられます。行を押すと、判定の理由とチャートが開きます。
+      <ul>
+        <li>これらのETFは1日の売買量が少なく、買値と売値の差が広がりやすいです。実際に売買するよりも、「どの業種が強そうか」を見る物差しとして使うことを想定しています。</li>
+        <li>強そうな業種が見つかったら、その業種の個別銘柄を調べるきっかけにしてください。</li>
+      </ul>
+    </div>
+    {% if sectors %}
+    <div class="sector-list">
+      {% for t in sectors %}
+      <details class="sector-row">
+        <summary>
+          <span class="sector-rank">{{ loop.index }}</span>
+          <span class="sector-name">{{ t.name }}</span>
+          <span class="sector-score status-{{ t.status_key }}">{{ t.score_display }}</span>
+          <span class="sector-rec">{{ t.status_icon }} {{ t.recommendation }}</span>
+          <span class="sector-change"><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
+        </summary>
+        {{ ticker_card(t, loop.index) }}
+      </details>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color: var(--text-muted); font-size: 0.9rem;">業種別ETFが登録されていません。<code>config/sectors.yaml</code> に登録すると、ここに表示されます。</p>
     {% endif %}
   </section>
 

@@ -290,3 +290,47 @@ def test_build_yutai_info_handles_missing_price():
     assert info["min_investment_display"] == "—"
     assert info["within_budget"] is None
     assert info["range_position_pct"] is None
+
+
+def _analysis(symbol, name, score, recommendation, **extra):
+    return {
+        "symbol": symbol,
+        "name": name,
+        "market": "JP",
+        "score": score,
+        "recommendation": recommendation,
+        "horizon": "中長期",
+        "reasoning": "理由",
+        "key_factors": ["要因"],
+        "risks": "リスク",
+        "price_stats": {"latest_close": 1000, "change_3m_pct": 5.0, "history_1y": [["2026-01-01", 900], ["2026-10-01", 1000]]},
+        **extra,
+    }
+
+
+def test_generate_report_renders_sector_ranking_and_yutai(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    sectors = [
+        _analysis("1621.T", "医薬品", -20, "売り候補", sector="医薬品", theme="医薬品"),
+        _analysis("1631.T", "銀行", 40, "買い候補", sector="銀行", theme="銀行"),
+    ]
+    yutai = [_analysis("9434.T", "ソフトバンク", 10, "様子見", yutai={"content": "PayPay", "shares": 100, "months": [3], "annual_value_jpy": 1000})]
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        yutai_results=yutai,
+        yutai_config={"max_min_investment_jpy": 150000, "checked_on": "2026-10-25"},
+        sector_results=sectors,
+    )
+    html = output.read_text(encoding="utf-8")
+    assert 'href="#sectors"' in html and 'id="sectors"' in html
+    sector_html = html.split('id="sectors"')[1].split("</section>")[0]
+    # スコアが高い銀行が先に並ぶ
+    assert sector_html.index("銀行") < sector_html.index("医薬品")
+    assert 'id="yutai"' in html and "PayPay" in html

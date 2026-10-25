@@ -315,6 +315,18 @@ def _build_yutai_section(yutai: dict | None) -> str:
 """
 
 
+def _build_sector_section(sector: str | None) -> str:
+    """業種別ETFの場合に、個別企業ではなく業種全体として判定するよう指示する。業種でなければ空文字。"""
+    if not sector:
+        return ""
+    return f"""
+【業種別ETF】
+この銘柄は、東証上場企業のうち「{sector}」業種全体の値動きに連動するETFです。
+特定の1社の材料ではなく、業種全体の業績・需要・金利や為替などのマクロ環境への感応度をもとに、
+この業種が他の業種と比べて強そうか弱そうかという観点で判定してください。
+"""
+
+
 def _build_prompt(
     ticker: dict,
     price_stats: dict | None,
@@ -343,6 +355,7 @@ def _build_prompt(
 
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
     theme_line += _build_yutai_section(ticker.get("yutai"))
+    theme_line += _build_sector_section(ticker.get("sector"))
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
@@ -668,7 +681,7 @@ def _get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
-_PASSTHROUGH_FIELDS = ("theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai")
+_PASSTHROUGH_FIELDS = ("theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector")
 
 
 def _base_fields(ticker: dict) -> dict:

@@ -298,3 +298,11 @@ def test_build_prompt_includes_yutai_details():
     assert "【株主優待】" in prompt
     assert "PayPayマネーライト1,000円分" in prompt
     assert "権利確定月: 3月・9月末" in prompt
+
+
+def test_build_prompt_includes_sector_instruction_only_for_sector_etfs():
+    ticker = {"symbol": "1621.T", "name": "医薬品", "market": "JP", "sector": "医薬品"}
+    prompt = analyze._build_prompt(ticker, None, [])
+    assert "【業種別ETF】" in prompt
+    assert "「医薬品」業種全体" in prompt
+    assert analyze._build_sector_section(None) == ""
