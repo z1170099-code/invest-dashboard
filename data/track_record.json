@@ -13102,6 +13102,20 @@
       "date": "2026-10-25",
       "price_at_prediction": 1714.5,
       "resolve_after": "2027-04-23"
+    },
+    {
+      "id": "yutai:9831.T:2026-10-25",
+      "group": "yutai",
+      "symbol": "9831.T",
+      "name": "ヤマダホールディングス",
+      "recommendation": "買い候補",
+      "theme": "小売",
+      "score": 25,
+      "horizon": "中長期",
+      "purchase_date": null,
+      "date": "2026-10-25",
+      "price_at_prediction": 728.0999755859375,
+      "resolve_after": "2027-04-23"
     }
   ],
   "summary": {
