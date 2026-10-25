@@ -92,43 +92,93 @@
   @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
   }
-  section[id] { scroll-margin-top: 12px; }
-  .quick-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
-  .quick-link {
-    display: inline-block;
+  /* 上部に固定される目次バー。スマホでは横にスクロールして全セクションを選べる */
+  .section-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 12px -16px 0;
+    padding: 8px 16px;
+    background: var(--page);
+    border-bottom: 1px solid var(--gridline);
+  }
+  .section-nav::-webkit-scrollbar { display: none; }
+  .section-nav a {
+    flex: none;
     border: 1px solid var(--border);
     background: var(--surface-1);
-    color: var(--text-primary);
+    color: var(--text-secondary);
     border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 0.85rem;
+    padding: 5px 12px;
+    font-size: 0.82rem;
     text-decoration: none;
+    white-space: nowrap;
   }
-  .quick-link:hover { background: var(--gridline); }
-  .quick-link:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+  .section-nav a:hover { color: var(--text-primary); }
+  .section-nav a.active { background: var(--text-primary); color: var(--page); border-color: var(--text-primary); }
+  .section-nav a:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+  .nav-badge {
+    font-size: 0.7rem;
+    color: var(--status-critical);
+    font-weight: 600;
+  }
+  .section-nav a.active .nav-badge { color: inherit; }
+  section[id], .card[id] { scroll-margin-top: 64px; }
 
   .disclaimer {
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-left: 4px solid var(--status-warning);
     border-radius: 8px;
-    padding: 12px 16px;
-    margin: 16px 0 28px;
-    font-size: 0.88rem;
+    padding: 10px 14px;
+    margin: 12px 0 0;
+    font-size: 0.82rem;
     color: var(--text-secondary);
   }
   .disclaimer strong { color: var(--text-primary); }
 
-  section { margin-bottom: 32px; }
+  .cards-hint { font-size: 0.78rem; color: var(--text-muted); margin: 14px 0 0; }
+  .empty-note { color: var(--text-muted); font-size: 0.9rem; }
+
+  section { margin: 28px 0 36px; }
   h2 {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border-bottom: 1px solid var(--gridline);
-    padding-bottom: 6px;
-    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-size: 1.12rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--gridline);
+    padding-bottom: 8px;
+    margin: 0 0 14px;
   }
+  .h2-count { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); }
+  .sub-heading { font-size: 1rem; margin: 26px 0 10px; }
+
+  /* セクションの注意書き。1行の要点だけを見せ、詳細は押すと開く */
+  .section-note {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--baseline);
+    border-radius: 8px;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .section-note.info { border-left-color: var(--series-1); }
+  .section-note.warn { border-left-color: var(--status-critical); }
+  .section-note > summary { cursor: pointer; color: var(--text-primary); font-weight: 600; }
+  .section-note[open] > summary { margin-bottom: 6px; }
+  .section-note ul { margin: 6px 0 0; padding-left: 1.2em; }
+  .note-detail { margin-top: 8px; font-size: 0.82rem; color: var(--text-secondary); }
+  .note-detail > summary { cursor: pointer; color: var(--text-muted); }
+  .note-detail[open] > summary { margin-bottom: 4px; }
+  .note-detail ul { padding-left: 1.2em; }
 
   .macro-list { list-style: none; padding: 0; margin: 0; }
   .macro-list li {
@@ -141,28 +191,99 @@
   .macro-list a:hover { text-decoration: underline; }
   .macro-source { color: var(--text-muted); font-size: 0.8rem; }
 
+  .card-list { display: flex; flex-direction: column; gap: 10px; }
   .card {
     background: var(--surface-1);
     border: 1px solid var(--border);
     border-left: 4px solid var(--status-color, var(--baseline));
     border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 14px;
   }
+  /* 折りたたみカードの見出し部分（閉じていても要点が分かるようにする） */
+  .card-summary {
+    display: block;
+    position: relative;
+    padding: 12px 40px 12px 14px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .card-summary::-webkit-details-marker { display: none; }
+  .card-summary:hover { background: var(--page); border-radius: 10px; }
+  .card-summary:focus-visible { outline: 2px solid var(--series-1); outline-offset: -2px; border-radius: 10px; }
+  .cs-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4px 10px;
+    flex-wrap: wrap;
+  }
+  .cs-title { min-width: 0; }
+  .cs-title .rank { margin-right: 6px; }
+  .cs-status { display: flex; align-items: center; gap: 10px; flex: none; }
+  .cs-score {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 1.05rem;
+    min-width: 2.6em;
+    text-align: right;
+    color: var(--status-color, var(--text-secondary));
+  }
+  .card.status-warning .cs-score, .card.status-muted .cs-score { color: var(--text-secondary); }
+  .cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 14px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .cs-meta .label { color: var(--text-muted); margin-right: 4px; }
+  .cs-meta .horizon-tag { margin-left: 0; }
+  .cs-gain { font-size: 0.95rem; }
+  .cs-reason {
+    margin: 6px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card[open] .cs-reason { display: none; }
+  .cs-toggle {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 18px;
+    text-align: center;
+  }
+  .cs-toggle::before { content: "▾"; }
+  .card[open] .cs-toggle::before { content: "▴"; }
+  .card-body { padding: 0 14px 14px; border-top: 1px solid var(--gridline); }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag-row .market-tag, .tag-row .theme-tag, .tag-row .nisa-tag { margin-left: 0; }
+  .price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: 4px 12px;
+    margin: 8px 0 12px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .price-grid .label { color: var(--text-muted); margin-right: 4px; font-size: 0.78rem; }
   .card.status-good     { --status-color: var(--status-good); }
   .card.status-warning  { --status-color: var(--status-warning); }
   .card.status-critical { --status-color: var(--status-critical); }
   .card.status-muted    { --status-color: var(--text-muted); }
 
-  .card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
   .rank { color: var(--text-muted); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
-  .name { font-weight: 600; font-size: 1.05rem; }
+  .name { font-weight: 600; font-size: 1rem; }
   .symbol { color: var(--text-muted); font-size: 0.85rem; font-weight: 400; }
   .market-tag {
     display: inline-block;
@@ -192,19 +313,6 @@
     padding: 1px 6px;
     margin-left: 6px;
   }
-  .risk-banner {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--status-critical);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-  }
-  .risk-banner strong { color: var(--text-primary); }
-  .risk-banner.info { border-left-color: var(--series-1); }
-  .risk-banner ul { margin: 6px 0 0; padding-left: 1.2em; }
 
   .yutai-box {
     border: 1px solid var(--gridline);
@@ -314,48 +422,16 @@
   .summary-score.buy { color: var(--status-good); }
   .summary-score.sell { color: var(--status-critical); }
   .summary-name { font-weight: 600; }
-  .summary-symbol { color: var(--text-muted); font-size: 0.78rem; }
   .summary-group {
     margin-left: auto;
     color: var(--text-muted);
     font-size: 0.72rem;
     flex: none;
   }
-  .sector-list {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .sector-row { border-bottom: 1px solid var(--gridline); }
-  .sector-row:last-child { border-bottom: none; }
-  .sector-row > summary {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    cursor: pointer;
-    list-style: none;
-    font-size: 0.88rem;
-  }
-  .sector-row > summary::-webkit-details-marker { display: none; }
-  .sector-row > summary:hover { background: var(--page); }
-  .sector-row > summary:focus-visible { outline: 2px solid var(--series-1); outline-offset: -2px; }
-  .sector-row > summary::after { content: "▸"; color: var(--text-muted); flex: none; }
-  .sector-row[open] > summary::after { content: "▾"; }
-  .sector-rank { color: var(--text-muted); font-variant-numeric: tabular-nums; width: 1.6em; flex: none; }
-  .sector-name { font-weight: 600; flex: 1; min-width: 0; }
-  .sector-score { font-variant-numeric: tabular-nums; font-weight: 600; width: 3em; flex: none; text-align: right; }
-  .sector-score.status-good { color: var(--status-good); }
-  .sector-score.status-critical { color: var(--status-critical); }
-  .sector-score.status-warning, .sector-score.status-muted { color: var(--text-secondary); }
-  .sector-rec { font-size: 0.78rem; color: var(--text-secondary); width: 5.5em; flex: none; }
-  .sector-change { font-size: 0.78rem; color: var(--text-secondary); font-variant-numeric: tabular-nums; width: 9em; flex: none; text-align: right; white-space: nowrap; }
-  .sector-change .label { color: var(--text-muted); margin-right: 3px; }
-  .sector-row .card { margin: 0 10px 10px; }
-  @media (max-width: 480px) {
-    .sector-change { display: none; }
-  }
+  .summary-count { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+  .summary-more { margin-top: 6px; }
+  .summary-more > summary { cursor: pointer; font-size: 0.82rem; color: var(--text-muted); padding: 4px 2px; }
+  .summary-more[open] > summary { margin-bottom: 6px; }
   .summary-empty {
     font-size: 0.85rem;
     color: var(--text-muted);
@@ -367,45 +443,8 @@
     margin: 10px 0 0;
   }
 
-  .portfolio-table-wrap {
-    overflow-x: auto;
-    margin-bottom: 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-  }
-  .portfolio-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    background: var(--surface-1);
-    white-space: nowrap;
-  }
-  .portfolio-table th, .portfolio-table td {
-    padding: 8px 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--gridline);
-  }
-  .portfolio-table th {
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 0.75rem;
-  }
-  .portfolio-table tbody tr:last-child td { border-bottom: none; }
-  .portfolio-table td.num, .portfolio-table th.num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-  .portfolio-row-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .portfolio-row-link:hover { text-decoration: underline; }
   .gain-up { color: var(--status-good); }
   .gain-down { color: var(--status-critical); }
-  .status-good-text { color: var(--status-good); font-weight: 600; }
-  .status-critical-text { color: var(--status-critical); font-weight: 600; }
-  .status-muted-text { color: var(--text-muted); font-weight: 600; }
 
   .status-chip {
     display: inline-flex;
@@ -467,24 +506,36 @@
     color: var(--text-secondary);
   }
   .allocation-amount {
-    width: 7em;
+    min-width: 7em;
     flex-shrink: 0;
     text-align: right;
     font-variant-numeric: tabular-nums;
     color: var(--text-secondary);
   }
   .allocation-note { color: var(--text-muted); font-size: 0.8rem; margin: 8px 0 0; }
-
-  .price-row {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-variant-numeric: tabular-nums;
-    margin: 8px 0 10px;
+  .allocation-amount { white-space: nowrap; }
+  @media (max-width: 560px) {
+    /* スマホでは項目名を1行目、バーと数値を2行目に置き、数値の折り返しを防ぐ */
+    .allocation-row { flex-wrap: wrap; row-gap: 2px; margin: 10px 0; }
+    .allocation-label { width: 100%; }
+    .allocation-amount { width: auto; min-width: 4em; }
   }
-  .price-row span.label { color: var(--text-muted); margin-right: 4px; }
+  .kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--gridline);
+    font-size: 0.88rem;
+  }
+  .kv-row:last-of-type { border-bottom: none; }
+  .kv-label { color: var(--text-secondary); }
+  .kv-value { font-variant-numeric: tabular-nums; text-align: right; }
+  .kv-sub { display: block; font-size: 0.75rem; color: var(--text-muted); }
+  .kv-total .kv-label { color: var(--text-primary); }
+
 
   .price-chart { margin: 4px 0 14px; }
   .price-chart-title { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
@@ -653,191 +704,31 @@
     <button class="theme-toggle" id="theme-toggle" type="button">☀︎ / ☾ 切替</button>
   </header>
   <div class="updated">最終更新: {{ generated_at }}</div>
-  <nav class="quick-links" aria-label="セクションへ移動">
-    <a class="quick-link" href="#yutai">🎁 株主優待銘柄へ</a>
-    <a class="quick-link" href="#sectors">📊 業種別の強さへ</a>
-  </nav>
 
   <div class="disclaimer">
-    <strong>⚠ 免責事項:</strong>
-    本サイトの内容はAIによる自動分析であり、投資助言・推奨ではありません。
-    表示されるスコア・推奨・理由は、公開されている株価データとニュース見出しをもとに
-    AIが機械的に整理した参考情報に過ぎず、正確性・完全性を保証するものではありません。
-    投資に関する最終判断は、必ずご自身の責任で行ってください。
+    <strong>⚠ AIによる自動分析で、投資助言・推奨ではありません。</strong>
+    投資の最終判断は、必ずご自身の責任で行ってください。
+    <details class="note-detail">
+      <summary>免責事項の全文</summary>
+      本サイトの内容はAIによる自動分析であり、投資助言・推奨ではありません。
+      表示されるスコア・推奨・理由は、公開されている株価データとニュース見出しをもとに
+      AIが機械的に整理した参考情報に過ぎず、正確性・完全性を保証するものではありません。
+      投資に関する最終判断は、必ずご自身の責任で行ってください。
+    </details>
   </div>
 
-  <section>
-    <h2>AIによる売買サマリー</h2>
-    {% for s in summary_sections %}
-    <div class="summary-horizon" id="summary-{{ s.key }}">
-      <h3 class="summary-horizon-title">{{ s.label }}</h3>
-      <p class="summary-horizon-note">{{ s.note }}</p>
-      <div class="summary-grid">
-        <div>
-          <h4 class="summary-heading buy">▲ 買い候補</h4>
-          {% if s.buy %}
-          <ul class="summary-list">
-            {% for t in s.buy %}
-            <li>
-              <a class="summary-link" href="#ticker-{{ t.symbol }}">
-                <span class="summary-score buy">{{ t.score_display }}</span>
-                <span class="summary-name">{{ t.name }}</span>
-                <span class="summary-symbol">{{ t.symbol }}</span>
-                <span class="summary-group">{{ t.group }}</span>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p class="summary-empty">本日は該当する銘柄がありません。</p>
-          {% endif %}
-        </div>
-        <div>
-          <h4 class="summary-heading sell">▼ 売り候補</h4>
-          {% if s.sell %}
-          <ul class="summary-list">
-            {% for t in s.sell %}
-            <li>
-              <a class="summary-link" href="#ticker-{{ t.symbol }}">
-                <span class="summary-score sell">{{ t.score_display }}</span>
-                <span class="summary-name">{{ t.name }}</span>
-                <span class="summary-symbol">{{ t.symbol }}</span>
-                <span class="summary-group">{{ t.group }}</span>
-              </a>
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p class="summary-empty">本日は該当する銘柄がありません。</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-    <p class="summary-note">詳しい根拠は下のランキングの各銘柄カードをご覧ください（クリックでジャンプします）。</p>
-  </section>
-
-  <section>
-    <h2>AIの的中率（過去の判定の検証）</h2>
-    <div class="risk-banner" style="border-left-color: var(--baseline);">
-      <strong>ℹ️ 検証方法:</strong>
-      「買い候補」「売り候補」「売却検討」の判定を、その後の株価と比較し、判定の方向（上昇/下落）と
-      実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
-      比較するタイミングは、短期の判定と保有銘柄の判定は30日後、中長期の判定は180日後です。
-      変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
-    </div>
-
-    {% if accuracy.overall_sample_size %}
-    <div class="allocation-box">
-      <h3>全体の的中率</h3>
-      <div class="score-row">
-        <div class="score-value">{{ "%.0f"|format(accuracy.overall_accuracy_pct) }}%</div>
-        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.overall_accuracy_pct }}%;"></div></div>
-      </div>
-      <p class="allocation-note">
-        検証済み {{ accuracy.overall_sample_size }}件（様子見扱い{{ accuracy.overall_neutral }}件を除く）・
-        検証待ち {{ accuracy.pending_count }}件（短期は30日後・中長期は180日後に確定します）
-      </p>
-      {% for h in accuracy.horizon_breakdown %}
-      <div class="allocation-row">
-        <span class="allocation-label">期間: {{ h.horizon }}</span>
-        {% if h.accuracy_pct is not none %}
-        <div class="score-track"><div class="score-fill" style="width: {{ h.accuracy_pct }}%;"></div></div>
-        <span class="allocation-amount">{{ "%.0f"|format(h.accuracy_pct) }}%（{{ h.sample_size }}件）</span>
-        {% else %}
-        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
-        <span class="allocation-amount">データなし</span>
-        {% endif %}
-      </div>
-      {% endfor %}
-
-      {% for b in accuracy.breakdown %}
-      <div class="allocation-row">
-        <span class="allocation-label">{{ b.recommendation }}</span>
-        {% if b.accuracy_pct is not none %}
-        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct }}%;"></div></div>
-        <span class="allocation-amount">{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）</span>
-        {% else %}
-        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
-        <span class="allocation-amount">データなし</span>
-        {% endif %}
-      </div>
-      {% endfor %}
-    </div>
-
-    {% if accuracy.accuracy_since_improvement.sample_size %}
-    <div class="allocation-box">
-      <h3>改善施策後の的中率（{{ accuracy.accuracy_since_improvement.cohort_start }}以降に記録した判定のみ）</h3>
-      <div class="risk-banner" style="border-left-color: var(--baseline);">
-        <strong>ℹ️ 注意:</strong>
-        判定の確定には30日かかるため、上の「全体の的中率」には検証期間の延長・確信度基準の
-        見直し・銘柄別の連続外れ検知といった改善策の導入前に記録された判定が多く含まれ、
-        改善の効果がすぐには反映されません。ここでは改善策の導入日以降に記録された判定だけを
-        別集計し、実際に効果が出ているかを早めに確認できるようにしています。
-      </div>
-      <div class="score-row">
-        <div class="score-value">{{ "%.0f"|format(accuracy.accuracy_since_improvement.accuracy_pct) }}%</div>
-        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.accuracy_since_improvement.accuracy_pct }}%;"></div></div>
-      </div>
-      <p class="allocation-note">
-        検証済み {{ accuracy.accuracy_since_improvement.sample_size }}件
-        （様子見扱い{{ accuracy.accuracy_since_improvement.neutral }}件を除く）
-      </p>
-    </div>
-    {% endif %}
-
-    {% if accuracy.simulated_pl.overall_trade_count %}
-    <div class="allocation-box">
-      <h3>シミュレーション損益（判定通りに行動していた場合）</h3>
-      <div class="risk-banner" style="border-left-color: var(--baseline);">
-        <strong>ℹ️ 注意:</strong>
-        「買い候補」は判定時に買って検証時点（短期30日後・中長期180日後）に売った場合、
-        「売り候補」「売却検討」は判定時に売った/買わなかった場合の仮想リターンです。等金額・単利（複利なし）で手数料や税金は
-        考慮していません。特定の売買を推奨するものではなく、あくまで判定を機械的に採用し
-        続けた場合の振り返り指標です。
-      </div>
-      <p class="allocation-note">
-        全シグナル平均リターン（1件あたり）:
-        <strong>{{ "%+.2f"|format(accuracy.simulated_pl.overall_avg_return_pct) }}%</strong>
-        （{{ accuracy.simulated_pl.overall_trade_count }}件）
-      </p>
-      {% for s in accuracy.simulated_pl.by_recommendation %}
-      <div class="allocation-row">
-        <span class="allocation-label">{{ s.recommendation }}</span>
-        {% if s.avg_return_pct is not none %}
-        <span class="allocation-amount">
-          {{ "%+.2f"|format(s.avg_return_pct) }}%（{{ s.trade_count }}件中 プラス{{ s.wins }}・マイナス{{ s.losses }}）
-        </span>
-        {% else %}
-        <span class="allocation-amount">データなし</span>
-        {% endif %}
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-
-    {% if accuracy.recent_resolved %}
-    <details class="news-detail">
-      <summary>直近の検証結果（{{ accuracy.recent_resolved|length }}件）</summary>
-      <ul>
-        {% for r in accuracy.recent_resolved %}
-        <li>
-          {{ r.date }} {{ r.name }}（{{ r.symbol }}）: {{ r.recommendation }} →
-          {{ "%+.2f"|format(r.change_pct) }}%
-          {% if r.outcome == "correct" %}✅ 的中{% elif r.outcome == "incorrect" %}❌ 不的中{% else %}― 様子見扱い{% endif %}
-          {% if r.sim_return_pct is not none %}（仮想リターン {{ "%+.2f"|format(r.sim_return_pct) }}%）{% endif %}
-        </li>
-        {% endfor %}
-      </ul>
-    </details>
-    {% endif %}
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">
-      検証にはまず判定から30日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
-      （検証待ち: {{ accuracy.pending_count }}件）。
-    </p>
-    {% endif %}
-  </section>
+  {% set holding_sell_count = holdings|selectattr("recommendation", "equalto", "売却検討")|list|length %}
+  <nav class="section-nav" id="section-nav" aria-label="セクションへ移動">
+    <a href="#summary">サマリー</a>
+    <a href="#holdings">保有銘柄{% if holding_sell_count %} <span class="nav-badge">売却検討{{ holding_sell_count }}</span>{% endif %}</a>
+    <a href="#sectors">業種別</a>
+    <a href="#yutai">株主優待</a>
+    <a href="#watchlist">ウォッチリスト</a>
+    <a href="#candidates">注目テーマ</a>
+    <a href="#crypto">暗号資産</a>
+    <a href="#news">ニュース</a>
+    <a href="#accuracy">的中率</a>
+  </nav>
 
   {% macro price_chart(c, name) %}
     {% if c %}
@@ -871,74 +762,7 @@
     {% endif %}
   {% endmacro %}
 
-  {% macro ticker_card(t, rank) %}
-    <div class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
-      <div class="card-head">
-        <div>
-          <span class="rank">#{{ rank }}</span><br>
-          <span class="name">{{ t.name }}</span>
-          <span class="symbol">{{ t.symbol }}</span>
-          {% if t.market %}<span class="market-tag">{{ t.market }}</span>{% endif %}
-          {% if t.theme %}<span class="theme-tag">{{ t.theme }}</span>{% endif %}
-          {% if t.nisa_tag %}<span class="nisa-tag">{{ t.nisa_tag }}</span>{% endif %}
-        </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          {{ t.status_icon }} {{ t.recommendation }}
-          {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
-        </div>
-      </div>
-
-      <div class="score-row">
-        <div class="score-value">{{ t.score_display }}</div>
-        <div class="score-track"><div class="score-fill" style="width: {{ t.score_bar_pct }}%;"></div></div>
-      </div>
-
-      {% if t.price_available %}
-      <div class="price-row">
-        <span><span class="label">前日比</span>{{ t.change_1d }}</span>
-        <span><span class="label">1週間</span>{{ t.change_1w }}</span>
-        <span><span class="label">1ヶ月</span>{{ t.change_1m }}</span>
-        <span><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
-        <span><span class="label">6ヶ月</span>{{ t.change_6m }}</span>
-        <span><span class="label">1年</span>{{ t.change_1y }}</span>
-      </div>
-      {% endif %}
-
-      {% if t.yutai %}
-      <div class="yutai-box">
-        <div class="yutai-content"><span class="label">🎁 優待:</span>{{ t.yutai.content }}</div>
-        <div class="yutai-stats">
-          <div>
-            <span class="label">最低投資金額（{{ t.yutai.shares }}株）</span>
-            {{ t.yutai.min_investment_display }}
-            {% if t.yutai.within_budget is not none %}<span class="yutai-flag">{{ "予算内" if t.yutai.within_budget else "予算オーバー" }}</span>{% endif %}
-          </div>
-          <div>
-            <span class="label">権利確定月</span>
-            {{ t.yutai.months_display }}末
-            {% if t.yutai.next_record_display %}<span class="yutai-flag">次回 {{ t.yutai.next_record_display }}{% if t.yutai.next_record_is_this_month %}（今月）{% endif %}</span>{% endif %}
-          </div>
-          {% if t.yutai.yield_display %}
-          <div>
-            <span class="label">優待利回り（年間の目安）</span>
-            {{ t.yutai.yield_display }}
-          </div>
-          {% endif %}
-          {% if t.yutai.range_position_pct is not none %}
-          <div>
-            <span class="label">1年の値幅の中での位置</span>
-            {{ t.yutai.range_label }}（{{ t.yutai.range_position_pct }}%）
-            <div class="range-meter" role="img" aria-label="1年の最安値を0%、最高値を100%としたときの現在位置: {{ t.yutai.range_position_pct }}%">
-              <span class="range-meter-dot" style="left: {{ t.yutai.range_position_pct }}%;"></span>
-            </div>
-            <div class="range-meter-ends"><span>1年の最安値</span><span>最高値</span></div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-      {% endif %}
-
+  {% macro analysis_details(t) %}
       {{ price_chart(t.chart, t.name) }}
 
       <p class="reasoning">{{ t.reasoning }}</p>
@@ -969,82 +793,220 @@
         </ul>
       </details>
       {% endif %}
-    </div>
+  {% endmacro %}
+
+  {% macro ticker_card(t, rank) %}
+    <details class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
+      <summary class="card-summary">
+        <div class="cs-top">
+          <div class="cs-title">
+            <span class="rank">{{ rank }}</span>
+            <span class="name">{{ t.name }}</span>
+            <span class="symbol">{{ t.symbol }}</span>
+          </div>
+          <div class="cs-status">
+            <span class="status-chip"><span class="status-dot"></span>{{ t.status_icon }} {{ t.recommendation }}</span>
+            <span class="cs-score">{{ t.score_display }}</span>
+          </div>
+        </div>
+        <div class="cs-meta">
+          {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
+          {% if t.yutai %}
+          <span><span class="label">最低投資</span>{{ t.yutai.min_investment_display }}{% if t.yutai.within_budget is false %}（予算超）{% endif %}</span>
+          {% endif %}
+          {% if t.price_available %}
+          <span><span class="label">前日比</span>{{ t.change_1d }}</span>
+          <span><span class="label">1ヶ月</span>{{ t.change_1m }}</span>
+          <span><span class="label">1年</span>{{ t.change_1y }}</span>
+          {% endif %}
+        </div>
+        <p class="cs-reason">{{ t.reasoning }}</p>
+        <span class="cs-toggle" aria-hidden="true"></span>
+      </summary>
+
+      <div class="card-body">
+        <div class="tag-row">
+          {% if t.market %}<span class="market-tag">{{ t.market }}</span>{% endif %}
+          {% if t.theme %}<span class="theme-tag">{{ t.theme }}</span>{% endif %}
+          {% if t.nisa_tag %}<span class="nisa-tag">{{ t.nisa_tag }}</span>{% endif %}
+        </div>
+
+        {% if t.price_available %}
+        <div class="price-grid">
+          <span><span class="label">現在値</span>{{ t.latest_close_display }}</span>
+          <span><span class="label">前日比</span>{{ t.change_1d }}</span>
+          <span><span class="label">1週間</span>{{ t.change_1w }}</span>
+          <span><span class="label">1ヶ月</span>{{ t.change_1m }}</span>
+          <span><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
+          <span><span class="label">6ヶ月</span>{{ t.change_6m }}</span>
+          <span><span class="label">1年</span>{{ t.change_1y }}</span>
+        </div>
+        {% endif %}
+
+        {% if t.yutai %}
+        <div class="yutai-box">
+          <div class="yutai-content"><span class="label">🎁 優待:</span>{{ t.yutai.content }}</div>
+          <div class="yutai-stats">
+            <div>
+              <span class="label">最低投資金額（{{ t.yutai.shares }}株）</span>
+              {{ t.yutai.min_investment_display }}
+              {% if t.yutai.within_budget is not none %}<span class="yutai-flag">{{ "予算内" if t.yutai.within_budget else "予算オーバー" }}</span>{% endif %}
+            </div>
+            <div>
+              <span class="label">権利確定月</span>
+              {{ t.yutai.months_display }}末
+              {% if t.yutai.next_record_display %}<span class="yutai-flag">次回 {{ t.yutai.next_record_display }}{% if t.yutai.next_record_is_this_month %}（今月）{% endif %}</span>{% endif %}
+            </div>
+            {% if t.yutai.yield_display %}
+            <div>
+              <span class="label">優待利回り（年間の目安）</span>
+              {{ t.yutai.yield_display }}
+            </div>
+            {% endif %}
+            {% if t.yutai.range_position_pct is not none %}
+            <div>
+              <span class="label">1年の値幅の中での位置</span>
+              {{ t.yutai.range_label }}（{{ t.yutai.range_position_pct }}%）
+              <div class="range-meter" role="img" aria-label="1年の最安値を0%、最高値を100%としたときの現在位置: {{ t.yutai.range_position_pct }}%">
+                <span class="range-meter-dot" style="left: {{ t.yutai.range_position_pct }}%;"></span>
+              </div>
+              <div class="range-meter-ends"><span>1年の最安値</span><span>最高値</span></div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+
+        {{ analysis_details(t) }}
+      </div>
+    </details>
   {% endmacro %}
 
   {% macro holding_card(h) %}
-    <div class="card status-{{ h.status_key }}" id="holding-{{ h.symbol }}-{{ h.purchase_date }}">
-      <div class="card-head">
-        <div>
-          <span class="name">{{ h.name }}</span>
-          <span class="symbol">{{ h.symbol }}</span>
-          {% if h.market %}<span class="market-tag">{{ h.market }}</span>{% endif %}
+    <details class="card status-{{ h.status_key }}" id="holding-{{ h.symbol }}-{{ h.purchase_date }}">
+      <summary class="card-summary">
+        <div class="cs-top">
+          <div class="cs-title">
+            <span class="name">{{ h.name }}</span>
+            <span class="symbol">{{ h.symbol }}</span>
+          </div>
+          <div class="cs-status">
+            <span class="status-chip"><span class="status-dot"></span>{{ h.status_icon }} {{ h.recommendation }}</span>
+          </div>
         </div>
-        <div class="status-chip">
-          <span class="status-dot"></span>
-          {{ h.status_icon }} {{ h.recommendation }}
+        <div class="cs-meta">
+          <span><span class="label">含み損益</span><strong class="cs-gain {{ h.gain_class }}">{{ h.gain_loss_display }}</strong></span>
+          <span><span class="label">現在値</span>{{ h.latest_close_display }}</span>
+          <span><span class="label">取得単価</span>{{ h.purchase_price_display }}</span>
+          <span><span class="label">保有</span>{{ h.holding_days if h.holding_days is not none else "—" }}日</span>
         </div>
+        <p class="cs-reason">{{ h.reasoning }}</p>
+        <span class="cs-toggle" aria-hidden="true"></span>
+      </summary>
+
+      <div class="card-body">
+        <div class="price-grid">
+          <span><span class="label">購入日</span>{{ h.purchase_date or "—" }}</span>
+          <span><span class="label">前日比</span>{{ h.change_1d }}</span>
+          <span><span class="label">1週間</span>{{ h.change_1w }}</span>
+          <span><span class="label">1ヶ月</span>{{ h.change_1m }}</span>
+          <span><span class="label">3ヶ月</span>{{ h.change_3m }}</span>
+          <span><span class="label">6ヶ月</span>{{ h.change_6m }}</span>
+          <span><span class="label">1年</span>{{ h.change_1y }}</span>
+        </div>
+
+        {{ analysis_details(h) }}
       </div>
-
-      <div class="price-row">
-        <span><span class="label">購入日</span>{{ h.purchase_date or "—" }}</span>
-        <span><span class="label">購入価格</span>{{ h.purchase_price if h.purchase_price is not none else "—" }}</span>
-        <span><span class="label">現在値</span>{{ h.latest_close if h.latest_close is not none else "—" }}</span>
-        <span><span class="label">保有日数</span>{{ h.holding_days if h.holding_days is not none else "—" }}日</span>
-      </div>
-      <div class="price-row">
-        <span><span class="label">含み損益</span><strong>{{ h.gain_loss_display }}</strong></span>
-        <span><span class="label">前日比</span>{{ h.change_1d }}</span>
-        <span><span class="label">1週間</span>{{ h.change_1w }}</span>
-        <span><span class="label">1ヶ月</span>{{ h.change_1m }}</span>
-        <span><span class="label">3ヶ月</span>{{ h.change_3m }}</span>
-        <span><span class="label">6ヶ月</span>{{ h.change_6m }}</span>
-        <span><span class="label">1年</span>{{ h.change_1y }}</span>
-      </div>
-
-      {{ price_chart(h.chart, h.name) }}
-
-      <p class="reasoning">{{ h.reasoning }}</p>
-
-      {% if h.key_factors %}
-      <ul class="factors">
-        {% for factor in h.key_factors %}
-        <li>{{ factor }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-
-      {% if h.risks %}
-      <p class="risks"><span class="label">留意点:</span> {{ h.risks }}</p>
-      {% endif %}
-
-      {% if h.reflection %}
-      <p class="reflection">🔁 前回からの振り返り: {{ h.reflection }}</p>
-      {% endif %}
-
-      {% if h.news %}
-      <details class="news-detail">
-        <summary>関連ニュース（{{ h.news|length }}件）</summary>
-        <ul>
-          {% for article in h.news %}
-          <li><a href="{{ article.link }}" target="_blank" rel="noopener">{{ article.title }}</a></li>
-          {% endfor %}
-        </ul>
-      </details>
-      {% endif %}
-    </div>
+    </details>
   {% endmacro %}
 
-  <section>
-    <h2>保有銘柄の売却タイミング</h2>
+  {% macro card_list(items, empty_message) %}
+    {% if items %}
+    <div class="card-list">
+      {% for t in items %}
+        {{ ticker_card(t, loop.index) }}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-note">{{ empty_message }}</p>
+    {% endif %}
+  {% endmacro %}
+
+  {% macro summary_items(items, side) %}
+    {% for t in items %}
+    <li>
+      <a class="summary-link" href="#ticker-{{ t.symbol }}">
+        <span class="summary-score {{ side }}">{{ t.score_display }}</span>
+        <span class="summary-name">{{ t.name }}</span>
+        <span class="summary-group">{{ t.group }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  {% endmacro %}
+
+  {% macro summary_list(items, side) %}
+    {% if items %}
+    <ul class="summary-list">{{ summary_items(items[:8], side) }}</ul>
+    {% if items|length > 8 %}
+    <details class="summary-more">
+      <summary>残り{{ items|length - 8 }}件を表示</summary>
+      <ul class="summary-list">{{ summary_items(items[8:], side) }}</ul>
+    </details>
+    {% endif %}
+    {% else %}
+    <p class="summary-empty">本日は該当する銘柄がありません。</p>
+    {% endif %}
+  {% endmacro %}
+
+  <p class="cards-hint">各銘柄のカードは押すと開き、チャート・判定の理由・ニュースが表示されます。</p>
+
+  <section id="summary">
+    <h2>AIによる売買サマリー</h2>
+    {% for s in summary_sections %}
+    <div class="summary-horizon" id="summary-{{ s.key }}">
+      <h3 class="summary-horizon-title">{{ s.label }}</h3>
+      <p class="summary-horizon-note">{{ s.note }}</p>
+      <div class="summary-grid">
+        <div>
+          <h4 class="summary-heading buy">▲ 買い候補 <span class="summary-count">{{ s.buy|length }}件</span></h4>
+          {{ summary_list(s.buy, "buy") }}
+        </div>
+        <div>
+          <h4 class="summary-heading sell">▼ 売り候補 <span class="summary-count">{{ s.sell|length }}件</span></h4>
+          {{ summary_list(s.sell, "sell") }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <p class="summary-note">銘柄名を押すと、その銘柄のカードが開きます。</p>
+  </section>
+
+  <section id="holdings">
+    <h2>保有銘柄の売却タイミング <span class="h2-count">{{ holdings|length }}件</span></h2>
 
     {% if profit_taking %}
-    <div class="risk-banner">
-      <strong>💰 利確優先モード適用中（{{ profit_taking.until }}まで・残り{{ profit_taking.days_left }}日）:</strong>
+    <details class="section-note warn">
+      <summary>💰 利確優先モード適用中（{{ profit_taking.until }}まで・残り{{ profit_taking.days_left }}日）</summary>
       含み益が出ている銘柄は、今後の値下がりが見込まれる材料が少しでもあればAIが「売却検討」と
       判定するように設定しています。含み損の銘柄は通常どおりの判断です。
       期限を過ぎると自動で通常の判断に戻ります（設定は <code>config/sell_policy.yaml</code>）。
+    </details>
+    {% endif %}
+
+    {% if holdings %}
+    <div class="card-list">
+      {% for h in holdings %}
+        {{ holding_card(h) }}
+      {% endfor %}
     </div>
+    {% else %}
+    <p class="empty-note">
+      まだ保有銘柄が登録されていません。<code>config/portfolio.yaml</code> に購入した銘柄・購入日・購入価格を登録すると、ここに売却タイミングの判断が表示されます。
+    </p>
+    {% endif %}
+
+    {% if theme_allocation or nisa_usage or tsumitate_usage %}
+    <h3 class="sub-heading">配分とNISA枠</h3>
     {% endif %}
 
     {% if theme_allocation %}
@@ -1115,15 +1077,15 @@
       </p>
       {% endif %}
 
-      <div class="risk-banner" style="border-left-color: var(--baseline);">
-        <strong>ℹ️ 注意:</strong>
+      <details class="note-detail">
+        <summary>ℹ️ この計算の注意点</summary>
         <code>config/nisa_tsumitate.yaml</code> に登録した積立設定（開始日・月額）のみに基づく
         概算です。証券会社側の正式な消化額とは異なる場合があるため、必ず証券会社側でご確認ください。
         年間枠を使い切ることを推奨するものではなく、あくまで目安の計算です。
         {% if tsumitate_usage.excluded_count %}日付や金額が不正な登録が{{ tsumitate_usage.excluded_count }}件あり、この集計から除外されています。{% endif %}
-      </div>
+      </details>
 
-      <details class="news-detail">
+      <details class="note-detail">
         <summary>つみたて投資枠の対象になりやすいファンドの種類（一般的な分類の例）</summary>
         <p class="allocation-note">
           特定の商品名を推奨するものではなく、あくまで一般的に知られている資産クラスの
@@ -1145,57 +1107,26 @@
       </details>
     </div>
     {% endif %}
+  </section>
 
-    {% if holdings %}
-    <div class="portfolio-table-wrap">
-      <table class="portfolio-table">
-        <thead>
-          <tr>
-            <th>銘柄</th>
-            <th>購入日</th>
-            <th class="num">購入価格</th>
-            <th class="num">現在値</th>
-            <th class="num">含み損益</th>
-            <th class="num">保有日数</th>
-            <th>判断</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for h in holdings %}
-          <tr>
-            <td>
-              <a class="portfolio-row-link" href="#holding-{{ h.symbol }}-{{ h.purchase_date }}">
-                {{ h.name }} <span class="summary-symbol">{{ h.symbol }}</span>
-              </a>
-            </td>
-            <td>{{ h.purchase_date or "—" }}</td>
-            <td class="num">{{ h.purchase_price if h.purchase_price is not none else "—" }}</td>
-            <td class="num">{{ h.latest_close if h.latest_close is not none else "—" }}</td>
-            <td class="num gain-{{ 'up' if (h.gain_loss_pct or 0) > 0 else ('down' if (h.gain_loss_pct or 0) < 0 else '') }}">{{ h.gain_loss_display }}</td>
-            <td class="num">{{ h.holding_days if h.holding_days is not none else "—" }}日</td>
-            <td>
-              <span class="status-{{ h.status_key }}-text">{{ h.status_icon }} {{ h.recommendation }}</span>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    {% for h in holdings %}
-      {{ holding_card(h) }}
-    {% endfor %}
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">
-      まだ保有銘柄が登録されていません。<code>config/portfolio.yaml</code> に購入した銘柄・購入日・購入価格を登録すると、ここに売却タイミングの判断が表示されます。
-    </p>
-    {% endif %}
+  <section id="sectors">
+    <h2>業種別の強さ（TOPIX-17業種ETF） <span class="h2-count">{{ sectors|length }}業種</span></h2>
+    <details class="section-note info">
+      <summary>📊 全17業種を、AIが同じ物差しでスコア順に比較しています</summary>
+      東証の上場企業を17の業種に分け、業種全体の値動きに連動するETFをAIがスコア付けし、強そうな順に並べています。
+      ほかのセクションは人が選んだ銘柄なので分野が偏りますが、ここでは全業種を偏りなく比べられます。
+      <ul>
+        <li>これらのETFは1日の売買量が少なく、買値と売値の差が広がりやすいです。実際に売買するよりも、「どの業種が強そうか」を見る物差しとして使うことを想定しています。</li>
+        <li>強そうな業種が見つかったら、その業種の個別銘柄を調べるきっかけにしてください。</li>
+      </ul>
+    </details>
+    {{ card_list(sectors, "業種別ETFが登録されていません。config/sectors.yaml に登録すると、ここに表示されます。") }}
   </section>
 
   <section id="yutai">
-    <h2>株主優待銘柄（少額で買える優待株）</h2>
-    <div class="risk-banner info">
-      <strong>🎁 このセクションについて:</strong>
+    <h2>株主優待銘柄（少額で買える優待株） <span class="h2-count">{{ yutai|length }}件</span></h2>
+    <details class="section-note info">
+      <summary>🎁 優待は原則100株以上が対象です（単元未満株では原則もらえません）</summary>
       株主優待がある銘柄の中から、少ない金額で買えるものを集め、株価そのものの上昇が見込めるかをAIがスコア順に整理しています。
       <ul>
         <li><strong>優待は原則100株（単元株）以上が対象です。</strong>単元未満株（1株単位・金額指定）での購入では、ほぼすべての銘柄で優待はもらえません。</li>
@@ -1204,64 +1135,37 @@
         <li>「1年の値幅の中での位置」は、1年間の最安値を0%、最高値を100%としたときの今の株価の位置です。安値圏でも、下がり続けている途中のこともあります。</li>
         <li>優待内容は{{ yutai_checked_on or "登録時" }}時点の確認内容です。変更・廃止されることがあるため、購入前に各社のIRサイトで最新情報を確認してください。{% if yutai_budget_display %}「予算内」は最低投資金額が{{ yutai_budget_display }}以下かどうかの目安です。{% endif %}</li>
       </ul>
-    </div>
-    {% if yutai %}
-    {% for t in yutai %}
-      {{ ticker_card(t, loop.index) }}
-    {% endfor %}
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">株主優待銘柄が登録されていません。<code>config/yutai.yaml</code> に銘柄を登録すると、ここに表示されます。</p>
-    {% endif %}
+    </details>
+    {{ card_list(yutai, "株主優待銘柄が登録されていません。config/yutai.yaml に銘柄を登録すると、ここに表示されます。") }}
   </section>
 
-  <section id="sectors">
-    <h2>業種別の強さ（TOPIX-17業種ETF）</h2>
-    <div class="risk-banner info">
-      <strong>📊 このセクションについて:</strong>
-      東証の上場企業を17の業種に分け、業種全体の値動きに連動するETFをAIが同じ物差しでスコア付けし、強そうな順に並べています。
-      ほかのセクションは人が選んだ銘柄なので分野が偏りますが、ここでは全業種を偏りなく比べられます。行を押すと、判定の理由とチャートが開きます。
-      <ul>
-        <li>これらのETFは1日の売買量が少なく、買値と売値の差が広がりやすいです。実際に売買するよりも、「どの業種が強そうか」を見る物差しとして使うことを想定しています。</li>
-        <li>強そうな業種が見つかったら、その業種の個別銘柄を調べるきっかけにしてください。</li>
-      </ul>
-    </div>
-    {% if sectors %}
-    <div class="sector-list">
-      {% for t in sectors %}
-      <details class="sector-row">
-        <summary>
-          <span class="sector-rank">{{ loop.index }}</span>
-          <span class="sector-name">{{ t.name }}</span>
-          <span class="sector-score status-{{ t.status_key }}">{{ t.score_display }}</span>
-          <span class="sector-rec">{{ t.status_icon }} {{ t.recommendation }}</span>
-          <span class="sector-change"><span class="label">3ヶ月</span>{{ t.change_3m }}</span>
-        </summary>
-        {{ ticker_card(t, loop.index) }}
-      </details>
-      {% endfor %}
-    </div>
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">業種別ETFが登録されていません。<code>config/sectors.yaml</code> に登録すると、ここに表示されます。</p>
-    {% endif %}
+  <section id="watchlist">
+    <h2>ウォッチリスト（スコア順） <span class="h2-count">{{ tickers|length }}件</span></h2>
+    {{ card_list(tickers, "ウォッチリストに銘柄が登録されていません。") }}
   </section>
 
-  <section>
-    <h2>暗号資産</h2>
-    <div class="risk-banner">
-      <strong>⚠ 暗号資産について:</strong>
+  <section id="candidates">
+    <h2>注目テーマ銘柄（ハイリスク候補） <span class="h2-count">{{ candidates|length }}件</span></h2>
+    <details class="section-note warn">
+      <summary>⚠ 値動きが大きいハイリスク銘柄です</summary>
+      このセクションは、世界情勢・マクロ経済ニュースをもとにAIが値動きの大きいテーマ株・成長株の中から
+      注目度を整理したものです。通常の銘柄よりも価格変動が大きく、短期的に大きく下落する可能性もあります。
+      投資対象として検討する場合は特に慎重に判断してください。
+    </details>
+    {{ card_list(candidates, "候補銘柄が登録されていません。") }}
+  </section>
+
+  <section id="crypto">
+    <h2>暗号資産 <span class="h2-count">{{ crypto|length }}件</span></h2>
+    <details class="section-note warn">
+      <summary>⚠ 株式とは別の資産クラスで、NISAの対象外です</summary>
       株式とは異なる資産クラスで、価格変動が非常に大きく、NISA成長投資枠の対象にもなりません。
       楽天証券のような証券会社では購入できず、暗号資産交換業者（楽天ウォレット等）の口座が別途必要です。
-    </div>
-    {% if crypto %}
-    {% for t in crypto %}
-      {{ ticker_card(t, loop.index) }}
-    {% endfor %}
-    {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">暗号資産の候補銘柄が登録されていません。</p>
-    {% endif %}
+    </details>
+    {{ card_list(crypto, "暗号資産の候補銘柄が登録されていません。") }}
   </section>
 
-  <section>
+  <section id="news">
     <h2>世界情勢・マクロ経済ニュース</h2>
     {% if macro_news %}
     <ul class="macro-list">
@@ -1273,31 +1177,129 @@
       {% endfor %}
     </ul>
     {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">本日はマクロ経済ニュースを取得できませんでした。</p>
+    <p class="empty-note">本日はマクロ経済ニュースを取得できませんでした。</p>
     {% endif %}
   </section>
 
-  <section>
-    <h2>銘柄ランキング（スコア順）</h2>
-    {% for t in tickers %}
-      {{ ticker_card(t, loop.index) }}
-    {% endfor %}
-  </section>
+  <section id="accuracy">
+    <h2>AIの的中率（過去の判定の検証）</h2>
+    <details class="section-note">
+      <summary>ℹ️ 検証方法</summary>
+      「買い候補」「売り候補」「売却検討」の判定を、その後の株価と比較し、判定の方向（上昇/下落）と
+      実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
+      比較するタイミングは、短期の判定と保有銘柄の判定は30日後、中長期の判定は180日後です。
+      変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
+    </details>
 
-  <section>
-    <h2>注目テーマ銘柄（ハイリスク候補）</h2>
-    <div class="risk-banner">
-      <strong>⚠ ハイリスク銘柄について:</strong>
-      このセクションは、世界情勢・マクロ経済ニュースをもとにAIが値動きの大きいテーマ株・成長株の中から
-      注目度を整理したものです。通常の銘柄よりも価格変動が大きく、短期的に大きく下落する可能性もあります。
-      投資対象として検討する場合は特に慎重に判断してください。
+    {% if accuracy.overall_sample_size %}
+    <div class="allocation-box">
+      <h3>全体の的中率</h3>
+      <div class="score-row">
+        <div class="score-value">{{ "%.0f"|format(accuracy.overall_accuracy_pct) }}%</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.overall_accuracy_pct }}%;"></div></div>
+      </div>
+      <p class="allocation-note">
+        検証済み {{ accuracy.overall_sample_size }}件（様子見扱い{{ accuracy.overall_neutral }}件を除く）・
+        検証待ち {{ accuracy.pending_count }}件（短期は30日後・中長期は180日後に確定します）
+      </p>
+      {% for h in accuracy.horizon_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">期間: {{ h.horizon }}</span>
+        {% if h.accuracy_pct is not none %}
+        <div class="score-track"><div class="score-fill" style="width: {{ h.accuracy_pct }}%;"></div></div>
+        <span class="allocation-amount">{{ "%.0f"|format(h.accuracy_pct) }}%（{{ h.sample_size }}件）</span>
+        {% else %}
+        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
+        <span class="allocation-amount">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      {% for b in accuracy.breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ b.recommendation }}</span>
+        {% if b.accuracy_pct is not none %}
+        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct }}%;"></div></div>
+        <span class="allocation-amount">{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）</span>
+        {% else %}
+        <div class="score-track"><div class="score-fill" style="width: 0%;"></div></div>
+        <span class="allocation-amount">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
-    {% if candidates %}
-    {% for t in candidates %}
-      {{ ticker_card(t, loop.index) }}
-    {% endfor %}
+
+    {% if accuracy.accuracy_since_improvement.sample_size %}
+    <div class="allocation-box">
+      <h3>改善施策後の的中率（{{ accuracy.accuracy_since_improvement.cohort_start }}以降に記録した判定のみ）</h3>
+      <div class="score-row">
+        <div class="score-value">{{ "%.0f"|format(accuracy.accuracy_since_improvement.accuracy_pct) }}%</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.accuracy_since_improvement.accuracy_pct }}%;"></div></div>
+      </div>
+      <p class="allocation-note">
+        検証済み {{ accuracy.accuracy_since_improvement.sample_size }}件
+        （様子見扱い{{ accuracy.accuracy_since_improvement.neutral }}件を除く）
+      </p>
+      <details class="note-detail">
+        <summary>ℹ️ この数字の見方</summary>
+        判定の確定には30日かかるため、上の「全体の的中率」には検証期間の延長・確信度基準の
+        見直し・銘柄別の連続外れ検知といった改善策の導入前に記録された判定が多く含まれ、
+        改善の効果がすぐには反映されません。ここでは改善策の導入日以降に記録された判定だけを
+        別集計し、実際に効果が出ているかを早めに確認できるようにしています。
+      </details>
+    </div>
+    {% endif %}
+
+    {% if accuracy.simulated_pl.overall_trade_count %}
+    <div class="allocation-box">
+      <h3>シミュレーション損益（判定通りに行動していた場合）</h3>
+      <div class="kv-row kv-total">
+        <span class="kv-label">全シグナル平均リターン（1件あたり・{{ accuracy.simulated_pl.overall_trade_count }}件）</span>
+        <strong class="kv-value">{{ "%+.2f"|format(accuracy.simulated_pl.overall_avg_return_pct) }}%</strong>
+      </div>
+      {% for s in accuracy.simulated_pl.by_recommendation %}
+      <div class="kv-row">
+        <span class="kv-label">{{ s.recommendation }}</span>
+        {% if s.avg_return_pct is not none %}
+        <span class="kv-value">
+          <strong>{{ "%+.2f"|format(s.avg_return_pct) }}%</strong>
+          <span class="kv-sub">{{ s.trade_count }}件中 プラス{{ s.wins }}・マイナス{{ s.losses }}</span>
+        </span>
+        {% else %}
+        <span class="kv-value">データなし</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <details class="note-detail">
+        <summary>ℹ️ この数字の見方</summary>
+        「買い候補」は判定時に買って検証時点（短期30日後・中長期180日後）に売った場合、
+        「売り候補」「売却検討」は判定時に売った/買わなかった場合の仮想リターンです。等金額・単利（複利なし）で手数料や税金は
+        考慮していません。特定の売買を推奨するものではなく、あくまで判定を機械的に採用し
+        続けた場合の振り返り指標です。
+      </details>
+    </div>
+    {% endif %}
+
+    {% if accuracy.recent_resolved %}
+    <details class="news-detail">
+      <summary>直近の検証結果（{{ accuracy.recent_resolved|length }}件）</summary>
+      <ul>
+        {% for r in accuracy.recent_resolved %}
+        <li>
+          {{ r.date }} {{ r.name }}（{{ r.symbol }}）: {{ r.recommendation }} →
+          {{ "%+.2f"|format(r.change_pct) }}%
+          {% if r.outcome == "correct" %}✅ 的中{% elif r.outcome == "incorrect" %}❌ 不的中{% else %}― 様子見扱い{% endif %}
+          {% if r.sim_return_pct is not none %}（仮想リターン {{ "%+.2f"|format(r.sim_return_pct) }}%）{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endif %}
     {% else %}
-    <p style="color: var(--text-muted); font-size: 0.9rem;">候補銘柄が登録されていません。</p>
+    <p class="empty-note">
+      検証にはまず判定から30日以上の経過が必要です。今後の判定が蓄積され次第、ここに的中率が表示されます
+      （検証待ち: {{ accuracy.pending_count }}件）。
+    </p>
     {% endif %}
   </section>
 
@@ -1361,6 +1363,47 @@
         if (e.key === "ArrowRight") { show(current + 1); e.preventDefault(); }
       });
     });
+  })();
+  (function () {
+    // サマリーの銘柄名などから「#ticker-…」へ飛んだとき、折りたたまれたカードを開く。
+    // クリック時の処理はページ内移動より先に動くので、開いてからその位置へスクロールされる。
+    function openTarget(hash) {
+      if (!hash || hash.length < 2) return;
+      var el = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (el && el.tagName === "DETAILS") el.open = true;
+    }
+    document.addEventListener("click", function (e) {
+      var link = e.target.closest('a[href^="#"]');
+      if (link) openTarget(link.getAttribute("href"));
+    });
+    window.addEventListener("hashchange", function () { openTarget(location.hash); });
+    openTarget(location.hash);
+  })();
+  (function () {
+    // 目次バーで、いま画面に表示しているセクションを強調する
+    var nav = document.getElementById("section-nav");
+    if (!nav || !("IntersectionObserver" in window)) return;
+    var links = {};
+    nav.querySelectorAll("a").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
+    var visible = {};
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { visible[entry.target.id] = entry.isIntersecting; });
+      var current = null;
+      document.querySelectorAll("section[id]").forEach(function (s) {
+        if (!current && visible[s.id]) current = s.id;
+      });
+      Object.keys(links).forEach(function (id) {
+        links[id].classList.toggle("active", id === current);
+        if (id === current) links[id].setAttribute("aria-current", "true");
+        else links[id].removeAttribute("aria-current");
+      });
+      if (current && links[current]) {
+        var a = links[current];
+        var left = a.offsetLeft - nav.clientWidth / 2 + a.offsetWidth / 2;
+        nav.scrollTo({ left: left, behavior: "smooth" });
+      }
+    }, { rootMargin: "-64px 0px -55% 0px" });
+    document.querySelectorAll("section[id]").forEach(function (s) { observer.observe(s); });
   })();
   (function () {
     var button = document.getElementById("back-to-top");

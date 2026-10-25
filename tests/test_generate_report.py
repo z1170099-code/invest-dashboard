@@ -334,3 +334,19 @@ def test_generate_report_renders_sector_ranking_and_yutai(tmp_path):
     # スコアが高い銀行が先に並ぶ
     assert sector_html.index("銀行") < sector_html.index("医薬品")
     assert 'id="yutai"' in html and "PayPay" in html
+
+
+def test_holding_view_formats_prices_and_gain_class():
+    view = gr._build_holding_view_model({
+        "symbol": "PAYP",
+        "name": "PayPay",
+        "recommendation": "売却検討",
+        "purchase_price": 20.45,
+        "gain_loss_pct": -26.55,
+        "price_stats": {"latest_close": 15.020000457763672},
+    })
+    assert view["latest_close_display"] == "15.02"
+    assert view["purchase_price_display"] == "20.45"
+    assert view["gain_class"] == "gain-down"
+    assert gr._fmt_price_or_dash(None) == "—"
+    assert gr._fmt_price_or_dash(12755.0) == "12,755"

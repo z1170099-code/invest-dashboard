@@ -42,6 +42,10 @@ def _fmt_price(value: float) -> str:
     return f"{value:,.0f}" if value >= 1000 else f"{value:,.2f}"
 
 
+def _fmt_price_or_dash(value) -> str:
+    return _fmt_price(value) if isinstance(value, (int, float)) else "—"
+
+
 def _build_price_chart(
     price_stats: dict | None, purchase_price=None, purchase_date: str | None = None
 ) -> dict | None:
@@ -122,6 +126,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "reflection": result.get("reflection", ""),
         "analysis_failed": result.get("analysis_failed", False),
         "latest_close": price_stats.get("latest_close"),
+        "latest_close_display": _fmt_price_or_dash(price_stats.get("latest_close")),
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
         "change_1w": _fmt_pct(price_stats.get("change_1w_pct")),
         "change_1m": _fmt_pct(price_stats.get("change_1m_pct")),
@@ -208,6 +213,7 @@ def _build_holding_view_model(result: dict) -> dict:
     price_stats = result.get("price_stats") or {}
     status = _HOLDING_STATUS_MAP.get(result.get("recommendation"), _HOLDING_STATUS_MAP["分析失敗"])
     gain_loss_pct = result.get("gain_loss_pct")
+    latest_close = price_stats.get("latest_close") or result.get("latest_close")
 
     return {
         "symbol": result["symbol"],
@@ -223,10 +229,15 @@ def _build_holding_view_model(result: dict) -> dict:
         "analysis_failed": result.get("analysis_failed", False),
         "purchase_date": result.get("purchase_date"),
         "purchase_price": result.get("purchase_price"),
-        "latest_close": price_stats.get("latest_close") or result.get("latest_close"),
+        "purchase_price_display": _fmt_price_or_dash(result.get("purchase_price")),
+        "latest_close": latest_close,
+        "latest_close_display": _fmt_price_or_dash(latest_close),
         "holding_days": result.get("holding_days"),
         "gain_loss_pct": gain_loss_pct,
         "gain_loss_display": _fmt_pct(gain_loss_pct),
+        "gain_class": (
+            "gain-up" if (gain_loss_pct or 0) > 0 else ("gain-down" if (gain_loss_pct or 0) < 0 else "")
+        ),
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
         "change_1w": _fmt_pct(price_stats.get("change_1w_pct")),
         "change_1m": _fmt_pct(price_stats.get("change_1m_pct")),
