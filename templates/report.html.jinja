@@ -429,6 +429,19 @@
     flex: none;
   }
   .summary-count { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+  .buy-heading { color: var(--status-good); margin-top: 4px; }
+  .group-more { margin-top: 14px; }
+  .group-more > summary {
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    padding: 10px 14px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+  }
+  .group-more[open] > summary { margin-bottom: 10px; }
+  .yutai-source { margin: 8px 0 0; font-size: 0.75rem; color: var(--text-muted); }
+  .yutai-source a { color: var(--series-1); margin-left: 6px; }
   .summary-more { margin-top: 6px; }
   .summary-more > summary { cursor: pointer; font-size: 0.82rem; color: var(--text-muted); padding: 4px 2px; }
   .summary-more[open] > summary { margin-bottom: 6px; }
@@ -874,6 +887,12 @@
             </div>
             {% endif %}
           </div>
+          {% if t.yutai.source or t.yutai.link %}
+          <p class="yutai-source">
+            {% if t.yutai.source %}出典: {{ t.yutai.source }}{% endif %}
+            {% if t.yutai.link %}<a href="{{ t.yutai.link }}" target="_blank" rel="noopener">優待の詳細を見る</a>{% endif %}
+          </p>
+          {% endif %}
         </div>
         {% endif %}
 
@@ -1136,7 +1155,20 @@
         <li>優待内容は{{ yutai_checked_on or "登録時" }}時点の確認内容です。変更・廃止されることがあるため、購入前に各社のIRサイトで最新情報を確認してください。{% if yutai_budget_display %}「予算内」は最低投資金額が{{ yutai_budget_display }}以下かどうかの目安です。{% endif %}</li>
       </ul>
     </details>
-    {{ card_list(yutai, "株主優待銘柄が登録されていません。config/yutai.yaml に銘柄を登録すると、ここに表示されます。") }}
+    {% if yutai %}
+    {% set yutai_buy = yutai|selectattr("recommendation", "equalto", "買い候補")|list %}
+    {% set yutai_rest = yutai|rejectattr("recommendation", "equalto", "買い候補")|list %}
+    <h3 class="sub-heading buy-heading">▲ 買い候補 <span class="summary-count">{{ yutai_buy|length }}件</span></h3>
+    {{ card_list(yutai_buy, "本日、買い候補と判定された優待銘柄はありません。") }}
+    {% if yutai_rest %}
+    <details class="group-more">
+      <summary>様子見・売り候補の優待銘柄（{{ yutai_rest|length }}件）を表示</summary>
+      {{ card_list(yutai_rest, "") }}
+    </details>
+    {% endif %}
+    {% else %}
+    <p class="empty-note">株主優待銘柄が登録されていません。config/yutai.yaml に銘柄を登録すると、ここに表示されます。</p>
+    {% endif %}
   </section>
 
   <section id="watchlist">
@@ -1370,7 +1402,10 @@
     function openTarget(hash) {
       if (!hash || hash.length < 2) return;
       var el = document.getElementById(decodeURIComponent(hash.slice(1)));
-      if (el && el.tagName === "DETAILS") el.open = true;
+      // カード自身に加え、カードを包む「…を表示」の折りたたみも開く
+      for (var node = el; node; node = node.parentElement) {
+        if (node.tagName === "DETAILS") node.open = true;
+      }
     }
     document.addEventListener("click", function (e) {
       var link = e.target.closest('a[href^="#"]');

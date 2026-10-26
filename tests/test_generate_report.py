@@ -350,3 +350,33 @@ def test_holding_view_formats_prices_and_gain_class():
     assert view["gain_class"] == "gain-down"
     assert gr._fmt_price_or_dash(None) == "—"
     assert gr._fmt_price_or_dash(12755.0) == "12,755"
+
+
+def test_generate_report_groups_yutai_buy_candidates_first(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    yutai = [
+        _analysis("7803.T", "ブシロード", 10, "様子見", yutai={"content": "ポイント", "shares": 100, "months": [6, 12]}),
+        _analysis("9432.T", "NTT", 30, "買い候補", yutai={
+            "content": "dポイント", "shares": 100, "months": [3],
+            "link": "https://example.com/ntt", "source": "楽天証券 株主優待検索（10万円以下）",
+        }),
+    ]
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        yutai_results=yutai,
+        yutai_config={"max_min_investment_jpy": 100000},
+    )
+    html = output.read_text(encoding="utf-8")
+    section = html.split('id="yutai"')[1].split("</section>")[0]
+    buy_part, rest_part = section.split('class="group-more"')
+    assert "NTT" in buy_part and "ブシロード" not in buy_part
+    assert "ブシロード" in rest_part
+    assert 'href="https://example.com/ntt"' in buy_part
+    assert "出典: 楽天証券 株主優待検索（10万円以下）" in buy_part

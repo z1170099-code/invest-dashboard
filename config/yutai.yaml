@@ -114,3 +114,204 @@ stocks:
       shares: 100
       months: [4, 10]
       annual_value_jpy: null
+
+  # --- 楽天証券「株主優待検索」の最低投資金額10万円以下（2026-10-26取得・393銘柄）から、
+  #     株価データで機械的に絞り込んだ銘柄。条件: 投資法人を除く・株価100円以上・
+  #     直近20営業日の平均売買代金3,000万円以上・株価が200日移動平均より上・
+  #     3ヶ月と6ヶ月の騰落率がプラス。上位15銘柄（3ヶ月と6ヶ月の騰落率の平均が高い順）。
+  #     優待内容は楽天証券の一覧の要約なので、金額などの詳細は link 先で確認してください。
+
+  - symbol: "7803.T"
+    name: "ブシロード"
+    market: "JP"
+    theme: "エンタメ（カードゲーム・興行）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "自社ECストアー利用ポイント、興行招待"
+      shares: 100
+      months: [6, 12]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_7803.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "6904.T"
+    name: "原田工業"
+    market: "JP"
+    theme: "電子部品（車載アンテナ）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "QUOカード"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_6904.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "8766.T"
+    name: "東京海上HD"
+    market: "JP"
+    theme: "保険"
+    nisa_growth_eligible: true
+    yutai:
+      content: "デジタルギフト"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_8766.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "4394.T"
+    name: "エクスモーション"
+    market: "JP"
+    theme: "ソフトウェア開発支援"
+    nisa_growth_eligible: true
+    yutai:
+      content: "デジタルギフト"
+      shares: 100
+      months: [11]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_4394.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "1848.T"
+    name: "富士ピー・エス"
+    market: "JP"
+    theme: "建設（橋梁）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "QUOカード"
+      shares: 100
+      months: [9]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_1848.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "3929.T"
+    name: "ソーシャルワイヤー"
+    market: "JP"
+    theme: "PR・シェアオフィス"
+    nisa_growth_eligible: true
+    yutai:
+      content: "デジタルギフト"
+      shares: 200
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_3929.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "3760.T"
+    name: "ケイブ"
+    market: "JP"
+    theme: "ゲーム"
+    nisa_growth_eligible: true
+    yutai:
+      content: "QUOカード、限定グッズ"
+      shares: 100
+      months: [5]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_3760.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "4712.T"
+    name: "KEYHOLDER"
+    market: "JP"
+    theme: "エンタメ（芸能・ライブ）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "リラクゼーションサロン利用券、ライブチケット"
+      shares: 100
+      months: [6]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_4712.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "4447.T"
+    name: "ピー・ビーシステムズ"
+    market: "JP"
+    theme: "ITインフラ・セキュリティ"
+    nisa_growth_eligible: true
+    yutai:
+      content: "自社特製カレンダー、QUOカード"
+      shares: 100
+      months: [9]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_4447.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "3694.T"
+    name: "オプティム"
+    market: "JP"
+    theme: "AI・IoT"
+    nisa_growth_eligible: true
+    yutai:
+      content: "株主優待商品券"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_3694.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "3679.T"
+    name: "じげん"
+    market: "JP"
+    theme: "ネットサービス"
+    nisa_growth_eligible: true
+    yutai:
+      content: "航空券予約サイト・ポイント"
+      shares: 100
+      months: [3, 9]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_3679.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "2930.T"
+    name: "北の達人コーポ"
+    market: "JP"
+    theme: "健康食品・化粧品EC"
+    nisa_growth_eligible: true
+    yutai:
+      content: "自社商品・ECサイト商品券"
+      shares: 100
+      months: [2]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_2930.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "4290.T"
+    name: "プレステージ・インター"
+    market: "JP"
+    theme: "BPO（ロードアシスト等）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "QUOカード"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_4290.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "7883.T"
+    name: "サンメッセ"
+    market: "JP"
+    theme: "印刷"
+    nisa_growth_eligible: true
+    yutai:
+      content: "オリジナルQUOカード"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_7883.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"
+
+  - symbol: "8616.T"
+    name: "東海東京HD"
+    market: "JP"
+    theme: "証券"
+    nisa_growth_eligible: true
+    yutai:
+      content: "株主優待カタログ、オリジナルQUOカード"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://www.rakuten-sec.co.jp/web/market/search/hp2/hp_8616.T.html"
+      source: "楽天証券 株主優待検索（10万円以下）"

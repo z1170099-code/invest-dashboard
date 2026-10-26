@@ -197,6 +197,8 @@ def _build_yutai_info(result: dict, budget_jpy: float | None, today: dt.date) ->
         "yield_display": f"{yield_pct:.2f}%" if yield_pct is not None else None,
         "range_position_pct": range_position_pct,
         "range_label": range_label,
+        "link": yutai.get("link"),
+        "source": yutai.get("source"),
     }
 
 
