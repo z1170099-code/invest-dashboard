@@ -250,7 +250,8 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .card[open] .cs-reason { display: none; }
+  /* 「>」で自分自身の見出しだけに限定する（業種カードの中に入れ子にした銘柄カードに影響させない） */
+  .card[open] > .card-summary .cs-reason { display: none; }
   .cs-toggle {
     position: absolute;
     top: 14px;
@@ -263,7 +264,7 @@
     text-align: center;
   }
   .cs-toggle::before { content: "▾"; }
-  .card[open] .cs-toggle::before { content: "▴"; }
+  .card[open] > .card-summary .cs-toggle::before { content: "▴"; }
   .card-body { padding: 0 14px 14px; border-top: 1px solid var(--gridline); }
   .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   .tag-row .market-tag, .tag-row .theme-tag, .tag-row .nisa-tag { margin-left: 0; }
