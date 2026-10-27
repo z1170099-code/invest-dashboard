@@ -436,16 +436,22 @@ def _build_tsumitate_usage(entries: list[dict], growth_lifetime_used: float) -> 
     }
 
 
+# 売買サマリーには、スコアの絶対値がこの値以上の銘柄を、期間・売買ごとに上位この件数までだけ載せる。
+# 全銘柄を載せると数十件になり、どれが有力か分からなくなるため。ほかの銘柄は各セクションで見られる。
+SUMMARY_MIN_ABS_SCORE = 30
+SUMMARY_MAX_ITEMS = 5
+
+
 def _build_summary(combined: list[dict]) -> tuple[list[dict], list[dict]]:
     buy_list = sorted(
-        (t for t in combined if t["recommendation"] == "買い候補"),
+        (t for t in combined if t["recommendation"] == "買い候補" and (t["score"] or 0) >= SUMMARY_MIN_ABS_SCORE),
         key=lambda t: -(t["score"] or 0),
     )
     sell_list = sorted(
-        (t for t in combined if t["recommendation"] == "売り候補"),
+        (t for t in combined if t["recommendation"] == "売り候補" and (t["score"] or 0) <= -SUMMARY_MIN_ABS_SCORE),
         key=lambda t: (t["score"] or 0),
     )
-    return buy_list, sell_list
+    return buy_list[:SUMMARY_MAX_ITEMS], sell_list[:SUMMARY_MAX_ITEMS]
 
 
 def _build_summary_by_horizon(combined: list[dict]) -> list[dict]:
@@ -524,6 +530,8 @@ def generate_report(
         holdings=holding_view,
         macro_news=macro_news,
         summary_sections=summary_sections,
+        summary_min_abs_score=SUMMARY_MIN_ABS_SCORE,
+        summary_max_items=SUMMARY_MAX_ITEMS,
         theme_allocation=theme_allocation,
         theme_allocation_excluded_count=theme_allocation_excluded_count,
         nisa_usage=nisa_usage,

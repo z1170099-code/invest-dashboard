@@ -455,9 +455,6 @@
   .group-more[open] > summary { margin-bottom: 10px; }
   .yutai-source { margin: 8px 0 0; font-size: 0.75rem; color: var(--text-muted); }
   .yutai-source a { color: var(--series-1); margin-left: 6px; }
-  .summary-more { margin-top: 6px; }
-  .summary-more > summary { cursor: pointer; font-size: 0.82rem; color: var(--text-muted); padding: 4px 2px; }
-  .summary-more[open] > summary { margin-bottom: 6px; }
   .summary-empty {
     font-size: 0.85rem;
     color: var(--text-muted);
@@ -993,13 +990,7 @@
 
   {% macro summary_list(items, side) %}
     {% if items %}
-    <ul class="summary-list">{{ summary_items(items[:8], side) }}</ul>
-    {% if items|length > 8 %}
-    <details class="summary-more">
-      <summary>残り{{ items|length - 8 }}件を表示</summary>
-      <ul class="summary-list">{{ summary_items(items[8:], side) }}</ul>
-    </details>
-    {% endif %}
+    <ul class="summary-list">{{ summary_items(items, side) }}</ul>
     {% else %}
     <p class="summary-empty">本日は該当する銘柄がありません。</p>
     {% endif %}
@@ -1025,7 +1016,7 @@
       </div>
     </div>
     {% endfor %}
-    <p class="summary-note">ウォッチリスト・注目テーマ銘柄・暗号資産・株主優待銘柄・業種の代表銘柄の判定をまとめています（業種別ETFと保有銘柄は除く）。銘柄名を押すと、その銘柄のカードが開きます。</p>
+    <p class="summary-note">ウォッチリスト・注目テーマ銘柄・暗号資産・株主優待銘柄・業種の代表銘柄の中から、スコアが±{{ summary_min_abs_score }}以上のものを、期間・売買ごとに上位{{ summary_max_items }}件まで載せています（業種別ETFと保有銘柄は除く）。そのほかの銘柄は各セクションで見られます。銘柄名を押すと、その銘柄のカードが開きます。</p>
   </section>
 
   <section id="holdings">

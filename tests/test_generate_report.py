@@ -92,8 +92,8 @@ def test_build_summary_by_horizon_splits_long_and_short():
     combined = [
         {"symbol": "L1", "recommendation": "買い候補", "score": 40, "horizon": "中長期"},
         {"symbol": "S1", "recommendation": "買い候補", "score": 30, "horizon": "短期"},
-        {"symbol": "S2", "recommendation": "売り候補", "score": -20, "horizon": "短期"},
-        {"symbol": "N1", "recommendation": "買い候補", "score": 20},  # horizon無しは中長期側
+        {"symbol": "S2", "recommendation": "売り候補", "score": -32, "horizon": "短期"},
+        {"symbol": "N1", "recommendation": "買い候補", "score": 35},  # horizon無しは中長期側
         {"symbol": "W1", "recommendation": "様子見", "score": 0, "horizon": "短期"},
     ]
     sections = {s["key"]: s for s in gr._build_summary_by_horizon(combined)}
@@ -102,6 +102,17 @@ def test_build_summary_by_horizon_splits_long_and_short():
     assert sections["long"]["sell"] == []
     assert [t["symbol"] for t in sections["short"]["buy"]] == ["S1"]
     assert [t["symbol"] for t in sections["short"]["sell"]] == ["S2"]
+
+
+def test_build_summary_keeps_only_strong_calls_up_to_limit():
+    combined = [{"symbol": f"B{i}", "recommendation": "買い候補", "score": 30 + i} for i in range(8)]
+    combined += [
+        {"symbol": "weak", "recommendation": "買い候補", "score": 29},
+        {"symbol": "S1", "recommendation": "売り候補", "score": -29},
+    ]
+    buy_list, sell_list = gr._build_summary(combined)
+    assert [t["symbol"] for t in buy_list] == ["B7", "B6", "B5", "B4", "B3"]  # スコア上位5件まで
+    assert sell_list == []  # ±30未満は載せない
 
 
 def test_build_summary_by_horizon_orders_long_section_first():
