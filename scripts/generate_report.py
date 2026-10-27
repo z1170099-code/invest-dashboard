@@ -278,6 +278,7 @@ def _build_holding_view_model(result: dict) -> dict:
         "name": result["name"],
         "market": result.get("market", ""),
         "account": holding_account(result),
+        "account_type": result.get("account_type") or "NISA",
         "recommendation": result.get("recommendation", "分析失敗"),
         "status_key": status["key"],
         "status_icon": status["icon"],
@@ -372,12 +373,17 @@ def _build_theme_allocation(portfolio_results: list[dict]) -> tuple[list[dict], 
     return allocation, excluded_count
 
 
+def _is_nisa_holding(result: dict) -> bool:
+    """account_type が未入力または "NISA" の保有銘柄をNISA口座での購入とみなす。"""
+    return (result.get("account_type") or "NISA") == "NISA"
+
+
 def _build_nisa_usage(portfolio_results: list[dict]) -> dict | None:
     """NISA成長投資枠の使用状況を集計する。
 
-    このアプリに登録された購入（すべてNISA成長投資枠で購入している前提）のみを
-    対象とした概算であり、証券会社側の正式な消化額とは異なる場合がある。
-    amount_invested_jpyが未入力の銘柄は集計から除外する。
+    このアプリに登録された購入（account_typeが未入力またはNISAの銘柄はNISA成長投資枠で
+    購入している前提）のみを対象とした概算であり、証券会社側の正式な消化額とは異なる場合がある。
+    特定口座などNISA以外の口座の銘柄は数えない。amount_invested_jpyが未入力の銘柄は集計から除外する。
     """
     current_year = dt.datetime.now(tz=_JST).year
     annual_used = 0.0
@@ -385,6 +391,8 @@ def _build_nisa_usage(portfolio_results: list[dict]) -> dict | None:
     excluded_count = 0
 
     for r in portfolio_results:
+        if not _is_nisa_holding(r):
+            continue
         amount = r.get("amount_invested_jpy")
         if not isinstance(amount, (int, float)):
             excluded_count += 1

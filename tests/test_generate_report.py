@@ -469,3 +469,14 @@ def test_group_holdings_by_account_keeps_order_and_scopes_profit_taking():
     assert [g["account"] for g in groups] == ["PayPay証券", "楽天証券"]
     assert groups[0]["sell_count"] == 1 and groups[0]["profit_taking"] == pt
     assert [h["symbol"] for h in groups[1]["holdings"]] == ["LMT"] and groups[1]["profit_taking"] is None
+
+
+def test_nisa_usage_skips_taxable_account_holdings():
+    year = dt.datetime.now(tz=_JST).year
+    results = [
+        {"amount_invested_jpy": 5000, "purchase_date": f"{year}-07-01"},
+        {"amount_invested_jpy": 31820, "purchase_date": f"{year}-10-26", "account_type": "特定口座"},
+    ]
+    usage = gr._build_nisa_usage(results)
+    assert usage["annual_used"] == 5000 and usage["lifetime_used"] == 5000
+    assert usage["excluded_count"] == 0  # 特定口座は「未入力で除外」とは数えない

@@ -757,6 +757,7 @@ def _get_client() -> genai.Client:
 
 _PASSTHROUGH_FIELDS = (
     "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members", "account",
+    "account_type",
 )
 
 

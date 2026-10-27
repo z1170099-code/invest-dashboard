@@ -952,6 +952,7 @@
           <div class="cs-title">
             <span class="name">{{ h.name }}</span>
             <span class="symbol">{{ h.symbol }}</span>
+            {% if h.account_type != "NISA" %}<span class="market-tag">{{ h.account_type }}</span>{% endif %}
           </div>
           <div class="cs-status">
             <span class="status-chip"><span class="status-dot"></span>{{ h.status_icon }} {{ h.recommendation }}</span>

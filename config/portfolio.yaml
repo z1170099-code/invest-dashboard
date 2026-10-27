@@ -12,6 +12,8 @@
 #     レポートの「テーマ別配分」で集計しやすくなります。未入力の場合は「未分類」として扱われます。
 #   account: （任意）購入した証券会社の口座。レポートでは口座ごとに別の枠で表示されます。
 #     未入力の場合は "PayPay証券" として扱います。
+#   account_type: （任意）"NISA" / "特定口座" / "一般口座"。未入力の場合は "NISA" として扱います。
+#     NISA以外の銘柄は、レポートの「NISA成長投資枠の使用状況」の集計に含めません。
 #   amount_invested_jpy: （任意）その購入で実際に投資した円換算金額。単元未満株で
 #     「◯円分購入」のように買った場合は、その円金額をそのまま入力してください。
 #     入力しておくと、レポートに保有銘柄のテーマ別配分（何%がどのテーマに偏っているか）が
@@ -123,23 +125,28 @@ holdings:
   - symbol: "6857.T"
     name: "アドバンテスト"
     market: "JP"
-    purchase_date: "2026-10-27"
-    purchase_price: 31820  # 楽天証券での取得単価（ユーザー申告）
+    purchase_date: "2026-10-26"
+    purchase_price: 31820  # 楽天証券で1株購入。取得単価はユーザー申告
     theme: "半導体"
+    amount_invested_jpy: 31820
     account: "楽天証券"
+    account_type: "特定口座"
 
   - symbol: "4519.T"
     name: "中外製薬"
     market: "JP"
-    purchase_date: "2026-10-27"
-    purchase_price: 6884  # 楽天証券での取得単価（ユーザー申告）
+    purchase_date: "2026-10-26"
+    purchase_price: 6884  # 楽天証券で1株購入。取得単価はユーザー申告
     theme: "ヘルスケア・製薬"
+    amount_invested_jpy: 6884
     account: "楽天証券"
+    account_type: "特定口座"
 
   - symbol: "LMT"
     name: "Lockheed Martin"
     market: "US"
     purchase_date: "2026-10-27"
-    purchase_price: 578.81  # 楽天証券での取得単価（米ドル、ユーザー申告）
+    purchase_price: 578.81  # 楽天証券での取得単価（米ドル、ユーザー申告）。株数・投資金額は未確認
     theme: "防衛・地政学"
     account: "楽天証券"
+    account_type: "特定口座"
