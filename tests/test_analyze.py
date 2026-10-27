@@ -327,3 +327,17 @@ def test_build_prompt_includes_sector_peer_table_when_given():
     prompt = analyze._build_prompt(ticker, None, [])
     assert "【全業種の騰落率（比較用）】" in prompt
     assert "- 医薬品: 1ヶ月 +2.00%" in prompt
+
+
+def test_combine_subscores_weights_and_thresholds():
+    assert analyze.combine_subscores({"trend": 50, "news": 20, "macro": -10}) == (23, "買い候補")
+    assert analyze.combine_subscores({"trend": -40, "news": -10, "macro": 0}) == (-19, "売り候補")
+    assert analyze.combine_subscores({"trend": 20, "news": 10, "macro": -10}) == (8, "様子見")
+    # 範囲外の値は±100に丸め、欠けている観点は0として扱う
+    assert analyze.combine_subscores({"trend": 300}) == (40, "買い候補")
+    assert analyze.combine_subscores({}) == (0, "様子見")
+
+
+def test_response_schema_asks_for_subscores_not_raw_score():
+    assert "subscores" in analyze._RESPONSE_SCHEMA["required"]
+    assert "score" not in analyze._RESPONSE_SCHEMA["properties"]

@@ -430,6 +430,16 @@
     flex: none;
   }
   .summary-count { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+  .subscores {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+    margin: -4px 0 12px;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .subscores .label { color: var(--text-muted); margin-right: 4px; font-size: 0.78rem; }
   .cs-pick { color: var(--text-primary); }
   .cs-pick strong { color: var(--status-good); }
   .member-block {
@@ -867,6 +877,13 @@
           <span><span class="label">6ヶ月</span>{{ t.change_6m }}</span>
           <span><span class="label">1年</span>{{ t.change_1y }}</span>
         </div>
+        {% endif %}
+
+        {% if t.subscores %}
+        <p class="subscores">
+          <span class="label">スコアの内訳</span>
+          {% for s in t.subscores %}<span class="subscore"><span class="label">{{ s.label }}</span><span class="gain-{{ s.sign }}">{{ s.display }}</span></span>{% endfor %}
+        </p>
         {% endif %}
 
         {% if t.yutai %}

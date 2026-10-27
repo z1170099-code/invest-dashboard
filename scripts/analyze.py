@@ -53,15 +53,14 @@ _SYSTEM_INSTRUCTION = """\
 - ただしこれは「安易に極端な高スコアを付けない」という注意であり、「様子見を多用すべき」
   という意味ではありません。「様子見」は、上昇材料と下降材料が本当に拮抗していて
   方向性を見出せない場合に限定してください。
-- スコアは-100〜100の幅を広く使い、材料の強さの違いがスコアの差としてはっきり表れるように
-  してください。多くの銘柄が+25や+30のような同じ値に集まると、どれが有力なのか区別できなく
-  なります。5刻みの丸い数字にこだわらず、37や52のような細かい値も使ってください。目安:
-  - 絶対値0〜14: 材料が拮抗している（「様子見」）
-  - 絶対値15〜34: 弱い方向性がある（根拠が1つだけ、または材料に食い違いがある）
-  - 絶対値35〜59: はっきりした方向性があり、中長期トレンドやニュースなど複数の材料が支えている
-  - 絶対値60以上: 上の「高スコアの注意」の条件をすべて満たす場合に限る
-- recommendationはスコアと矛盾させないでください。スコアが+15以上なら「買い候補」、
-  -15以下なら「売り候補」、その間なら「様子見」としてください。
+- スコアは3つの観点に分けて、subscoresにそれぞれ-100〜100で付けてください。最終スコアと
+  判定（買い候補/様子見/売り候補）は、この3つからプログラムが計算します。
+  - trend: 株価の動き（中長期トレンド、指数比、直近の勢い）が上昇・下落のどちらを示しているか
+  - news: その銘柄・業種に固有のニュースや業績材料が追い風か逆風か
+  - macro: 世界情勢・金利・為替などのマクロ環境が追い風か逆風か
+  3つは互いに独立に採点し、材料の強さの違いがそのまま点数の差に表れるようにしてください。
+  材料がほぼ無い観点は0付近、はっきりした材料があれば±50以上も使ってください。
+  ほかの銘柄と同じような値に揃える必要はありません。
 - 騰落率に「指数比」（ベンチマーク指数との比較値）が付記されている場合、それも判断に
   活用してください。たとえば1ヶ月で-5%でも指数比が-1%程度なら「市場全体の地合いが悪い
   中での平均的な動き」であり、銘柄固有の悪材料とは言えません。逆に指数比が-8%のように
@@ -82,13 +81,14 @@ _SYSTEM_INSTRUCTION = """\
 _RESPONSE_SCHEMA = {
     "type": "object",
     "properties": {
-        "score": {
-            "type": "integer",
-            "description": "-100(強い売り材料)から100(強い買い材料)のスコア",
-        },
-        "recommendation": {
-            "type": "string",
-            "enum": ["買い候補", "様子見", "売り候補"],
+        "subscores": {
+            "type": "object",
+            "properties": {
+                "trend": {"type": "integer", "description": "株価の動き（-100〜100）"},
+                "news": {"type": "integer", "description": "銘柄・業種固有のニュース・業績材料（-100〜100）"},
+                "macro": {"type": "integer", "description": "マクロ環境・世界情勢（-100〜100）"},
+            },
+            "required": ["trend", "news", "macro"],
         },
         "horizon": {
             "type": "string",
@@ -113,8 +113,29 @@ _RESPONSE_SCHEMA = {
             "description": "前回分析からの振り返り（初回分析の場合は空文字）",
         },
     },
-    "required": ["score", "recommendation", "horizon", "reasoning", "key_factors", "risks"],
+    "required": ["subscores", "horizon", "reasoning", "key_factors", "risks"],
 }
+
+# 最終スコア＝3観点の加重平均。1つの点数を直接付けさせると+25や+42のような決まった値に
+# 集まってしまうため、観点ごとに採点させて合成し、銘柄ごとの差が出るようにしている。
+_SUBSCORE_WEIGHTS = {"trend": 0.4, "news": 0.3, "macro": 0.3}
+# 判定の境目。スコアと判定の食い違い（例: -22なのに様子見）が起きないよう、プログラムで決める。
+_RECOMMENDATION_THRESHOLD = 15
+
+
+def combine_subscores(subscores: dict) -> tuple[int, str]:
+    """3観点のサブスコアから、最終スコアと判定（買い候補/様子見/売り候補）を計算する。"""
+    total = 0.0
+    for key, weight in _SUBSCORE_WEIGHTS.items():
+        value = subscores.get(key, 0)
+        value = value if isinstance(value, (int, float)) else 0
+        total += max(-100, min(100, value)) * weight
+    score = int(round(total))
+    if score >= _RECOMMENDATION_THRESHOLD:
+        return score, "買い候補"
+    if score <= -_RECOMMENDATION_THRESHOLD:
+        return score, "売り候補"
+    return score, "様子見"
 
 
 def _build_reflection_section(previous: dict | None, latest_close) -> str:
@@ -756,6 +777,7 @@ def analyze_ticker(
                 ),
             )
             data = json.loads(response.text)
+            data["score"], data["recommendation"] = combine_subscores(data.get("subscores") or {})
             return {
                 **_base_fields(ticker),
                 "price_stats": price_stats,

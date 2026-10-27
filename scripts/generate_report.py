@@ -101,6 +101,20 @@ def _fmt_pct(value) -> str:
     return f"{arrow} {value:+.2f}%"
 
 
+_SUBSCORE_LABELS = (("trend", "値動き"), ("news", "ニュース"), ("macro", "マクロ"))
+
+
+def _build_subscores_display(subscores: dict | None) -> list[dict]:
+    """最終スコアの内訳（値動き・ニュース・マクロ）を表示用に整える。無ければ空リスト。"""
+    if not isinstance(subscores, dict):
+        return []
+    return [
+        {"label": label, "display": f"{subscores[key]:+d}", "sign": "up" if subscores[key] > 0 else ("down" if subscores[key] < 0 else "")}
+        for key, label in _SUBSCORE_LABELS
+        if isinstance(subscores.get(key), int)
+    ]
+
+
 def _build_view_model(result: dict, group: str = "") -> dict:
     price_stats = result.get("price_stats") or {}
     status = _STATUS_MAP.get(result.get("recommendation"), _STATUS_MAP["分析失敗"])
@@ -121,6 +135,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "score": score,
         "score_display": "—" if score is None else f"{score:+d}",
         "score_bar_pct": 0 if score is None else min(100, abs(score)),
+        "subscores": _build_subscores_display(result.get("subscores")),
         "reasoning": result.get("reasoning", ""),
         "key_factors": result.get("key_factors") or [],
         "risks": result.get("risks", ""),

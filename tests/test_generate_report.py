@@ -444,3 +444,11 @@ def test_summary_sources_include_yutai_and_new_sector_members_with_anchors():
     assert by_symbol["2914.T"]["anchor_id"] == "ticker-2914.T"
     buy = gr._build_summary_by_horizon(combined)[0]["buy"]
     assert buy[0]["name"] == "日立製作所"  # スコア45が先頭
+
+
+def test_subscores_display_formats_signs():
+    shown = gr._build_subscores_display({"trend": 40, "news": 0, "macro": -15})
+    assert [(s["label"], s["display"], s["sign"]) for s in shown] == [
+        ("値動き", "+40", "up"), ("ニュース", "+0", ""), ("マクロ", "-15", "down"),
+    ]
+    assert gr._build_subscores_display(None) == []
