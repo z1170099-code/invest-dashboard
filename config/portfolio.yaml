@@ -10,6 +10,8 @@
 #   purchase_price: 購入時の価格（1株あたり。円や米ドルなど、銘柄の通貨単位で入力）
 #   theme: （任意）テーマ名の自由記述。candidate_pool.yamlと表記を揃えておくと、
 #     レポートの「テーマ別配分」で集計しやすくなります。未入力の場合は「未分類」として扱われます。
+#   account: （任意）購入した証券会社の口座。レポートでは口座ごとに別の枠で表示されます。
+#     未入力の場合は "PayPay証券" として扱います。
 #   amount_invested_jpy: （任意）その購入で実際に投資した円換算金額。単元未満株で
 #     「◯円分購入」のように買った場合は、その円金額をそのまま入力してください。
 #     入力しておくと、レポートに保有銘柄のテーマ別配分（何%がどのテーマに偏っているか）が
@@ -116,3 +118,28 @@ holdings:
     purchase_price: 362.84  # 単元未満株を3,000円分購入。8/15は休場日のため直近の確定終値（8/14終値）を取得単価として使用。実際の約定価格が分かり次第、要修正
     theme: "金融"
     amount_invested_jpy: 3000
+
+  # --- 楽天証券で購入した銘柄 ---
+  - symbol: "6857.T"
+    name: "アドバンテスト"
+    market: "JP"
+    purchase_date: "2026-10-27"
+    purchase_price: 31820  # 楽天証券での取得単価（ユーザー申告）
+    theme: "半導体"
+    account: "楽天証券"
+
+  - symbol: "4519.T"
+    name: "中外製薬"
+    market: "JP"
+    purchase_date: "2026-10-27"
+    purchase_price: 6884  # 楽天証券での取得単価（ユーザー申告）
+    theme: "ヘルスケア・製薬"
+    account: "楽天証券"
+
+  - symbol: "LMT"
+    name: "Lockheed Martin"
+    market: "US"
+    purchase_date: "2026-10-27"
+    purchase_price: 578.81  # 楽天証券での取得単価（米ドル、ユーザー申告）
+    theme: "防衛・地政学"
+    account: "楽天証券"

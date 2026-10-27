@@ -456,3 +456,16 @@ def test_subscores_display_formats_signs():
         ("値動き", "+40", "up"), ("ニュース", "+0", ""), ("マクロ", "-15", "down"),
     ]
     assert gr._build_subscores_display(None) == []
+
+
+def test_group_holdings_by_account_keeps_order_and_scopes_profit_taking():
+    results = [
+        {"symbol": "NVDA", "name": "NVIDIA", "recommendation": "売却検討", "gain_loss_pct": 5.0},
+        {"symbol": "LMT", "name": "LMT", "recommendation": "保有継続", "gain_loss_pct": 1.0, "account": "楽天証券"},
+    ]
+    views = [gr._build_holding_view_model(r) for r in results]
+    pt = {"until": "2026-12-31", "days_left": 65, "accounts": ["PayPay証券"]}
+    groups = gr._group_holdings_by_account(views, results, pt)
+    assert [g["account"] for g in groups] == ["PayPay証券", "楽天証券"]
+    assert groups[0]["sell_count"] == 1 and groups[0]["profit_taking"] == pt
+    assert [h["symbol"] for h in groups[1]["holdings"]] == ["LMT"] and groups[1]["profit_taking"] is None

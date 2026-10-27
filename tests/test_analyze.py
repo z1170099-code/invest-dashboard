@@ -341,3 +341,17 @@ def test_combine_subscores_weights_and_thresholds():
 def test_response_schema_asks_for_subscores_not_raw_score():
     assert "subscores" in analyze._RESPONSE_SCHEMA["required"]
     assert "score" not in analyze._RESPONSE_SCHEMA["properties"]
+
+
+def test_active_profit_taking_carries_target_accounts():
+    policy = {"profit_taking_until": "2026-12-31", "profit_taking_accounts": ["PayPay証券"]}
+    result = analyze.active_profit_taking(policy, dt.date(2026, 10, 27))
+    assert result["accounts"] == ["PayPay証券"]
+
+
+def test_profit_taking_applies_only_to_target_accounts():
+    pt = {"until": "2026-12-31", "days_left": 65, "accounts": ["PayPay証券"]}
+    assert analyze.profit_taking_applies(pt, {"symbol": "NVDA"})  # account未入力はPayPay証券扱い
+    assert not analyze.profit_taking_applies(pt, {"symbol": "LMT", "account": "楽天証券"})
+    assert analyze.profit_taking_applies({"until": "2026-12-31", "days_left": 65}, {"account": "楽天証券"})  # 指定なしは全口座
+    assert not analyze.profit_taking_applies(None, {"symbol": "NVDA"})

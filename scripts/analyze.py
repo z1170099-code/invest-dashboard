@@ -486,8 +486,27 @@ _HOLDING_RESPONSE_SCHEMA = {
 }
 
 
+# portfolio.yaml で account（証券会社の口座）を書いていない保有銘柄は、最初に使っていたPayPay証券とみなす。
+DEFAULT_ACCOUNT = "PayPay証券"
+
+
+def holding_account(holding: dict) -> str:
+    return holding.get("account") or DEFAULT_ACCOUNT
+
+
+def profit_taking_applies(profit_taking: dict | None, holding: dict) -> bool:
+    """利確優先モードがこの保有銘柄に適用されるか。対象口座の指定が無ければ全保有銘柄に適用する。"""
+    if not profit_taking:
+        return False
+    accounts = profit_taking.get("accounts")
+    return not accounts or holding_account(holding) in accounts
+
+
 def active_profit_taking(sell_policy: dict | None, today: dt.date | None = None) -> dict | None:
-    """利確優先モードが有効なら {"until": 期限日(str), "days_left": 残り日数} を返す。無効ならNone。"""
+    """利確優先モードが有効なら {"until": 期限日(str), "days_left": 残り日数, "accounts": 対象口座} を返す。無効ならNone。
+
+    accounts は sell_policy.yaml の profit_taking_accounts（無ければNone＝全口座が対象）。
+    """
     until_str = (sell_policy or {}).get("profit_taking_until")
     if not until_str:
         return None
@@ -499,7 +518,11 @@ def active_profit_taking(sell_policy: dict | None, today: dt.date | None = None)
     today = today or dt.date.today()
     if today > until:
         return None
-    return {"until": until.isoformat(), "days_left": (until - today).days}
+    result = {"until": until.isoformat(), "days_left": (until - today).days}
+    accounts = (sell_policy or {}).get("profit_taking_accounts")
+    if accounts:
+        result["accounts"] = list(accounts)
+    return result
 
 
 def _build_profit_taking_section(profit_taking: dict | None, gain_loss_pct) -> str:
@@ -716,7 +739,7 @@ def analyze_all_holdings(
             previous=previous,
             accuracy_summary=accuracy_summary,
             streak=streak,
-            profit_taking=profit_taking,
+            profit_taking=profit_taking if profit_taking_applies(profit_taking, holding) else None,
         )
         results.append(result)
     return results
@@ -733,7 +756,7 @@ def _get_client() -> genai.Client:
 
 
 _PASSTHROUGH_FIELDS = (
-    "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members",
+    "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members", "account",
 )
 
 

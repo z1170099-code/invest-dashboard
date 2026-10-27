@@ -8,6 +8,8 @@ from zoneinfo import ZoneInfo
 
 from jinja2 import Environment, FileSystemLoader
 
+from analyze import holding_account, profit_taking_applies
+
 logger = logging.getLogger(__name__)
 
 _JST = ZoneInfo("Asia/Tokyo")
@@ -275,6 +277,7 @@ def _build_holding_view_model(result: dict) -> dict:
         "symbol": result["symbol"],
         "name": result["name"],
         "market": result.get("market", ""),
+        "account": holding_account(result),
         "recommendation": result.get("recommendation", "分析失敗"),
         "status_key": status["key"],
         "status_icon": status["icon"],
@@ -304,6 +307,27 @@ def _build_holding_view_model(result: dict) -> dict:
         "chart": _build_price_chart(price_stats, result.get("purchase_price"), result.get("purchase_date")),
         "news": result.get("news") or [],
     }
+
+
+def _group_holdings_by_account(
+    holding_view: list[dict], portfolio_results: list[dict], profit_taking: dict | None
+) -> list[dict]:
+    """保有銘柄を口座（証券会社）ごとの枠に分ける。枠の順番は portfolio.yaml に最初に出てくる順。"""
+    order = []
+    for r in portfolio_results:
+        account = holding_account(r)
+        if account not in order:
+            order.append(account)
+    groups = []
+    for account in order:
+        items = [h for h in holding_view if h["account"] == account]
+        groups.append({
+            "account": account,
+            "holdings": items,
+            "sell_count": sum(1 for h in items if h["recommendation"] == "売却検討"),
+            "profit_taking": profit_taking if profit_taking_applies(profit_taking, {"account": account}) else None,
+        })
+    return groups
 
 
 def _sort_holdings(results: list[dict]) -> list[dict]:
@@ -513,6 +537,7 @@ def generate_report(
     holding_view = [
         _build_holding_view_model(r) for r in _sort_holdings(portfolio_results)
     ]
+    holding_groups = _group_holdings_by_account(holding_view, portfolio_results, profit_taking)
     now = dt.datetime.now(tz=_JST)
     generated_at = now.strftime("%Y年%m月%d日 %H:%M (JST)")
     yutai_config = yutai_config or {}
@@ -545,6 +570,7 @@ def generate_report(
         candidates=candidate_view,
         crypto=crypto_view,
         holdings=holding_view,
+        holding_groups=holding_groups,
         macro_news=macro_news,
         summary_sections=summary_sections,
         summary_min_abs_score=SUMMARY_MIN_ABS_SCORE,
