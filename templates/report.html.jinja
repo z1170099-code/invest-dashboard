@@ -429,6 +429,18 @@
     flex: none;
   }
   .summary-count { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+  .cs-pick { color: var(--text-primary); }
+  .cs-pick strong { color: var(--status-good); }
+  .member-block {
+    margin: 12px 0 14px;
+    padding: 10px 12px 12px;
+    background: var(--page);
+    border: 1px solid var(--gridline);
+    border-radius: 8px;
+  }
+  .member-heading { margin: 0; font-size: 0.9rem; }
+  .member-note { margin: 2px 0 10px; font-size: 0.75rem; color: var(--text-muted); }
+  .member-block .card-list { gap: 8px; }
   .buy-heading { color: var(--status-good); margin-top: 4px; }
   .group-more { margin-top: 14px; }
   .group-more > summary {
@@ -808,8 +820,8 @@
       {% endif %}
   {% endmacro %}
 
-  {% macro ticker_card(t, rank) %}
-    <details class="card status-{{ t.status_key }}" id="ticker-{{ t.symbol }}">
+  {% macro ticker_card(t, rank, id_prefix="ticker-") %}
+    <details class="card status-{{ t.status_key }}" id="{{ id_prefix }}{{ t.symbol }}">
       <summary class="card-summary">
         <div class="cs-top">
           <div class="cs-title">
@@ -826,6 +838,9 @@
           {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
           {% if t.yutai %}
           <span><span class="label">最低投資</span>{{ t.yutai.min_investment_display }}{% if t.yutai.within_budget is false %}（予算超）{% endif %}</span>
+          {% endif %}
+          {% if t.top_member %}
+          <span class="cs-pick"><span class="label">業種内の注目</span>{{ t.top_member.name }} <strong>{{ t.top_member.score_display }}</strong></span>
           {% endif %}
           {% if t.price_available %}
           <span><span class="label">前日比</span>{{ t.change_1d }}</span>
@@ -893,6 +908,18 @@
             {% if t.yutai.link %}<a href="{{ t.yutai.link }}" target="_blank" rel="noopener">優待の詳細を見る</a>{% endif %}
           </p>
           {% endif %}
+        </div>
+        {% endif %}
+
+        {% if t.members %}
+        <div class="member-block">
+          <h4 class="member-heading">業種内の主な銘柄（AIスコア順）</h4>
+          <p class="member-note">この業種の代表的な大型株を、AIが個別に判定した結果です。押すと理由とチャートが開きます。</p>
+          <div class="card-list">
+            {% for m in t.members %}
+              {{ ticker_card(m, loop.index, "member-") }}
+            {% endfor %}
+          </div>
         </div>
         {% endif %}
 

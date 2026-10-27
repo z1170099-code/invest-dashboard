@@ -91,6 +91,24 @@ def _analyze_group(
     )
 
 
+def _sector_member_tickers(sector_etfs: list[dict], skip_symbols: set[str]) -> list[dict]:
+    """業種別ETFの代表銘柄（members）のうち、まだ買い/売りの判定をしていない銘柄を分析対象として返す。"""
+    tickers, seen = [], set(skip_symbols)
+    for sector in sector_etfs:
+        for member in sector.get("members") or []:
+            if member["symbol"] in seen:
+                continue
+            seen.add(member["symbol"])
+            tickers.append({
+                "symbol": member["symbol"],
+                "name": member["name"],
+                "market": sector.get("market", "JP"),
+                "theme": sector.get("theme") or sector.get("name"),
+                "nisa_growth_eligible": True,
+            })
+    return tickers
+
+
 def main() -> None:
     load_dotenv(_ROOT / ".env")
 
@@ -188,7 +206,25 @@ def main() -> None:
         analyze_fn=functools.partial(analyze_all_holdings, profit_taking=profit_taking),
     )
 
-    all_results = watchlist_results + candidate_results + yutai_results + sector_results + portfolio_results
+    # 業種内の代表銘柄。ほかのリスト（保有銘柄を除く）で判定済みの銘柄はその判定を使い回し、
+    # 無い銘柄だけ追加で分析する（保有銘柄は「保有継続/売却検討」という別の物差しなので使い回さない）。
+    member_tickers = _sector_member_tickers(
+        sector_etfs, {r["symbol"] for r in watchlist_results + candidate_results + yutai_results}
+    )
+    sector_member_results = _analyze_group(
+        "業種内の代表銘柄",
+        member_tickers,
+        max_per_ticker,
+        macro_news,
+        history,
+        "sector_member",
+        accuracy_summary_for_prompt,
+        benchmarks,
+    )
+
+    all_results = (
+        watchlist_results + candidate_results + yutai_results + sector_results + sector_member_results + portfolio_results
+    )
     current_prices = {
         r["symbol"]: r["price_stats"]["latest_close"]
         for r in all_results
@@ -199,6 +235,7 @@ def main() -> None:
     record_predictions(track_record, "candidate", candidate_results)
     record_predictions(track_record, "yutai", yutai_results)
     record_predictions(track_record, "sector", sector_results)
+    record_predictions(track_record, "sector_member", sector_member_results)
     record_predictions(track_record, "holding", portfolio_results)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
@@ -217,6 +254,7 @@ def main() -> None:
         yutai_results,
         yutai_config,
         sector_results,
+        sector_member_results,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
@@ -235,6 +273,7 @@ def main() -> None:
         apply_group_results(history, "candidate", candidate_results)
         apply_group_results(history, "yutai", yutai_results)
         apply_group_results(history, "sector", sector_results)
+        apply_group_results(history, "sector_member", sector_member_results)
         apply_group_results(history, "holding", portfolio_results)
         save_history(_HISTORY_PATH, history)
     except Exception:

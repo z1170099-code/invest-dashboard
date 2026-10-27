@@ -704,7 +704,9 @@ def _get_client() -> genai.Client:
     return genai.Client(api_key=api_key)
 
 
-_PASSTHROUGH_FIELDS = ("theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector")
+_PASSTHROUGH_FIELDS = (
+    "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members",
+)
 
 
 def _base_fields(ticker: dict) -> dict:

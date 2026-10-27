@@ -211,6 +211,23 @@ def _build_yutai_view(results: list[dict], budget_jpy: float | None, today: dt.d
     return views
 
 
+def _build_sector_view(sector_results: list[dict], member_results: list[dict]) -> list[dict]:
+    """業種別ETFのカードに、その業種の代表銘柄の判定（スコア順）と、業種内の注目銘柄を添える。
+
+    注目銘柄は「買い候補」のうちスコアが最も高い銘柄。買い候補が無い業種では付けない。
+    """
+    lookup = {r["symbol"]: r for r in member_results}
+    views = []
+    for r in _sort_by_score(sector_results):
+        view = _build_view_model(r, group="業種別ETF")
+        members = [lookup[m["symbol"]] for m in r.get("members") or [] if m.get("symbol") in lookup]
+        view["members"] = [_build_view_model(m, group="業種内の代表銘柄") for m in _sort_by_score(members)]
+        top = view["members"][0] if view["members"] else None
+        view["top_member"] = top if top and top["recommendation"] == "買い候補" else None
+        views.append(view)
+    return views
+
+
 def _build_holding_view_model(result: dict) -> dict:
     price_stats = result.get("price_stats") or {}
     status = _HOLDING_STATUS_MAP.get(result.get("recommendation"), _HOLDING_STATUS_MAP["分析失敗"])
@@ -440,6 +457,7 @@ def generate_report(
     yutai_results: list[dict] | None = None,
     yutai_config: dict | None = None,
     sector_results: list[dict] | None = None,
+    sector_member_results: list[dict] | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -469,7 +487,11 @@ def generate_report(
     yutai_config = yutai_config or {}
     yutai_budget = yutai_config.get("max_min_investment_jpy")
     yutai_view = _build_yutai_view(yutai_results or [], yutai_budget, now.date())
-    sector_view = [_build_view_model(r, group="業種別ETF") for r in _sort_by_score(sector_results or [])]
+    # 代表銘柄の判定は、ほかのリスト（保有銘柄を除く）の判定を使い回し、無い銘柄は追加分析の結果を使う
+    sector_view = _build_sector_view(
+        sector_results or [],
+        watchlist_results + candidate_results + (yutai_results or []) + (sector_member_results or []),
+    )
 
     html = template.render(
         tickers=watchlist_view,

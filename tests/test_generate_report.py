@@ -380,3 +380,41 @@ def test_generate_report_groups_yutai_buy_candidates_first(tmp_path):
     assert "ブシロード" in rest_part
     assert 'href="https://example.com/ntt"' in buy_part
     assert "出典: 楽天証券 株主優待検索（10万円以下）" in buy_part
+
+
+def test_build_sector_view_attaches_members_by_score_and_top_buy():
+    sectors = [_analysis("1617.T", "食品", 30, "買い候補", members=[
+        {"symbol": "2914.T", "name": "JT"}, {"symbol": "2802.T", "name": "味の素"}, {"symbol": "9999.T", "name": "未分析"},
+    ])]
+    members = [_analysis("2914.T", "JT", 10, "様子見"), _analysis("2802.T", "味の素", 35, "買い候補")]
+    view = gr._build_sector_view(sectors, members)[0]
+    assert [m["name"] for m in view["members"]] == ["味の素", "JT"]  # 判定の無い銘柄は出さない
+    assert view["top_member"]["name"] == "味の素"
+
+
+def test_build_sector_view_has_no_top_member_without_buy():
+    sectors = [_analysis("1631.T", "銀行", -20, "売り候補", members=[{"symbol": "8306.T", "name": "MUFG"}])]
+    view = gr._build_sector_view(sectors, [_analysis("8306.T", "MUFG", -15, "売り候補")])[0]
+    assert view["top_member"] is None
+    assert len(view["members"]) == 1
+
+
+def test_generate_report_renders_sector_members_with_unique_ids(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    sectors = [_analysis("1617.T", "食品", 30, "買い候補", sector="食品", members=[{"symbol": "2914.T", "name": "JT"}])]
+    candidates = [_analysis("2914.T", "JT", 40, "買い候補")]
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], candidates, [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        sector_results=sectors,
+    )
+    html = output.read_text(encoding="utf-8")
+    sector_html = html.split('id="sectors"')[1].split("</section>")[0]
+    assert "業種内の注目" in sector_html and 'id="member-2914.T"' in sector_html
+    assert html.count('id="ticker-2914.T"') == 1  # 候補セクションのカードとIDが重複しない

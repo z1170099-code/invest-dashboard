@@ -16,6 +16,9 @@
 #   sector: 業種名（AIへの入力に使う。「個別企業ではなく業種全体として判定する」よう指示する）
 #   theme: 的中率を業種ごとに集計するためのテーマ名（sectorと同じにしている）
 #   news_query: 関連ニュースの検索語（ETFの正式名称では業種のニュースが見つからないため）
+#   members: その業種の代表的な大型株（時価総額が大きい有名企業から3銘柄）。AIが個別に判定し、
+#     業種カードの中に「業種内の注目銘柄（AIスコア順）」として表示する。ほかのリスト
+#     （watchlist・candidate_pool・yutai）にある銘柄はその判定を使い回し、無い銘柄だけ追加で分析する。
 
 sectors:
   - symbol: "1617.T"
@@ -25,6 +28,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "食品株"
+    members:
+      - { symbol: "2914.T", name: "日本たばこ産業" }
+      - { symbol: "2802.T", name: "味の素" }
+      - { symbol: "2502.T", name: "アサヒグループHD" }
 
   - symbol: "1618.T"
     name: "エネルギー資源"
@@ -33,6 +40,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "石油株 資源株"
+    members:
+      - { symbol: "1605.T", name: "INPEX" }
+      - { symbol: "5020.T", name: "ENEOSホールディングス" }
+      - { symbol: "5019.T", name: "出光興産" }
 
   - symbol: "1619.T"
     name: "建設・資材"
@@ -41,6 +52,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "建設株"
+    members:
+      - { symbol: "1925.T", name: "大和ハウス工業" }
+      - { symbol: "1928.T", name: "積水ハウス" }
+      - { symbol: "1801.T", name: "大成建設" }
 
   - symbol: "1620.T"
     name: "素材・化学"
@@ -49,6 +64,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "化学株"
+    members:
+      - { symbol: "4063.T", name: "信越化学工業" }
+      - { symbol: "4901.T", name: "富士フイルムHD" }
+      - { symbol: "4452.T", name: "花王" }
 
   - symbol: "1621.T"
     name: "医薬品"
@@ -57,6 +76,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "医薬品株"
+    members:
+      - { symbol: "4502.T", name: "武田薬品工業" }
+      - { symbol: "4568.T", name: "第一三共" }
+      - { symbol: "4519.T", name: "中外製薬" }
 
   - symbol: "1622.T"
     name: "自動車・輸送機"
@@ -65,6 +88,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "自動車株"
+    members:
+      - { symbol: "7203.T", name: "トヨタ自動車" }
+      - { symbol: "6902.T", name: "デンソー" }
+      - { symbol: "7267.T", name: "本田技研工業" }
 
   - symbol: "1623.T"
     name: "鉄鋼・非鉄"
@@ -73,6 +100,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "鉄鋼株 非鉄株"
+    members:
+      - { symbol: "5401.T", name: "日本製鉄" }
+      - { symbol: "5802.T", name: "住友電気工業" }
+      - { symbol: "5713.T", name: "住友金属鉱山" }
 
   - symbol: "1624.T"
     name: "機械"
@@ -81,6 +112,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "機械株"
+    members:
+      - { symbol: "6367.T", name: "ダイキン工業" }
+      - { symbol: "6301.T", name: "小松製作所" }
+      - { symbol: "7011.T", name: "三菱重工業" }
 
   - symbol: "1625.T"
     name: "電機・精密"
@@ -89,6 +124,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "電機株"
+    members:
+      - { symbol: "6758.T", name: "ソニーグループ" }
+      - { symbol: "6501.T", name: "日立製作所" }
+      - { symbol: "8035.T", name: "東京エレクトロン" }
 
   - symbol: "1626.T"
     name: "情報通信・サービス"
@@ -97,6 +136,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "情報通信株"
+    members:
+      - { symbol: "9432.T", name: "NTT" }
+      - { symbol: "9984.T", name: "ソフトバンクグループ" }
+      - { symbol: "6098.T", name: "リクルートHD" }
 
   - symbol: "1627.T"
     name: "電力・ガス"
@@ -105,6 +148,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "電力株"
+    members:
+      - { symbol: "9501.T", name: "東京電力HD" }
+      - { symbol: "9503.T", name: "関西電力" }
+      - { symbol: "9531.T", name: "東京ガス" }
 
   - symbol: "1628.T"
     name: "運輸・物流"
@@ -113,6 +160,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "運輸株 海運株"
+    members:
+      - { symbol: "9022.T", name: "JR東海" }
+      - { symbol: "9020.T", name: "JR東日本" }
+      - { symbol: "9101.T", name: "日本郵船" }
 
   - symbol: "1629.T"
     name: "商社・卸売"
@@ -121,6 +172,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "商社株"
+    members:
+      - { symbol: "8058.T", name: "三菱商事" }
+      - { symbol: "8031.T", name: "三井物産" }
+      - { symbol: "8001.T", name: "伊藤忠商事" }
 
   - symbol: "1630.T"
     name: "小売"
@@ -129,6 +184,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "小売株"
+    members:
+      - { symbol: "9983.T", name: "ファーストリテイリング" }
+      - { symbol: "3382.T", name: "セブン&アイ・HD" }
+      - { symbol: "8267.T", name: "イオン" }
 
   - symbol: "1631.T"
     name: "銀行"
@@ -137,6 +196,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "銀行株"
+    members:
+      - { symbol: "8306.T", name: "三菱UFJフィナンシャル・グループ" }
+      - { symbol: "8316.T", name: "三井住友フィナンシャルグループ" }
+      - { symbol: "8411.T", name: "みずほフィナンシャルグループ" }
 
   - symbol: "1632.T"
     name: "金融（除く銀行）"
@@ -145,6 +208,10 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "証券株 保険株"
+    members:
+      - { symbol: "8766.T", name: "東京海上HD" }
+      - { symbol: "8591.T", name: "オリックス" }
+      - { symbol: "8604.T", name: "野村ホールディングス" }
 
   - symbol: "1633.T"
     name: "不動産"
@@ -153,3 +220,7 @@ sectors:
     market: "JP"
     nisa_growth_eligible: true
     news_query: "不動産株"
+    members:
+      - { symbol: "8801.T", name: "三井不動産" }
+      - { symbol: "8802.T", name: "三菱地所" }
+      - { symbol: "8830.T", name: "住友不動産" }
