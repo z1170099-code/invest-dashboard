@@ -982,7 +982,7 @@
   {% macro summary_items(items, side) %}
     {% for t in items %}
     <li>
-      <a class="summary-link" href="#ticker-{{ t.symbol }}">
+      <a class="summary-link" href="#{{ t.anchor_id }}">
         <span class="summary-score {{ side }}">{{ t.score_display }}</span>
         <span class="summary-name">{{ t.name }}</span>
         <span class="summary-group">{{ t.group }}</span>
@@ -1025,7 +1025,7 @@
       </div>
     </div>
     {% endfor %}
-    <p class="summary-note">銘柄名を押すと、その銘柄のカードが開きます。</p>
+    <p class="summary-note">ウォッチリスト・注目テーマ銘柄・暗号資産・株主優待銘柄・業種の代表銘柄の判定をまとめています（業種別ETFと保有銘柄は除く）。銘柄名を押すと、その銘柄のカードが開きます。</p>
   </section>
 
   <section id="holdings">

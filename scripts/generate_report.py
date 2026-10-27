@@ -109,6 +109,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
 
     return {
         "symbol": result["symbol"],
+        "anchor_id": f"ticker-{result['symbol']}",
         "name": result["name"],
         "market": result.get("market", ""),
         "theme": result.get("theme", ""),
@@ -226,6 +227,27 @@ def _build_sector_view(sector_results: list[dict], member_results: list[dict]) -
         view["top_member"] = top if top and top["recommendation"] == "買い候補" else None
         views.append(view)
     return views
+
+
+def _build_summary_sources(
+    watchlist_view: list[dict], candidate_view: list[dict], yutai_view: list[dict], sector_member_results: list[dict]
+) -> list[dict]:
+    """売買サマリーに載せる銘柄。業種別ETFは業種の物差しなので載せない。
+
+    業種内の代表銘柄のうち、ほかのリストに無く追加で分析した銘柄は、業種カードの中の
+    カード（id="member-…"）へ飛ぶようにする。同じ銘柄が重複しないよう最初の1件だけ残す。
+    """
+    members = [
+        {**_build_view_model(r, group=f"業種代表（{r.get('theme') or '業種'}）"), "anchor_id": f"member-{r['symbol']}"}
+        for r in sector_member_results
+    ]
+    seen, combined = set(), []
+    for v in watchlist_view + candidate_view + yutai_view + members:
+        if v["symbol"] in seen:
+            continue
+        seen.add(v["symbol"])
+        combined.append(v)
+    return combined
 
 
 def _build_holding_view_model(result: dict) -> dict:
@@ -468,7 +490,14 @@ def generate_report(
     holding_view = [
         _build_holding_view_model(r) for r in _sort_holdings(portfolio_results)
     ]
-    summary_sections = _build_summary_by_horizon(watchlist_view + candidate_view)
+    now = dt.datetime.now(tz=_JST)
+    generated_at = now.strftime("%Y年%m月%d日 %H:%M (JST)")
+    yutai_config = yutai_config or {}
+    yutai_budget = yutai_config.get("max_min_investment_jpy")
+    yutai_view = _build_yutai_view(yutai_results or [], yutai_budget, now.date())
+    summary_sections = _build_summary_by_horizon(
+        _build_summary_sources(watchlist_view, candidate_view, yutai_view, sector_member_results or [])
+    )
     theme_allocation, theme_allocation_excluded_count = _build_theme_allocation(portfolio_results)
     nisa_usage = _build_nisa_usage(portfolio_results)
     tsumitate_usage = _build_tsumitate_usage(
@@ -482,11 +511,6 @@ def generate_report(
     env = Environment(loader=FileSystemLoader(str(templates_dir)), autoescape=True)
     template = env.get_template("report.html.jinja")
 
-    now = dt.datetime.now(tz=_JST)
-    generated_at = now.strftime("%Y年%m月%d日 %H:%M (JST)")
-    yutai_config = yutai_config or {}
-    yutai_budget = yutai_config.get("max_min_investment_jpy")
-    yutai_view = _build_yutai_view(yutai_results or [], yutai_budget, now.date())
     # 代表銘柄の判定は、ほかのリスト（保有銘柄を除く）の判定を使い回し、無い銘柄は追加分析の結果を使う
     sector_view = _build_sector_view(
         sector_results or [],

@@ -418,3 +418,18 @@ def test_generate_report_renders_sector_members_with_unique_ids(tmp_path):
     sector_html = html.split('id="sectors"')[1].split("</section>")[0]
     assert "業種内の注目" in sector_html and 'id="member-2914.T"' in sector_html
     assert html.count('id="ticker-2914.T"') == 1  # 候補セクションのカードとIDが重複しない
+
+
+def test_summary_sources_include_yutai_and_new_sector_members_with_anchors():
+    watch = [gr._build_view_model(_analysis("7203.T", "トヨタ", 20, "買い候補"), group="ウォッチリスト")]
+    cand = [gr._build_view_model(_analysis("2914.T", "JT", 40, "買い候補"), group="ハイリスク候補")]
+    yutai = [gr._build_view_model(_analysis("9432.T", "NTT", 30, "買い候補"), group="株主優待")]
+    members = [_analysis("6501.T", "日立製作所", 45, "買い候補", theme="電機・精密"), _analysis("2914.T", "JT", 40, "買い候補")]
+    combined = gr._build_summary_sources(watch, cand, yutai, members)
+    by_symbol = {v["symbol"]: v for v in combined}
+    assert set(by_symbol) == {"7203.T", "2914.T", "9432.T", "6501.T"}  # JTは重複させない
+    assert by_symbol["6501.T"]["anchor_id"] == "member-6501.T"
+    assert by_symbol["6501.T"]["group"] == "業種代表（電機・精密）"
+    assert by_symbol["2914.T"]["anchor_id"] == "ticker-2914.T"
+    buy = gr._build_summary_by_horizon(combined)[0]["buy"]
+    assert buy[0]["name"] == "日立製作所"  # スコア45が先頭

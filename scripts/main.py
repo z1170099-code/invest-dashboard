@@ -265,6 +265,7 @@ def main() -> None:
         + find_newly_strong_buy(candidate_results, history, "candidate")
         + find_newly_strong_buy(yutai_results, history, "yutai")
         + find_newly_strong_buy(sector_results, history, "sector")
+        + find_newly_strong_buy(sector_member_results, history, "sector_member")
     )
     send_notification_email(sell_alerts, buy_alerts)
 
