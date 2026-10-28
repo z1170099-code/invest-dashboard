@@ -1,4 +1,4 @@
-from history import apply_group_results, build_key, load_history, save_history
+from history import apply_group_results, build_key, fill_failed_from_history, load_history, save_history
 
 
 def test_build_key_holding_includes_purchase_date():
@@ -68,6 +68,51 @@ def test_apply_group_results_prunes_removed_tickers():
     apply_group_results(history, "watchlist", results)
     assert "watchlist:MSFT" not in history
     assert "watchlist:AAPL" in history
+
+
+def test_fill_failed_from_history_uses_previous_judgement():
+    history = {
+        "watchlist:AAPL": {
+            "date": "2026-10-27",
+            "recommendation": "買い候補",
+            "score": 32,
+            "reasoning": "前回の理由",
+            "horizon": "短期",
+        }
+    }
+    results = [{"symbol": "AAPL", "analysis_failed": True, "recommendation": "分析失敗", "score": None}]
+    assert fill_failed_from_history(history, "watchlist", results) == 1
+    r = results[0]
+    assert (r["recommendation"], r["score"], r["reasoning"], r["horizon"]) == ("買い候補", 32, "前回の理由", "短期")
+    assert r["stale_date"] == "2026-10-27"
+    # 的中率の記録・履歴の更新から外すため、失敗フラグは残す
+    assert r["analysis_failed"] is True
+
+
+def test_fill_failed_from_history_skips_success_and_missing_history():
+    history = {"watchlist:AAPL": {"date": "2026-10-27", "recommendation": "様子見", "score": 0}}
+    ok = {"symbol": "AAPL", "analysis_failed": False, "recommendation": "買い候補", "score": 40}
+    new = {"symbol": "MSFT", "analysis_failed": True, "recommendation": "分析失敗", "score": None}
+    assert fill_failed_from_history(history, "watchlist", [ok, new]) == 0
+    assert ok["recommendation"] == "買い候補"
+    assert new["recommendation"] == "分析失敗"
+
+
+def test_fill_failed_from_history_holding_key_uses_purchase_date():
+    history = {"holding:LMT:2026-10-27": {"date": "2026-10-27", "recommendation": "保有継続", "score": None}}
+    results = [
+        {"symbol": "LMT", "purchase_date": "2026-07-24", "analysis_failed": True, "recommendation": "分析失敗"},
+        {"symbol": "LMT", "purchase_date": "2026-10-27", "analysis_failed": True, "recommendation": "分析失敗"},
+    ]
+    assert fill_failed_from_history(history, "holding", results) == 1
+    assert [r["recommendation"] for r in results] == ["分析失敗", "保有継続"]
+
+
+def test_apply_group_results_records_horizon():
+    history = {}
+    results = [{"symbol": "AAPL", "recommendation": "様子見", "score": 5, "horizon": "中長期", "analysis_failed": False}]
+    apply_group_results(history, "watchlist", results)
+    assert history["watchlist:AAPL"]["horizon"] == "中長期"
 
 
 def test_apply_group_results_does_not_touch_other_groups():

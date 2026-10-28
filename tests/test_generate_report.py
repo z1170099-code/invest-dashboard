@@ -480,3 +480,8 @@ def test_nisa_usage_skips_taxable_account_holdings():
     usage = gr._build_nisa_usage(results)
     assert usage["annual_used"] == 5000 and usage["lifetime_used"] == 5000
     assert usage["excluded_count"] == 0  # 特定口座は「未入力で除外」とは数えない
+
+def test_stale_note_formats_previous_date():
+    assert gr._stale_note({"stale_date": "2026-10-27"}) == "10/27の判定"
+    assert gr._stale_note({"stale_date": "bad"}) == "前回の判定"
+    assert gr._stale_note({}) is None

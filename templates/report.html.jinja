@@ -662,6 +662,14 @@
     font-variant-numeric: tabular-nums;
   }
 
+  .stale-tag {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 0 6px;
+  }
+  .stale-note { font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0; }
   .reasoning { font-size: 0.92rem; margin: 8px 0; }
   .risks { font-size: 0.85rem; color: var(--text-secondary); }
   .risks .label { color: var(--text-muted); }
@@ -800,6 +808,9 @@
   {% macro analysis_details(t) %}
       {{ price_chart(t.chart, t.name) }}
 
+      {% if t.stale_note %}
+      <p class="stale-note">※ 今回はAIの分析に失敗したため、前回（{{ t.stale_note }}）の内容を表示しています。株価・ニュースは最新です。</p>
+      {% endif %}
       <p class="reasoning">{{ t.reasoning }}</p>
 
       {% if t.key_factors %}
@@ -845,6 +856,7 @@
           </div>
         </div>
         <div class="cs-meta">
+          {% if t.stale_note %}<span class="stale-tag">{{ t.stale_note }}</span>{% endif %}
           {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
           {% if t.yutai %}
           <span><span class="label">最低投資</span>{{ t.yutai.min_investment_display }}{% if t.yutai.within_budget is false %}（予算超）{% endif %}</span>
@@ -959,6 +971,7 @@
           </div>
         </div>
         <div class="cs-meta">
+          {% if h.stale_note %}<span class="stale-tag">{{ h.stale_note }}</span>{% endif %}
           <span><span class="label">含み損益</span><strong class="cs-gain {{ h.gain_class }}">{{ h.gain_loss_display }}</strong></span>
           <span><span class="label">現在値</span>{{ h.latest_close_display }}</span>
           <span><span class="label">取得単価</span>{{ h.purchase_price_display }}</span>

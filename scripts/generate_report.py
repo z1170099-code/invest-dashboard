@@ -117,6 +117,18 @@ def _build_subscores_display(subscores: dict | None) -> list[dict]:
     ]
 
 
+def _stale_note(result: dict) -> str | None:
+    """今回の分析に失敗し、前回の判定を表示している銘柄の注記（例: 「10/27の判定」）。"""
+    stale_date = result.get("stale_date")
+    if not stale_date:
+        return None
+    try:
+        d = dt.date.fromisoformat(stale_date)
+    except ValueError:
+        return "前回の判定"
+    return f"{d.month}/{d.day}の判定"
+
+
 def _build_view_model(result: dict, group: str = "") -> dict:
     price_stats = result.get("price_stats") or {}
     status = _STATUS_MAP.get(result.get("recommendation"), _STATUS_MAP["分析失敗"])
@@ -143,6 +155,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "risks": result.get("risks", ""),
         "reflection": result.get("reflection", ""),
         "analysis_failed": result.get("analysis_failed", False),
+        "stale_note": _stale_note(result),
         "latest_close": price_stats.get("latest_close"),
         "latest_close_display": _fmt_price_or_dash(price_stats.get("latest_close")),
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
@@ -287,6 +300,7 @@ def _build_holding_view_model(result: dict) -> dict:
         "risks": result.get("risks", ""),
         "reflection": result.get("reflection", ""),
         "analysis_failed": result.get("analysis_failed", False),
+        "stale_note": _stale_note(result),
         "purchase_date": result.get("purchase_date"),
         "purchase_price": result.get("purchase_price"),
         "purchase_price_display": _fmt_price_or_dash(result.get("purchase_price")),

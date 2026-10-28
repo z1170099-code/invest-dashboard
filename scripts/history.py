@@ -60,9 +60,35 @@ def apply_group_results(history: dict, group: str, results: list[dict]) -> None:
             "recommendation": r.get("recommendation"),
             "score": r.get("score"),
             "reasoning": r.get("reasoning"),
+            "horizon": r.get("horizon"),
             "latest_close": price_stats.get("latest_close"),
         }
 
     prefix = f"{group}:"
     for key in [k for k in history if k.startswith(prefix) and k not in seen_keys]:
         del history[key]
+
+
+def fill_failed_from_history(history: dict, group: str, results: list[dict]) -> int:
+    """分析失敗した銘柄に、前回の判定（推奨・スコア・理由）を表示用として埋める（in-place）。
+
+    AIの利用上限などで分析できなかった日も「分析失敗」だらけにせず、前回の判定を
+    日付付きで見せるため。analysis_failed は True のまま残すので、的中率の記録や
+    historyの更新には使われない（前回の判定を今日の判定として数え直さない）。
+    埋めた件数を返す。
+    """
+    filled = 0
+    for r in results:
+        if not r.get("analysis_failed"):
+            continue
+        previous = history.get(build_key(group, r["symbol"], r.get("purchase_date")))
+        if not previous or not previous.get("recommendation"):
+            continue
+        r["recommendation"] = previous["recommendation"]
+        r["score"] = previous.get("score")
+        r["reasoning"] = previous.get("reasoning") or ""
+        if previous.get("horizon"):
+            r["horizon"] = previous["horizon"]
+        r["stale_date"] = previous.get("date")
+        filled += 1
+    return filled

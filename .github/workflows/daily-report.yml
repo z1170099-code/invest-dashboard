@@ -2,8 +2,10 @@ name: Daily Investment Report
 
 on:
   schedule:
-    # UTC 00:30 (毎日) = JST 09:30 (毎日)
-    - cron: "30 0 * * *"
+    # 朝9:30の更新は cron-job.org から起動している（README参照）。こちらは予備の夕方便で、
+    # UTC 08:30 = JST 17:30。Gemini無料枠の1日の上限は米国太平洋時間0時（JST 16時、冬時間は17時）に
+    # リセットされるため、朝の便が上限切れで失敗しても、リセット後のこの便で取り戻せるようにしている。
+    - cron: "30 8 * * *"
   workflow_dispatch: {}
 
 permissions:

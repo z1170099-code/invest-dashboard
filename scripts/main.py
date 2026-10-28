@@ -14,7 +14,7 @@ from analyze import active_profit_taking, analyze_all, analyze_all_holdings, bui
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks
 from generate_report import generate_report
-from history import apply_group_results, load_history, save_history
+from history import apply_group_results, fill_failed_from_history, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
 from track_record import (
     build_accuracy_summary,
@@ -239,6 +239,22 @@ def main() -> None:
     record_predictions(track_record, "holding", portfolio_results)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
+
+    # AIの利用上限などで分析できなかった銘柄は、前回の判定を日付付きで表示する。
+    # 的中率の記録（上）より後に行い、前回の判定を今回の予測として記録しないようにしている。
+    filled = sum(
+        fill_failed_from_history(history, group, results)
+        for group, results in (
+            ("watchlist", watchlist_results),
+            ("candidate", candidate_results),
+            ("yutai", yutai_results),
+            ("sector", sector_results),
+            ("sector_member", sector_member_results),
+            ("holding", portfolio_results),
+        )
+    )
+    if filled:
+        logger.warning("分析に失敗した%d銘柄は、前回の判定を表示します。", filled)
 
     logger.info("レポートを生成中...")
     generate_report(
