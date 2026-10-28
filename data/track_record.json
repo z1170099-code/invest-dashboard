@@ -16024,6 +16024,20 @@
       "date": "2026-10-28",
       "price_at_prediction": 34760.0,
       "resolve_after": "2026-11-27"
+    },
+    {
+      "id": "candidate:COIN:2026-10-28",
+      "group": "candidate",
+      "symbol": "COIN",
+      "name": "Coinbase Global",
+      "recommendation": "売り候補",
+      "theme": "暗号資産",
+      "score": -26,
+      "horizon": "中長期",
+      "purchase_date": null,
+      "date": "2026-10-28",
+      "price_at_prediction": 159.60000610351562,
+      "resolve_after": "2027-04-26"
     }
   ],
   "summary": {
