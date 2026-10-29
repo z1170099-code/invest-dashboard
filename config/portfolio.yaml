@@ -89,14 +89,6 @@ holdings:
     theme: "テクノロジー（総合）"
     amount_invested_jpy: 3000
 
-  - symbol: "LMT"
-    name: "Lockheed Martin"
-    market: "US"
-    purchase_date: "2026-07-24"
-    purchase_price: 582.60  # 単元未満株を10,000円分購入。当日(7/24)終値を取得単価として使用
-    theme: "防衛・地政学"
-    amount_invested_jpy: 10000
-
   - symbol: "4385.T"
     name: "メルカリ"
     market: "JP"
@@ -139,14 +131,5 @@ holdings:
     purchase_price: 6884  # 楽天証券で1株購入。取得単価はユーザー申告
     theme: "ヘルスケア・製薬"
     amount_invested_jpy: 6884
-    account: "楽天証券"
-    account_type: "特定口座"
-
-  - symbol: "LMT"
-    name: "Lockheed Martin"
-    market: "US"
-    purchase_date: "2026-10-27"
-    purchase_price: 578.81  # 楽天証券での取得単価（米ドル、ユーザー申告）。株数・投資金額は未確認
-    theme: "防衛・地政学"
     account: "楽天証券"
     account_type: "特定口座"
