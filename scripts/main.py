@@ -69,10 +69,11 @@ def _analyze_group(
         attach_relative_performance(
             price_stats_by_symbol.get(ticker["symbol"]), ticker.get("market"), benchmarks
         )
-    # 業種別ETFは1業種ずつ判定されるため、全業種の騰落率の比較表を各業種のプロンプトに添える。
-    peer_table = build_sector_peer_table(tickers, price_stats_by_symbol)
-    if peer_table:
-        tickers = [{**t, "sector_peers": peer_table} if t.get("sector") else t for t in tickers]
+    # 業種別ETF・つみたて投資枠の指数は1本ずつ判定されるため、全体の騰落率の比較表を各プロンプトに添える。
+    for key in ("sector", "tsumitate"):
+        peer_table = build_sector_peer_table(tickers, price_stats_by_symbol, key=key)
+        if peer_table:
+            tickers = [{**t, f"{key}_peers": peer_table} if t.get(key) else t for t in tickers]
 
     logger.info("[%s] 個別銘柄のニュースを取得中...", label)
     news_by_symbol = {
@@ -123,12 +124,15 @@ def main() -> None:
     yutai_config = (_load_yaml(yutai_path) if yutai_path.exists() else None) or {}
     sectors_path = _CONFIG_DIR / "sectors.yaml"
     sectors_config = (_load_yaml(sectors_path) if sectors_path.exists() else None) or {}
+    tsumitate_funds_path = _CONFIG_DIR / "tsumitate_funds.yaml"
+    tsumitate_funds_config = (_load_yaml(tsumitate_funds_path) if tsumitate_funds_path.exists() else None) or {}
 
     tickers = watchlist.get("tickers", [])
     candidates = candidate_pool.get("candidates", [])
     holdings = portfolio.get("holdings", []) if portfolio else []
     yutai_stocks = yutai_config.get("stocks") or []
     sector_etfs = sectors_config.get("sectors") or []
+    tsumitate_funds = tsumitate_funds_config.get("funds") or []
     tsumitate_entries = (tsumitate_config or {}).get("tsumitate", [])
     profit_taking = active_profit_taking(sell_policy, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date())
     if profit_taking:
@@ -194,6 +198,16 @@ def main() -> None:
         accuracy_summary_for_prompt,
         benchmarks,
     )
+    tsumitate_fund_results = _analyze_group(
+        "つみたて投資枠",
+        tsumitate_funds,
+        max_per_ticker,
+        macro_news,
+        history,
+        "tsumitate_fund",
+        accuracy_summary_for_prompt,
+        benchmarks,
+    )
     portfolio_results = _analyze_group(
         "保有銘柄",
         holdings,
@@ -223,7 +237,8 @@ def main() -> None:
     )
 
     all_results = (
-        watchlist_results + candidate_results + yutai_results + sector_results + sector_member_results + portfolio_results
+        watchlist_results + candidate_results + yutai_results + sector_results + sector_member_results
+        + tsumitate_fund_results + portfolio_results
     )
     current_prices = {
         r["symbol"]: r["price_stats"]["latest_close"]
@@ -236,6 +251,7 @@ def main() -> None:
     record_predictions(track_record, "yutai", yutai_results)
     record_predictions(track_record, "sector", sector_results)
     record_predictions(track_record, "sector_member", sector_member_results)
+    record_predictions(track_record, "tsumitate_fund", tsumitate_fund_results)
     record_predictions(track_record, "holding", portfolio_results)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
@@ -250,6 +266,7 @@ def main() -> None:
             ("yutai", yutai_results),
             ("sector", sector_results),
             ("sector_member", sector_member_results),
+            ("tsumitate_fund", tsumitate_fund_results),
             ("holding", portfolio_results),
         )
     )
@@ -271,6 +288,7 @@ def main() -> None:
         yutai_config,
         sector_results,
         sector_member_results,
+        tsumitate_fund_results,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
@@ -282,6 +300,7 @@ def main() -> None:
         + find_newly_strong_buy(yutai_results, history, "yutai")
         + find_newly_strong_buy(sector_results, history, "sector")
         + find_newly_strong_buy(sector_member_results, history, "sector_member")
+        + find_newly_strong_buy(tsumitate_fund_results, history, "tsumitate_fund")
     )
     send_notification_email(sell_alerts, buy_alerts)
 
@@ -291,6 +310,7 @@ def main() -> None:
         apply_group_results(history, "yutai", yutai_results)
         apply_group_results(history, "sector", sector_results)
         apply_group_results(history, "sector_member", sector_member_results)
+        apply_group_results(history, "tsumitate_fund", tsumitate_fund_results)
         apply_group_results(history, "holding", portfolio_results)
         save_history(_HISTORY_PATH, history)
     except Exception:

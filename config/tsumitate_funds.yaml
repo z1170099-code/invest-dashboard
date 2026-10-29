@@ -1,0 +1,86 @@
+# NISAの「つみたて投資枠」で積み立てる代表的な指数を、同じ物差しで比べるためのリストです。
+#
+# つみたて投資枠で買えるのは投資信託（ファンド）ですが、投資信託の日々の基準価額は
+# 株価データの取得元（yfinance）から安定して取れません。そこで、同じ指数に連動する
+# 東証上場のETF（円建て）の値動きで代用して、Gemini APIで毎日スコア付けし、
+# レポート内の「NISAつみたて投資枠」セクションにスコア順で表示します。
+#
+# ⚠ ETFの値動きは分配金を含まないため、分配金を再投資する投資信託とは長期の騰落率が少しずれます。
+# ⚠ 代表的なファンド例は登録時点の名称です。つみたて投資枠の対象かどうか・信託報酬は、
+#   購入前に証券会社のサイトで確認してください。同じ指数に連動する他社のファンドもあります。
+#
+# 各項目の意味:
+#   symbol: 値動きの代用に使うETFのティッカー
+#   name: 表示名（指数の分類）
+#   market: "ETF"（ベンチマーク比の計算をしない）
+#   theme: 的中率をまとめて集計するためのテーマ名
+#   news_query: 関連ニュースの検索語（ETFの正式名称ではニュースが見つかりにくいため）
+#   tsumitate:
+#     index: 連動する指数
+#     proxy: 値動きの代用に使っているETFの名前
+#     example_funds: つみたて投資枠の代表的なファンド例
+
+funds:
+  # MSCI ACWIそのものに連動する2559.T（MAXIS全世界株式）は、2026年6月の分割前後の株価データが
+  # 崩れていて1年騰落率が-88%と出るため、日本を除くACWIに連動する1554.Tで代用している（日本は約5%）。
+  - symbol: "1554.T"
+    name: "全世界株式（オール・カントリー）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "全世界株式 オルカン"
+    tsumitate:
+      index: "MSCI ACWI（日本を含む先進国・新興国の約50ヶ国）"
+      proxy: "上場インデックスファンド世界株式（MSCI ACWI）除く日本"
+      example_funds: ["eMAXIS Slim 全世界株式（オール・カントリー）"]
+
+  # 2558.T（MAXIS）は2559.Tと同じく分割前後のデータが崩れている。1655.Tはウォッチリストと重複するため2633.Tを使う。
+  - symbol: "2633.T"
+    name: "米国株式（S&P500）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "S&P500 米国株"
+    tsumitate:
+      index: "S&P500（米国の大型株約500社）"
+      proxy: "NEXT FUNDS S&P500指数（為替ヘッジなし）連動型上場投信"
+      example_funds: ["eMAXIS Slim 米国株式（S&P500）"]
+
+  - symbol: "1657.T"
+    name: "先進国株式（日本を除く）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "先進国株 MSCIコクサイ"
+    tsumitate:
+      index: "MSCIコクサイ（日本を除く先進国22ヶ国）"
+      proxy: "iシェアーズ・コア MSCI 先進国株（除く日本）ETF"
+      example_funds: ["eMAXIS Slim 先進国株式インデックス"]
+
+  - symbol: "2520.T"
+    name: "新興国株式"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "新興国株"
+    tsumitate:
+      index: "MSCIエマージング・マーケット（中国・インド・台湾などの新興国）"
+      proxy: "NEXT FUNDS 新興国株式・MSCI-EM（為替ヘッジなし）連動型上場投信"
+      example_funds: ["eMAXIS Slim 新興国株式インデックス"]
+
+  # 1306.T・1321.Tは株価データに1日だけ1/10・1/100になる異常値が混じるため、異常値の無いETFを使う。
+  - symbol: "1475.T"
+    name: "日本株式（TOPIX）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "TOPIX 日本株"
+    tsumitate:
+      index: "TOPIX（東証の幅広い銘柄）"
+      proxy: "iシェアーズ・コア TOPIX ETF"
+      example_funds: ["eMAXIS Slim 国内株式（TOPIX）"]
+
+  - symbol: "1346.T"
+    name: "日本株式（日経平均）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "日経平均"
+    tsumitate:
+      index: "日経平均株価（東証の代表的な225銘柄）"
+      proxy: "MAXIS 日経225上場投信"
+      example_funds: ["eMAXIS Slim 国内株式（日経平均）"]

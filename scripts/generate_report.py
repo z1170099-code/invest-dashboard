@@ -259,6 +259,21 @@ def _build_sector_view(sector_results: list[dict], member_results: list[dict]) -
     return views
 
 
+def _build_tsumitate_fund_view(results: list[dict]) -> list[dict]:
+    """つみたて投資枠の指数（値動きはETFで代用）をスコア順に並べ、連動指数・ファンド例を添える。"""
+    views = []
+    for r in _sort_by_score(results):
+        view = _build_view_model(r, group="つみたて投資枠")
+        info = r.get("tsumitate") or {}
+        view["tsumitate"] = {
+            "index": info.get("index", ""),
+            "proxy": info.get("proxy", ""),
+            "example_funds": info.get("example_funds") or [],
+        }
+        views.append(view)
+    return views
+
+
 def _build_summary_sources(
     watchlist_view: list[dict], candidate_view: list[dict], yutai_view: list[dict], sector_member_results: list[dict]
 ) -> list[dict]:
@@ -549,6 +564,7 @@ def generate_report(
     yutai_config: dict | None = None,
     sector_results: list[dict] | None = None,
     sector_member_results: list[dict] | None = None,
+    tsumitate_fund_results: list[dict] | None = None,
 ) -> None:
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
@@ -605,6 +621,7 @@ def generate_report(
         profit_taking=profit_taking,
         yutai=yutai_view,
         sectors=sector_view,
+        tsumitate_funds=_build_tsumitate_fund_view(tsumitate_fund_results or []),
         yutai_budget_display=f"{yutai_budget:,.0f}円" if yutai_budget else None,
         yutai_checked_on=yutai_config.get("checked_on"),
         accuracy=accuracy_summary,

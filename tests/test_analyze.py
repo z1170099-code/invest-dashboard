@@ -329,6 +329,34 @@ def test_build_prompt_includes_sector_peer_table_when_given():
     assert "- 医薬品: 1ヶ月 +2.00%" in prompt
 
 
+def test_build_sector_peer_table_can_list_tsumitate_indexes():
+    tickers = [
+        {"symbol": "2559.T", "name": "全世界株式", "tsumitate": {"index": "MSCI ACWI"}},
+        {"symbol": "1621.T", "name": "医薬品", "sector": "医薬品"},
+    ]
+    stats = {"2559.T": {"change_1y_pct": 20.0}}
+    table = analyze.build_sector_peer_table(tickers, stats, key="tsumitate")
+    assert "- 全世界株式: 1ヶ月 データなし" in table
+    assert "1年 +20.00%" in table
+    assert "医薬品" not in table
+
+
+def test_build_prompt_includes_tsumitate_section():
+    ticker = {
+        "symbol": "2559.T",
+        "name": "全世界株式（オール・カントリー）",
+        "market": "ETF",
+        "tsumitate": {"index": "MSCI ACWI", "example_funds": ["eMAXIS Slim 全世界株式（オール・カントリー）"]},
+        "tsumitate_peers": "- 全世界株式: 1年 +20.00%",
+    }
+    prompt = analyze._build_prompt(ticker, None, [])
+    assert "【NISAつみたて投資枠】" in prompt
+    assert "「MSCI ACWI」に連動するETF" in prompt
+    assert "（例: eMAXIS Slim 全世界株式（オール・カントリー））" in prompt
+    assert "【つみたて投資枠の主な指数の騰落率（比較用）】" in prompt
+    assert analyze._build_tsumitate_section(None) == ""
+
+
 def test_combine_subscores_weights_and_thresholds():
     assert analyze.combine_subscores({"trend": 50, "news": 20, "macro": -10}) == (23, "買い候補")
     assert analyze.combine_subscores({"trend": -40, "news": -10, "macro": 0}) == (-19, "売り候補")

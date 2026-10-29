@@ -764,6 +764,7 @@
   <nav class="section-nav" id="section-nav" aria-label="セクションへ移動">
     <a href="#summary">サマリー</a>
     <a href="#holdings">保有銘柄{% if holding_sell_count %} <span class="nav-badge">売却検討{{ holding_sell_count }}</span>{% endif %}</a>
+    <a href="#tsumitate">つみたて枠</a>
     <a href="#sectors">業種別</a>
     <a href="#yutai">株主優待</a>
     <a href="#watchlist">ウォッチリスト</a>
@@ -936,6 +937,26 @@
             {% if t.yutai.source %}出典: {{ t.yutai.source }}{% endif %}
             {% if t.yutai.link %}<a href="{{ t.yutai.link }}" target="_blank" rel="noopener">優待の詳細を見る</a>{% endif %}
           </p>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {% if t.tsumitate %}
+        <div class="yutai-box">
+          <div class="yutai-stats">
+            <div>
+              <span class="label">連動する指数</span>
+              {{ t.tsumitate.index }}
+            </div>
+            {% if t.tsumitate.example_funds %}
+            <div>
+              <span class="label">つみたて投資枠の代表的なファンド例</span>
+              {{ t.tsumitate.example_funds|join("、") }}
+            </div>
+            {% endif %}
+          </div>
+          {% if t.tsumitate.proxy %}
+          <p class="yutai-source">値動き・チャートは「{{ t.tsumitate.proxy }}」（{{ t.symbol }}）で代用しています。</p>
           {% endif %}
         </div>
         {% endif %}
@@ -1182,6 +1203,20 @@
       </details>
     </div>
     {% endif %}
+  </section>
+
+  <section id="tsumitate">
+    <h2>NISAつみたて投資枠（指数の比較） <span class="h2-count">{{ tsumitate_funds|length }}指数</span></h2>
+    <details class="section-note info">
+      <summary>📈 長期で積み立てる前提で、代表的な指数をAIが同じ物差しで比べています</summary>
+      つみたて投資枠で選ばれることの多い指数を、「毎月一定額を10年以上積み立てるなら、今どれが相対的に有利そうか」という観点でAIがスコア付けし、スコア順に並べています。
+      <ul>
+        <li>つみたて投資枠で買えるのは投資信託ですが、日々の値段が取得しにくいため、同じ指数に連動する東証上場のETF（円建て）の値動きで代用しています。分配金の扱いが違うため、長期の騰落率は投資信託と少しずれます。</li>
+        <li>積立は、買う時期を分散して値動きの影響をならす方法です。スコアが日々上下しても、それに合わせて積立先を頻繁に変えたり止めたりすると、その効果が薄れやすい点に注意してください。</li>
+        <li>ファンド例は登録時点の名称です。つみたて投資枠の対象かどうかと信託報酬（保有中ずっとかかる手数料）は、購入前に証券会社のサイトで確認してください。</li>
+      </ul>
+    </details>
+    {{ card_list(tsumitate_funds, "つみたて投資枠の指数が登録されていません。config/tsumitate_funds.yaml に登録すると、ここに表示されます。") }}
   </section>
 
   <section id="sectors">

@@ -343,11 +343,16 @@ def _build_yutai_section(yutai: dict | None) -> str:
 """
 
 
-def build_sector_peer_table(tickers: list[dict], price_stats_by_symbol: dict[str, dict | None]) -> str:
-    """業種別ETF全体の騰落率を1つの比較表にする。1業種ずつ判定するAIに、他業種との比較材料を渡すため。"""
+def build_sector_peer_table(
+    tickers: list[dict], price_stats_by_symbol: dict[str, dict | None], key: str = "sector"
+) -> str:
+    """業種別ETF（key="tsumitate"ならつみたて投資枠の指数）全体の騰落率を1つの比較表にする。
+
+    1本ずつ判定するAIに、ほかの業種・指数との比較材料を渡すため。
+    """
     rows = []
     for t in tickers:
-        if not t.get("sector"):
+        if not t.get(key):
             continue
         ps = price_stats_by_symbol.get(t["symbol"]) or {}
         rows.append(
@@ -374,6 +379,28 @@ def _build_sector_section(sector: str | None, peer_table: str | None = None) -> 
 この表とマクロ環境から見て、この業種がほかの業種より相対的に強いか弱いかを判定の中心にしてください。
 全業種がほぼ同じスコアになると比較の意味がなくなるため、相対的に強い業種ほど高く、弱い業種ほど低い
 スコアにして、業種間の差をはっきりつけてください。
+"""
+    return section
+
+
+def _build_tsumitate_section(tsumitate: dict | None, peer_table: str | None = None) -> str:
+    """NISAつみたて投資枠の指数の場合に、長期積立の前提で判定するよう指示する。該当しなければ空文字。"""
+    if not tsumitate:
+        return ""
+    funds = "、".join(tsumitate.get("example_funds") or [])
+    section = f"""
+【NISAつみたて投資枠】
+この銘柄は「{tsumitate.get("index", "")}」に連動するETFで、同じ指数に連動する投資信託{f"（例: {funds}）" if funds else ""}を
+NISAのつみたて投資枠で毎月一定額、10年以上積み立てる場合の判断材料として使います。値動きはこのETFで代用しています。
+数日〜数週間の値動きよりも、この指数の中長期の見通し（構成国・企業の成長性、分散の効き方、割高・割安感、
+為替や金利の影響）を中心に判定し、horizonは原則「中長期」にしてください。
+"""
+    if peer_table:
+        section += f"""
+【つみたて投資枠の主な指数の騰落率（比較用）】
+{peer_table}
+この表とマクロ環境から見て、この指数がほかの指数より長期の積立先として相対的に有利そうか不利そうかを
+判定の中心にし、指数間でスコアの差をはっきりつけてください。
 """
     return section
 
@@ -407,6 +434,7 @@ def _build_prompt(
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
     theme_line += _build_yutai_section(ticker.get("yutai"))
     theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"))
+    theme_line += _build_tsumitate_section(ticker.get("tsumitate"), ticker.get("tsumitate_peers"))
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )
@@ -757,7 +785,7 @@ def _get_client() -> genai.Client:
 
 _PASSTHROUGH_FIELDS = (
     "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members", "account",
-    "account_type",
+    "account_type", "tsumitate",
 )
 
 

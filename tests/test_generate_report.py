@@ -485,3 +485,15 @@ def test_stale_note_formats_previous_date():
     assert gr._stale_note({"stale_date": "2026-10-27"}) == "10/27の判定"
     assert gr._stale_note({"stale_date": "bad"}) == "前回の判定"
     assert gr._stale_note({}) is None
+
+def test_build_tsumitate_fund_view_sorts_by_score_and_adds_index_info():
+    results = [
+        {"symbol": "1321.T", "name": "日本株式（日経平均）", "recommendation": "様子見", "score": 3,
+         "tsumitate": {"index": "日経平均株価", "proxy": "NEXT FUNDS 日経225連動型上場投信", "example_funds": ["eMAXIS Slim 国内株式（日経平均）"]}},
+        {"symbol": "2559.T", "name": "全世界株式", "recommendation": "買い候補", "score": 22,
+         "tsumitate": {"index": "MSCI ACWI"}},
+    ]
+    view = gr._build_tsumitate_fund_view(results)
+    assert [v["symbol"] for v in view] == ["2559.T", "1321.T"]
+    assert view[0]["tsumitate"] == {"index": "MSCI ACWI", "proxy": "", "example_funds": []}
+    assert view[1]["tsumitate"]["example_funds"] == ["eMAXIS Slim 国内株式（日経平均）"]
