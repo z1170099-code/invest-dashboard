@@ -57,22 +57,6 @@ holdings:
     theme: "半導体"
     amount_invested_jpy: 5000
 
-  - symbol: "285A.T"
-    name: "キオクシア"
-    market: "JP"
-    purchase_date: "2026-06-05"
-    purchase_price: 78140  # 単元未満株を3,000円分購入。当日終値を取得単価として使用
-    theme: "半導体"
-    amount_invested_jpy: 3000
-
-  - symbol: "PAYP"
-    name: "PayPay Corporation"
-    market: "US"
-    purchase_date: "2026-03-19"
-    purchase_price: 20.45  # PayPay証券アプリで購入したPayPayのADS(米国預託証券)。単元未満株を1,000円分購入。当日終値をUSD換算の取得単価として使用
-    theme: "フィンテック"
-    amount_invested_jpy: 1000
-
   - symbol: "AAPL"
     name: "Apple"
     market: "US"
