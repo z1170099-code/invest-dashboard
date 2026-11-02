@@ -23,8 +23,8 @@
 #       入力すると「優待利回り」（優待の金額÷最低投資金額）を計算して表示します。
 #       金額に換算しにくい優待（割引・無料プラン等）や、毎年はもらえない優待は空欄（null）。
 
-max_min_investment_jpy: 50000
-checked_on: "2026-10-25"
+max_min_investment_jpy: 100000
+checked_on: "2026-11-02"
 
 stocks:
   # 2026-10-27 にユーザーの指定で選び直した（それまでの23銘柄から絞り込み）。条件:
@@ -34,6 +34,11 @@ stocks:
   #      （自社サイト専用ポイント、自社商品の割引、カレンダー、抽選などは除外）
   # 1と2を満たしたのは NTT（+25・約1.7万円）と じげん（+30・約4.7万円）。じげんは優待が
   # 自社の旅行予約サイト専用ポイント（PayPayポイントへの交換は年1回以上の利用が条件）のため3で除外。
+  #
+  # 2026-11-02 に「1件では少ない、ソフトバンクや楽天など5件ほど」というユーザーの指定で4銘柄を追加。
+  # 最低投資金額の上限を楽天証券の優待検索と同じ10万円に戻し、3（幅広く使える優待）を満たす銘柄から、
+  # ユーザー指定のソフトバンク・楽天グループと、東京海上HD（電子マネー等）・原田工業（QUOカード）を選んだ。
+  # 東海東京HD（100株は3年保有で500円分のQUOカードのみ）は優待が小さいため見送り。
 
   - symbol: "9432.T"
     name: "NTT"
@@ -45,3 +50,55 @@ stocks:
       shares: 100
       months: [3]
       annual_value_jpy: null
+
+  - symbol: "9434.T"
+    name: "ソフトバンク"
+    market: "JP"
+    theme: "通信"
+    nisa_growth_eligible: true
+    yutai:
+      content: "PayPayマネーライト1,000円分（年1回）。100株以上を1年以上継続保有（3月末・9月末の株主名簿に同じ株主番号で3回以上連続）し、優待サイトで申請が必要。株数を増やしても金額は同じ"
+      shares: 100
+      months: [3, 9]
+      annual_value_jpy: 1000
+      link: "https://yutai-guide.daiwair.co.jp/stock/detail/9434"
+      source: "大和IR 株主優待ガイド等（2026-11-02確認）"
+
+  - symbol: "4755.T"
+    name: "楽天グループ"
+    market: "JP"
+    theme: "Eコマース・フィンテック"
+    nisa_growth_eligible: true
+    yutai:
+      content: "楽天モバイルの音声+データプラン（30GB/月）が6ヶ月無料。12月末と翌年6月末の両方で100株以上を保有していれば、さらに6ヶ月無料（最大1年）。楽天会員登録と専用サイトでの事前申込が必要"
+      shares: 100
+      months: [12]
+      annual_value_jpy: null
+      link: "https://yutai-guide.daiwair.co.jp/stock/detail/4755"
+      source: "野村證券・大和IR 株主優待ガイド等（2026-11-02確認。2026年12月末の内容は会社の発表で要確認）"
+
+  - symbol: "8766.T"
+    name: "東京海上HD"
+    market: "JP"
+    theme: "金融・保険"
+    nisa_growth_eligible: true
+    yutai:
+      content: "電子マネー等（複数から選択）。2026年の1→15株分割に合わせて新設。100株以上を3年以上継続保有（3月末・9月末の株主名簿に同じ株主番号で7回以上連続）で初回7,500円相当、その後も保有を続ければ毎年2,500円相当。初回の基準日は2027年3月末。売却すると保有期間はリセット"
+      shares: 100
+      months: [3]
+      annual_value_jpy: null
+      link: "https://yutai-guide.daiwair.co.jp/stock/detail/8766"
+      source: "野村證券・大和IR 株主優待ガイド等（2026-11-02確認）"
+
+  - symbol: "6904.T"
+    name: "原田工業"
+    market: "JP"
+    theme: "電子部品（車載アンテナ）"
+    nisa_growth_eligible: true
+    yutai:
+      content: "QUOカード。100株以上を1年以上継続保有（3月末・9月末の株主名簿に3回以上連続）で1,000円分、5年以上（11回以上連続）で1,500円分。毎年6月の株主総会決議通知に同封"
+      shares: 100
+      months: [3]
+      annual_value_jpy: 1000
+      link: "https://yutai-guide.daiwair.co.jp/stock/detail/6904"
+      source: "松井証券・大和IR 株主優待ガイド等（2026-11-02確認。金額変更の記述もあるため会社IRで要確認）"
