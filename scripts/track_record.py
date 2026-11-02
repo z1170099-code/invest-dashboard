@@ -118,6 +118,7 @@ _EMPTY_RECORD = {
     "summary_relative": {},
     "summary_relative_by_theme": {},
     "summary_by_subscore": {},
+    "summary_by_model": {},
 }
 
 
@@ -188,6 +189,8 @@ def record_predictions(
             extra["benchmark_price_at_prediction"] = benchmark_price
         if isinstance(subscores, dict):
             extra["subscores"] = {k: v for k, v in subscores.items() if isinstance(v, int)}
+        if r.get("model"):
+            extra["model"] = r["model"]
         record["pending"].append(
             {
                 **extra,
@@ -309,6 +312,9 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
             _add_outcome(record["summary_relative"], p["recommendation"], relative_outcome)
             if p.get("theme"):
                 _add_outcome(record["summary_relative_by_theme"], p["theme"], relative_outcome)
+        if p.get("model"):
+            # 上位モデルに変えて的中率が上がったかを確かめるため、モデル別にも集計する（市場平均比を優先）。
+            _add_outcome(record["summary_by_model"], p["model"], relative_outcome or outcome)
         basis_pct = excess_pct if excess_pct is not None else change_pct
         for key, value in (p.get("subscores") or {}).items():
             if isinstance(value, int) and abs(value) >= SUBSCORE_MIN_ABS:
@@ -494,6 +500,7 @@ def build_accuracy_summary(record: dict) -> dict:
         "relative_sample_size": relative_scored,
         "relative_breakdown": relative_breakdown,
         "subscore_breakdown": subscore_breakdown,
+        "model_breakdown": _bucketed_breakdown(record.get("summary_by_model", {}), "model"),
         "low_reliability_themes": low_reliability_themes(record),
     }
 

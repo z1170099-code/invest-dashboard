@@ -833,6 +833,10 @@
       <p class="reflection">🔁 前回からの振り返り: {{ t.reflection }}</p>
       {% endif %}
 
+      {% if t.model and not t.stale_note %}
+      <p class="stale-note">分析したAI: {{ t.model }}</p>
+      {% endif %}
+
       {% if t.news %}
       <details class="news-detail">
         <summary>関連ニュース（{{ t.news|length }}件）</summary>
@@ -1320,7 +1324,7 @@
       勝ったか負けたかでも採点しています。相場全体が下げた期間でも、AIの銘柄選びの実力だけを測れるためです。
     </details>
 
-    {% if accuracy.relative_sample_size or accuracy.subscore_breakdown or accuracy.low_reliability_themes %}
+    {% if accuracy.relative_sample_size or accuracy.subscore_breakdown or accuracy.model_breakdown or accuracy.low_reliability_themes %}
     <div class="allocation-box">
       <h3>市場平均と比べた的中率</h3>
       {% if accuracy.relative_sample_size %}
@@ -1350,6 +1354,18 @@
       </div>
       {% endfor %}
       <p class="allocation-note">各観点のプラス・マイナスが、その後の値動きと合っていたかの割合です。十分な件数が貯まったら、当たっている観点の比重を上げます。</p>
+      {% endif %}
+
+      {% if accuracy.model_breakdown %}
+      <h3>AIのモデルごとの的中率</h3>
+      {% for b in accuracy.model_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ b.model }}</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct or 0 }}%;"></div></div>
+        <span class="allocation-amount">{% if b.accuracy_pct is not none %}{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）{% else %}データなし{% endif %}</span>
+      </div>
+      {% endfor %}
+      <p class="allocation-note">保有銘柄とウォッチリストは上位モデル（gemini-flash-latest）、ほかは通常モデル（gemini-flash-lite-latest）で分析しています。市場平均比で採点できた判定はその結果、それ以外は値上がり・値下がりで数えています。</p>
       {% endif %}
 
       {% if accuracy.low_reliability_themes %}

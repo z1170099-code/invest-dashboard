@@ -440,3 +440,22 @@ def test_generate_json_retries_then_falls_back_and_returns_none(monkeypatch):
     client = _FakeClient({"primary": boom, analyze.FALLBACK_MODEL: boom})
     assert analyze._generate_json(client, "primary", "p", "s", {}, "AAA") is None
     assert client.models.calls == ["primary", "primary", analyze.FALLBACK_MODEL, analyze.FALLBACK_MODEL]
+
+
+def test_model_for_group_uses_premium_model_only_for_holdings_and_watchlist(monkeypatch):
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    assert analyze.model_for_group("holding") == analyze.DEFAULT_MODEL
+    assert analyze.model_for_group("watchlist") == analyze.DEFAULT_MODEL
+    assert analyze.model_for_group("candidate") == analyze.FALLBACK_MODEL
+    monkeypatch.setenv("GEMINI_MODEL", "custom")
+    assert analyze.model_for_group("candidate") == "custom"
+
+
+def test_generate_json_switches_to_fallback_immediately_on_503(monkeypatch):
+    monkeypatch.setattr(analyze.time, "sleep", lambda s: None)
+    monkeypatch.setattr(analyze, "_exhausted_models", set())
+    client = _FakeClient({"primary": Exception("503 UNAVAILABLE high demand")})
+    assert analyze._generate_json(client, "primary", "p", "s", {}, "AAA") == ({"ok": True}, analyze.FALLBACK_MODEL)
+    # 混雑は一時的なので、上限切れとは違い次の銘柄では再びprimaryを試す
+    assert client.models.calls == ["primary", analyze.FALLBACK_MODEL]
+    assert "primary" not in analyze._exhausted_models

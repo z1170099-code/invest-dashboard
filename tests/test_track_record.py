@@ -612,3 +612,18 @@ def test_build_accuracy_summary_includes_relative_and_subscores():
     assert summary["relative_sample_size"] == 4
     assert summary["subscore_breakdown"][0]["label"] == "ニュース"
     assert summary["low_reliability_themes"] == {}
+
+
+def test_resolve_predictions_counts_outcomes_by_model():
+    record = tr._empty_record()
+    a = _pending_entry(symbol="AAA")
+    a.update(model="gemini-flash-latest", benchmark_symbol="^N225", benchmark_price_at_prediction=100.0)
+    b = _pending_entry(symbol="BBB")
+    b.update(model="gemini-flash-lite-latest")
+    record["pending"] = [a, b]
+    # AAAは+5%でも市場平均+10%に負けて不的中、BBBは市場平均比が無いので値上がりで的中
+    tr.resolve_predictions(record, {"AAA": 105.0, "BBB": 105.0, "^N225": 110.0})
+    assert record["summary_by_model"]["gemini-flash-latest"]["incorrect"] == 1
+    assert record["summary_by_model"]["gemini-flash-lite-latest"]["correct"] == 1
+    models = {b["model"] for b in tr.build_accuracy_summary(record)["model_breakdown"]}
+    assert models == {"gemini-flash-latest", "gemini-flash-lite-latest"}

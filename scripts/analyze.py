@@ -18,13 +18,22 @@ from track_record import HIGH_CONFIDENCE_ABS_SCORE, MIN_STREAK_FOR_PROMPT, get_s
 
 logger = logging.getLogger(__name__)
 
-# 2026-11-02に、更新を1日1回に減らす代わりにflash-liteから上位のflashへ変更した。flashは1銘柄の
-# 分析に十数秒〜2分かかり、無料枠の1日の回数上限もflash-liteより厳しい。上限に達した場合は
-# 残りの銘柄を予備のflash-liteで分析する（モデルごとに上限が別のため）。
+# 2026-11-02に、更新を1日1回に減らしたうえで上位のflashを使うようにした。ただしflashの無料枠は
+# 1日20回ほどしかなく（2026-11-02の実行で確認）、全約150銘柄には使えない。そこで、実際にお金が
+# かかっている保有銘柄と、自分で選んだウォッチリスト（合わせて約15銘柄）だけflashで分析し、
+# ほかはflash-liteで分析する。flashが上限や混雑で使えないときも、その銘柄はflash-liteで分析する。
 DEFAULT_MODEL = "gemini-flash-latest"
 FALLBACK_MODEL = "gemini-flash-lite-latest"
+PREMIUM_GROUPS = {"holding", "watchlist"}
 # この実行中に1日の上限に達したモデル（_generate_jsonが追加する）。
 _exhausted_models: set[str] = set()
+
+
+def model_for_group(group: str) -> str:
+    """グループに使うモデル。環境変数GEMINI_MODELがあれば全グループでそれを使う。"""
+    if os.environ.get("GEMINI_MODEL"):
+        return os.environ["GEMINI_MODEL"]
+    return DEFAULT_MODEL if group in PREMIUM_GROUPS else FALLBACK_MODEL
 # 低めに設定し、際どいスコアの銘柄で日によって判定が無意味にブレるのを抑える。
 _TEMPERATURE = 0.2
 # 的中率をプロンプトに含める最低件数。少数件でのブレを過大評価しないための閾値。
@@ -804,6 +813,7 @@ def analyze_all_holdings(
             price_stats_by_symbol.get(symbol),
             news_by_symbol.get(symbol, []),
             macro_news,
+            model=model_for_group(group),
             previous=previous,
             accuracy_summary=accuracy_summary,
             streak=streak,
@@ -848,6 +858,10 @@ def _generate_json(
                 if _is_daily_quota_error(exc):
                     logger.warning("%s は1日の利用上限に達したため、以降の銘柄では使いません。", current)
                     _exhausted_models.add(current)
+                    break
+                if current != FALLBACK_MODEL and "503" in str(exc):
+                    # 混雑による一時的な失敗。再試行も1日の回数に数えられるため、すぐ予備のモデルに切り替える。
+                    logger.warning("%s が混雑しているため、%s は予備のモデルで分析します。", current, symbol)
                     break
                 logger.exception("Gemini分析に失敗しました（%s、試行%d回目）: %s", current, attempt + 1, symbol)
                 time.sleep(8)
@@ -950,6 +964,7 @@ def analyze_all(
             price_stats_by_symbol.get(symbol),
             news_by_symbol.get(symbol, []),
             macro_news,
+            model=model_for_group(group),
             previous=previous,
             accuracy_summary=accuracy_summary,
             streak=streak,
