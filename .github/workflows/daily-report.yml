@@ -3,8 +3,8 @@ name: Daily Investment Report
 on:
   schedule:
     # 朝9:30の更新は cron-job.org から起動している（README参照）。こちらは予備の夕方便で、
-    # UTC 08:30 = JST 17:30。Gemini無料枠の1日の上限は米国太平洋時間0時（JST 16時、冬時間は17時）に
-    # リセットされるため、朝の便が上限切れで失敗しても、リセット後のこの便で取り戻せるようにしている。
+    # UTC 08:30 = JST 17:30。2026-11-02から上位モデル（1日の回数上限が厳しい）を使うため更新は1日1回にし、
+    # この便は「その日の更新がまだ無いとき」（cron-job.orgが動かなかった日など）だけ実行する。
     - cron: "30 8 * * *"
   workflow_dispatch: {}
 
@@ -14,19 +14,37 @@ permissions:
 jobs:
   build-report:
     runs-on: ubuntu-latest
+    # 上位モデルは1銘柄に十数秒〜2分かかり、全銘柄で1〜2時間ほどかかるため、余裕を持たせる。
+    timeout-minutes: 300
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 下の「本日更新済みか」の判定で、レポートを最後に更新したコミットを探せるように履歴も取る
+          fetch-depth: 50
+
+      - name: Skip if already updated today (scheduled backup run only)
+        id: guard
+        run: |
+          last=$(TZ=Asia/Tokyo git log -1 --date=format-local:%Y-%m-%d --format=%cd -- docs/index.html)
+          today=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$last" = "$today" ]; then
+            echo "本日（$today）は更新済みのため、予備便はスキップします。"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Python
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
+        if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: Generate report
+        if: steps.guard.outputs.skip != 'true'
         working-directory: scripts
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -37,6 +55,7 @@ jobs:
         run: python main.py
 
       - name: Commit and push if changed
+        if: steps.guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

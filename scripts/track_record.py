@@ -88,6 +88,23 @@ MIN_STREAK_FOR_PROMPT = 2
 # 「改善が実際に効いているか」を全期間より早く確認できるようにしている。
 _IMPROVEMENT_COHORT_START = "2026-09-08"
 
+# 市場平均比（ベンチマーク比）での検証（2026-11-02〜）。株価が上がったかどうかだけで採点すると、
+# 相場全体が下げた期間は良い銘柄を選んでも「外れ」になり、AIの銘柄選びの実力が測れない。
+# そこで判定時のベンチマーク指数（日本株は日経225、米国株はS&P500）の値も記録し、
+# 「銘柄の騰落率 − 指数の騰落率」（超過リターン）の符号でも採点する（summary_relative系）。
+# ベンチマークの無いETF・暗号資産や、この変更より前の判定は、従来の絶対値の採点だけになる。
+#
+# スコアの3観点（値動き・ニュース・マクロ）がそれぞれ当たっているかも記録する（summary_by_subscore）。
+# 観点の符号（+なら上昇、-なら下落を見込んだ）とその後の値動き（あれば超過リターン）を比べ、
+# |観点スコア|がSUBSCORE_MIN_ABS未満の「材料なし」は数えない。十分な件数が貯まったら、
+# analyze._SUBSCORE_WEIGHTS（現在は値動き0.4・ニュース0.3・マクロ0.3）を当たる観点に寄せる。
+SUBSCORE_MIN_ABS = 10
+
+# この件数以上検証済みで、的中率がこの値未満のテーマは「的中率が低い分野」として、
+# レポート上の買い候補・売り候補を様子見扱いで表示する（判定の記録は続け、回復すれば自動で戻る）。
+LOW_RELIABILITY_MIN_SAMPLE = 15
+LOW_RELIABILITY_MAX_ACCURACY_PCT = 30.0
+
 _EMPTY_RECORD = {
     "pending": [],
     "summary": {},
@@ -98,6 +115,9 @@ _EMPTY_RECORD = {
     "simulated_pl": {},
     "summary_since_improvement": {},
     "summary_by_horizon": {},
+    "summary_relative": {},
+    "summary_relative_by_theme": {},
+    "summary_by_subscore": {},
 }
 
 
@@ -133,8 +153,13 @@ def save_track_record(path: Path, record: dict) -> None:
     path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def record_predictions(record: dict, group: str, results: list[dict]) -> None:
-    """今回の分析結果のうち、方向性のある判定（買い候補・売り候補・売却検討）を保留リストに追加する。"""
+def record_predictions(
+    record: dict, group: str, results: list[dict], benchmark_prices: dict[str, float] | None = None
+) -> None:
+    """今回の分析結果のうち、方向性のある判定（買い候補・売り候補・売却検討）を保留リストに追加する。
+
+    benchmark_prices: ベンチマーク指数のsymbol -> 最新終値。市場平均比での検証に使う。
+    """
     today_str = _today().isoformat()
     existing_ids = {p["id"] for p in record["pending"]}
 
@@ -154,8 +179,18 @@ def record_predictions(record: dict, group: str, results: list[dict]) -> None:
         score = r.get("score")
         horizon = r.get("horizon") if r.get("horizon") in _RESOLVE_AFTER_DAYS_BY_HORIZON else None
         resolve_days = _RESOLVE_AFTER_DAYS_BY_HORIZON.get(horizon, _RESOLVE_AFTER_DAYS)
+        benchmark_symbol = price_stats.get("benchmark_symbol")
+        benchmark_price = (benchmark_prices or {}).get(benchmark_symbol) if benchmark_symbol else None
+        subscores = r.get("subscores")
+        extra = {}
+        if isinstance(benchmark_price, (int, float)):
+            extra["benchmark_symbol"] = benchmark_symbol
+            extra["benchmark_price_at_prediction"] = benchmark_price
+        if isinstance(subscores, dict):
+            extra["subscores"] = {k: v for k, v in subscores.items() if isinstance(v, int)}
         record["pending"].append(
             {
+                **extra,
                 "id": pred_id,
                 "group": group,
                 "symbol": r["symbol"],
@@ -234,6 +269,20 @@ def _update_streak(record: dict, position_key: str, p: dict, outcome: str) -> No
     }
 
 
+def _add_outcome(buckets: dict, label: str, outcome: str) -> None:
+    bucket = buckets.setdefault(label, {"correct": 0, "incorrect": 0, "neutral": 0})
+    bucket[outcome] += 1
+
+
+def _excess_return_pct(p: dict, change_pct: float, current_prices: dict[str, float]) -> float | None:
+    """銘柄の騰落率から、同じ期間のベンチマーク指数の騰落率を引いた超過リターン(%)。算出できなければNone。"""
+    benchmark_then = p.get("benchmark_price_at_prediction")
+    benchmark_now = current_prices.get(p.get("benchmark_symbol"))
+    if not isinstance(benchmark_then, (int, float)) or not benchmark_then or not isinstance(benchmark_now, (int, float)):
+        return None
+    return change_pct - (benchmark_now / benchmark_then - 1) * 100
+
+
 def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
     """判定から30日経過した保留中の予測を、現在の株価と照らして確定させる。
 
@@ -253,6 +302,17 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
         price_then = p["price_at_prediction"]
         change_pct = (price_now / price_then - 1) * 100 if price_then else 0.0
         outcome = _classify(p["recommendation"], change_pct)
+
+        excess_pct = _excess_return_pct(p, change_pct, current_prices)
+        relative_outcome = _classify(p["recommendation"], excess_pct) if excess_pct is not None else None
+        if relative_outcome:
+            _add_outcome(record["summary_relative"], p["recommendation"], relative_outcome)
+            if p.get("theme"):
+                _add_outcome(record["summary_relative_by_theme"], p["theme"], relative_outcome)
+        basis_pct = excess_pct if excess_pct is not None else change_pct
+        for key, value in (p.get("subscores") or {}).items():
+            if isinstance(value, int) and abs(value) >= SUBSCORE_MIN_ABS:
+                _add_outcome(record["summary_by_subscore"], key, _classify("買い候補" if value > 0 else "売り候補", basis_pct))
 
         bucket = record["summary"].setdefault(
             p["recommendation"], {"correct": 0, "incorrect": 0, "neutral": 0}
@@ -299,6 +359,8 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
                 "price_at_resolution": price_now,
                 "change_pct": change_pct,
                 "outcome": outcome,
+                "excess_pct": excess_pct,
+                "outcome_relative": relative_outcome,
                 "sim_return_pct": sim_return_pct,
             },
         )
@@ -376,8 +438,35 @@ def _build_accuracy_since_improvement(record: dict) -> dict:
     }
 
 
+def low_reliability_themes(record: dict) -> dict[str, dict]:
+    """的中率が低い分野（テーマ）を返す: テーマ -> {accuracy_pct, sample_size, basis}。
+
+    市場平均比の検証がLOW_RELIABILITY_MIN_SAMPLE件以上あればそれを、無ければ従来の
+    絶対値の検証を使う（市場平均比は2026-11-02以降の判定からしか集計されないため）。
+    """
+    relative = {b["theme"]: b for b in _bucketed_breakdown(record.get("summary_relative_by_theme", {}), "theme")}
+    absolute = {b["theme"]: b for b in _bucketed_breakdown(record.get("summary_by_theme", {}), "theme")}
+    themes = {}
+    for theme in set(relative) | set(absolute):
+        for basis, source in (("市場平均比", relative), ("値上がり・値下がり", absolute)):
+            b = source.get(theme)
+            if b and b["sample_size"] >= LOW_RELIABILITY_MIN_SAMPLE:
+                if b["accuracy_pct"] < LOW_RELIABILITY_MAX_ACCURACY_PCT:
+                    themes[theme] = {"accuracy_pct": b["accuracy_pct"], "sample_size": b["sample_size"], "basis": basis}
+                break
+    return themes
+
+
 def build_accuracy_summary(record: dict) -> dict:
     """レポート表示用に、判定種別・テーマ別・確信度別、および全体の的中率を集計する。"""
+    relative_breakdown = _bucketed_breakdown(record.get("summary_relative", {}), "recommendation")
+    relative_correct = sum(b["correct"] for b in relative_breakdown)
+    relative_scored = sum(b["sample_size"] for b in relative_breakdown)
+    subscore_labels = {"trend": "値動き", "news": "ニュース", "macro": "マクロ"}
+    subscore_breakdown = [
+        {**b, "label": subscore_labels.get(b["subscore"], b["subscore"])}
+        for b in _bucketed_breakdown(record.get("summary_by_subscore", {}), "subscore")
+    ]
     breakdown = _bucketed_breakdown(record["summary"], "recommendation")
     theme_breakdown = _bucketed_breakdown(record["summary_by_theme"], "theme")
     confidence_breakdown = _bucketed_breakdown(record["summary_by_confidence"], "confidence")
@@ -401,6 +490,11 @@ def build_accuracy_summary(record: dict) -> dict:
         "streaks": record["streak_by_position"],
         "simulated_pl": _build_simulated_pl_summary(record),
         "accuracy_since_improvement": _build_accuracy_since_improvement(record),
+        "relative_accuracy_pct": (relative_correct / relative_scored * 100) if relative_scored else None,
+        "relative_sample_size": relative_scored,
+        "relative_breakdown": relative_breakdown,
+        "subscore_breakdown": subscore_breakdown,
+        "low_reliability_themes": low_reliability_themes(record),
     }
 
 

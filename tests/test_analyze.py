@@ -383,3 +383,60 @@ def test_profit_taking_applies_only_to_target_accounts():
     assert not analyze.profit_taking_applies(pt, {"symbol": "LMT", "account": "楽天証券"})
     assert analyze.profit_taking_applies({"until": "2026-12-31", "days_left": 65}, {"account": "楽天証券"})  # 指定なしは全口座
     assert not analyze.profit_taking_applies(None, {"symbol": "NVDA"})
+
+
+def test_build_fundamentals_section_formats_values_and_near_earnings():
+    import datetime as dt
+    f = {"trailingPE": 13.6, "forwardPE": 11.9, "priceToBook": 1.43, "trailingAnnualDividendYield": 0.0306,
+         "revenueGrowth": 0.109, "recommendationMean": 2.1, "numberOfAnalystOpinions": 14,
+         "next_earnings_date": "2026-11-04"}
+    text = analyze._build_fundamentals_section(f, today=dt.date(2026, 11, 2))
+    assert "PER（実績）: 13.6倍 / PER（予想）: 11.9倍 / PBR: 1.43倍" in text
+    assert "配当利回り（実績）: +3.1%" in text
+    assert "売上成長率（前年同期比）: +10.9% / 利益成長率: データなし" in text
+    assert "アナリスト評価の平均: 2.10（1=強い買い〜5=売り、14人）" in text
+    assert "次回決算発表予定: 2026-11-04（あと2日）" in text
+    far = analyze._build_fundamentals_section({**f, "next_earnings_date": "2027-03-01"}, today=dt.date(2026, 11, 2))
+    assert "次回決算" not in far
+    assert analyze._build_fundamentals_section(None) == ""
+
+
+class _FakeModels:
+    def __init__(self, failures):
+        self.failures = failures  # model -> 投げる例外（無ければ成功）
+        self.calls = []
+
+    def generate_content(self, model, contents, config):
+        self.calls.append(model)
+        if model in self.failures:
+            raise self.failures[model]
+
+        class R:
+            text = '{"ok": true}'
+        return R()
+
+
+class _FakeClient:
+    def __init__(self, failures):
+        self.models = _FakeModels(failures)
+
+
+def test_generate_json_switches_to_fallback_after_daily_quota(monkeypatch):
+    monkeypatch.setattr(analyze.time, "sleep", lambda s: None)
+    monkeypatch.setattr(analyze, "_exhausted_models", set())
+    daily = Exception("429 RESOURCE_EXHAUSTED quotaId: GenerateRequestsPerDayPerProjectPerModel-FreeTier")
+    client = _FakeClient({"primary": daily})
+    assert analyze._generate_json(client, "primary", "p", "s", {}, "AAA") == ({"ok": True}, analyze.FALLBACK_MODEL)
+    # 上限に達したモデルは、次の銘柄からは呼ばない
+    client.models.calls.clear()
+    analyze._generate_json(client, "primary", "p", "s", {}, "BBB")
+    assert client.models.calls == [analyze.FALLBACK_MODEL]
+
+
+def test_generate_json_retries_then_falls_back_and_returns_none(monkeypatch):
+    monkeypatch.setattr(analyze.time, "sleep", lambda s: None)
+    monkeypatch.setattr(analyze, "_exhausted_models", set())
+    boom = Exception("500 internal")
+    client = _FakeClient({"primary": boom, analyze.FALLBACK_MODEL: boom})
+    assert analyze._generate_json(client, "primary", "p", "s", {}, "AAA") is None
+    assert client.models.calls == ["primary", "primary", analyze.FALLBACK_MODEL, analyze.FALLBACK_MODEL]

@@ -497,3 +497,17 @@ def test_build_tsumitate_fund_view_sorts_by_score_and_adds_index_info():
     assert [v["symbol"] for v in view] == ["2559.T", "1321.T"]
     assert view[0]["tsumitate"] == {"index": "MSCI ACWI", "proxy": "", "example_funds": []}
     assert view[1]["tsumitate"]["example_funds"] == ["eMAXIS Slim 国内株式（日経平均）"]
+
+
+def test_apply_low_reliability_shows_watch_without_touching_original():
+    low = {"暗号資産（現物）": {"accuracy_pct": 18.2, "sample_size": 44, "basis": "値上がり・値下がり"}}
+    original = {"symbol": "BTC-USD", "theme": "暗号資産（現物）", "recommendation": "買い候補", "score": 25}
+    other = {"symbol": "AAPL", "theme": "テクノロジー", "recommendation": "買い候補", "score": 25}
+    watch = {"symbol": "ETH-USD", "theme": "暗号資産（現物）", "recommendation": "様子見", "score": 5}
+    adjusted = gr._apply_low_reliability([original, other, watch], low)
+    assert adjusted[0]["recommendation"] == "様子見"
+    assert "的中率が18%（44件）" in adjusted[0]["reliability_note"]
+    assert "AIの判定: 買い候補 +25" in adjusted[0]["reliability_note"]
+    assert original["recommendation"] == "買い候補"
+    assert adjusted[1] is other
+    assert "reliability_note" not in adjusted[2]

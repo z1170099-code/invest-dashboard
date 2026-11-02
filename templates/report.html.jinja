@@ -812,6 +812,9 @@
       {% if t.stale_note %}
       <p class="stale-note">※ 今回はAIの分析に失敗したため、前回（{{ t.stale_note }}）の内容を表示しています。株価・ニュースは最新です。</p>
       {% endif %}
+      {% if t.reliability_note %}
+      <p class="stale-note">※ {{ t.reliability_note }}</p>
+      {% endif %}
       <p class="reasoning">{{ t.reasoning }}</p>
 
       {% if t.key_factors %}
@@ -858,6 +861,7 @@
         </div>
         <div class="cs-meta">
           {% if t.stale_note %}<span class="stale-tag">{{ t.stale_note }}</span>{% endif %}
+          {% if t.reliability_note %}<span class="stale-tag">的中率の低い分野</span>{% endif %}
           {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
           {% if t.yutai %}
           <span><span class="label">最低投資</span>{{ t.yutai.min_investment_display }}{% if t.yutai.within_budget is false %}（予算超）{% endif %}</span>
@@ -1312,7 +1316,53 @@
       実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
       比較するタイミングは、短期の判定と保有銘柄の判定は30日後、中長期の判定は180日後です。
       変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
+      2026年11月2日以降の判定は、同じ期間の市場平均（日本株は日経平均、米国株はS&amp;P500）と比べて
+      勝ったか負けたかでも採点しています。相場全体が下げた期間でも、AIの銘柄選びの実力だけを測れるためです。
     </details>
+
+    {% if accuracy.relative_sample_size or accuracy.subscore_breakdown or accuracy.low_reliability_themes %}
+    <div class="allocation-box">
+      <h3>市場平均と比べた的中率</h3>
+      {% if accuracy.relative_sample_size %}
+      <div class="score-row">
+        <div class="score-value">{{ "%.0f"|format(accuracy.relative_accuracy_pct) }}%</div>
+        <div class="score-track"><div class="score-fill" style="width: {{ accuracy.relative_accuracy_pct }}%;"></div></div>
+      </div>
+      <p class="allocation-note">検証済み {{ accuracy.relative_sample_size }}件。買い候補は市場平均より上がれば的中、売り候補・売却検討は市場平均より下がれば的中です。</p>
+      {% for b in accuracy.relative_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ b.recommendation }}</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct or 0 }}%;"></div></div>
+        <span class="allocation-amount">{% if b.accuracy_pct is not none %}{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）{% else %}データなし{% endif %}</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="allocation-note">2026年11月2日以降の判定から集計します。最初の結果が出るのは、短期の判定が確定する30日後からです。</p>
+      {% endif %}
+
+      {% if accuracy.subscore_breakdown %}
+      <h3>スコアの観点ごとの的中率</h3>
+      {% for b in accuracy.subscore_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ b.label }}</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ b.accuracy_pct or 0 }}%;"></div></div>
+        <span class="allocation-amount">{% if b.accuracy_pct is not none %}{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）{% else %}データなし{% endif %}</span>
+      </div>
+      {% endfor %}
+      <p class="allocation-note">各観点のプラス・マイナスが、その後の値動きと合っていたかの割合です。十分な件数が貯まったら、当たっている観点の比重を上げます。</p>
+      {% endif %}
+
+      {% if accuracy.low_reliability_themes %}
+      <h3>的中率が低いため様子見扱いにしている分野</h3>
+      <ul class="allocation-note">
+        {% for theme, info in accuracy.low_reliability_themes|dictsort %}
+        <li>{{ theme }}: {{ "%.0f"|format(info.accuracy_pct) }}%（{{ info.sample_size }}件、{{ info.basis }}で採点）</li>
+        {% endfor %}
+      </ul>
+      <p class="allocation-note">これらの分野の買い候補・売り候補は、カード上で「様子見」として表示し、売買サマリーにも載せません。判定の記録は続けるので、的中率が回復すれば自動で元に戻ります。</p>
+      {% endif %}
+    </div>
+    {% endif %}
 
     {% if accuracy.overall_sample_size %}
     <div class="allocation-box">
@@ -1410,7 +1460,7 @@
         {% for r in accuracy.recent_resolved %}
         <li>
           {{ r.date }} {{ r.name }}（{{ r.symbol }}）: {{ r.recommendation }} →
-          {{ "%+.2f"|format(r.change_pct) }}%
+          {{ "%+.2f"|format(r.change_pct) }}%{% if r.excess_pct is defined and r.excess_pct is not none %}（市場平均比 {{ "%+.2f"|format(r.excess_pct) }}%）{% endif %}
           {% if r.outcome == "correct" %}✅ 的中{% elif r.outcome == "incorrect" %}❌ 不的中{% else %}― 様子見扱い{% endif %}
           {% if r.sim_return_pct is not none %}（仮想リターン {{ "%+.2f"|format(r.sim_return_pct) }}%）{% endif %}
         </li>

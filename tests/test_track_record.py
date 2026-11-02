@@ -543,3 +543,72 @@ def test_load_track_record_adds_horizon_bucket_to_old_files(tmp_path):
     record = tr.load_track_record(path)
     assert record["summary_by_horizon"] == {}
     assert tr.build_accuracy_summary(record)["horizon_breakdown"] == []
+
+
+def test_record_predictions_stores_benchmark_and_subscores():
+    record = tr._empty_record()
+    results = [{
+        "symbol": "AAA", "name": "AAA", "recommendation": "買い候補", "score": 30,
+        "subscores": {"trend": 40, "news": 20, "macro": 25},
+        "price_stats": {"latest_close": 100.0, "benchmark_symbol": "^N225"},
+    }]
+    tr.record_predictions(record, "candidate", results, {"^N225": 50000.0})
+    entry = record["pending"][0]
+    assert entry["benchmark_symbol"] == "^N225"
+    assert entry["benchmark_price_at_prediction"] == 50000.0
+    assert entry["subscores"] == {"trend": 40, "news": 20, "macro": 25}
+
+
+def test_resolve_predictions_scores_against_benchmark_and_subscores():
+    record = tr._empty_record()
+    entry = _pending_entry(theme="半導体")
+    entry.update(benchmark_symbol="^N225", benchmark_price_at_prediction=100.0,
+                 subscores={"trend": 40, "news": -30, "macro": 5})
+    record["pending"] = [entry]
+    # 銘柄は+5%だが、市場平均は+10% → 値上がりでは的中、市場平均比では-5%で不的中
+    tr.resolve_predictions(record, {"AAA": 105.0, "^N225": 110.0})
+    assert record["summary"]["買い候補"]["correct"] == 1
+    assert record["summary_relative"]["買い候補"]["incorrect"] == 1
+    assert record["summary_relative_by_theme"]["半導体"]["incorrect"] == 1
+    # 値動き(+40)は上昇を見込んで外れ、ニュース(-30)は下落を見込んで的中、マクロ(+5)は材料なしで数えない
+    assert record["summary_by_subscore"]["trend"]["incorrect"] == 1
+    assert record["summary_by_subscore"]["news"]["correct"] == 1
+    assert "macro" not in record["summary_by_subscore"]
+    resolved = record["recent_resolved"][0]
+    assert round(resolved["excess_pct"], 6) == -5.0
+    assert resolved["outcome_relative"] == "incorrect"
+
+
+def test_resolve_predictions_without_benchmark_keeps_absolute_only():
+    record = tr._empty_record()
+    record["pending"] = [_pending_entry()]
+    tr.resolve_predictions(record, {"AAA": 105.0})
+    assert record["summary"]["買い候補"]["correct"] == 1
+    assert record["summary_relative"] == {}
+    assert record["recent_resolved"][0]["excess_pct"] is None
+
+
+def test_low_reliability_themes_prefers_relative_when_enough_samples():
+    record = tr._empty_record()
+    record["summary_by_theme"] = {
+        "暗号資産": {"correct": 8, "incorrect": 36, "neutral": 1},   # 18% → 低い
+        "金融": {"correct": 11, "incorrect": 20, "neutral": 0},     # 35% → 対象外
+        "貴金属": {"correct": 1, "incorrect": 7, "neutral": 0},     # 件数不足
+        "防衛": {"correct": 4, "incorrect": 16, "neutral": 0},      # 絶対値では20%だが…
+    }
+    record["summary_relative_by_theme"] = {"防衛": {"correct": 9, "incorrect": 7, "neutral": 0}}  # 市場平均比は56%
+    themes = tr.low_reliability_themes(record)
+    assert set(themes) == {"暗号資産"}
+    assert themes["暗号資産"]["basis"] == "値上がり・値下がり"
+    assert round(themes["暗号資産"]["accuracy_pct"]) == 18
+
+
+def test_build_accuracy_summary_includes_relative_and_subscores():
+    record = tr._empty_record()
+    record["summary_relative"] = {"買い候補": {"correct": 3, "incorrect": 1, "neutral": 0}}
+    record["summary_by_subscore"] = {"news": {"correct": 2, "incorrect": 2, "neutral": 0}}
+    summary = tr.build_accuracy_summary(record)
+    assert summary["relative_accuracy_pct"] == 75.0
+    assert summary["relative_sample_size"] == 4
+    assert summary["subscore_breakdown"][0]["label"] == "ニュース"
+    assert summary["low_reliability_themes"] == {}

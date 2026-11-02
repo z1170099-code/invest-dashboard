@@ -156,6 +156,7 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "reflection": result.get("reflection", ""),
         "analysis_failed": result.get("analysis_failed", False),
         "stale_note": _stale_note(result),
+        "reliability_note": result.get("reliability_note"),
         "latest_close": price_stats.get("latest_close"),
         "latest_close_display": _fmt_price_or_dash(price_stats.get("latest_close")),
         "change_1d": _fmt_pct(price_stats.get("change_1d_pct")),
@@ -257,6 +258,30 @@ def _build_sector_view(sector_results: list[dict], member_results: list[dict]) -
         view["top_member"] = top if top and top["recommendation"] == "買い候補" else None
         views.append(view)
     return views
+
+
+def _apply_low_reliability(results: list[dict], low_themes: dict[str, dict]) -> list[dict]:
+    """的中率が低い分野の買い候補・売り候補を、表示上だけ様子見に置き換えたコピーを返す。
+
+    外れやすい判定を売買サマリーなどに載せないため。元の結果（的中率の記録・履歴に使う）は変えない。
+    """
+    adjusted = []
+    for r in results:
+        info = low_themes.get(r.get("theme"))
+        if info and r.get("recommendation") in ("買い候補", "売り候補"):
+            score = r.get("score")
+            r = {
+                **r,
+                "recommendation": "様子見",
+                "reliability_note": (
+                    f"「{r['theme']}」はAIの的中率が{info['accuracy_pct']:.0f}%（{info['sample_size']}件）と低いため、"
+                    f"様子見として表示しています（AIの判定: {r['recommendation']}"
+                    + (f" {score:+d}" if isinstance(score, int) else "")
+                    + "）"
+                ),
+            }
+        adjusted.append(r)
+    return adjusted
 
 
 def _build_tsumitate_fund_view(results: list[dict]) -> list[dict]:
@@ -566,6 +591,13 @@ def generate_report(
     sector_member_results: list[dict] | None = None,
     tsumitate_fund_results: list[dict] | None = None,
 ) -> None:
+    low_themes = (accuracy_summary or {}).get("low_reliability_themes") or {}
+    watchlist_results = _apply_low_reliability(watchlist_results, low_themes)
+    candidate_results = _apply_low_reliability(candidate_results, low_themes)
+    yutai_results = _apply_low_reliability(yutai_results or [], low_themes)
+    sector_results = _apply_low_reliability(sector_results or [], low_themes)
+    sector_member_results = _apply_low_reliability(sector_member_results or [], low_themes)
+    tsumitate_fund_results = _apply_low_reliability(tsumitate_fund_results or [], low_themes)
     watchlist_view = [
         _build_view_model(r, group="ウォッチリスト") for r in _sort_by_score(watchlist_results)
     ]

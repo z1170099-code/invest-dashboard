@@ -18,7 +18,13 @@ from track_record import HIGH_CONFIDENCE_ABS_SCORE, MIN_STREAK_FOR_PROMPT, get_s
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "gemini-flash-lite-latest"
+# 2026-11-02に、更新を1日1回に減らす代わりにflash-liteから上位のflashへ変更した。flashは1銘柄の
+# 分析に十数秒〜2分かかり、無料枠の1日の回数上限もflash-liteより厳しい。上限に達した場合は
+# 残りの銘柄を予備のflash-liteで分析する（モデルごとに上限が別のため）。
+DEFAULT_MODEL = "gemini-flash-latest"
+FALLBACK_MODEL = "gemini-flash-lite-latest"
+# この実行中に1日の上限に達したモデル（_generate_jsonが追加する）。
+_exhausted_models: set[str] = set()
 # 低めに設定し、際どいスコアの銘柄で日によって判定が無意味にブレるのを抑える。
 _TEMPERATURE = 0.2
 # 的中率をプロンプトに含める最低件数。少数件でのブレを過大評価しないための閾値。
@@ -328,6 +334,51 @@ def _format_price_section(price_stats: dict | None) -> str:
     )
 
 
+def _build_fundamentals_section(fundamentals: dict | None, today: dt.date | None = None) -> str:
+    """財務・バリュエーション指標と次回決算日をプロンプト用に整形する。データが無ければ空文字。"""
+    if not fundamentals:
+        return ""
+    today = today or dt.date.today()
+
+    def num(key, fmt):
+        value = fundamentals.get(key)
+        return fmt.format(value) if isinstance(value, (int, float)) else "データなし"
+
+    def pct(key):
+        value = fundamentals.get(key)
+        return f"{value * 100:+.1f}%" if isinstance(value, (int, float)) else "データなし"
+
+    lines = [
+        f"PER（実績）: {num('trailingPE', '{:.1f}倍')} / PER（予想）: {num('forwardPE', '{:.1f}倍')} / PBR: {num('priceToBook', '{:.2f}倍')}",
+        f"配当利回り（実績）: {pct('trailingAnnualDividendYield')}",
+        f"売上成長率（前年同期比）: {pct('revenueGrowth')} / 利益成長率: {pct('earningsGrowth')}",
+        f"純利益率: {pct('profitMargins')} / ROE: {pct('returnOnEquity')}",
+    ]
+    if isinstance(fundamentals.get("recommendationMean"), (int, float)):
+        count = fundamentals.get("numberOfAnalystOpinions")
+        lines.append(
+            f"アナリスト評価の平均: {fundamentals['recommendationMean']:.2f}（1=強い買い〜5=売り"
+            + (f"、{int(count)}人" if isinstance(count, (int, float)) else "")
+            + "）"
+        )
+    earnings = fundamentals.get("next_earnings_date")
+    if earnings:
+        try:
+            days = (dt.date.fromisoformat(earnings) - today).days
+            if 0 <= days <= 60:
+                lines.append(f"次回決算発表予定: {earnings}（あと{days}日）")
+        except ValueError:
+            pass
+    joined = "\n".join(lines)
+    return f"""
+【財務・バリュエーション】
+{joined}
+※ データ提供元の値で、株式分割の直後などに誤った値が混じることがあります。極端な値（予想PERが1倍台など）は参考程度にしてください。
+PERやPBRは同じ業種の水準と比べて割高・割安を判断し、成長率や利益率は業績の勢いとしてnewsの採点に反映してください。
+決算発表が近い銘柄は、決算の内容次第で株価が大きく動きやすい点も考慮してください。
+"""
+
+
 def _build_yutai_section(yutai: dict | None) -> str:
     """株主優待銘柄の優待内容と権利確定月をプロンプト用に整形する。優待情報がなければ空文字。"""
     if not yutai:
@@ -432,6 +483,7 @@ def _build_prompt(
         macro_section = "特筆すべき世界情勢・マクロ経済ニュースはありません。"
 
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
+    theme_line += _build_fundamentals_section((price_stats or {}).get("fundamentals"))
     theme_line += _build_yutai_section(ticker.get("yutai"))
     theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"))
     theme_line += _build_tsumitate_section(ticker.get("tsumitate"), ticker.get("tsumitate_peers"))
@@ -654,7 +706,7 @@ def _build_holding_prompt(
 
 【株価データ】
 {price_section}
-
+{_build_fundamentals_section((price_stats or {}).get("fundamentals"))}
 【関連ニュース見出し】
 {news_section}
 
@@ -695,33 +747,21 @@ def analyze_holding(
         profit_taking,
     )
 
-    for attempt in range(2):
-        try:
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=_HOLDING_SYSTEM_INSTRUCTION,
-                    response_mime_type="application/json",
-                    response_schema=_HOLDING_RESPONSE_SCHEMA,
-                    temperature=_TEMPERATURE,
-                ),
-            )
-            data = json.loads(response.text)
-            return {
-                **_base_fields(holding),
-                **holding_stats,
-                "price_stats": price_stats,
-                "news": news,
-                "analysis_failed": False,
-                "reflection": "",
-                **data,
-            }
-        except Exception:
-            logger.exception(
-                "Gemini分析に失敗しました（試行%d回目）: %s", attempt + 1, holding["symbol"]
-            )
-            time.sleep(8)
+    generated = _generate_json(
+        client, model, prompt, _HOLDING_SYSTEM_INSTRUCTION, _HOLDING_RESPONSE_SCHEMA, holding["symbol"]
+    )
+    if generated:
+        data, used_model = generated
+        return {
+            **_base_fields(holding),
+            **holding_stats,
+            "price_stats": price_stats,
+            "news": news,
+            "analysis_failed": False,
+            "reflection": "",
+            "model": used_model,
+            **data,
+        }
 
     return {
         **_base_fields(holding),
@@ -773,6 +813,47 @@ def analyze_all_holdings(
     return results
 
 
+def _is_daily_quota_error(exc: Exception) -> bool:
+    """無料枠の「1日あたりの回数上限」に達したエラーか（1分あたりの上限とは区別する）。"""
+    text = str(exc)
+    return "429" in text and "PerDay" in text
+
+
+def _generate_json(
+    client: genai.Client, model: str, prompt: str, system_instruction: str, schema: dict, symbol: str
+) -> tuple[dict, str] | None:
+    """Geminiに問い合わせてJSONの結果と使ったモデル名を返す。失敗したらNone。
+
+    各モデル2回まで試し、ダメなら予備のモデル（FALLBACK_MODEL）でも試す。1日の上限に
+    達したモデルは_exhausted_modelsに入れ、この実行の残りの銘柄では呼ばない（上限切れの
+    モデルを毎回呼んでリトライ待ちを繰り返すと、実行時間が何十分も延びるため）。
+    """
+    for current in dict.fromkeys([model, FALLBACK_MODEL]):
+        if current in _exhausted_models:
+            continue
+        for attempt in range(2):
+            try:
+                response = client.models.generate_content(
+                    model=current,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_instruction,
+                        response_mime_type="application/json",
+                        response_schema=schema,
+                        temperature=_TEMPERATURE,
+                    ),
+                )
+                return json.loads(response.text), current
+            except Exception as exc:
+                if _is_daily_quota_error(exc):
+                    logger.warning("%s は1日の利用上限に達したため、以降の銘柄では使いません。", current)
+                    _exhausted_models.add(current)
+                    break
+                logger.exception("Gemini分析に失敗しました（%s、試行%d回目）: %s", current, attempt + 1, symbol)
+                time.sleep(8)
+    return None
+
+
 def _get_client() -> genai.Client:
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -816,33 +897,19 @@ def analyze_ticker(
     model = model or os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
     prompt = _build_prompt(ticker, price_stats, news, macro_news, previous, accuracy_summary, streak)
 
-    for attempt in range(2):
-        try:
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=_SYSTEM_INSTRUCTION,
-                    response_mime_type="application/json",
-                    response_schema=_RESPONSE_SCHEMA,
-                    temperature=_TEMPERATURE,
-                ),
-            )
-            data = json.loads(response.text)
-            data["score"], data["recommendation"] = combine_subscores(data.get("subscores") or {})
-            return {
-                **_base_fields(ticker),
-                "price_stats": price_stats,
-                "news": news,
-                "analysis_failed": False,
-                "reflection": "",
-                **data,
-            }
-        except Exception:
-            logger.exception(
-                "Gemini分析に失敗しました（試行%d回目）: %s", attempt + 1, ticker["symbol"]
-            )
-            time.sleep(8)
+    generated = _generate_json(client, model, prompt, _SYSTEM_INSTRUCTION, _RESPONSE_SCHEMA, ticker["symbol"])
+    if generated:
+        data, used_model = generated
+        data["score"], data["recommendation"] = combine_subscores(data.get("subscores") or {})
+        return {
+            **_base_fields(ticker),
+            "price_stats": price_stats,
+            "news": news,
+            "analysis_failed": False,
+            "reflection": "",
+            "model": used_model,
+            **data,
+        }
 
     return {
         **_base_fields(ticker),

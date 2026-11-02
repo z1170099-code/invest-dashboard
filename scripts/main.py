@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 from analyze import active_profit_taking, analyze_all, analyze_all_holdings, build_sector_peer_table
 from fetch_news import fetch_macro_news, fetch_ticker_news
-from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks
+from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks, fetch_fundamentals
 from generate_report import generate_report
 from history import apply_group_results, fill_failed_from_history, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
@@ -66,9 +66,11 @@ def _analyze_group(
     logger.info("[%s] 株価データを取得中...", label)
     price_stats_by_symbol = fetch_all_price_stats(tickers)
     for ticker in tickers:
-        attach_relative_performance(
-            price_stats_by_symbol.get(ticker["symbol"]), ticker.get("market"), benchmarks
-        )
+        stats = price_stats_by_symbol.get(ticker["symbol"])
+        attach_relative_performance(stats, ticker.get("market"), benchmarks)
+        # 個別株（日本株・米国株）だけ財務データを添える。ETF・暗号資産には決算やPERが無いため。
+        if stats and ticker.get("market") in ("JP", "US") and not ticker.get("sector"):
+            stats["fundamentals"] = fetch_fundamentals(ticker["symbol"])
     # 業種別ETF・つみたて投資枠の指数は1本ずつ判定されるため、全体の騰落率の比較表を各プロンプトに添える。
     for key in ("sector", "tsumitate"):
         peer_table = build_sector_peer_table(tickers, price_stats_by_symbol, key=key)
@@ -245,14 +247,24 @@ def main() -> None:
         for r in all_results
         if r.get("price_stats") and isinstance(r["price_stats"].get("latest_close"), (int, float))
     }
+    # 市場平均比での検証用に、ベンチマーク指数の終値も記録・照合する。
+    benchmark_prices = {
+        symbol: stats["latest_close"]
+        for symbol, stats in benchmarks.items()
+        if stats and isinstance(stats.get("latest_close"), (int, float))
+    }
+    current_prices.update(benchmark_prices)
     resolve_predictions(track_record, current_prices)
-    record_predictions(track_record, "watchlist", watchlist_results)
-    record_predictions(track_record, "candidate", candidate_results)
-    record_predictions(track_record, "yutai", yutai_results)
-    record_predictions(track_record, "sector", sector_results)
-    record_predictions(track_record, "sector_member", sector_member_results)
-    record_predictions(track_record, "tsumitate_fund", tsumitate_fund_results)
-    record_predictions(track_record, "holding", portfolio_results)
+    for group, results in (
+        ("watchlist", watchlist_results),
+        ("candidate", candidate_results),
+        ("yutai", yutai_results),
+        ("sector", sector_results),
+        ("sector_member", sector_member_results),
+        ("tsumitate_fund", tsumitate_fund_results),
+        ("holding", portfolio_results),
+    ):
+        record_predictions(track_record, group, results, benchmark_prices)
     # レポート表示用は、今回確定した分も反映した最新の的中率を使う。
     accuracy_summary = build_accuracy_summary(track_record)
 

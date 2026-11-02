@@ -80,6 +80,36 @@ def fetch_all_price_stats(tickers: list[dict]) -> dict[str, dict | None]:
     return results
 
 
+# AIに渡す財務・バリュエーションの項目（yfinanceのinfoのキー）。比率の項目は小数（0.12=12%）。
+_FUNDAMENTAL_KEYS = (
+    "trailingPE", "forwardPE", "priceToBook", "trailingAnnualDividendYield", "revenueGrowth",
+    "earningsGrowth", "profitMargins", "returnOnEquity", "recommendationMean", "numberOfAnalystOpinions",
+)
+
+
+def fetch_fundamentals(symbol: str) -> dict | None:
+    """PER・PBR・成長率・利益率・アナリスト評価・次回決算日を取得する。取得できなければNone。
+
+    株価の変化率とニュース見出しだけでは割高・割安や業績の勢いが分からないため、AIの判断材料に加える。
+    提供元のデータには誤り（分割直後の予想PERなど）が混じることがあるため、プロンプト側で注意書きを添える。
+    """
+    try:
+        ticker = yf.Ticker(symbol)
+        info = ticker.info or {}
+    except Exception:
+        logger.exception("財務データの取得に失敗しました: %s", symbol)
+        return None
+
+    data = {k: info[k] for k in _FUNDAMENTAL_KEYS if isinstance(info.get(k), (int, float))}
+    try:
+        dates = (ticker.calendar or {}).get("Earnings Date") or []
+        if dates:
+            data["next_earnings_date"] = min(dates).isoformat()
+    except Exception:
+        logger.warning("決算日の取得に失敗しました: %s", symbol)
+    return data or None
+
+
 # 市場ごとの比較対象ベンチマーク指数。ETF・暗号資産など対応する指数が無い市場は対象外。
 _BENCHMARK_BY_MARKET = {
     "US": "^GSPC",
