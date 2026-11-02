@@ -19406,6 +19406,127 @@
       "date": "2026-11-02",
       "price_at_prediction": 65800.0,
       "resolve_after": "2027-05-01"
+    },
+    {
+      "benchmark_symbol": "^GSPC",
+      "benchmark_price_at_prediction": 7580.06982421875,
+      "subscores": {
+        "trend": -45,
+        "news": 20,
+        "macro": -40
+      },
+      "id": "watchlist:NVDA:2026-11-02",
+      "group": "watchlist",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "recommendation": "売り候補",
+      "theme": null,
+      "score": -24,
+      "horizon": "短期",
+      "purchase_date": null,
+      "date": "2026-11-02",
+      "price_at_prediction": 204.63999938964844,
+      "resolve_after": "2026-12-02"
+    },
+    {
+      "benchmark_symbol": "^N225",
+      "benchmark_price_at_prediction": 63022.01953125,
+      "subscores": {
+        "trend": 25,
+        "news": 15,
+        "macro": 5
+      },
+      "id": "yutai:9432.T:2026-11-02",
+      "group": "yutai",
+      "symbol": "9432.T",
+      "name": "NTT",
+      "recommendation": "買い候補",
+      "theme": "通信",
+      "score": 16,
+      "horizon": "中長期",
+      "purchase_date": null,
+      "date": "2026-11-02",
+      "price_at_prediction": 173.10000610351562,
+      "resolve_after": "2027-05-01"
+    },
+    {
+      "benchmark_symbol": "^N225",
+      "benchmark_price_at_prediction": 63022.01953125,
+      "subscores": {
+        "trend": -15,
+        "news": -20,
+        "macro": -10
+      },
+      "id": "sector_member:4901.T:2026-11-02",
+      "group": "sector_member",
+      "symbol": "4901.T",
+      "name": "富士フイルムHD",
+      "recommendation": "売り候補",
+      "theme": "素材・化学",
+      "score": -15,
+      "horizon": "短期",
+      "purchase_date": null,
+      "date": "2026-11-02",
+      "price_at_prediction": 3484.0,
+      "resolve_after": "2026-12-02"
+    },
+    {
+      "benchmark_symbol": "^N225",
+      "benchmark_price_at_prediction": 63022.01953125,
+      "subscores": {
+        "trend": -15,
+        "news": -20,
+        "macro": -10
+      },
+      "id": "sector_member:6367.T:2026-11-02",
+      "group": "sector_member",
+      "symbol": "6367.T",
+      "name": "ダイキン工業",
+      "recommendation": "売り候補",
+      "theme": "機械",
+      "score": -15,
+      "horizon": "短期",
+      "purchase_date": null,
+      "date": "2026-11-02",
+      "price_at_prediction": 20970.0,
+      "resolve_after": "2026-12-02"
+    },
+    {
+      "benchmark_symbol": "^N225",
+      "benchmark_price_at_prediction": 63022.01953125,
+      "subscores": {
+        "trend": 25,
+        "news": 35,
+        "macro": 10
+      },
+      "id": "sector_member:9022.T:2026-11-02",
+      "group": "sector_member",
+      "symbol": "9022.T",
+      "name": "JR東海",
+      "recommendation": "買い候補",
+      "theme": "運輸・物流",
+      "score": 24,
+      "horizon": "中長期",
+      "purchase_date": null,
+      "date": "2026-11-02",
+      "price_at_prediction": 3954.0,
+      "resolve_after": "2027-05-01"
+    },
+    {
+      "benchmark_symbol": "^N225",
+      "benchmark_price_at_prediction": 63022.01953125,
+      "id": "holding:4519.T:2026-10-26:2026-11-02",
+      "group": "holding",
+      "symbol": "4519.T",
+      "name": "中外製薬",
+      "recommendation": "売却検討",
+      "theme": "ヘルスケア・製薬",
+      "score": null,
+      "horizon": null,
+      "purchase_date": "2026-10-26",
+      "date": "2026-11-02",
+      "price_at_prediction": 6807.0,
+      "resolve_after": "2026-12-02"
     }
   ],
   "summary": {
@@ -20202,5 +20323,8 @@
     "incorrect": 121,
     "neutral": 19
   },
-  "summary_by_horizon": {}
+  "summary_by_horizon": {},
+  "summary_relative": {},
+  "summary_relative_by_theme": {},
+  "summary_by_subscore": {}
 }
