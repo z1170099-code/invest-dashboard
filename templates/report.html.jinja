@@ -1365,7 +1365,7 @@
         <span class="allocation-amount">{% if b.accuracy_pct is not none %}{{ "%.0f"|format(b.accuracy_pct) }}%（{{ b.sample_size }}件）{% else %}データなし{% endif %}</span>
       </div>
       {% endfor %}
-      <p class="allocation-note">保有銘柄とウォッチリストは上位モデル（gemini-flash-latest）、ほかは通常モデル（gemini-flash-lite-latest）で分析しています。市場平均比で採点できた判定はその結果、それ以外は値上がり・値下がりで数えています。</p>
+      <p class="allocation-note">保有銘柄とウォッチリストは上位モデル（flash）、ほかは通常モデル（gemini-flash-lite-latest）で分析しています。上位モデルが混雑で使えなかった日は、その銘柄も通常モデルで分析しています。市場平均比で採点できた判定はその結果、それ以外は値上がり・値下がりで数えています。</p>
       {% endif %}
 
       {% if accuracy.low_reliability_themes %}

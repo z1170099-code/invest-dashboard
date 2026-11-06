@@ -22,8 +22,13 @@ logger = logging.getLogger(__name__)
 # 1日20回ほどしかなく（2026-11-02の実行で確認）、全約150銘柄には使えない。そこで、実際にお金が
 # かかっている保有銘柄と、自分で選んだウォッチリスト（合わせて約15銘柄）だけflashで分析し、
 # ほかはflash-liteで分析する。flashが上限や混雑で使えないときも、その銘柄はflash-liteで分析する。
-DEFAULT_MODEL = "gemini-flash-latest"
+# 最新版を指す gemini-flash-latest（3.8）は無料枠では混雑（503）で毎回断られた（11/04〜11/06）ため、
+# 2026-11-06に、応答が安定していた gemini-3.5-flash（中身は3.6）に変えた。
+DEFAULT_MODEL = "gemini-3.5-flash"
 FALLBACK_MODEL = "gemini-flash-lite-latest"
+# 1回の問い合わせを待つ上限（ミリ秒）。上位モデルでも2分ほどで返るが、応答が返らないまま
+# 5時間待ち続けて実行が打ち切られたことがある（11/06）ため、4分で失敗とみなす。
+_REQUEST_TIMEOUT_MS = 240_000
 PREMIUM_GROUPS = {"holding", "watchlist"}
 # この実行中に1日の上限に達したモデル（_generate_jsonが追加する）。
 _exhausted_models: set[str] = set()
@@ -841,7 +846,9 @@ def _generate_json(
     for current in dict.fromkeys([model, FALLBACK_MODEL]):
         if current in _exhausted_models:
             continue
-        for attempt in range(2):
+        # 予備のモデルは最後の砦なので、混雑（503）でも待ち時間を延ばしながら3回まで試す。
+        attempts = 3 if current == FALLBACK_MODEL else 2
+        for attempt in range(attempts):
             try:
                 response = client.models.generate_content(
                     model=current,
@@ -864,7 +871,7 @@ def _generate_json(
                     logger.warning("%s が混雑しているため、%s は予備のモデルで分析します。", current, symbol)
                     break
                 logger.exception("Gemini分析に失敗しました（%s、試行%d回目）: %s", current, attempt + 1, symbol)
-                time.sleep(8)
+                time.sleep(8 * (attempt + 1))
     return None
 
 
@@ -875,7 +882,7 @@ def _get_client() -> genai.Client:
             "環境変数 GEMINI_API_KEY が設定されていません。"
             ".env またはGitHub Secretsを確認してください。"
         )
-    return genai.Client(api_key=api_key)
+    return genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=_REQUEST_TIMEOUT_MS))
 
 
 _PASSTHROUGH_FIELDS = (

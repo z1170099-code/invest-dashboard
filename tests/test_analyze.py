@@ -439,7 +439,7 @@ def test_generate_json_retries_then_falls_back_and_returns_none(monkeypatch):
     boom = Exception("500 internal")
     client = _FakeClient({"primary": boom, analyze.FALLBACK_MODEL: boom})
     assert analyze._generate_json(client, "primary", "p", "s", {}, "AAA") is None
-    assert client.models.calls == ["primary", "primary", analyze.FALLBACK_MODEL, analyze.FALLBACK_MODEL]
+    assert client.models.calls == ["primary", "primary"] + [analyze.FALLBACK_MODEL] * 3
 
 
 def test_model_for_group_uses_premium_model_only_for_holdings_and_watchlist(monkeypatch):
