@@ -22980,6 +22980,28 @@
       "date": "2026-11-06",
       "price_at_prediction": 3623.0,
       "resolve_after": "2026-12-06"
+    },
+    {
+      "benchmark_symbol": "^GSPC",
+      "benchmark_price_at_prediction": 7353.72998046875,
+      "subscores": {
+        "trend": 50,
+        "news": 25,
+        "macro": -35
+      },
+      "model": "gemini-3.5-flash",
+      "id": "watchlist:AAPL:2026-11-06",
+      "group": "watchlist",
+      "symbol": "AAPL",
+      "name": "Apple",
+      "recommendation": "買い候補",
+      "theme": null,
+      "score": 17,
+      "horizon": "中長期",
+      "purchase_date": null,
+      "date": "2026-11-06",
+      "price_at_prediction": 344.1700134277344,
+      "resolve_after": "2027-05-05"
     }
   ],
   "summary": {
