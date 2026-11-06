@@ -30,7 +30,7 @@ FALLBACK_MODEL = "gemini-flash-lite-latest"
 # 5時間待ち続けて実行が打ち切られたことがある（11/06）ため、4分で失敗とみなす。
 _REQUEST_TIMEOUT_MS = 240_000
 PREMIUM_GROUPS = {"holding", "watchlist"}
-# この実行中に1日の上限に達したモデル（_generate_jsonが追加する）。
+# この実行中に使えなくなったモデル（1日の上限に達した・モデルが見つからない）。_generate_jsonが追加する。
 _exhausted_models: set[str] = set()
 
 
@@ -834,6 +834,12 @@ def _is_daily_quota_error(exc: Exception) -> bool:
     return "429" in text and "PerDay" in text
 
 
+def _is_model_missing_error(exc: Exception) -> bool:
+    """指定したモデルが存在しない（呼べない）エラーか。"""
+    text = str(exc)
+    return "404" in text and "NOT_FOUND" in text
+
+
 def _generate_json(
     client: genai.Client, model: str, prompt: str, system_instruction: str, schema: dict, symbol: str
 ) -> tuple[dict, str] | None:
@@ -866,6 +872,12 @@ def _generate_json(
                     logger.warning("%s は1日の利用上限に達したため、以降の銘柄では使いません。", current)
                     _exhausted_models.add(current)
                     break
+                if _is_model_missing_error(exc):
+                    # 名前の誤りや提供終了で、何度呼んでも結果は同じ。再試行の待ち時間で実行が
+                    # 1時間以上延びたことがある（11/06）ため、すぐに使わないモデルとして扱う。
+                    logger.error("%s が見つからないため、以降の銘柄では使いません: %s", current, exc)
+                    _exhausted_models.add(current)
+                    break
                 if current != FALLBACK_MODEL and "503" in str(exc):
                     # 混雑による一時的な失敗。再試行も1日の回数に数えられるため、すぐ予備のモデルに切り替える。
                     logger.warning("%s が混雑しているため、%s は予備のモデルで分析します。", current, symbol)
@@ -882,7 +894,12 @@ def _get_client() -> genai.Client:
             "環境変数 GEMINI_API_KEY が設定されていません。"
             ".env またはGitHub Secretsを確認してください。"
         )
-    return genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=_REQUEST_TIMEOUT_MS))
+    # 問い合わせ先は v1beta に固定する。v1 には gemini-flash-lite-latest のような「-latest」の
+    # 呼び名がなく、google-genai 3.0.0 で既定が v1 に変わったときに予備のモデルが全滅した（11/06）。
+    return genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(api_version="v1beta", timeout=_REQUEST_TIMEOUT_MS),
+    )
 
 
 _PASSTHROUGH_FIELDS = (

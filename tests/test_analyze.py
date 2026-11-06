@@ -459,3 +459,21 @@ def test_generate_json_switches_to_fallback_immediately_on_503(monkeypatch):
     # 混雑は一時的なので、上限切れとは違い次の銘柄では再びprimaryを試す
     assert client.models.calls == ["primary", analyze.FALLBACK_MODEL]
     assert "primary" not in analyze._exhausted_models
+
+
+def test_generate_json_stops_calling_missing_model_without_retries(monkeypatch):
+    monkeypatch.setattr(analyze.time, "sleep", lambda s: None)
+    monkeypatch.setattr(analyze, "_exhausted_models", set())
+    missing = Exception("404 NOT_FOUND. models/gemini-flash-lite-latest is not found for API version v1")
+    client = _FakeClient({analyze.FALLBACK_MODEL: missing})
+    assert analyze._generate_json(client, analyze.FALLBACK_MODEL, "p", "s", {}, "AAA") is None
+    # 再試行せず1回で諦め、次の銘柄からは呼ばない
+    assert client.models.calls == [analyze.FALLBACK_MODEL]
+    assert analyze._generate_json(client, analyze.FALLBACK_MODEL, "p", "s", {}, "BBB") is None
+    assert client.models.calls == [analyze.FALLBACK_MODEL]
+
+
+def test_get_client_pins_v1beta(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "dummy")
+    client = analyze._get_client()
+    assert client._api_client._http_options.api_version == "v1beta"
