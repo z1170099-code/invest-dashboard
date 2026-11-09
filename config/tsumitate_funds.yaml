@@ -19,6 +19,14 @@
 #     index: 連動する指数
 #     proxy: 値動きの代用に使っているETFの名前
 #     example_funds: つみたて投資枠の代表的なファンド例
+#     nisa_frame: 買えるNISAの枠。省略時は "つみたて投資枠"。金のようにつみたて投資枠の対象外で、
+#       成長投資枠でなら積み立てられるものは "成長投資枠" と書く（カードに「成長投資枠のみ」と出る）。
+#
+# つみたて投資枠の対象かどうかは、金融庁の「つみたて投資枠対象商品届出一覧」で確認した
+# （https://www.fsa.go.jp/policy/nisa2/products/index.html 、2026-10-23版・377本）。
+# 金・コモディティのファンドは1本もない。NASDAQ100・FANG+・NYダウは「指定インデックス投資信託以外」の
+# 区分に一部のファンドだけが載っている（例: eMAXIS NASDAQ100インデックスは載っていない）。
+# 全米株式・米国高配当も対象だが、同じ指数に連動する東証上場ETFが無いため載せていない。
 
 funds:
   # MSCI ACWIそのものに連動する2559.T（MAXIS全世界株式）は、2026年6月の分割前後の株価データが
@@ -84,3 +92,48 @@ funds:
       index: "日経平均株価（東証の代表的な225銘柄）"
       proxy: "MAXIS 日経225上場投信"
       example_funds: ["eMAXIS Slim 国内株式（日経平均）"]
+
+  # 以下4つは 2026-11-09 に追加。代用ETFは、同じ指数の中で株価データに異常値の無いものを選んだ
+  # （1545.T は2026年5月、1546.T は2026年11月に値が1/100以下になる日があったため使わない）。
+  - symbol: "2631.T"
+    name: "米国株式（NASDAQ100）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "ナスダック100 米国ハイテク株"
+    tsumitate:
+      index: "NASDAQ100（米ナスダック上場の金融を除く大型株100社。IT企業の比率が高い）"
+      proxy: "MAXIS ナスダック100上場投信"
+      example_funds: ["iFreeNEXT NASDAQ100インデックス", "インデックスファンドNASDAQ100（アメリカ株式）"]
+
+  - symbol: "316A.T"
+    name: "米国株式（FANG+）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "FANG+ 米国テック株"
+    tsumitate:
+      index: "NYSE FANG+（米国の大型テック・ネット企業10社に均等に投資。銘柄数が少なく値動きが大きい）"
+      proxy: "iFreeETF FANG+"
+      example_funds: ["iFreeNEXT FANG+インデックス"]
+
+  - symbol: "2241.T"
+    name: "米国株式（NYダウ）"
+    market: "ETF"
+    theme: "つみたて投資枠"
+    news_query: "NYダウ"
+    tsumitate:
+      index: "ダウ・ジョーンズ工業株価平均（米国を代表する30社）"
+      proxy: "MAXIS NYダウ上場投信"
+      example_funds: ["eMAXIS NYダウインデックス", "iFree NYダウ・インデックス", "たわらノーロード NYダウ"]
+
+  # 三菱UFJ 純金ファンドは1540.Tそのものに投資しているため、代用のずれがほとんど無い。
+  # 成長投資枠の対象であることは運用会社の販売用資料（2026年4月版）で確認した。
+  - symbol: "1540.T"
+    name: "金（ゴールド）"
+    market: "ETF"
+    theme: "金（ゴールド）"
+    news_query: "金価格 ゴールド"
+    tsumitate:
+      index: "国内の金価格（大阪取引所の金先物をもとにした1グラムあたりの円建て価格）"
+      proxy: "純金上場信託（現物国内保管型）"
+      example_funds: ["三菱UFJ 純金ファンド（ファインゴールド）"]
+      nisa_frame: "成長投資枠"

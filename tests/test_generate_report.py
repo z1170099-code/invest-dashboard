@@ -495,8 +495,46 @@ def test_build_tsumitate_fund_view_sorts_by_score_and_adds_index_info():
     ]
     view = gr._build_tsumitate_fund_view(results)
     assert [v["symbol"] for v in view] == ["2559.T", "1321.T"]
-    assert view[0]["tsumitate"] == {"index": "MSCI ACWI", "proxy": "", "example_funds": []}
+    assert view[0]["tsumitate"] == {"index": "MSCI ACWI", "proxy": "", "example_funds": [], "frame": "つみたて投資枠"}
     assert view[1]["tsumitate"]["example_funds"] == ["eMAXIS Slim 国内株式（日経平均）"]
+
+
+def test_build_tsumitate_fund_view_keeps_growth_frame():
+    results = [{"symbol": "1540.T", "name": "金（ゴールド）", "recommendation": "様子見", "score": 5,
+                "tsumitate": {"index": "国内の金価格", "nisa_frame": "成長投資枠"}}]
+    assert gr._build_tsumitate_fund_view(results)[0]["tsumitate"]["frame"] == "成長投資枠"
+
+
+def test_generate_report_marks_growth_only_fund_in_tsumitate_section(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    funds = [
+        _analysis("2631.T", "米国株式（NASDAQ100）", 20, "買い候補", market="ETF",
+                  tsumitate={"index": "NASDAQ100", "example_funds": ["iFreeNEXT NASDAQ100インデックス"]}),
+        _analysis("1540.T", "金（ゴールド）", 10, "様子見", market="ETF",
+                  tsumitate={"index": "国内の金価格", "example_funds": ["三菱UFJ 純金ファンド（ファインゴールド）"],
+                             "nisa_frame": "成長投資枠"}),
+    ]
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        tsumitate_fund_results=funds,
+    )
+    section = output.read_text(encoding="utf-8").split('id="tsumitate"')[1].split("</section>")[0]
+
+    def card(symbol):
+        return section.split(f'id="ticker-{symbol}"')[1].split('<details class="card')[0]
+
+    nasdaq, gold = card("2631.T"), card("1540.T")
+    assert "つみたて投資枠の代表的なファンド例" in nasdaq and "成長投資枠のみ" not in nasdaq
+    assert "成長投資枠のみ" in gold
+    assert "成長投資枠の代表的なファンド例" in gold
+    assert "つみたて投資枠では買えません" in gold
 
 
 def test_apply_low_reliability_shows_watch_without_touching_original():

@@ -353,8 +353,19 @@ def test_build_prompt_includes_tsumitate_section():
     assert "【NISAつみたて投資枠】" in prompt
     assert "「MSCI ACWI」に連動するETF" in prompt
     assert "（例: eMAXIS Slim 全世界株式（オール・カントリー））" in prompt
-    assert "【つみたて投資枠の主な指数の騰落率（比較用）】" in prompt
+    assert "【NISAで積み立てる主な指数の騰落率（比較用）】" in prompt
+    assert "対象外" not in prompt
     assert analyze._build_tsumitate_section(None) == ""
+
+
+def test_tsumitate_section_for_growth_frame_explains_non_stock_asset():
+    section = analyze._build_tsumitate_section(
+        {"index": "国内の金価格", "example_funds": ["三菱UFJ 純金ファンド"], "nisa_frame": "成長投資枠"}
+    )
+    assert "【NISA成長投資枠】" in section
+    assert "NISAの成長投資枠で毎月一定額" in section
+    assert "つみたて投資枠の対象外" in section
+    assert "実質金利" in section
 
 
 def test_combine_subscores_weights_and_thresholds():

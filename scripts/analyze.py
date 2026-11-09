@@ -449,20 +449,30 @@ def _build_sector_section(sector: str | None, peer_table: str | None = None) -> 
 
 
 def _build_tsumitate_section(tsumitate: dict | None, peer_table: str | None = None) -> str:
-    """NISAつみたて投資枠の指数の場合に、長期積立の前提で判定するよう指示する。該当しなければ空文字。"""
+    """NISAで積み立てる指数の場合に、長期積立の前提で判定するよう指示する。該当しなければ空文字。
+
+    金のようにつみたて投資枠の対象外で、成長投資枠でなら積み立てられるものは nisa_frame に
+    "成長投資枠" を指定する。株式の指数とは性質が違うため、その前提も伝える。
+    """
     if not tsumitate:
         return ""
     funds = "、".join(tsumitate.get("example_funds") or [])
+    frame = tsumitate.get("nisa_frame") or "つみたて投資枠"
     section = f"""
-【NISAつみたて投資枠】
-この銘柄は「{tsumitate.get("index", "")}」に連動するETFで、同じ指数に連動する投資信託{f"（例: {funds}）" if funds else ""}を
-NISAのつみたて投資枠で毎月一定額、10年以上積み立てる場合の判断材料として使います。値動きはこのETFで代用しています。
+【NISA{frame}】
+この銘柄は「{tsumitate.get("index", "")}」に連動するETFで、同じ値動きを目指す投資信託{f"（例: {funds}）" if funds else ""}を
+NISAの{frame}で毎月一定額、10年以上積み立てる場合の判断材料として使います。値動きはこのETFで代用しています。
 数日〜数週間の値動きよりも、この指数の中長期の見通し（構成国・企業の成長性、分散の効き方、割高・割安感、
 為替や金利の影響）を中心に判定し、horizonは原則「中長期」にしてください。
 """
+    if frame != "つみたて投資枠":
+        section += """これはつみたて投資枠の対象外で、成長投資枠の積立設定で買う前提です。株式と違って配当や利益の成長は
+ありません。実質金利・ドル円・インフレ・地政学リスクへの反応や、株式と値動きが異なることによる分散の効果を
+中心に判定してください。
+"""
     if peer_table:
         section += f"""
-【つみたて投資枠の主な指数の騰落率（比較用）】
+【NISAで積み立てる主な指数の騰落率（比較用）】
 {peer_table}
 この表とマクロ環境から見て、この指数がほかの指数より長期の積立先として相対的に有利そうか不利そうかを
 判定の中心にし、指数間でスコアの差をはっきりつけてください。

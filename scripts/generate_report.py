@@ -286,7 +286,10 @@ def _apply_low_reliability(results: list[dict], low_themes: dict[str, dict]) -> 
 
 
 def _build_tsumitate_fund_view(results: list[dict]) -> list[dict]:
-    """つみたて投資枠の指数（値動きはETFで代用）をスコア順に並べ、連動指数・ファンド例を添える。"""
+    """つみたて投資枠の指数（値動きはETFで代用）をスコア順に並べ、連動指数・ファンド例を添える。
+
+    frame は買えるNISAの枠。金のように成長投資枠でしか買えないものは、カードにその旨を出す。
+    """
     views = []
     for r in _sort_by_score(results):
         view = _build_view_model(r, group="つみたて投資枠")
@@ -295,6 +298,7 @@ def _build_tsumitate_fund_view(results: list[dict]) -> list[dict]:
             "index": info.get("index", ""),
             "proxy": info.get("proxy", ""),
             "example_funds": info.get("example_funds") or [],
+            "frame": info.get("nisa_frame") or "つみたて投資枠",
         }
         views.append(view)
     return views
