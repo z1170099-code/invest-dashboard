@@ -101,3 +101,13 @@ holdings:
     amount_invested_jpy: 6884
     account: "楽天証券"
     account_type: "特定口座"
+
+  - symbol: "8306.T"
+    name: "三菱UFJフィナンシャル・グループ"
+    market: "JP"
+    purchase_date: "2026-10-30"
+    purchase_price: 3456  # 楽天証券で1株購入。取得単価はユーザー申告
+    theme: "金融"
+    amount_invested_jpy: 3456
+    account: "楽天証券"
+    account_type: "特定口座"
