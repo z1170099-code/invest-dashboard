@@ -505,6 +505,40 @@ def test_build_tsumitate_fund_view_keeps_growth_frame():
     assert gr._build_tsumitate_fund_view(results)[0]["tsumitate"]["frame"] == "成長投資枠"
 
 
+def test_generate_report_shows_sell_once_box_and_fund_fields(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    state = {"status": "signaled", "date": "2026-11-13", "price_date": "2026-11-12", "price": 49000,
+             "gain_pct": 4.2, "reason": "ai", "min_gain_pct": 3.0, "final_days": 14,
+             "deadline": "2026-12-30", "days_left": 47, "new": True}
+    fund = {
+        "symbol": "03311112", "name": "三菱UFJ 純金ファンド", "market": "投信", "recommendation": "保有継続",
+        "reasoning": "理由", "key_factors": [], "risks": "", "purchase_price": 46000, "purchase_date": None,
+        "gain_loss_pct": 4.2, "units": 11968, "market_value_jpy": 58643.2, "sell_once": {"deadline": "2026-12-30"},
+        "sell_once_state": state,
+        "price_stats": {"latest_close": 49000, "history_1y": [["2026-01-01", 60000], ["2026-11-12", 49000]]},
+    }
+    stock = {"symbol": "NVDA", "name": "NVIDIA", "market": "US", "recommendation": "保有継続", "reasoning": "",
+             "purchase_price": 200, "purchase_date": "2026-07-16", "gain_loss_pct": 1.0,
+             "price_stats": {"latest_close": 202}}
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [stock, fund], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+    )
+    section = output.read_text(encoding="utf-8").split('id="holdings"')[1].split("</section>")[0]
+    box = section.split('id="sell-once"')[1].split("</div>")[0]
+    assert "売却の条件を満たした銘柄があります" in box and "三菱UFJ 純金ファンド" in box and "NVIDIA" not in box
+    # 合図が出た銘柄は、AIが保有継続でも口座内の先頭に並ぶ
+    assert section.index('id="holding-03311112-None"') < section.index('id="holding-NVDA-2026-07-16"')
+    card = section.split('id="holding-03311112-None"')[1].split('id="holding-NVDA')[0]
+    assert "基準価額" in card and "58,643円" in card and "11,968口" in card and "売却の合図 11/13" in card
+
+
 def test_generate_report_marks_growth_only_fund_in_tsumitate_section(tmp_path):
     from pathlib import Path
 

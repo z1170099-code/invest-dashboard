@@ -126,6 +126,17 @@ def test_build_buy_section_contains_score():
     assert "好材料" in text
 
 
+def test_build_sell_once_section_uses_rule_message():
+    state = {"status": "signaled", "date": "2026-11-13", "price_date": "2026-11-12", "gain_pct": 4.2,
+             "reason": "ai", "min_gain_pct": 3.0, "final_days": 14, "deadline": "2026-12-30", "days_left": 47}
+    text = notify._build_sell_once_section(
+        [{"symbol": "03311112", "name": "三菱UFJ 純金ファンド", "sell_once_state": state, "reasoning": "金利上昇"}]
+    )
+    assert "売却の条件を満たした保有銘柄（1件" in text
+    assert "11/13に売却の条件を満たしました" in text
+    assert "AIの見立て: 金利上昇" in text
+
+
 def test_send_notification_email_noop_when_both_empty(monkeypatch):
     called = False
 

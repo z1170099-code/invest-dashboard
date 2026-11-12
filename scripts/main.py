@@ -16,6 +16,7 @@ from fetch_prices import attach_relative_performance, fetch_all_price_stats, fet
 from generate_report import generate_report
 from history import apply_group_results, fill_failed_from_history, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
+from sell_once import evaluate_sell_once, load_signals, save_signals
 from track_record import (
     build_accuracy_summary,
     load_track_record,
@@ -40,6 +41,7 @@ _TEMPLATES_DIR = _ROOT / "templates"
 _OUTPUT_PATH = _ROOT / "docs" / "index.html"
 _HISTORY_PATH = _ROOT / "data" / "analysis_history.json"
 _TRACK_RECORD_PATH = _ROOT / "data" / "track_record.json"
+_SELL_SIGNALS_PATH = _ROOT / "data" / "sell_signals.json"
 
 
 def _load_yaml(path: Path) -> dict:
@@ -285,6 +287,15 @@ def main() -> None:
     if filled:
         logger.warning("分析に失敗した%d銘柄は、前回の判定を表示します。", filled)
 
+    # sell_once を設定した保有銘柄は、条件を満たした最初の日に1回だけ売却の合図を出す。
+    sell_signals = load_signals(_SELL_SIGNALS_PATH)
+    today = dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date()
+    for r in portfolio_results:
+        state = evaluate_sell_once(r, sell_signals, today)
+        if state:
+            r["sell_once_state"] = state
+    sell_once_alerts = [r for r in portfolio_results if (r.get("sell_once_state") or {}).get("new")]
+
     logger.info("レポートを生成中...")
     generate_report(
         watchlist_results,
@@ -305,7 +316,8 @@ def main() -> None:
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
     # 「新たに売却検討になった銘柄」「新たにスコア70以上の買い候補になった銘柄」を通知する。
-    sell_alerts = find_newly_flagged_sell(portfolio_results, history)
+    # sell_once の銘柄は日ごとのAI判定ではなく、1回だけの合図（sell_once_alerts）で知らせる。
+    sell_alerts = [r for r in find_newly_flagged_sell(portfolio_results, history) if not r.get("sell_once")]
     buy_alerts = (
         find_newly_strong_buy(watchlist_results, history, "watchlist")
         + find_newly_strong_buy(candidate_results, history, "candidate")
@@ -314,7 +326,12 @@ def main() -> None:
         + find_newly_strong_buy(sector_member_results, history, "sector_member")
         + find_newly_strong_buy(tsumitate_fund_results, history, "tsumitate_fund")
     )
-    send_notification_email(sell_alerts, buy_alerts)
+    send_notification_email(sell_alerts, buy_alerts, sell_once_alerts)
+
+    try:
+        save_signals(_SELL_SIGNALS_PATH, sell_signals)
+    except Exception:
+        logger.exception("売却合図の記録の保存に失敗しましたが、レポートは正常に生成されています。")
 
     try:
         apply_group_results(history, "watchlist", watchlist_results)

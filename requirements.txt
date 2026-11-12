@@ -4,5 +4,7 @@ feedparser>=6.0.11
 # 404で使えなくなった。動作を確かめた2系に固定する。
 google-genai>=2.22,<3
 jinja2>=3.1.4
+# 投資信託の基準価額CSVの取得に使う（yfinanceも内部で使っている）
+requests>=2.31
 pyyaml>=6.0.1
 python-dotenv>=1.0.1

@@ -19,6 +19,16 @@
 #     入力しておくと、レポートに保有銘柄のテーマ別配分（何%がどのテーマに偏っているか）が
 #     表示されます。未入力の銘柄はテーマ別配分の集計から除外されます。
 #
+# 投資信託（yfinanceに株価が無いもの）は、次の2つを書きます。
+#   nav_csv: 運用会社が公開している基準価額のCSVのURL（1列目が基準日、2列目が基準価額）
+#   units: 保有口数。基準価額は1万口あたりなので、purchase_price も1万口あたりの取得単価で書く
+#   symbol には協会コード（8桁、Yahoo!ファイナンスなどに出ている番号）を書く
+#
+# sell_once: （任意）条件を満たした最初の日に1回だけ「売却の合図」を出す（scripts/sell_once.py）。
+#   deadline: この日までに売りたいという期限。最後の14日間は、含み益が条件以上なら合図を出す
+#   min_gain_pct: 合図を出す最低の含み益（%、既定3）。含み損のときは合図を出さない
+#   一度出した合図は data/sell_signals.json に記録され、取り消されない
+#
 # 同じ銘柄を複数回に分けて買った場合（ナンピン等）は、購入ごとに別の項目として
 # 登録してください（symbolが重複してもOKです）。
 #
@@ -80,6 +90,33 @@ holdings:
     purchase_price: 362.84  # 単元未満株を3,000円分購入。8/15は休場日のため直近の確定終値（8/14終値）を取得単価として使用。実際の約定価格が分かり次第、要修正
     theme: "金融"
     amount_invested_jpy: 3000
+
+  # --- PayPay証券の投資信託（2026-11-12 登録） ---
+  # 年末までに、利益が出ているときに1回だけ売りたいという方針（損切りはしない）。
+  # 取得単価はまだ分からないため未登録。分かったら purchase_price（1万口あたり）を書く。
+  - symbol: "03311112"
+    name: "三菱UFJ 純金ファンド（ファインゴールド）"
+    market: "投信"
+    nav_csv: "https://www.am.mufg.jp/fund_file/setteirai/251065.csv"
+    units: 11968
+    purchase_price: null
+    theme: "金（ゴールド）"
+    news_query: "金価格 ゴールド"
+    sell_once:
+      deadline: "2026-12-30"
+      min_gain_pct: 3
+
+  - symbol: "64315091"
+    name: "世界経済インデックスファンド"
+    market: "投信"
+    nav_csv: "https://www.smtam.jp/chart_data/140844/140844.csv"
+    units: 11899
+    purchase_price: null
+    theme: "バランス（株式・債券）"
+    news_query: "世界株 債券 市場"
+    sell_once:
+      deadline: "2026-12-30"
+      min_gain_pct: 3
 
   # --- 楽天証券で購入した銘柄 ---
   - symbol: "6857.T"

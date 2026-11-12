@@ -1,7 +1,14 @@
-"""yfinanceを使って株価データを取得し、変化率などの指標を計算する。"""
+"""yfinanceを使って株価データを取得し、変化率などの指標を計算する。
 
+投資信託はyfinanceに無いため、運用会社が公開している基準価額のCSVから同じ形の指標を作る。
+"""
+
+import csv
+import io
 import logging
 
+import pandas as pd
+import requests
 import yfinance as yf
 
 logger = logging.getLogger(__name__)
@@ -20,7 +27,51 @@ def fetch_price_stats(symbol: str) -> dict | None:
         logger.warning("価格データが空でした: %s", symbol)
         return None
 
-    closes = history["Close"].dropna()
+    return _stats_from_closes(symbol, history["Close"].dropna())
+
+
+def parse_nav_csv(text: str) -> pd.Series:
+    """基準価額のCSV（1列目が基準日、2列目が基準価額）を、日付順の終値の系列にする。
+
+    三菱UFJアセットマネジメント（1行目にファンド名）と三井住友トラスト・アセットマネジメント
+    （1行目が見出し）のどちらの形でも読めるよう、「基準日」で始まる行を見出しとして探す。
+    """
+    rows = list(csv.reader(io.StringIO(text)))
+    header = next((i for i, r in enumerate(rows) if r and r[0].strip().startswith("基準日")), None)
+    if header is None:
+        return pd.Series(dtype=float)
+    dates, navs = [], []
+    for r in rows[header + 1:]:
+        if len(r) < 2 or not r[1].strip().replace(",", "").isdigit():
+            continue
+        try:
+            dates.append(pd.Timestamp(r[0].strip().replace("/", "-")))
+        except ValueError:
+            continue
+        navs.append(float(r[1].strip().replace(",", "")))
+    return pd.Series(navs, index=pd.DatetimeIndex(dates)).sort_index()
+
+
+def fetch_fund_nav_stats(symbol: str, nav_csv: str) -> dict | None:
+    """投資信託の基準価額（1万口あたり）のCSVを読み、株価と同じ形の価格統計を返す。取得できなければNone。"""
+    try:
+        response = requests.get(nav_csv, headers={"User-Agent": "Mozilla/5.0 invest-dashboard"}, timeout=30)
+        response.raise_for_status()
+    except Exception:
+        logger.exception("基準価額の取得に失敗しました: %s", symbol)
+        return None
+    raw = response.content
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = raw.decode("cp932", errors="replace")
+    closes = parse_nav_csv(text)
+    # 株価と同じく、1年騰落率の計算に足りる2年分だけ使う
+    closes = closes[closes.index >= closes.index.max() - pd.Timedelta(days=730)] if len(closes) else closes
+    return _stats_from_closes(symbol, closes)
+
+
+def _stats_from_closes(symbol: str, closes: pd.Series) -> dict | None:
     if len(closes) < 2:
         logger.warning("価格データが不足しています: %s", symbol)
         return None
@@ -76,7 +127,10 @@ def fetch_all_price_stats(tickers: list[dict]) -> dict[str, dict | None]:
     results: dict[str, dict | None] = {}
     for ticker in tickers:
         symbol = ticker["symbol"]
-        results[symbol] = fetch_price_stats(symbol)
+        if ticker.get("nav_csv"):
+            results[symbol] = fetch_fund_nav_stats(symbol, ticker["nav_csv"])
+        else:
+            results[symbol] = fetch_price_stats(symbol)
     return results
 
 

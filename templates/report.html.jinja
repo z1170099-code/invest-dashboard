@@ -170,6 +170,10 @@
     font-size: 0.85rem;
     color: var(--text-secondary);
   }
+  .sell-once-list { list-style: none; margin: 6px 0 0; padding: 0; }
+  .sell-once-list li { margin: 8px 0 0; }
+  .sell-once-list a { color: var(--text-primary); }
+  .sell-once-msg { font-size: 0.82rem; color: var(--text-secondary); margin: 6px 0 0; }
   .section-note.info { border-left-color: var(--series-1); }
   .section-note.warn { border-left-color: var(--status-critical); }
   .section-note > summary { cursor: pointer; color: var(--text-primary); font-weight: 600; }
@@ -1005,11 +1009,14 @@
         </div>
         <div class="cs-meta">
           {% if h.stale_note %}<span class="stale-tag">{{ h.stale_note }}</span>{% endif %}
+          {% if h.sell_once %}<span class="stale-tag">{{ h.sell_once.label }}</span>{% endif %}
           <span><span class="label">含み損益</span><strong class="cs-gain {{ h.gain_class }}">{{ h.gain_loss_display }}</strong></span>
-          <span><span class="label">現在値</span>{{ h.latest_close_display }}</span>
+          <span><span class="label">{{ "基準価額" if h.is_fund else "現在値" }}</span>{{ h.latest_close_display }}</span>
+          {% if h.market_value_display %}<span><span class="label">評価額</span>{{ h.market_value_display }}</span>{% endif %}
           <span><span class="label">取得単価</span>{{ h.purchase_price_display }}</span>
           <span><span class="label">保有</span>{{ h.holding_days if h.holding_days is not none else "—" }}日</span>
         </div>
+        {% if h.sell_once %}<p class="sell-once-msg">{{ h.sell_once.message }}</p>{% endif %}
         <p class="cs-reason">{{ h.reasoning }}</p>
         <span class="cs-toggle" aria-hidden="true"></span>
       </summary>
@@ -1017,6 +1024,7 @@
       <div class="card-body">
         <div class="price-grid">
           <span><span class="label">購入日</span>{{ h.purchase_date or "—" }}</span>
+          {% if h.units_display %}<span><span class="label">保有口数</span>{{ h.units_display }}</span>{% endif %}
           <span><span class="label">前日比</span>{{ h.change_1d }}</span>
           <span><span class="label">1週間</span>{{ h.change_1w }}</span>
           <span><span class="label">1ヶ月</span>{{ h.change_1m }}</span>
@@ -1087,6 +1095,18 @@
 
   <section id="holdings">
     <h2>保有銘柄の売却タイミング <span class="h2-count">{{ holdings|length }}件</span></h2>
+
+    {% if sell_once_holdings %}
+    <div class="section-note {{ 'warn' if sell_once_any_signal else 'info' }}" id="sell-once">
+      <strong>{% if sell_once_any_signal %}🔔 売却の条件を満たした銘柄があります{% else %}⏳ 1回だけの売却合図を待っている銘柄{% endif %}</strong>
+      <ul class="sell-once-list">
+        {% for h in sell_once_holdings %}
+        <li><a href="#holding-{{ h.symbol }}-{{ h.purchase_date }}"><strong>{{ h.name }}</strong></a>（{{ h.sell_once.label }}）<br>{{ h.sell_once.message }}</li>
+        {% endfor %}
+      </ul>
+      <p class="sell-once-msg">含み益が設定した割合以上あり、AIが値下がりの材料ありと判定した日か期限の直前に、1回だけ合図を出します。含み損のときは出しません（損切りしない設定）。投資信託は注文した日の夕方に値段が決まるため、実際に売れる値段は合図の日の値動きで変わります（設定は <code>config/portfolio.yaml</code> の <code>sell_once</code>）。</p>
+    </div>
+    {% endif %}
 
     {% if holdings %}
     {% for g in holding_groups %}

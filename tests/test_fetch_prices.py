@@ -55,3 +55,45 @@ def test_attach_relative_performance_skips_period_when_ticker_value_missing():
 
     assert "change_1w_pct_relative" not in price_stats
     assert round(price_stats["change_1m_pct_relative"], 2) == -8.0
+
+
+MUFG_CSV = """三菱ＵＦＪ 純金ファンド
+基準日,基準価額(円),基準価額（分配金再投資）(円),分配金（税引前）(円),純資産総額（億円）
+2026/11/10,49189,49189,,8335.38
+2026/11/11,48549,48549,,8228.99
+"""
+
+SMTAM_CSV = """基準日,基準価額,分配金,純資産総額
+2026/11/11,48474,-,5848.35
+2026/11/12,48908,-,5905.50
+"""
+
+
+def test_parse_nav_csv_reads_both_asset_manager_formats():
+    mufg = fp.parse_nav_csv(MUFG_CSV)
+    assert list(mufg.values) == [49189.0, 48549.0]
+    assert str(mufg.index[-1].date()) == "2026-11-11"
+    smtam = fp.parse_nav_csv(SMTAM_CSV)
+    assert list(smtam.values) == [48474.0, 48908.0]
+    assert fp.parse_nav_csv("見出しなし\n1,2\n").empty
+
+
+def test_fund_nav_stats_has_same_shape_as_stock_stats(monkeypatch):
+    class _Response:
+        content = SMTAM_CSV.encode("utf-8-sig")
+
+        def raise_for_status(self):
+            pass
+
+    monkeypatch.setattr(fp.requests, "get", lambda *a, **k: _Response())
+    stats = fp.fetch_fund_nav_stats("64315091", "https://example.com/nav.csv")
+    assert stats["latest_close"] == 48908.0 and stats["latest_date"] == "2026-11-12"
+    assert round(stats["change_1d_pct"], 2) == 0.90
+    assert stats["history_1y"][-1] == ["2026-11-12", 48908.0]
+
+
+def test_fetch_all_price_stats_uses_nav_csv_for_funds(monkeypatch):
+    monkeypatch.setattr(fp, "fetch_fund_nav_stats", lambda symbol, url: {"fund": url})
+    monkeypatch.setattr(fp, "fetch_price_stats", lambda symbol: {"stock": symbol})
+    stats = fp.fetch_all_price_stats([{"symbol": "64315091", "nav_csv": "u"}, {"symbol": "NVDA"}])
+    assert stats == {"64315091": {"fund": "u"}, "NVDA": {"stock": "NVDA"}}

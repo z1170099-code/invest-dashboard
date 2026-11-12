@@ -11,6 +11,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 from history import build_key
+from sell_once import describe as describe_sell_once
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,18 @@ def _build_sell_section(sell_alerts: list[dict]) -> str:
     return "\n".join(lines)
 
 
+def _build_sell_once_section(sell_once_alerts: list[dict]) -> str:
+    lines = [f"■ 売却の条件を満たした保有銘柄（{len(sell_once_alerts)}件・1回だけの合図）", ""]
+    for r in sell_once_alerts:
+        info = describe_sell_once(r.get("sell_once_state")) or {}
+        lines.append(f"・{r.get('name')}（{r.get('symbol')}）")
+        lines.append(f"  {info.get('message', '')}")
+        if r.get("reasoning"):
+            lines.append(f"  AIの見立て: {r['reasoning']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def _build_buy_section(buy_alerts: list[dict]) -> str:
     lines = [
         f"■ 新たにスコア{_STRONG_BUY_SCORE_THRESHOLD}以上の「買い候補」になった銘柄（{len(buy_alerts)}件）",
@@ -83,9 +96,15 @@ def _build_buy_section(buy_alerts: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def send_notification_email(sell_alerts: list[dict], buy_alerts: list[dict]) -> None:
-    """新規の売却検討／強い買い候補がある場合のみ、1通にまとめてメール通知する。失敗しても例外を送出しない。"""
-    if not sell_alerts and not buy_alerts:
+def send_notification_email(
+    sell_alerts: list[dict], buy_alerts: list[dict], sell_once_alerts: list[dict] | None = None
+) -> None:
+    """新規の売却検討／強い買い候補／1回だけの売却合図がある場合のみ、1通にまとめてメール通知する。
+
+    失敗しても例外を送出しない。
+    """
+    sell_once_alerts = sell_once_alerts or []
+    if not sell_alerts and not buy_alerts and not sell_once_alerts:
         return
 
     sender = os.environ.get("GMAIL_ADDRESS")
@@ -97,6 +116,8 @@ def send_notification_email(sell_alerts: list[dict], buy_alerts: list[dict]) -> 
         return
 
     subject_parts = []
+    if sell_once_alerts:
+        subject_parts.append(f"売却の合図{len(sell_once_alerts)}件")
     if buy_alerts:
         subject_parts.append(f"強い買い候補{len(buy_alerts)}件")
     if sell_alerts:
@@ -104,6 +125,8 @@ def send_notification_email(sell_alerts: list[dict], buy_alerts: list[dict]) -> 
     subject = f"【投資ダッシュボード】{' / '.join(subject_parts)}"
 
     sections = []
+    if sell_once_alerts:
+        sections.append(_build_sell_once_section(sell_once_alerts))
     if buy_alerts:
         sections.append(_build_buy_section(buy_alerts))
     if sell_alerts:
@@ -123,7 +146,8 @@ def send_notification_email(sell_alerts: list[dict], buy_alerts: list[dict]) -> 
             server.login(sender, app_password)
             server.sendmail(sender, [recipient], msg.as_string())
         logger.info(
-            "通知メールを送信しました（買い候補%d件・売却検討%d件）", len(buy_alerts), len(sell_alerts)
+            "通知メールを送信しました（売却の合図%d件・買い候補%d件・売却検討%d件）",
+            len(sell_once_alerts), len(buy_alerts), len(sell_alerts),
         )
     except Exception:
         logger.exception("通知メールの送信に失敗しましたが、レポートは正常に生成されています。")

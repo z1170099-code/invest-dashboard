@@ -673,12 +673,19 @@ def _compute_holding_stats(holding: dict, price_stats: dict | None) -> dict:
         except ValueError:
             holding_days = None
 
+    # 投資信託は units（口数）を書く。基準価額は1万口あたりなので、評価額は 口数×基準価額÷1万。
+    market_value_jpy = None
+    units = holding.get("units")
+    if isinstance(units, (int, float)) and isinstance(latest_close, (int, float)):
+        market_value_jpy = units * latest_close / 10000
+
     return {
         "purchase_price": purchase_price,
         "purchase_date": purchase_date_str,
         "latest_close": latest_close,
         "gain_loss_pct": gain_loss_pct,
         "holding_days": holding_days,
+        "market_value_jpy": market_value_jpy,
     }
 
 
@@ -702,12 +709,18 @@ def _build_holding_prompt(
     # 的中率フィードバック（売却検討は外れやすい等）より後ろに置き、ユーザーの方針を優先させる。
     profit_taking_section = _build_profit_taking_section(profit_taking, holding_stats.get("gain_loss_pct"))
 
+    purchase_price = holding_stats["purchase_price"]
     holding_section = (
-        f"購入日: {holding_stats['purchase_date']}\n"
-        f"購入価格: {holding_stats['purchase_price']}\n"
-        f"保有日数: {holding_stats['holding_days']}日\n"
+        f"購入日: {holding_stats['purchase_date'] or '不明'}\n"
+        f"購入価格: {purchase_price if purchase_price is not None else '不明（未登録）'}\n"
+        f"保有日数: {holding_stats['holding_days'] if holding_stats['holding_days'] is not None else '不明'}日\n"
         f"購入価格からの含み損益: {_fmt_pct(holding_stats['gain_loss_pct'])}\n"
     )
+    if holding.get("units"):
+        holding_section += (
+            f"保有口数: {holding['units']:,}口（投資信託。価格は1万口あたりの基準価額で、"
+            "注文した日の夕方に決まる値段で売買される）\n"
+        )
 
     if news:
         news_section = "\n".join(f"- {a['title']}（{a.get('source', '')}）" for a in news)
@@ -914,7 +927,7 @@ def _get_client() -> genai.Client:
 
 _PASSTHROUGH_FIELDS = (
     "theme", "risk_level", "nisa_growth_eligible", "amount_invested_jpy", "yutai", "sector", "members", "account",
-    "account_type", "tsumitate",
+    "account_type", "tsumitate", "units", "sell_once",
 )
 
 

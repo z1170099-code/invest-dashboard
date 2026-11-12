@@ -412,6 +412,18 @@ def test_build_fundamentals_section_formats_values_and_near_earnings():
     assert analyze._build_fundamentals_section(None) == ""
 
 
+def test_holding_stats_and_prompt_for_fund_with_unknown_cost():
+    holding = {"symbol": "03311112", "name": "三菱UFJ 純金ファンド", "market": "投信", "units": 11968,
+               "purchase_price": None}
+    stats = analyze._compute_holding_stats(holding, {"latest_close": 48000})
+    assert stats["gain_loss_pct"] is None
+    assert round(stats["market_value_jpy"]) == 57446
+    prompt = analyze._build_holding_prompt(holding, {"latest_close": 48000}, [], [], stats)
+    assert "購入価格: 不明（未登録）" in prompt
+    assert "保有口数: 11,968口（投資信託" in prompt
+    assert "購入日: 不明" in prompt
+
+
 class _FakeModels:
     def __init__(self, failures):
         self.failures = failures  # model -> 投げる例外（無ければ成功）

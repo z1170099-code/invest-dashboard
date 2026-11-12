@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 from jinja2 import Environment, FileSystemLoader
 
 from analyze import holding_account, profit_taking_applies
+from sell_once import describe as describe_sell_once
 
 logger = logging.getLogger(__name__)
 
@@ -353,6 +354,14 @@ def _build_holding_view_model(result: dict) -> dict:
         "latest_close": latest_close,
         "latest_close_display": _fmt_price_or_dash(latest_close),
         "holding_days": result.get("holding_days"),
+        # 投資信託は価格が「1万口あたりの基準価額」なので、ラベルを変えて評価額も出す
+        "is_fund": bool(result.get("units")),
+        "units_display": f"{result['units']:,}口" if result.get("units") else None,
+        "market_value_display": (
+            f"{result['market_value_jpy']:,.0f}円"
+            if isinstance(result.get("market_value_jpy"), (int, float)) else None
+        ),
+        "sell_once": describe_sell_once(result.get("sell_once_state")),
         "gain_loss_pct": gain_loss_pct,
         "gain_loss_display": _fmt_pct(gain_loss_pct),
         "gain_class": (
@@ -392,9 +401,10 @@ def _group_holdings_by_account(
 
 
 def _sort_holdings(results: list[dict]) -> list[dict]:
-    # 「売却検討」を優先的に上位表示し、同じ推奨内では含み損が大きい順に並べる
+    # 「売却検討」と1回だけの売却合図が出た銘柄を優先的に上位表示し、同じ推奨内では含み損が大きい順に並べる
     def key(r):
-        needs_action = r["recommendation"] != "売却検討"
+        signaled = (r.get("sell_once_state") or {}).get("status") == "signaled"
+        needs_action = not signaled and r["recommendation"] != "売却検討"
         gain = r["gain_loss_pct"] if r["gain_loss_pct"] is not None else 0
         return (needs_action, gain)
 
@@ -647,6 +657,8 @@ def generate_report(
         crypto=crypto_view,
         holdings=holding_view,
         holding_groups=holding_groups,
+        sell_once_holdings=[h for h in holding_view if h["sell_once"]],
+        sell_once_any_signal=any(h["sell_once"]["signaled"] for h in holding_view if h["sell_once"]),
         macro_news=macro_news,
         summary_sections=summary_sections,
         summary_min_abs_score=SUMMARY_MIN_ABS_SCORE,
