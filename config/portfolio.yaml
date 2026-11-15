@@ -93,13 +93,14 @@ holdings:
 
   # --- PayPay証券の投資信託（2026-11-12 登録） ---
   # 年末までに、利益が出ているときに1回だけ売りたいという方針（損切りはしない）。
-  # 取得単価はまだ分からないため未登録。分かったら purchase_price（1万口あたり）を書く。
+  # 取得単価は、アプリの評価額と損益から「(評価額−損益)÷口数×1万」で逆算した。
   - symbol: "03311112"
     name: "三菱UFJ 純金ファンド（ファインゴールド）"
     market: "投信"
     nav_csv: "https://www.am.mufg.jp/fund_file/setteirai/251065.csv"
     units: 11968
-    purchase_price: null
+    purchase_price: 49048.3  # 1万口あたり。11/15にアプリの評価額56,405円・損益−2,296円から逆算（取得額58,701円）
+    amount_invested_jpy: 58701
     theme: "金（ゴールド）"
     news_query: "金価格 ゴールド"
     sell_once:
@@ -111,7 +112,8 @@ holdings:
     market: "投信"
     nav_csv: "https://www.smtam.jp/chart_data/140844/140844.csv"
     units: 11899
-    purchase_price: null
+    purchase_price: 43702.8  # 1万口あたり。11/15にアプリの評価額57,965円・損益+5,963円から逆算（取得額52,002円）
+    amount_invested_jpy: 52002
     theme: "バランス（株式・債券）"
     news_query: "世界株 債券 市場"
     sell_once:
