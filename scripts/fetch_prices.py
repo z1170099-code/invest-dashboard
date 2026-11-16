@@ -195,8 +195,30 @@ def fetch_benchmarks() -> dict[str, dict | None]:
     区別できるようにするための比較対象。複数銘柄で共有するため、銘柄ごとではなく
     一度だけ取得する。
     """
-    symbols = set(_BENCHMARK_BY_MARKET.values())
-    return {symbol: fetch_price_stats(symbol) for symbol in symbols}
+    return {symbol: _fetch_benchmark_stats(symbol) for symbol in set(_BENCHMARK_BY_MARKET.values())}
+
+
+def _fetch_benchmark_stats(symbol: str) -> dict | None:
+    """指数の価格統計に、相場全体の状態を見るための移動平均と、過去の判定と比べるための日々の終値を足す。"""
+    try:
+        history = yf.Ticker(symbol).history(period="2y", interval="1d")
+    except Exception:
+        logger.exception("価格取得に失敗しました: %s", symbol)
+        return None
+    if history is None or history.empty:
+        logger.warning("価格データが空でした: %s", symbol)
+        return None
+    closes = history["Close"].dropna()
+    stats = _stats_from_closes(symbol, closes)
+    if stats:
+        add_moving_averages(stats, closes)
+    return stats
+
+
+def add_moving_averages(stats: dict, closes: pd.Series) -> None:
+    stats["ma_50"] = float(closes.tail(50).mean()) if len(closes) >= 50 else None
+    stats["ma_200"] = float(closes.tail(200).mean()) if len(closes) >= 200 else None
+    stats["daily_closes"] = {d.date().isoformat(): round(float(v), 4) for d, v in closes.tail(260).items()}
 
 
 def attach_relative_performance(

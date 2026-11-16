@@ -319,7 +319,8 @@ def _build_summary_sources(
     ]
     seen, combined = set(), []
     for v in watchlist_view + candidate_view + yutai_view + members:
-        if v["symbol"] in seen:
+        # 暗号資産は、スコアに関係なく大きく下がっていて判定が役に立っていなかったため載せない（2026-11-16）。
+        if v["symbol"] in seen or v["market"] == "暗号資産":
             continue
         seen.add(v["symbol"])
         combined.append(v)
@@ -607,6 +608,8 @@ def generate_report(
     sector_results: list[dict] | None = None,
     sector_member_results: list[dict] | None = None,
     tsumitate_fund_results: list[dict] | None = None,
+    market_state: dict | None = None,
+    group_performance: list[dict] | None = None,
 ) -> None:
     low_themes = (accuracy_summary or {}).get("low_reliability_themes") or {}
     watchlist_results = _apply_low_reliability(watchlist_results, low_themes)
@@ -662,6 +665,8 @@ def generate_report(
         sell_once_any_signal=any(h["sell_once"]["signaled"] for h in holding_view if h["sell_once"]),
         macro_news=macro_news,
         summary_sections=summary_sections,
+        market_state=market_state,
+        group_performance=group_performance or [],
         summary_min_abs_score=SUMMARY_MIN_ABS_SCORE,
         summary_max_buy_items=SUMMARY_MAX_BUY_ITEMS,
         summary_max_sell_items=SUMMARY_MAX_SELL_ITEMS,

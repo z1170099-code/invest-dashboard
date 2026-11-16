@@ -481,6 +481,30 @@
     color: var(--text-muted);
     margin: 10px 0 0;
   }
+  .market-state {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--baseline);
+    border-radius: 8px;
+  }
+  .market-state.up { border-left-color: var(--status-good); }
+  .market-state.down { border-left-color: var(--status-critical); }
+  .market-state.mixed { border-left-color: var(--status-warning); }
+  .market-state h3 { margin: 0 0 6px; font-size: 0.95rem; }
+  .market-state p { margin: 6px 0 0; font-size: 0.85rem; color: var(--text-secondary); }
+  .market-state .ms-note { font-size: 0.75rem; color: var(--text-muted); }
+  .ms-indexes { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+  .ms-label { font-weight: 600; }
+  .ms-label.up { color: var(--status-good); }
+  .ms-label.down { color: var(--status-critical); }
+  .group-perf { width: 100%; border-collapse: collapse; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+  .group-perf th, .group-perf td { padding: 4px 6px; border-bottom: 1px solid var(--gridline); text-align: right; }
+  .group-perf th:first-child, .group-perf td:first-child { text-align: left; }
+  .group-perf th { font-weight: 600; color: var(--text-secondary); }
+  .group-perf-wrap { margin: 0 0 16px; overflow-x: auto; }
+  .group-perf-wrap h3 { margin: 0 0 4px; font-size: 0.95rem; }
 
   .gain-up { color: var(--status-good); }
   .gain-down { color: var(--status-critical); }
@@ -1074,6 +1098,39 @@
 
   <section id="summary">
     <h2>AIによる売買サマリー</h2>
+    {% if market_state %}
+    <div class="market-state {{ market_state.overall }}">
+      <h3>相場全体の状態</h3>
+      <div class="ms-indexes">
+        {% for m in market_state.indexes %}
+        <span>{{ m.name }} <span class="ms-label {{ m.key }}">{{ m.label }}</span>
+          {% if m.gap_200_pct is not none %}（200日移動平均より{{ "%+.1f"|format(m.gap_200_pct) }}%{% if m.change_1m_pct is not none %}・1か月{{ "%+.1f"|format(m.change_1m_pct) }}%{% endif %}）{% endif %}</span>
+        {% endfor %}
+      </div>
+      <p>{{ market_state.message }}</p>
+      <p class="ms-note">株価が200日移動平均より上で、50日移動平均も200日移動平均より上なら上昇基調、どちらも下なら下落基調としています。過去の値動きから見た目安で、この先の上げ下げを当てるものではありません。</p>
+    </div>
+    {% endif %}
+    {% if group_performance %}
+    <div class="group-perf-wrap">
+      <h3>リストごとの過去の買い候補の成績</h3>
+      <p class="summary-note" style="margin:0 0 6px">スコア{{ summary_min_abs_score }}以上の買い候補が、判定してから今までにどれだけ動いたかの平均です（7日以上たったもの）。「指数との差」は、同じ期間の日経平均（米国株はS&amp;P500）より何%よかったかです。サマリーの銘柄名の右に出ているリスト名と見比べてください。</p>
+      <table class="group-perf">
+        <thead><tr><th>リスト</th><th>件数</th><th>値動き</th><th>指数との差</th><th>指数を上回った割合</th></tr></thead>
+        <tbody>
+        {% for g in group_performance %}
+        <tr>
+          <td>{{ g.label }}</td>
+          <td>{{ g.n }}</td>
+          <td class="{{ 'gain-up' if g.avg_return_pct > 0 else 'gain-down' }}">{{ "%+.1f"|format(g.avg_return_pct) }}%</td>
+          <td class="{% if g.avg_excess_pct is not none %}{{ 'gain-up' if g.avg_excess_pct > 0 else 'gain-down' }}{% endif %}">{% if g.avg_excess_pct is not none %}{{ "%+.1f"|format(g.avg_excess_pct) }}%{% else %}—{% endif %}</td>
+          <td>{% if g.beat_index_pct is not none %}{{ "%.0f"|format(g.beat_index_pct) }}%{% else %}—{% endif %}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
     {% for s in summary_sections %}
     <div class="summary-horizon" id="summary-{{ s.key }}">
       <h3 class="summary-horizon-title">{{ s.label }}</h3>
@@ -1090,7 +1147,7 @@
       </div>
     </div>
     {% endfor %}
-    <p class="summary-note">ウォッチリスト・注目テーマ銘柄・暗号資産・株主優待銘柄・業種の代表銘柄の中から、スコアが±{{ summary_min_abs_score }}以上のものを、期間ごとに買い候補は上位{{ summary_max_buy_items }}件、売り候補は上位{{ summary_max_sell_items }}件まで載せています（業種別ETFと保有銘柄は除く）。そのほかの銘柄は各セクションで見られます。銘柄名を押すと、その銘柄のカードが開きます。</p>
+    <p class="summary-note">ウォッチリスト・注目テーマ銘柄・株主優待銘柄・業種の代表銘柄の中から（暗号資産は除く）、スコアが±{{ summary_min_abs_score }}以上のものを、期間ごとに買い候補は上位{{ summary_max_buy_items }}件、売り候補は上位{{ summary_max_sell_items }}件まで載せています（業種別ETFと保有銘柄は除く）。そのほかの銘柄は各セクションで見られます。銘柄名を押すと、その銘柄のカードが開きます。</p>
   </section>
 
   <section id="holdings">

@@ -475,6 +475,53 @@ def test_summary_sources_include_yutai_and_new_sector_members_with_anchors():
     assert buy[0]["name"] == "日立製作所"  # スコア45が先頭
 
 
+def test_summary_sources_exclude_crypto():
+    cand = [
+        gr._build_view_model({**_analysis("BTC-USD", "ビットコイン", 40, "買い候補"), "market": "暗号資産"}, group="ハイリスク候補"),
+        gr._build_view_model(_analysis("2914.T", "JT", 30, "買い候補"), group="ハイリスク候補"),
+    ]
+    assert [v["symbol"] for v in gr._build_summary_sources([], cand, [], [])] == ["2914.T"]
+
+
+def test_generate_report_shows_market_state_and_group_performance(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        market_state={"overall": "down", "message": "日経平均が下落基調です。", "indexes": [
+            {"name": "日経平均", "key": "down", "label": "下落基調", "gap_200_pct": -4.0, "change_1m_pct": -3.2},
+        ]},
+        group_performance=[{"group": "sector_member", "label": "業種の代表銘柄", "n": 88,
+                            "avg_return_pct": 0.4, "avg_excess_pct": 2.1, "beat_index_pct": 61.0}],
+    )
+    summary = output.read_text(encoding="utf-8").split('id="summary"')[1].split("</section>")[0]
+    assert 'class="market-state down"' in summary
+    assert "200日移動平均より-4.0%・1か月-3.2%" in summary and "日経平均が下落基調です。" in summary
+    assert "業種の代表銘柄" in summary and "+2.1%" in summary and "61%" in summary
+
+
+def test_generate_report_without_market_data_omits_boxes(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+    )
+    summary = output.read_text(encoding="utf-8").split('id="summary"')[1].split("</section>")[0]
+    assert 'class="market-state' not in summary and 'class="group-perf"' not in summary
+
+
 def test_subscores_display_formats_signs():
     shown = gr._build_subscores_display({"trend": 40, "news": 0, "macro": -15})
     assert [(s["label"], s["display"], s["sign"]) for s in shown] == [

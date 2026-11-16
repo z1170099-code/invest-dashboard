@@ -14,6 +14,7 @@ from analyze import active_profit_taking, analyze_all, analyze_all_holdings, bui
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks, fetch_fundamentals
 from generate_report import generate_report
+from market_signals import buy_call_performance, market_regime
 from history import apply_group_results, fill_failed_from_history, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
 from sell_once import evaluate_sell_once, load_signals, save_signals
@@ -264,6 +265,10 @@ def main() -> None:
         if stats and isinstance(stats.get("latest_close"), (int, float))
     }
     current_prices.update(benchmark_prices)
+    # 答え合わせ（pending から消える）より前に、リストごとの過去の買い候補の成績を出す。
+    group_performance = buy_call_performance(
+        track_record["pending"], current_prices, benchmarks, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date()
+    )
     resolve_predictions(track_record, current_prices)
     for group, results in (
         ("watchlist", watchlist_results),
@@ -320,6 +325,8 @@ def main() -> None:
         sector_results,
         sector_member_results,
         tsumitate_fund_results,
+        market_state=market_regime(benchmarks),
+        group_performance=group_performance,
     )
 
     # historyを更新（＝前回状態を上書き）する前に、前回との比較で
