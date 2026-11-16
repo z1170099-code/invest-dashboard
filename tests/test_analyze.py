@@ -322,6 +322,19 @@ def test_build_sector_peer_table_lists_only_sector_etfs():
     assert analyze.build_sector_peer_table([{"symbol": "AAPL", "name": "Apple"}], {}) == ""
 
 
+def test_us_sector_etf_prompt_and_peer_table_are_separate_from_japan():
+    us = {"symbol": "XLV", "name": "米国 ヘルスケア", "market": "US", "sector": "ヘルスケア"}
+    prompt = analyze._build_prompt(us, None, [])
+    assert "米国のS&P500採用企業のうち「ヘルスケア」業種全体" in prompt and "東証" not in prompt
+
+    tickers = [{"symbol": "1621.T", "name": "医薬品", "market": "JP", "sector": "医薬品"}, us]
+    stats = {"1621.T": {"change_1m_pct": 2.0}, "XLV": {"change_1m_pct": 3.0}}
+    us_table = analyze.build_sector_peer_table(tickers, stats, market="US")
+    jp_table = analyze.build_sector_peer_table(tickers, stats, market="JP")
+    assert "米国 ヘルスケア" in us_table and "医薬品" not in us_table
+    assert "医薬品" in jp_table and "米国" not in jp_table
+
+
 def test_build_prompt_includes_sector_peer_table_when_given():
     ticker = {"symbol": "1621.T", "name": "医薬品", "market": "JP", "sector": "医薬品", "sector_peers": "- 医薬品: 1ヶ月 +2.00%"}
     prompt = analyze._build_prompt(ticker, None, [])

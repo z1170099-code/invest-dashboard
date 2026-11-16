@@ -74,10 +74,18 @@ def _analyze_group(
         if stats and ticker.get("market") in ("JP", "US") and not ticker.get("sector"):
             stats["fundamentals"] = fetch_fundamentals(ticker["symbol"])
     # 業種別ETF・つみたて投資枠の指数は1本ずつ判定されるため、全体の騰落率の比較表を各プロンプトに添える。
+    # 業種別ETFは日本（TOPIX-17業種）と米国（S&P500の11業種）を別々の表にする。
     for key in ("sector", "tsumitate"):
-        peer_table = build_sector_peer_table(tickers, price_stats_by_symbol, key=key)
-        if peer_table:
-            tickers = [{**t, f"{key}_peers": peer_table} if t.get(key) else t for t in tickers]
+        markets = {t.get("market", "JP") for t in tickers if t.get(key)} if key == "sector" else {None}
+        for market in markets:
+            peer_table = build_sector_peer_table(tickers, price_stats_by_symbol, key=key, market=market)
+            if not peer_table:
+                continue
+            tickers = [
+                {**t, f"{key}_peers": peer_table}
+                if t.get(key) and (market is None or t.get("market", "JP") == market) else t
+                for t in tickers
+            ]
 
     logger.info("[%s] 個別銘柄のニュースを取得中...", label)
     news_by_symbol = {

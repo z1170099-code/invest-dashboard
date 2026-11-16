@@ -349,6 +349,31 @@ def test_generate_report_renders_sector_ranking_and_yutai(tmp_path):
     # スコアが高い銀行が先に並ぶ
     assert sector_html.index("銀行") < sector_html.index("医薬品")
     assert 'id="yutai"' in html and "PayPay" in html
+    # 米国の業種が無いときは、日本・米国の小見出しを出さない
+    assert "米国（S&amp;P500の11業種）" not in sector_html
+
+
+def test_generate_report_shows_us_sectors_under_their_own_heading(tmp_path):
+    from pathlib import Path
+
+    import track_record
+
+    sectors = [
+        _analysis("1621.T", "医薬品", 10, "様子見", sector="医薬品", theme="医薬品"),
+        {**_analysis("XLV", "米国 ヘルスケア", 50, "買い候補", sector="ヘルスケア", theme="米国 ヘルスケア"), "market": "US"},
+    ]
+    output = tmp_path / "index.html"
+    gr.generate_report(
+        [], [], [], [],
+        track_record.build_accuracy_summary(track_record.load_track_record(tmp_path / "none.json")),
+        Path(__file__).resolve().parent.parent / "templates",
+        output,
+        sector_results=sectors,
+    )
+    sector_html = output.read_text(encoding="utf-8").split('id="sectors"')[1].split("</section>")[0]
+    jp_part, us_part = sector_html.split("米国（S&amp;P500の11業種）")
+    assert "日本（TOPIX-17業種）" in jp_part and "医薬品" in jp_part.split("日本（TOPIX-17業種）")[1]
+    assert "米国 ヘルスケア" in us_part and "医薬品" not in us_part
 
 
 def test_holding_view_formats_prices_and_gain_class():

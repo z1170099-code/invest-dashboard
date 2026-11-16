@@ -409,15 +409,18 @@ def _build_yutai_section(yutai: dict | None) -> str:
 
 
 def build_sector_peer_table(
-    tickers: list[dict], price_stats_by_symbol: dict[str, dict | None], key: str = "sector"
+    tickers: list[dict], price_stats_by_symbol: dict[str, dict | None], key: str = "sector", market: str | None = None
 ) -> str:
     """業種別ETF（key="tsumitate"ならつみたて投資枠の指数）全体の騰落率を1つの比較表にする。
 
-    1本ずつ判定するAIに、ほかの業種・指数との比較材料を渡すため。
+    1本ずつ判定するAIに、ほかの業種・指数との比較材料を渡すため。market を指定すると、その市場の
+    ETFだけで表を作る（日本のTOPIX-17業種と米国の11業種を混ぜて比べないため）。
     """
     rows = []
     for t in tickers:
         if not t.get(key):
+            continue
+        if market and t.get("market", "JP") != market:
             continue
         ps = price_stats_by_symbol.get(t["symbol"]) or {}
         rows.append(
@@ -427,13 +430,14 @@ def build_sector_peer_table(
     return "\n".join(rows)
 
 
-def _build_sector_section(sector: str | None, peer_table: str | None = None) -> str:
+def _build_sector_section(sector: str | None, peer_table: str | None = None, market: str = "JP") -> str:
     """業種別ETFの場合に、個別企業ではなく業種全体として判定するよう指示する。業種でなければ空文字。"""
     if not sector:
         return ""
+    universe = "米国のS&P500採用企業" if market == "US" else "東証上場企業"
     section = f"""
 【業種別ETF】
-この銘柄は、東証上場企業のうち「{sector}」業種全体の値動きに連動するETFです。
+この銘柄は、{universe}のうち「{sector}」業種全体の値動きに連動するETFです。
 特定の1社の材料ではなく、業種全体の業績・需要・金利や為替などのマクロ環境への感応度をもとに、
 この業種が他の業種と比べて強そうか弱そうかという観点で判定してください。
 """
@@ -509,7 +513,7 @@ def _build_prompt(
     theme_line = f"\n注目テーマ: {theme}\n" if theme else ""
     theme_line += _build_fundamentals_section((price_stats or {}).get("fundamentals"))
     theme_line += _build_yutai_section(ticker.get("yutai"))
-    theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"))
+    theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"), ticker.get("market", "JP"))
     theme_line += _build_tsumitate_section(ticker.get("tsumitate"), ticker.get("tsumitate_peers"))
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
