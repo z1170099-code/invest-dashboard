@@ -557,7 +557,8 @@ def _build_tsumitate_usage(entries: list[dict], growth_lifetime_used: float) -> 
 # 全銘柄を載せると数十件になり、どれが有力か分からなくなるため。ほかの銘柄は各セクションで見られる。
 # 3観点の加重平均でスコアを出すようになり（2026-10-27〜）、値の幅が±40程度に収まるため20にしている。
 SUMMARY_MIN_ABS_SCORE = 20
-SUMMARY_MAX_BUY_ITEMS = 10
+# 2026-11-16 に判定する銘柄を約3倍にしたため、買いの上限を10から20にした（高スコアの銘柄をサマリーで多く見たいため）。
+SUMMARY_MAX_BUY_ITEMS = 20
 SUMMARY_MAX_SELL_ITEMS = 5
 
 

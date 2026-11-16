@@ -18,7 +18,8 @@
 #   theme: 的中率を業種ごとに集計するためのテーマ名（sectorと同じにしている）
 #   news_query: 関連ニュースの検索語（ETFの正式名称では業種のニュースが見つからないため）
 #   members: その業種の主な銘柄。最初の3銘柄は時価総額が大きい代表的な企業。2026-11-16 に、
-#     過去6か月の値動きとAIの業種スコアが強い業種ほど多く（最大15銘柄）足した。AIが個別に判定し、
+#     強い業種（過去6か月の値動きかAIの業種スコアが高い業種）にだけ銘柄を足した。目的は、トップの
+#     売買サマリーに載る高スコアの銘柄を増やすこと。AIが個別に判定し、
 #     業種カードの中に「業種内の注目銘柄（AIスコア順）」として表示する。ほかのリスト
 #     （watchlist・candidate_pool・yutai）にある銘柄はその判定を使い回し、無い銘柄だけ追加で分析する。
 
@@ -34,13 +35,6 @@ sectors:
       - { symbol: "2914.T", name: "日本たばこ産業" }
       - { symbol: "2802.T", name: "味の素" }
       - { symbol: "2502.T", name: "アサヒグループHD" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "2503.T", name: "キリンHD" }
-      - { symbol: "2587.T", name: "サントリー食品インターナショナル" }
-      - { symbol: "2897.T", name: "日清食品HD" }
-      - { symbol: "2269.T", name: "明治HD" }
-      - { symbol: "2801.T", name: "キッコーマン" }
-      - { symbol: "2282.T", name: "日本ハム" }
 
   - symbol: "1618.T"
     name: "エネルギー資源"
@@ -53,10 +47,6 @@ sectors:
       - { symbol: "1605.T", name: "INPEX" }
       - { symbol: "5020.T", name: "ENEOSホールディングス" }
       - { symbol: "5019.T", name: "出光興産" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "5021.T", name: "コスモエネルギーHD" }
-      - { symbol: "1662.T", name: "石油資源開発" }
-      - { symbol: "1515.T", name: "日鉄鉱業" }
 
   - symbol: "1619.T"
     name: "建設・資材"
@@ -69,12 +59,6 @@ sectors:
       - { symbol: "1925.T", name: "大和ハウス工業" }
       - { symbol: "1928.T", name: "積水ハウス" }
       - { symbol: "1801.T", name: "大成建設" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "1802.T", name: "大林組" }
-      - { symbol: "1812.T", name: "鹿島建設" }
-      - { symbol: "1803.T", name: "清水建設" }
-      - { symbol: "1878.T", name: "大東建託" }
-      - { symbol: "5201.T", name: "AGC" }
 
   - symbol: "1620.T"
     name: "素材・化学"
@@ -87,13 +71,6 @@ sectors:
       - { symbol: "4063.T", name: "信越化学工業" }
       - { symbol: "4901.T", name: "富士フイルムHD" }
       - { symbol: "4452.T", name: "花王" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "4188.T", name: "三菱ケミカルグループ" }
-      - { symbol: "3407.T", name: "旭化成" }
-      - { symbol: "4183.T", name: "三井化学" }
-      - { symbol: "6988.T", name: "日東電工" }
-      - { symbol: "5108.T", name: "ブリヂストン" }
-      - { symbol: "4911.T", name: "資生堂" }
 
   - symbol: "1621.T"
     name: "医薬品"
@@ -106,7 +83,7 @@ sectors:
       - { symbol: "4502.T", name: "武田薬品工業" }
       - { symbol: "4568.T", name: "第一三共" }
       - { symbol: "4519.T", name: "中外製薬" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "4523.T", name: "エーザイ" }
       - { symbol: "4507.T", name: "塩野義製薬" }
       - { symbol: "4151.T", name: "協和キリン" }
@@ -122,6 +99,13 @@ sectors:
       - { symbol: "4521.T", name: "科研製薬" }
       - { symbol: "4552.T", name: "JCRファーマ" }
       - { symbol: "4547.T", name: "キッセイ薬品工業" }
+      - { symbol: "4569.T", name: "杏林製薬" }
+      - { symbol: "4534.T", name: "持田製薬" }
+      - { symbol: "4559.T", name: "ゼリア新薬工業" }
+      - { symbol: "4553.T", name: "東和薬品" }
+      - { symbol: "4548.T", name: "生化学工業" }
+      - { symbol: "4592.T", name: "サンバイオ" }
+      - { symbol: "4549.T", name: "栄研化学" }
 
   - symbol: "1622.T"
     name: "自動車・輸送機"
@@ -134,7 +118,7 @@ sectors:
       - { symbol: "7203.T", name: "トヨタ自動車" }
       - { symbol: "6902.T", name: "デンソー" }
       - { symbol: "7267.T", name: "本田技研工業" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "7269.T", name: "スズキ" }
       - { symbol: "7270.T", name: "SUBARU" }
       - { symbol: "7201.T", name: "日産自動車" }
@@ -145,6 +129,12 @@ sectors:
       - { symbol: "7012.T", name: "川崎重工業" }
       - { symbol: "7211.T", name: "三菱自動車工業" }
       - { symbol: "7282.T", name: "豊田合成" }
+      - { symbol: "7276.T", name: "小糸製作所" }
+      - { symbol: "7224.T", name: "新明和工業" }
+      - { symbol: "6995.T", name: "東海理化" }
+      - { symbol: "7313.T", name: "テイ・エス テック" }
+      - { symbol: "7231.T", name: "トピー工業" }
+      - { symbol: "7283.T", name: "愛三工業" }
 
   - symbol: "1623.T"
     name: "鉄鋼・非鉄"
@@ -157,12 +147,6 @@ sectors:
       - { symbol: "5401.T", name: "日本製鉄" }
       - { symbol: "5802.T", name: "住友電気工業" }
       - { symbol: "5713.T", name: "住友金属鉱山" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "5411.T", name: "JFEホールディングス" }
-      - { symbol: "5803.T", name: "フジクラ" }
-      - { symbol: "5801.T", name: "古河電気工業" }
-      - { symbol: "5706.T", name: "三井金属" }
-      - { symbol: "5711.T", name: "三菱マテリアル" }
 
   - symbol: "1624.T"
     name: "機械"
@@ -175,12 +159,6 @@ sectors:
       - { symbol: "6367.T", name: "ダイキン工業" }
       - { symbol: "6301.T", name: "小松製作所" }
       - { symbol: "7011.T", name: "三菱重工業" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "6273.T", name: "SMC" }
-      - { symbol: "6326.T", name: "クボタ" }
-      - { symbol: "6146.T", name: "ディスコ" }
-      - { symbol: "6383.T", name: "ダイフク" }
-      - { symbol: "7013.T", name: "IHI" }
 
   - symbol: "1625.T"
     name: "電機・精密"
@@ -193,12 +171,6 @@ sectors:
       - { symbol: "6758.T", name: "ソニーグループ" }
       - { symbol: "6501.T", name: "日立製作所" }
       - { symbol: "8035.T", name: "東京エレクトロン" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "6861.T", name: "キーエンス" }
-      - { symbol: "6981.T", name: "村田製作所" }
-      - { symbol: "6702.T", name: "富士通" }
-      - { symbol: "4543.T", name: "テルモ" }
-      - { symbol: "6723.T", name: "ルネサスエレクトロニクス" }
 
   - symbol: "1626.T"
     name: "情報通信・サービス"
@@ -211,7 +183,7 @@ sectors:
       - { symbol: "9432.T", name: "NTT" }
       - { symbol: "9984.T", name: "ソフトバンクグループ" }
       - { symbol: "6098.T", name: "リクルートHD" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "9433.T", name: "KDDI" }
       - { symbol: "4689.T", name: "LINEヤフー" }
       - { symbol: "4307.T", name: "野村総合研究所" }
@@ -227,6 +199,14 @@ sectors:
       - { symbol: "7832.T", name: "バンダイナムコHD" }
       - { symbol: "9735.T", name: "セコム" }
       - { symbol: "6532.T", name: "ベイカレント" }
+      - { symbol: "4768.T", name: "大塚商会" }
+      - { symbol: "2327.T", name: "日鉄ソリューションズ" }
+      - { symbol: "4751.T", name: "サイバーエージェント" }
+      - { symbol: "9602.T", name: "東宝" }
+      - { symbol: "4716.T", name: "日本オラクル" }
+      - { symbol: "3769.T", name: "GMOペイメントゲートウェイ" }
+      - { symbol: "2181.T", name: "パーソルHD" }
+      - { symbol: "9684.T", name: "スクウェア・エニックスHD" }
 
   - symbol: "1627.T"
     name: "電力・ガス"
@@ -239,7 +219,7 @@ sectors:
       - { symbol: "9501.T", name: "東京電力HD" }
       - { symbol: "9503.T", name: "関西電力" }
       - { symbol: "9531.T", name: "東京ガス" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "9502.T", name: "中部電力" }
       - { symbol: "9504.T", name: "中国電力" }
       - { symbol: "9506.T", name: "東北電力" }
@@ -250,6 +230,10 @@ sectors:
       - { symbol: "9505.T", name: "北陸電力" }
       - { symbol: "9507.T", name: "四国電力" }
       - { symbol: "9509.T", name: "北海道電力" }
+      - { symbol: "9511.T", name: "沖縄電力" }
+      - { symbol: "9517.T", name: "イーレックス" }
+      - { symbol: "9536.T", name: "西部ガスHD" }
+      - { symbol: "9519.T", name: "レノバ" }
 
   - symbol: "1628.T"
     name: "運輸・物流"
@@ -262,7 +246,7 @@ sectors:
       - { symbol: "9022.T", name: "JR東海" }
       - { symbol: "9020.T", name: "JR東日本" }
       - { symbol: "9101.T", name: "日本郵船" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "9104.T", name: "商船三井" }
       - { symbol: "9107.T", name: "川崎汽船" }
       - { symbol: "9021.T", name: "JR西日本" }
@@ -278,6 +262,14 @@ sectors:
       - { symbol: "9147.T", name: "NIPPON EXPRESS HD" }
       - { symbol: "9143.T", name: "SGホールディングス" }
       - { symbol: "9009.T", name: "京成電鉄" }
+      - { symbol: "9006.T", name: "京浜急行電鉄" }
+      - { symbol: "9003.T", name: "相鉄ホールディングス" }
+      - { symbol: "9044.T", name: "南海電気鉄道" }
+      - { symbol: "9045.T", name: "京阪ホールディングス" }
+      - { symbol: "9048.T", name: "名古屋鉄道" }
+      - { symbol: "9301.T", name: "三菱倉庫" }
+      - { symbol: "9364.T", name: "上組" }
+      - { symbol: "9076.T", name: "セイノーHD" }
 
   - symbol: "1629.T"
     name: "商社・卸売"
@@ -290,7 +282,7 @@ sectors:
       - { symbol: "8058.T", name: "三菱商事" }
       - { symbol: "8031.T", name: "三井物産" }
       - { symbol: "8001.T", name: "伊藤忠商事" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "8053.T", name: "住友商事" }
       - { symbol: "8002.T", name: "丸紅" }
       - { symbol: "8015.T", name: "豊田通商" }
@@ -301,6 +293,14 @@ sectors:
       - { symbol: "8088.T", name: "岩谷産業" }
       - { symbol: "2784.T", name: "アルフレッサHD" }
       - { symbol: "8133.T", name: "伊藤忠エネクス" }
+      - { symbol: "3038.T", name: "神戸物産" }
+      - { symbol: "7458.T", name: "第一興商" }
+      - { symbol: "8060.T", name: "キヤノンマーケティングジャパン" }
+      - { symbol: "9987.T", name: "スズケン" }
+      - { symbol: "8154.T", name: "加賀電子" }
+      - { symbol: "3132.T", name: "マクニカHD" }
+      - { symbol: "8078.T", name: "阪和興業" }
+      - { symbol: "8098.T", name: "稲畑産業" }
 
   - symbol: "1630.T"
     name: "小売"
@@ -313,7 +313,7 @@ sectors:
       - { symbol: "9983.T", name: "ファーストリテイリング" }
       - { symbol: "3382.T", name: "セブン&アイ・HD" }
       - { symbol: "8267.T", name: "イオン" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "7532.T", name: "パン・パシフィック・インターナショナルHD" }
       - { symbol: "3099.T", name: "三越伊勢丹HD" }
       - { symbol: "8233.T", name: "高島屋" }
@@ -329,6 +329,14 @@ sectors:
       - { symbol: "3563.T", name: "FOOD & LIFE COMPANIES" }
       - { symbol: "3197.T", name: "すかいらーくHD" }
       - { symbol: "2670.T", name: "エービーシー・マート" }
+      - { symbol: "8252.T", name: "丸井グループ" }
+      - { symbol: "3048.T", name: "ビックカメラ" }
+      - { symbol: "9831.T", name: "ヤマダHD" }
+      - { symbol: "8282.T", name: "ケーズHD" }
+      - { symbol: "3349.T", name: "コスモス薬品" }
+      - { symbol: "2782.T", name: "セリア" }
+      - { symbol: "7516.T", name: "コーナン商事" }
+      - { symbol: "7419.T", name: "ノジマ" }
 
   - symbol: "1631.T"
     name: "銀行"
@@ -341,7 +349,7 @@ sectors:
       - { symbol: "8306.T", name: "三菱UFJフィナンシャル・グループ" }
       - { symbol: "8316.T", name: "三井住友フィナンシャルグループ" }
       - { symbol: "8411.T", name: "みずほフィナンシャルグループ" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "8309.T", name: "三井住友トラストG" }
       - { symbol: "8308.T", name: "りそなHD" }
       - { symbol: "7182.T", name: "ゆうちょ銀行" }
@@ -357,6 +365,13 @@ sectors:
       - { symbol: "8418.T", name: "山口フィナンシャルG" }
       - { symbol: "5830.T", name: "いよぎんHD" }
       - { symbol: "8359.T", name: "八十二長野銀行" }
+      - { symbol: "7180.T", name: "九州フィナンシャルグループ" }
+      - { symbol: "8410.T", name: "セブン銀行" }
+      - { symbol: "5844.T", name: "京都フィナンシャルグループ" }
+      - { symbol: "7189.T", name: "西日本フィナンシャルHD" }
+      - { symbol: "8377.T", name: "ほくほくフィナンシャルグループ" }
+      - { symbol: "8341.T", name: "七十七銀行" }
+      - { symbol: "8524.T", name: "北洋銀行" }
 
   - symbol: "1632.T"
     name: "金融（除く銀行）"
@@ -369,7 +384,7 @@ sectors:
       - { symbol: "8766.T", name: "東京海上HD" }
       - { symbol: "8591.T", name: "オリックス" }
       - { symbol: "8604.T", name: "野村ホールディングス" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
+      # 2026-11-16 追加（強い業種だけ）
       - { symbol: "8725.T", name: "MS&ADインシュアランスG" }
       - { symbol: "8630.T", name: "SOMPOホールディングス" }
       - { symbol: "8750.T", name: "第一生命グループ" }
@@ -385,6 +400,14 @@ sectors:
       - { symbol: "8698.T", name: "マネックスグループ" }
       - { symbol: "7164.T", name: "全国保証" }
       - { symbol: "8439.T", name: "東京センチュリー" }
+      - { symbol: "8609.T", name: "岡三証券グループ" }
+      - { symbol: "8616.T", name: "東海東京フィナンシャルHD" }
+      - { symbol: "8628.T", name: "松井証券" }
+      - { symbol: "8424.T", name: "芙蓉総合リース" }
+      - { symbol: "8584.T", name: "ジャックス" }
+      - { symbol: "8566.T", name: "リコーリース" }
+      - { symbol: "8715.T", name: "アニコムHD" }
+      - { symbol: "7157.T", name: "ライフネット生命保険" }
 
   - symbol: "1633.T"
     name: "不動産"
@@ -397,16 +420,10 @@ sectors:
       - { symbol: "8801.T", name: "三井不動産" }
       - { symbol: "8802.T", name: "三菱地所" }
       - { symbol: "8830.T", name: "住友不動産" }
-      # 2026-11-16 追加（過去6か月に強かった業種ほど多く）
-      - { symbol: "3289.T", name: "東急不動産HD" }
-      - { symbol: "8804.T", name: "東京建物" }
-      - { symbol: "3003.T", name: "ヒューリック" }
-      - { symbol: "3231.T", name: "野村不動産HD" }
-      - { symbol: "8850.T", name: "スターツコーポレーション" }
 
   # --- 米国の業種別ETF（Select Sector SPDR、S&P500を11業種に分けたもの。2026-11-16 追加） ---
   # 日本の17業種とは別の表で比べる（main.py が market ごとに騰落率の比較表を作る）。
-  # members は過去6か月に強かった業種ほど多くしている。
+  # 過去6か月が強い4業種だけ登録している（弱い業種は銘柄を足しても売買サマリーに載りにくいため）。
 
   - symbol: "XLV"
     name: "米国 ヘルスケア"
@@ -429,6 +446,16 @@ sectors:
       - { symbol: "SYK", name: "ストライカー" }
       - { symbol: "MDT", name: "メドトロニック" }
       - { symbol: "CVS", name: "CVSヘルス" }
+      - { symbol: "ELV", name: "エレバンス・ヘルス" }
+      - { symbol: "CI", name: "シグナ" }
+      - { symbol: "HCA", name: "HCAヘルスケア" }
+      - { symbol: "REGN", name: "リジェネロン" }
+      - { symbol: "ZTS", name: "ゾエティス" }
+      - { symbol: "BDX", name: "ベクトン・ディッキンソン" }
+      - { symbol: "MCK", name: "マッケソン" }
+      - { symbol: "COR", name: "センコラ" }
+      - { symbol: "IDXX", name: "アイデックス・ラボラトリーズ" }
+      - { symbol: "HUM", name: "ヒューマナ" }
 
   - symbol: "XLF"
     name: "米国 金融"
@@ -449,6 +476,15 @@ sectors:
       - { symbol: "SCHW", name: "チャールズ・シュワブ" }
       - { symbol: "BLK", name: "ブラックロック" }
       - { symbol: "SPGI", name: "S&Pグローバル" }
+      - { symbol: "PGR", name: "プログレッシブ" }
+      - { symbol: "CB", name: "チャブ" }
+      - { symbol: "MRSH", name: "マーシュ・マクレナン" }
+      - { symbol: "ICE", name: "インターコンチネンタル取引所" }
+      - { symbol: "CME", name: "CMEグループ" }
+      - { symbol: "PNC", name: "PNCフィナンシャル" }
+      - { symbol: "USB", name: "USバンコープ" }
+      - { symbol: "COF", name: "キャピタル・ワン" }
+      - { symbol: "KKR", name: "KKR" }
 
   - symbol: "XLE"
     name: "米国 エネルギー"
@@ -467,6 +503,12 @@ sectors:
       - { symbol: "WMB", name: "ウィリアムズ" }
       - { symbol: "KMI", name: "キンダー・モルガン" }
       - { symbol: "VLO", name: "バレロ・エナジー" }
+      - { symbol: "OKE", name: "ワンオーク" }
+      - { symbol: "HAL", name: "ハリバートン" }
+      - { symbol: "BKR", name: "ベーカー・ヒューズ" }
+      - { symbol: "FANG", name: "ダイヤモンドバック" }
+      - { symbol: "DVN", name: "デボン・エナジー" }
+      - { symbol: "TRGP", name: "タルガ・リソーシズ" }
 
   - symbol: "XLP"
     name: "米国 生活必需品"
@@ -485,93 +527,10 @@ sectors:
       - { symbol: "CL", name: "コルゲート・パーモリーブ" }
       - { symbol: "KMB", name: "キンバリー・クラーク" }
       - { symbol: "KR", name: "クローガー" }
-
-  - symbol: "XLB"
-    name: "米国 素材"
-    sector: "素材"
-    theme: "米国 素材"
-    market: "US"
-    news_query: "米国 素材株 化学"
-    members:
-      - { symbol: "LIN", name: "リンデ" }
-      - { symbol: "SHW", name: "シャーウィン・ウィリアムズ" }
-      - { symbol: "APD", name: "エア・プロダクツ" }
-      - { symbol: "ECL", name: "エコラボ" }
-      - { symbol: "FCX", name: "フリーポート・マクモラン" }
-      - { symbol: "NEM", name: "ニューモント" }
-      - { symbol: "NUE", name: "ニューコア" }
-
-  - symbol: "XLY"
-    name: "米国 一般消費財"
-    sector: "一般消費財"
-    theme: "米国 一般消費財"
-    market: "US"
-    news_query: "米国 消費関連株"
-    members:
-      - { symbol: "AMZN", name: "アマゾン・ドット・コム" }
-      - { symbol: "TSLA", name: "テスラ" }
-      - { symbol: "HD", name: "ホーム・デポ" }
-      - { symbol: "MCD", name: "マクドナルド" }
-      - { symbol: "NKE", name: "ナイキ" }
-      - { symbol: "BKNG", name: "ブッキング・ホールディングス" }
-
-  - symbol: "XLRE"
-    name: "米国 不動産"
-    sector: "不動産"
-    theme: "米国 不動産"
-    market: "US"
-    news_query: "米国 不動産株 REIT"
-    members:
-      - { symbol: "PLD", name: "プロロジス" }
-      - { symbol: "AMT", name: "アメリカン・タワー" }
-      - { symbol: "EQIX", name: "エクイニクス" }
-      - { symbol: "WELL", name: "ウェルタワー" }
-      - { symbol: "O", name: "リアルティ・インカム" }
-
-  - symbol: "XLU"
-    name: "米国 公益"
-    sector: "公益（電力・ガス）"
-    theme: "米国 公益"
-    market: "US"
-    news_query: "米国 電力株 公益株"
-    members:
-      - { symbol: "NEE", name: "ネクステラ・エナジー" }
-      - { symbol: "SO", name: "サザン" }
-      - { symbol: "DUK", name: "デューク・エナジー" }
-      - { symbol: "CEG", name: "コンステレーション・エナジー" }
-      - { symbol: "AEP", name: "アメリカン・エレクトリック・パワー" }
-
-  - symbol: "XLI"
-    name: "米国 資本財"
-    sector: "資本財（機械・航空・運輸）"
-    theme: "米国 資本財"
-    market: "US"
-    news_query: "米国 資本財 工業株"
-    members:
-      - { symbol: "GE", name: "GEエアロスペース" }
-      - { symbol: "CAT", name: "キャタピラー" }
-      - { symbol: "HON", name: "ハネウェル" }
-      - { symbol: "UNP", name: "ユニオン・パシフィック" }
-      - { symbol: "BA", name: "ボーイング" }
-
-  - symbol: "XLK"
-    name: "米国 情報技術"
-    sector: "情報技術"
-    theme: "米国 情報技術"
-    market: "US"
-    news_query: "米国 ハイテク株"
-    members:
-      - { symbol: "MSFT", name: "マイクロソフト" }
-      - { symbol: "AVGO", name: "ブロードコム" }
-      - { symbol: "ORCL", name: "オラクル" }
-      - { symbol: "CRM", name: "セールスフォース" }
-
-  - symbol: "XLC"
-    name: "米国 通信サービス"
-    sector: "通信サービス"
-    theme: "米国 通信サービス"
-    market: "US"
-    news_query: "米国 通信 メディア株"
-    members:
-      - { symbol: "GOOGL", name: "アルファベット" }
-      - { symbol: "META", name: "メタ・プラットフォームズ" }
+      - { symbol: "TGT", name: "ターゲット" }
+      - { symbol: "GIS", name: "ゼネラル・ミルズ" }
+      - { symbol: "HSY", name: "ハーシー" }
+      - { symbol: "SYY", name: "シスコ（食品卸）" }
+      - { symbol: "KDP", name: "キューリグ・ドクターペッパー" }
+      - { symbol: "ADM", name: "アーチャー・ダニエルズ・ミッドランド" }
+      - { symbol: "STZ", name: "コンステレーション・ブランズ" }

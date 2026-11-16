@@ -107,14 +107,14 @@ def test_build_summary_by_horizon_splits_long_and_short():
 
 def test_build_summary_keeps_only_strong_calls_up_to_limit():
     low = gr.SUMMARY_MIN_ABS_SCORE
-    combined = [{"symbol": f"B{i}", "recommendation": "買い候補", "score": low + i} for i in range(14)]
+    combined = [{"symbol": f"B{i}", "recommendation": "買い候補", "score": low + i} for i in range(24)]
     combined += [{"symbol": f"S{i}", "recommendation": "売り候補", "score": -low - i} for i in range(8)]
     combined += [
         {"symbol": "weak", "recommendation": "買い候補", "score": low - 1},
         {"symbol": "weak-sell", "recommendation": "売り候補", "score": -low + 1},
     ]
     buy_list, sell_list = gr._build_summary(combined)
-    assert [t["symbol"] for t in buy_list] == [f"B{i}" for i in range(13, 3, -1)]  # 買いは上位10件
+    assert [t["symbol"] for t in buy_list] == [f"B{i}" for i in range(23, 3, -1)]  # 買いは上位20件
     assert [t["symbol"] for t in sell_list] == [f"S{i}" for i in range(7, 2, -1)]  # 売りは上位5件
     assert all(t["symbol"].startswith(("B", "S")) for t in buy_list + sell_list)  # 基準未満は載せない
 
@@ -350,7 +350,7 @@ def test_generate_report_renders_sector_ranking_and_yutai(tmp_path):
     assert sector_html.index("銀行") < sector_html.index("医薬品")
     assert 'id="yutai"' in html and "PayPay" in html
     # 米国の業種が無いときは、日本・米国の小見出しを出さない
-    assert "米国（S&amp;P500の11業種）" not in sector_html
+    assert "米国（S&amp;P500の業種のうち強いもの）" not in sector_html
 
 
 def test_generate_report_shows_us_sectors_under_their_own_heading(tmp_path):
@@ -371,7 +371,7 @@ def test_generate_report_shows_us_sectors_under_their_own_heading(tmp_path):
         sector_results=sectors,
     )
     sector_html = output.read_text(encoding="utf-8").split('id="sectors"')[1].split("</section>")[0]
-    jp_part, us_part = sector_html.split("米国（S&amp;P500の11業種）")
+    jp_part, us_part = sector_html.split("米国（S&amp;P500の業種のうち強いもの）")
     assert "日本（TOPIX-17業種）" in jp_part and "医薬品" in jp_part.split("日本（TOPIX-17業種）")[1]
     assert "米国 ヘルスケア" in us_part and "医薬品" not in us_part
 
