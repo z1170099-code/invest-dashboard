@@ -1104,7 +1104,7 @@
         <li><a href="#holding-{{ h.symbol }}-{{ h.purchase_date }}"><strong>{{ h.name }}</strong></a>（{{ h.sell_once.label }}）<br>{{ h.sell_once.message }}</li>
         {% endfor %}
       </ul>
-      <p class="sell-once-msg">含み益が設定した割合以上あり、AIが値下がりの材料ありと判定した日か期限の直前に、1回だけ合図を出します。含み損のときは出しません（損切りしない設定）。投資信託は注文した日の夕方に値段が決まるため、実際に売れる値段は合図の日の値動きで変わります（設定は <code>config/portfolio.yaml</code> の <code>sell_once</code>）。</p>
+      <p class="sell-once-msg">含み益が設定した割合以上あり、AIが期限までにこれ以上の値上がりは見込めないと判定した日に、1回だけ合図を出します。まだ値上がりが見込めるあいだは、含み益があっても出しません。含み損のときは出しません（損切りしない設定）。投資信託は注文した日の夕方に値段が決まるため、実際に売れる値段は合図の日の値動きで変わります（設定は <code>config/portfolio.yaml</code> の <code>sell_once</code>）。</p>
     </div>
     {% endif %}
 
@@ -1117,6 +1117,7 @@
         <summary>💰 利確優先モード適用中（{{ g.profit_taking.until }}まで・残り{{ g.profit_taking.days_left }}日）</summary>
         この口座で含み益が出ている銘柄は、今後の値下がりが見込まれる材料が少しでもあればAIが「売却検討」と
         判定するように設定しています。含み損の銘柄は通常どおりの判断です。
+        1回だけの売却合図を設定した銘柄は、このモードではなく「期限までにさらに値上がりが見込めるか」で判定します。
         期限を過ぎると自動で通常の判断に戻ります（設定は <code>config/sell_policy.yaml</code>）。
       </details>
       {% endif %}

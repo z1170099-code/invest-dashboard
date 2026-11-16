@@ -51,10 +51,11 @@ def test_signals_once_when_ai_says_sell_and_keeps_it_after_price_drops():
     assert later["status"] == "signaled" and later["new"] is False and later["date"] == "2026-11-13"
 
 
-def test_signals_near_deadline_even_if_ai_says_hold():
+def test_does_not_signal_near_deadline_while_ai_expects_a_rise():
+    # 期限が近いという理由だけでは合図を出さない（2026-11-16 のユーザーの指示）
     signals = {}
-    state = sell_once.evaluate_sell_once(_result(3.5), signals, dt.date(2026, 12, 16))
-    assert state["status"] == "signaled" and state["reason"] == "deadline"
+    state = sell_once.evaluate_sell_once(_result(3.5), signals, dt.date(2026, 12, 29))
+    assert state["status"] == "waiting_ai" and signals == {}
 
 
 def test_failed_analysis_is_not_used_as_ai_sell():
@@ -68,6 +69,10 @@ def test_describe_messages():
     signaled = sell_once.describe(sell_once.evaluate_sell_once(_result(4.2, "売却検討"), signals, TODAY))
     assert signaled["signaled"] and signaled["label"] == "売却の合図 11/13"
     assert "含み益+4.2%" in signaled["message"] and "取り消しません" in signaled["message"]
+    assert "2026-12-30）までにこれ以上の値上がりは見込めない" in signaled["message"]
+
+    waiting = sell_once.describe(sell_once.evaluate_sell_once(_result(5.0), {}, TODAY))
+    assert "まだ値上がりが見込める" in waiting["message"] and "14日" not in waiting["message"]
 
     loss = sell_once.describe(sell_once.evaluate_sell_once(_result(-4.0), {}, TODAY))
     assert not loss["signaled"] and "損切りしない" in loss["message"] and "あと47日" in loss["message"]

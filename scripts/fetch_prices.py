@@ -35,40 +35,57 @@ def parse_nav_csv(text: str) -> pd.Series:
 
     三菱UFJアセットマネジメント（1行目にファンド名）と三井住友トラスト・アセットマネジメント
     （1行目が見出し）のどちらの形でも読めるよう、「基準日」で始まる行を見出しとして探す。
+    投資信託協会の投信総合検索ライブラリー（見出しが「年月日」、日付が 2026年11月13日 の形）も読める。
     """
     rows = list(csv.reader(io.StringIO(text)))
-    header = next((i for i, r in enumerate(rows) if r and r[0].strip().startswith("基準日")), None)
+    header = next(
+        (i for i, r in enumerate(rows) if r and r[0].strip().startswith(("基準日", "年月日"))), None
+    )
     if header is None:
         return pd.Series(dtype=float)
     dates, navs = [], []
     for r in rows[header + 1:]:
         if len(r) < 2 or not r[1].strip().replace(",", "").isdigit():
             continue
+        day = r[0].strip().replace("/", "-").replace("年", "-").replace("月", "-").replace("日", "")
         try:
-            dates.append(pd.Timestamp(r[0].strip().replace("/", "-")))
+            dates.append(pd.Timestamp(day))
         except ValueError:
             continue
         navs.append(float(r[1].strip().replace(",", "")))
     return pd.Series(navs, index=pd.DatetimeIndex(dates)).sort_index()
 
 
-def fetch_fund_nav_stats(symbol: str, nav_csv: str) -> dict | None:
-    """投資信託の基準価額（1万口あたり）のCSVを読み、株価と同じ形の価格統計を返す。取得できなければNone。"""
+def _download_nav_closes(symbol: str, url: str) -> pd.Series:
     try:
-        response = requests.get(nav_csv, headers={"User-Agent": "Mozilla/5.0 invest-dashboard"}, timeout=30)
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0 invest-dashboard"}, timeout=30)
         response.raise_for_status()
-    except Exception:
-        logger.exception("基準価額の取得に失敗しました: %s", symbol)
-        return None
+    except Exception as exc:
+        logger.warning("基準価額の取得に失敗しました: %s（%s）: %s", symbol, url, exc)
+        return pd.Series(dtype=float)
     raw = response.content
     try:
         text = raw.decode("utf-8-sig")
     except UnicodeDecodeError:
         text = raw.decode("cp932", errors="replace")
-    closes = parse_nav_csv(text)
-    # 株価と同じく、1年騰落率の計算に足りる2年分だけ使う
-    closes = closes[closes.index >= closes.index.max() - pd.Timedelta(days=730)] if len(closes) else closes
-    return _stats_from_closes(symbol, closes)
+    return parse_nav_csv(text)
+
+
+def fetch_fund_nav_stats(symbol: str, nav_csv: str | list[str]) -> dict | None:
+    """投資信託の基準価額（1万口あたり）のCSVを読み、株価と同じ形の価格統計を返す。取得できなければNone。
+
+    nav_csv にURLを複数（リスト）書くと、前から順に試して最初に読めたものを使う。運用会社のサイトが
+    GitHub Actions のサーバーからの取得を拒むことがあるため（2026-11-16、三菱UFJアセットマネジメントで403）。
+    """
+    urls = [nav_csv] if isinstance(nav_csv, str) else list(nav_csv)
+    for url in urls:
+        closes = _download_nav_closes(symbol, url)
+        if len(closes) >= 2:
+            # 株価と同じく、1年騰落率の計算に足りる2年分だけ使う
+            closes = closes[closes.index >= closes.index.max() - pd.Timedelta(days=730)]
+            return _stats_from_closes(symbol, closes)
+    logger.error("基準価額をどの取得元からも読めませんでした: %s", symbol)
+    return None
 
 
 def _stats_from_closes(symbol: str, closes: pd.Series) -> dict | None:

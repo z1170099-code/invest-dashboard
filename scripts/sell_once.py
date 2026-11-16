@@ -3,7 +3,11 @@
 portfolio.yaml の保有銘柄に sell_once を書くと、毎回の実行で次の条件を確かめる。
 
 - 含み益が min_gain_pct（既定+3%）以上
-- かつ、AIが「売却検討」と判定した、または期限（deadline）まで final_days（既定14日）以内
+- かつ、AIが「期限（deadline）までにこれ以上の値上がりは見込めない」として「売却検討」と判定した
+
+含み益があっても、期限までにまだ値上がりが見込めるとAIが判定している間は合図を出さない
+（2026-11-16 のユーザーの指示。判定の問いかけは analyze._build_sell_once_section）。
+期限が近いという理由だけで合図を出すことはしない。
 
 条件を満たした最初の日に1回だけ合図を出し、data/sell_signals.json に記録する。一度出した合図は
 その後値下がりしても取り消さない（日によって判定が揺れると、いつ売ればよいか決められないため）。
@@ -22,7 +26,6 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 DEFAULT_MIN_GAIN_PCT = 3.0
-DEFAULT_FINAL_DAYS = 14
 
 
 def load_signals(path: Path) -> dict:
@@ -61,7 +64,6 @@ def evaluate_sell_once(result: dict, signals: dict, today: dt.date) -> dict | No
             logger.warning("sell_once の deadline が日付として読めません: %s", rule["deadline"])
     state = {
         "min_gain_pct": float(rule.get("min_gain_pct", DEFAULT_MIN_GAIN_PCT)),
-        "final_days": int(rule.get("final_days", DEFAULT_FINAL_DAYS)),
         "deadline": deadline.isoformat() if deadline else None,
         "days_left": (deadline - today).days if deadline else None,
         "new": False,
@@ -82,8 +84,7 @@ def evaluate_sell_once(result: dict, signals: dict, today: dt.date) -> dict | No
 
     # 分析に失敗して前回の判定を表示している日は、AIの判定を合図の根拠にしない
     ai_sell = result.get("recommendation") == "売却検討" and not result.get("analysis_failed")
-    near_deadline = state["days_left"] is not None and state["days_left"] <= state["final_days"]
-    if not (ai_sell or near_deadline):
+    if not ai_sell:
         return {**state, "status": "waiting_ai"}
 
     price_stats = result.get("price_stats") or {}
@@ -92,7 +93,7 @@ def evaluate_sell_once(result: dict, signals: dict, today: dt.date) -> dict | No
         "price_date": price_stats.get("latest_date"),
         "price": price_stats.get("latest_close"),
         "gain_pct": state["gain_pct"],
-        "reason": "ai" if ai_sell else "deadline",
+        "reason": "ai",
     }
     signals[key] = record
     logger.info("売却の合図を出しました: %s（含み益%+.2f%%）", result["symbol"], gain)
@@ -105,15 +106,14 @@ def describe(state: dict | None) -> dict | None:
         return None
     min_gain = state["min_gain_pct"]
     deadline = state.get("deadline")
-    final_days = state["final_days"]
     gain = state.get("gain_pct")
     status = state["status"]
 
     if status == "signaled":
         date = dt.date.fromisoformat(state["date"])
         reason = (
-            "AIが値下がりの材料ありと判定した" if state.get("reason") == "ai"
-            else f"期限まで{final_days}日を切った"
+            f"AIが期限（{deadline}）までにこれ以上の値上がりは見込めないと判定した" if deadline
+            else "AIがこれ以上の値上がりは見込めないと判定した"
         )
         price_date = state.get("price_date") or "前の営業日"
         label = f"売却の合図 {date.month}/{date.day}"
@@ -134,10 +134,8 @@ def describe(state: dict | None) -> dict | None:
     else:
         message = (
             f"含み益{gain:+.1f}%で、条件の+{min_gain:g}%以上は満たしています。"
-            "AIがまだ値上がりの余地ありと判定しているため、合図は出していません。"
+            "AIが期限までにまだ値上がりが見込めると判定しているため、合図は出していません。"
         )
-        if deadline:
-            message += f"期限の{final_days}日前からは、+{min_gain:g}%以上なら合図を出します。"
     days_left = state.get("days_left")
     if days_left is not None and days_left < 0:
         message += f"期限（{deadline}）は過ぎましたが、損切りしない設定なので、条件を満たすまで判定を続けます。"

@@ -20,13 +20,15 @@
 #     表示されます。未入力の銘柄はテーマ別配分の集計から除外されます。
 #
 # 投資信託（yfinanceに株価が無いもの）は、次の2つを書きます。
-#   nav_csv: 運用会社が公開している基準価額のCSVのURL（1列目が基準日、2列目が基準価額）
+#   nav_csv: 基準価額のCSVのURL（1列目が基準日、2列目が基準価額）。運用会社のCSVか、投資信託協会の
+#     投信総合検索ライブラリーのCSV。URLをリストで複数書くと、前から順に試して最初に読めたものを使う
 #   units: 保有口数。基準価額は1万口あたりなので、purchase_price も1万口あたりの取得単価で書く
 #   symbol には協会コード（8桁、Yahoo!ファイナンスなどに出ている番号）を書く
 #
 # sell_once: （任意）条件を満たした最初の日に1回だけ「売却の合図」を出す（scripts/sell_once.py）。
-#   deadline: この日までに売りたいという期限。最後の14日間は、含み益が条件以上なら合図を出す
+#   deadline: この日までに売りたいという期限。AIには「この日までにさらに値上がりが見込めるか」を判定させる
 #   min_gain_pct: 合図を出す最低の含み益（%、既定3）。含み損のときは合図を出さない
+#   合図は「含み益が条件以上」かつ「期限までにこれ以上の値上がりが見込めないとAIが判定」の日だけ出す
 #   一度出した合図は data/sell_signals.json に記録され、取り消されない
 #
 # 同じ銘柄を複数回に分けて買った場合（ナンピン等）は、購入ごとに別の項目として
@@ -97,7 +99,10 @@ holdings:
   - symbol: "03311112"
     name: "三菱UFJ 純金ファンド（ファインゴールド）"
     market: "投信"
-    nav_csv: "https://www.am.mufg.jp/fund_file/setteirai/251065.csv"
+    # 運用会社のサイトは GitHub Actions からだと403で拒まれるため、投資信託協会のCSVを先に試す
+    nav_csv:
+      - "https://toushin-lib.fwg.ne.jp/FdsWeb/FDST030000/csv-file-download?isinCd=JP90C0007G10&associFundCd=03311112"
+      - "https://www.am.mufg.jp/fund_file/setteirai/251065.csv"
     units: 11968
     purchase_price: 49048.3  # 1万口あたり。11/15にアプリの評価額56,405円・損益−2,296円から逆算（取得額58,701円）
     amount_invested_jpy: 58701

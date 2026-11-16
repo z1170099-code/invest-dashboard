@@ -424,6 +424,32 @@ def test_holding_stats_and_prompt_for_fund_with_unknown_cost():
     assert "購入日: 不明" in prompt
 
 
+def test_sell_once_holding_asks_about_rise_by_deadline_instead_of_profit_taking():
+    holding = {"symbol": "64315091", "name": "世界経済インデックスファンド", "market": "投信", "units": 11899,
+               "purchase_price": 43702.8, "sell_once": {"deadline": "2026-12-30", "min_gain_pct": 3}}
+    stats = analyze._compute_holding_stats(holding, {"latest_close": 48715})
+    profit_taking = {"until": "2026-12-31", "days_left": 45}
+    prompt = analyze._build_holding_prompt(holding, {"latest_close": 48715}, [], [], stats, profit_taking=profit_taking)
+    assert "利確優先" in prompt  # 「利確優先の方針より優先」の一文だけ
+    assert "一つでもあれば「売却検討」" not in prompt
+    assert "さらに上昇すると見込めるか" in prompt and "2026-12-30まで" in prompt
+
+    # sell_once の無い銘柄には、これまでどおり利確優先の指示を渡す
+    plain = {k: v for k, v in holding.items() if k != "sell_once"}
+    assert "一つでもあれば「売却検討」" in analyze._build_holding_prompt(
+        plain, {"latest_close": 48715}, [], [], stats, profit_taking=profit_taking
+    )
+
+
+def test_sell_once_section_variants():
+    rule = {"deadline": "2026-12-30"}
+    loss = analyze._build_sell_once_section(rule, -3.9, dt.date(2026, 11, 16))
+    assert "含み益が出ていない" in loss and "2026-12-30まで（残り44日）" in loss
+    after = analyze._build_sell_once_section(rule, 5.0, dt.date(2027, 1, 5))
+    assert "今後1か月程度（売却期限の2026-12-30は過ぎています）" in after
+    assert analyze._build_sell_once_section(None, 5.0) == ""
+
+
 class _FakeModels:
     def __init__(self, failures):
         self.failures = failures  # model -> 投げる例外（無ければ成功）

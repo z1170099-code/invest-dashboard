@@ -654,6 +654,51 @@ def _build_profit_taking_section(profit_taking: dict | None, gain_loss_pct) -> s
 """
 
 
+def _build_sell_once_section(rule: dict | None, gain_loss_pct, today: dt.date | None = None) -> str:
+    """sell_once（期限までに1回だけ売る）の保有銘柄に、AIへ判定の問いかけを渡す。
+
+    2026-11-16 のユーザーの指示で、含み益があっても「期限までにさらに値上がりが見込める」なら売らない。
+    「売却検討」は、期限までにこれ以上の値上がりが見込めないと判断した場合だけにする。
+    """
+    if not rule:
+        return ""
+    today = today or dt.date.today()
+    deadline = None
+    if rule.get("deadline"):
+        try:
+            deadline = dt.date.fromisoformat(str(rule["deadline"]))
+        except ValueError:
+            deadline = None
+
+    if deadline and today <= deadline:
+        period = f"{deadline.isoformat()}まで（残り{(deadline - today).days}日）"
+    elif deadline:
+        period = f"今後1か月程度（売却期限の{deadline.isoformat()}は過ぎています）"
+    else:
+        period = "今後1か月程度"
+
+    if not (isinstance(gain_loss_pct, (int, float)) and gain_loss_pct > 0):
+        return f"""
+【ユーザーの売却方針（1回だけ売る・損切りはしない）】
+ユーザーはこの銘柄を、利益が出ているときに1回だけ売る予定です。損切りはしません。
+現在は含み益が出ていないので、売却の対象ではありません。通常どおり判断し、
+{period}に含み益に転じる見込みがあるかどうかも理由に含めてください。
+"""
+    return f"""
+【ユーザーの売却方針（1回だけ売る・損切りはしない）】
+ユーザーはこの銘柄を、利益が出ているときに1回だけ売る予定です。
+現在は購入価格から{gain_loss_pct:+.2f}%の含み益です。
+含み益があっても、{period}にさらに値上がりが見込めるなら、売らずに待ちます。
+判定の問いは「{period}に、今の水準からさらに上昇すると見込めるか」です。
+- 見込めない（横ばい、または値下がりが想定される）と判断した場合だけ「売却検討」としてください。
+- 上昇が見込めると判断した場合は「保有継続」とし、その根拠を理由に書いてください。
+直近の値動きが鈍いことだけ、悪材料が一つあることだけで「売却検討」にはしないでください。
+上昇・下落それぞれの材料を比べたうえで、{period}の見通しとして判断してください。
+理由には、{period}の見通しをどう考えたかを必ず書いてください。
+この方針は、利確優先の方針や通常の「中長期トレンドを主たる根拠にする」という判断軸より優先してください。
+"""
+
+
 def _compute_holding_stats(holding: dict, price_stats: dict | None) -> dict:
     purchase_price = holding.get("purchase_price")
     purchase_date_str = holding.get("purchase_date")
@@ -707,7 +752,12 @@ def _build_holding_prompt(
 
     price_section = _format_price_section(price_stats)
     # 的中率フィードバック（売却検討は外れやすい等）より後ろに置き、ユーザーの方針を優先させる。
-    profit_taking_section = _build_profit_taking_section(profit_taking, holding_stats.get("gain_loss_pct"))
+    # sell_once の銘柄は「期限までにさらに上がるか」で判定させ、利確優先（値下がり材料が一つでもあれば
+    # 売却検討）の指示は渡さない。
+    if holding.get("sell_once"):
+        profit_taking_section = _build_sell_once_section(holding["sell_once"], holding_stats.get("gain_loss_pct"))
+    else:
+        profit_taking_section = _build_profit_taking_section(profit_taking, holding_stats.get("gain_loss_pct"))
 
     purchase_price = holding_stats["purchase_price"]
     holding_section = (

@@ -78,6 +78,44 @@ def test_parse_nav_csv_reads_both_asset_manager_formats():
     assert fp.parse_nav_csv("見出しなし\n1,2\n").empty
 
 
+TOUSHIN_LIB_CSV = """年月日,基準価額(円),純資産総額（百万円）,分配金,決算期
+2026年11月12日,47996,813517,,
+2026年11月13日,47130,799020,,
+"""
+
+
+def test_parse_nav_csv_reads_toushin_lib_format():
+    nav = fp.parse_nav_csv(TOUSHIN_LIB_CSV)
+    assert list(nav.values) == [47996.0, 47130.0]
+    assert str(nav.index[-1].date()) == "2026-11-13"
+
+
+def test_fund_nav_stats_falls_back_to_next_url(monkeypatch):
+    class _Forbidden:
+        def raise_for_status(self):
+            raise fp.requests.HTTPError("403 Client Error: Forbidden")
+
+    class _Ok:
+        content = TOUSHIN_LIB_CSV.encode("cp932")
+
+        def raise_for_status(self):
+            pass
+
+    calls = []
+
+    def _get(url, **kwargs):
+        calls.append(url)
+        return _Forbidden() if url == "https://blocked.example/nav.csv" else _Ok()
+
+    monkeypatch.setattr(fp.requests, "get", _get)
+    stats = fp.fetch_fund_nav_stats("03311112", ["https://blocked.example/nav.csv", "https://ok.example/nav.csv"])
+    assert calls == ["https://blocked.example/nav.csv", "https://ok.example/nav.csv"]
+    assert stats["latest_close"] == 47130.0 and stats["latest_date"] == "2026-11-13"
+
+    monkeypatch.setattr(fp.requests, "get", lambda url, **k: _Forbidden())
+    assert fp.fetch_fund_nav_stats("03311112", ["https://blocked.example/nav.csv"]) is None
+
+
 def test_fund_nav_stats_has_same_shape_as_stock_stats(monkeypatch):
     class _Response:
         content = SMTAM_CSV.encode("utf-8-sig")
