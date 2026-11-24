@@ -14,11 +14,13 @@ from analyze import active_profit_taking, analyze_all, analyze_all_holdings, bui
 from fetch_news import fetch_macro_news, fetch_ticker_news
 from fetch_prices import attach_relative_performance, fetch_all_price_stats, fetch_benchmarks, fetch_fundamentals
 from generate_report import generate_report
+from buy_guard import apply_buy_guard
 from market_signals import buy_call_performance, market_regime
 from history import apply_group_results, fill_failed_from_history, load_history, save_history
 from notify import find_newly_flagged_sell, find_newly_strong_buy, send_notification_email
 from sell_once import evaluate_sell_once, load_signals, save_signals
 from track_record import (
+    backfill_benchmark_prices,
     build_accuracy_summary,
     load_track_record,
     record_predictions,
@@ -249,6 +251,13 @@ def main() -> None:
         benchmarks,
     )
 
+    # 急騰の直後・急落の途中に出た買い候補は、表示上「様子見」に下げる（buy_guard.py）。
+    # 的中率の記録より前にかけ、AIの判定のまま「下げた判定」として別に答え合わせする。
+    guard_groups = (watchlist_results, candidate_results, yutai_results, sector_member_results)
+    guarded = sum(apply_buy_guard(results) for results in guard_groups)
+    if guarded:
+        logger.info("急騰の直後・急落の途中の買い候補%d件を、様子見として表示します。", guarded)
+
     all_results = (
         watchlist_results + candidate_results + yutai_results + sector_results + sector_member_results
         + tsumitate_fund_results + portfolio_results
@@ -265,6 +274,11 @@ def main() -> None:
         if stats and isinstance(stats.get("latest_close"), (int, float))
     }
     current_prices.update(benchmark_prices)
+    # 指数の値が無い古い判定にも判定日の指数の終値を書き足し、答え合わせを指数比でもできるようにする。
+    markets = {r["symbol"]: r.get("market", "") for r in all_results}
+    backfilled = backfill_benchmark_prices(track_record, benchmarks, markets)
+    if backfilled:
+        logger.info("指数の値が無かった判定%d件に、判定日の指数の終値を書き足しました。", backfilled)
     # 答え合わせ（pending から消える）より前に、リストごとの過去の買い候補の成績を出す。
     group_performance = buy_call_performance(
         track_record["pending"], current_prices, benchmarks, dt.datetime.now(tz=ZoneInfo("Asia/Tokyo")).date()
@@ -299,6 +313,9 @@ def main() -> None:
     )
     if filled:
         logger.warning("分析に失敗した%d銘柄は、前回の判定を表示します。", filled)
+        # 前回の判定（AI自身の買い候補）を埋めたものにも、今日の株価で同じ決まりをかける。
+        for results in guard_groups:
+            apply_buy_guard(results)
 
     # sell_once を設定した保有銘柄は、条件を満たした最初の日に1回だけ売却の合図を出す。
     sell_signals = load_signals(_SELL_SIGNALS_PATH)

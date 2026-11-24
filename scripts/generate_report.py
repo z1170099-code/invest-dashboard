@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 from jinja2 import Environment, FileSystemLoader
 
 from analyze import holding_account, profit_taking_applies
+from buy_guard import REASON_LABELS as GUARD_REASON_LABELS
 from sell_once import describe as describe_sell_once
 
 logger = logging.getLogger(__name__)
@@ -158,6 +159,8 @@ def _build_view_model(result: dict, group: str = "") -> dict:
         "analysis_failed": result.get("analysis_failed", False),
         "stale_note": _stale_note(result),
         "reliability_note": result.get("reliability_note"),
+        "guard_note": result.get("guard_note"),
+        "guard_label": GUARD_REASON_LABELS.get((result.get("guard") or {}).get("reason")),
         "model": result.get("model"),
         "latest_close": price_stats.get("latest_close"),
         "latest_close_display": _fmt_price_or_dash(price_stats.get("latest_close")),

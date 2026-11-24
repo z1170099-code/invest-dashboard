@@ -56875,8 +56875,173 @@
       "neutral": 0
     }
   },
-  "summary_relative": {},
-  "summary_relative_by_theme": {},
+  "summary_relative": {
+    "買い候補": {
+      "correct": 256,
+      "incorrect": 299,
+      "neutral": 70
+    },
+    "売り候補": {
+      "correct": 90,
+      "incorrect": 73,
+      "neutral": 5
+    },
+    "売却検討": {
+      "correct": 108,
+      "incorrect": 138,
+      "neutral": 24
+    }
+  },
+  "summary_relative_by_theme": {
+    "半導体": {
+      "correct": 43,
+      "incorrect": 82,
+      "neutral": 12
+    },
+    "AI・データ分析": {
+      "correct": 3,
+      "incorrect": 16,
+      "neutral": 3
+    },
+    "資源・エネルギー（貴金属）": {
+      "correct": 11,
+      "incorrect": 10,
+      "neutral": 3
+    },
+    "金融": {
+      "correct": 35,
+      "incorrect": 24,
+      "neutral": 6
+    },
+    "生活必需品": {
+      "correct": 18,
+      "incorrect": 20,
+      "neutral": 9
+    },
+    "国内グロース": {
+      "correct": 17,
+      "incorrect": 44,
+      "neutral": 11
+    },
+    "ヘルスケア・製薬": {
+      "correct": 32,
+      "incorrect": 13,
+      "neutral": 2
+    },
+    "防衛・地政学": {
+      "correct": 43,
+      "incorrect": 55,
+      "neutral": 2
+    },
+    "半導体・AI": {
+      "correct": 21,
+      "incorrect": 18,
+      "neutral": 1
+    },
+    "資源・エネルギー": {
+      "correct": 43,
+      "incorrect": 29,
+      "neutral": 7
+    },
+    "フィンテック": {
+      "correct": 14,
+      "incorrect": 5,
+      "neutral": 0
+    },
+    "AI（小型成長株）": {
+      "correct": 24,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "暗号資産": {
+      "correct": 6,
+      "incorrect": 8,
+      "neutral": 0
+    },
+    "暗号資産（ビットコイン保有）": {
+      "correct": 7,
+      "incorrect": 15,
+      "neutral": 0
+    },
+    "AI（国内小型成長株）": {
+      "correct": 9,
+      "incorrect": 15,
+      "neutral": 0
+    },
+    "テクノロジー（総合）": {
+      "correct": 0,
+      "incorrect": 36,
+      "neutral": 0
+    },
+    "ネット・通信": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "食品": {
+      "correct": 0,
+      "incorrect": 0,
+      "neutral": 1
+    },
+    "エネルギー資源": {
+      "correct": 0,
+      "incorrect": 1,
+      "neutral": 0
+    },
+    "素材・化学": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "医薬品": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "自動車・輸送機": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "電力・ガス": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "運輸・物流": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "小売": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "建設・資材": {
+      "correct": 0,
+      "incorrect": 1,
+      "neutral": 0
+    },
+    "鉄鋼・非鉄": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    },
+    "不動産": {
+      "correct": 1,
+      "incorrect": 0,
+      "neutral": 0
+    }
+  },
   "summary_by_subscore": {},
-  "summary_by_model": {}
+  "summary_by_model": {},
+  "summary_guarded": {},
+  "summary_guarded_relative": {},
+  "relative_backfill": {
+    "date": "2026-11-25",
+    "count": 1063,
+    "skipped": 0,
+    "note": "2026-11-02 より前の判定で、答え合わせ済みのものを指数比で採点し直した（scripts/backfill_relative_accuracy.py）"
+  }
 }

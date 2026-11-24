@@ -119,6 +119,9 @@ _EMPTY_RECORD = {
     "summary_relative_by_theme": {},
     "summary_by_subscore": {},
     "summary_by_model": {},
+    # buy_guard で様子見に下げた買い候補（理由ごと）。通常の的中率とは分けて答え合わせする。
+    "summary_guarded": {},
+    "summary_guarded_relative": {},
 }
 
 
@@ -165,7 +168,9 @@ def record_predictions(
     existing_ids = {p["id"] for p in record["pending"]}
 
     for r in results:
-        recommendation = r.get("recommendation")
+        # buy_guard で様子見に下げた結果は、AIの判定（買い候補）のまま記録し、guarded を付けて別に数える。
+        guard = r.get("guard") or {}
+        recommendation = guard.get("ai_recommendation") or r.get("recommendation")
         if recommendation not in _TRACKED or r.get("analysis_failed"):
             continue
         price_stats = r.get("price_stats") or {}
@@ -191,6 +196,8 @@ def record_predictions(
             extra["subscores"] = {k: v for k, v in subscores.items() if isinstance(v, int)}
         if r.get("model"):
             extra["model"] = r["model"]
+        if guard.get("reason"):
+            extra["guarded"] = guard["reason"]
         record["pending"].append(
             {
                 **extra,
@@ -286,6 +293,49 @@ def _excess_return_pct(p: dict, change_pct: float, current_prices: dict[str, flo
     return change_pct - (benchmark_now / benchmark_then - 1) * 100
 
 
+BENCHMARK_BY_MARKET = {"JP": "^N225", "US": "^GSPC"}
+
+
+def benchmark_for(symbol: str, group: str, markets: dict[str, str]) -> str | None:
+    """判定を比べる指数。今の設定の market（JP/US）を優先し、設定から外れた銘柄はティッカーの形で決める。
+
+    つみたて投資枠の指数・ETF・暗号資産・投資信託は、判定するときにも指数と比べていないので対象にしない。
+    """
+    if group == "tsumitate_fund":
+        return None
+    if symbol in markets:
+        return BENCHMARK_BY_MARKET.get(markets[symbol])
+    if symbol.endswith("-USD") or symbol.isdigit():
+        return None
+    return BENCHMARK_BY_MARKET["JP"] if symbol.endswith(".T") else BENCHMARK_BY_MARKET["US"]
+
+
+def index_close_before(daily_closes: dict[str, float], date_str: str) -> float | None:
+    """date_str より前の最後の終値。判定は朝に行うため、判定時点の株価は前の営業日の終値になる。"""
+    earlier = [d for d in daily_closes if d < date_str]
+    return daily_closes[max(earlier)] if earlier else None
+
+
+def backfill_benchmark_prices(record: dict, benchmarks: dict, markets: dict[str, str]) -> int:
+    """指数の値が無い保留中の判定に、判定日の指数の終値を書き足す（2026-11-25〜）。埋めた件数を返す。
+
+    指数の値は 2026-11-02 以降の判定からしか記録していなかった。それより前の判定も、答え合わせのときに
+    指数と比べて採点できるよう、fetch_benchmarks の日々の終値（daily_closes）から補う。
+    """
+    filled = 0
+    for p in record["pending"]:
+        if isinstance(p.get("benchmark_price_at_prediction"), (int, float)):
+            continue
+        symbol = benchmark_for(p["symbol"], p.get("group", ""), markets)
+        closes = ((benchmarks or {}).get(symbol) or {}).get("daily_closes") if symbol else None
+        price = index_close_before(closes, p["date"]) if closes else None
+        if isinstance(price, (int, float)):
+            p["benchmark_symbol"] = symbol
+            p["benchmark_price_at_prediction"] = price
+            filled += 1
+    return filled
+
+
 def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
     """判定から30日経過した保留中の予測を、現在の株価と照らして確定させる。
 
@@ -308,6 +358,12 @@ def resolve_predictions(record: dict, current_prices: dict[str, float]) -> None:
 
         excess_pct = _excess_return_pct(p, change_pct, current_prices)
         relative_outcome = _classify(p["recommendation"], excess_pct) if excess_pct is not None else None
+        if p.get("guarded"):
+            # 表示上は様子見に下げた判定。通常の的中率・連続記録・仮想損益には入れず、決まりの効果を見るためだけに数える。
+            _add_outcome(record["summary_guarded"], p["guarded"], outcome)
+            if relative_outcome:
+                _add_outcome(record["summary_guarded_relative"], p["guarded"], relative_outcome)
+            continue
         if relative_outcome:
             _add_outcome(record["summary_relative"], p["recommendation"], relative_outcome)
             if p.get("theme"):
@@ -463,6 +519,29 @@ def low_reliability_themes(record: dict) -> dict[str, dict]:
     return themes
 
 
+_GUARD_LABELS = {"hot": "急騰の直後（1か月で+20%超）", "falling": "急落の途中（52週高値から-30%以下）"}
+
+
+def _guarded_breakdown(record: dict) -> list[dict]:
+    """buy_guard で様子見に下げた買い候補が、その後どうなったか（理由ごと）。"""
+    absolute = {b["reason"]: b for b in _bucketed_breakdown(record.get("summary_guarded", {}), "reason")}
+    relative = {b["reason"]: b for b in _bucketed_breakdown(record.get("summary_guarded_relative", {}), "reason")}
+    rows = []
+    for reason, label in _GUARD_LABELS.items():
+        a, r = absolute.get(reason), relative.get(reason)
+        if not a and not r:
+            continue
+        rows.append({
+            "reason": reason,
+            "label": label,
+            "accuracy_pct": a["accuracy_pct"] if a else None,
+            "sample_size": a["sample_size"] if a else 0,
+            "relative_accuracy_pct": r["accuracy_pct"] if r else None,
+            "relative_sample_size": r["sample_size"] if r else 0,
+        })
+    return rows
+
+
 def build_accuracy_summary(record: dict) -> dict:
     """レポート表示用に、判定種別・テーマ別・確信度別、および全体の的中率を集計する。"""
     relative_breakdown = _bucketed_breakdown(record.get("summary_relative", {}), "recommendation")
@@ -499,6 +578,9 @@ def build_accuracy_summary(record: dict) -> dict:
         "relative_accuracy_pct": (relative_correct / relative_scored * 100) if relative_scored else None,
         "relative_sample_size": relative_scored,
         "relative_breakdown": relative_breakdown,
+        "relative_theme_breakdown": _bucketed_breakdown(record.get("summary_relative_by_theme", {}), "theme"),
+        "relative_backfill": record.get("relative_backfill"),
+        "guarded_breakdown": _guarded_breakdown(record),
         "subscore_breakdown": subscore_breakdown,
         "model_breakdown": _bucketed_breakdown(record.get("summary_by_model", {}), "model"),
         "low_reliability_themes": low_reliability_themes(record),

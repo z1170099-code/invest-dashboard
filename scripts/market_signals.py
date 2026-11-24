@@ -108,6 +108,9 @@ def buy_call_performance(
     for p in pending:
         if p.get("recommendation") != "買い候補" or (p.get("score") or 0) < min_score or p.get("date", "") > cutoff:
             continue
+        if p.get("guarded"):
+            continue  # 急騰・急落で様子見に下げた判定は、サマリーに載っていないので数えない
+
         index_symbol = _market_of(p["symbol"])
         now, then = current_prices.get(p["symbol"]), p.get("price_at_prediction")
         if not index_symbol or not isinstance(now, (int, float)) or not then:

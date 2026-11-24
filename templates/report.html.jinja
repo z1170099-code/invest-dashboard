@@ -843,6 +843,9 @@
       {% if t.reliability_note %}
       <p class="stale-note">※ {{ t.reliability_note }}</p>
       {% endif %}
+      {% if t.guard_note %}
+      <p class="stale-note">※ {{ t.guard_note }}</p>
+      {% endif %}
       <p class="reasoning">{{ t.reasoning }}</p>
 
       {% if t.key_factors %}
@@ -894,6 +897,7 @@
         <div class="cs-meta">
           {% if t.stale_note %}<span class="stale-tag">{{ t.stale_note }}</span>{% endif %}
           {% if t.reliability_note %}<span class="stale-tag">的中率の低い分野</span>{% endif %}
+          {% if t.guard_label %}<span class="stale-tag">{{ t.guard_label }}</span>{% endif %}
           {% if t.tsumitate and t.tsumitate.frame != "つみたて投資枠" %}<span class="stale-tag">{{ t.tsumitate.frame }}のみ</span>{% endif %}
           {% if t.horizon %}<span class="horizon-tag">{{ t.horizon }}</span>{% endif %}
           {% if t.yutai %}
@@ -1411,11 +1415,15 @@
       実際の値動きが一致していれば「的中」、逆であれば「不的中」として集計しています。
       比較するタイミングは、短期の判定と保有銘柄の判定は30日後、中長期の判定は180日後です。
       変化率が±1%以内の場合は判定なし（様子見扱い）として集計から除外します。
-      2026年11月2日以降の判定は、同じ期間の市場平均（日本株は日経平均、米国株はS&amp;P500）と比べて
-      勝ったか負けたかでも採点しています。相場全体が下げた期間でも、AIの銘柄選びの実力だけを測れるためです。
+      同じ期間の市場平均（日本株は日経平均、米国株はS&amp;P500）と比べて勝ったか負けたかでも採点しています。
+      相場全体が下げた期間でも、AIの銘柄選びの実力だけを測れるためです。AIに伝える的中率と、的中率の低い分野を
+      様子見にする判断も、この市場平均比の数字を使います。
+      {% if accuracy.relative_backfill %}市場平均比は2026年11月2日以降の判定から記録を始めましたが、
+      {{ accuracy.relative_backfill.date }}に、それより前に答え合わせ済みの判定{{ accuracy.relative_backfill.count }}件も、
+      判定日と答え合わせの日の指数の終値から採点し直して加えています。{% endif %}
     </details>
 
-    {% if accuracy.relative_sample_size or accuracy.subscore_breakdown or accuracy.model_breakdown or accuracy.low_reliability_themes %}
+    {% if accuracy.relative_sample_size or accuracy.subscore_breakdown or accuracy.model_breakdown or accuracy.low_reliability_themes or accuracy.guarded_breakdown %}
     <div class="allocation-box">
       <h3>市場平均と比べた的中率</h3>
       {% if accuracy.relative_sample_size %}
@@ -1433,6 +1441,18 @@
       {% endfor %}
       {% else %}
       <p class="allocation-note">2026年11月2日以降の判定から集計します。最初の結果が出るのは、短期の判定が確定する30日後からです。</p>
+      {% endif %}
+
+      {% if accuracy.guarded_breakdown %}
+      <h3>急騰・急落で様子見に下げた買い候補のその後</h3>
+      {% for g in accuracy.guarded_breakdown %}
+      <div class="allocation-row">
+        <span class="allocation-label">{{ g.label }}</span>
+        <div class="score-track"><div class="score-fill" style="width: {{ g.relative_accuracy_pct or g.accuracy_pct or 0 }}%;"></div></div>
+        <span class="allocation-amount">{% if g.relative_accuracy_pct is not none %}市場平均比 {{ "%.0f"|format(g.relative_accuracy_pct) }}%（{{ g.relative_sample_size }}件）{% elif g.accuracy_pct is not none %}{{ "%.0f"|format(g.accuracy_pct) }}%（{{ g.sample_size }}件）{% else %}データなし{% endif %}</span>
+      </div>
+      {% endfor %}
+      <p class="allocation-note">AIが買い候補とした判定のうち、急騰の直後（1か月で+20%超）・急落の途中（52週高値から-30%以下）だったため様子見として表示したものが、もし買っていたら当たっていたかの割合です。通常の買い候補の的中率より低ければ、下げたのは正しかったことになります。</p>
       {% endif %}
 
       {% if accuracy.subscore_breakdown %}

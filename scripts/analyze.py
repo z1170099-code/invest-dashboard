@@ -13,6 +13,7 @@ import time
 from google import genai
 from google.genai import types
 
+from buy_guard import REASON_LABELS, prompt_caution
 from history import build_key
 from track_record import HIGH_CONFIDENCE_ABS_SCORE, MIN_STREAK_FOR_PROMPT, get_streak
 
@@ -172,6 +173,9 @@ def _build_reflection_section(previous: dict | None, latest_close) -> str:
         change_note = f"{(latest_close / prev_close - 1) * 100:+.2f}%"
 
     score_line = f"（スコア {previous['score']:+d}）" if isinstance(previous.get("score"), int) else ""
+    guard_label = REASON_LABELS.get(previous.get("guard_reason"))
+    if guard_label:
+        score_line += f"（{guard_label}だったため、ダッシュボードでは様子見として表示）"
 
     return f"""
 【前回の分析（{previous.get('date', '不明')}）】
@@ -232,15 +236,27 @@ def _build_accuracy_section(
 
     lines = []
 
-    for b in accuracy_summary.get("breakdown", []):
+    # 指数比（同じ期間の日経平均・S&P500と比べて上か下か）の検証が十分にあれば、そちらを伝える（2026-11-25〜）。
+    # 値上がりしたかどうかだけで数えると、相場全体が下げた時期は銘柄選びが良くても買い候補が
+    # まとめて「外れ」になり、AIが買い判定を必要以上にためらうようになるため。
+    use_relative = any(
+        b["recommendation"] in relevant and b["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT
+        for b in accuracy_summary.get("relative_breakdown", [])
+    )
+    rec_rows = accuracy_summary.get("relative_breakdown" if use_relative else "breakdown", [])
+    for b in rec_rows:
         if b["recommendation"] in relevant and b["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT:
             lines.append(
                 f"- {b['recommendation']}: 過去{b['sample_size']}件中{b['correct']}件が的中"
                 f"（的中率{b['accuracy_pct']:.0f}%）。{_describe_trend(b['accuracy_pct'])}"
             )
 
+    # 確信度別・期間別は値上がり・値下がりでしか数えていないため、指数比で伝えるときは混ぜない。
+    confidence_breakdown = [] if use_relative else accuracy_summary.get("confidence_breakdown", [])
+    horizon_breakdown = [] if use_relative else accuracy_summary.get("horizon_breakdown", [])
+
     confidence_rows = {}
-    for c in accuracy_summary.get("confidence_breakdown", []):
+    for c in confidence_breakdown:
         if c["sample_size"] < _MIN_SAMPLE_FOR_PROMPT:
             continue
         confidence_rows[c["confidence"]] = c
@@ -254,7 +270,7 @@ def _build_accuracy_section(
             f"（的中率{c['accuracy_pct']:.0f}%）。{_describe_trend(c['accuracy_pct'])}"
         )
 
-    for h in accuracy_summary.get("horizon_breakdown", []):
+    for h in horizon_breakdown:
         if h["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT:
             lines.append(
                 f"- 期間「{h['horizon']}」の判定: 過去{h['sample_size']}件中{h['correct']}件が的中"
@@ -279,12 +295,9 @@ def _build_accuracy_section(
         )
 
     if theme:
+        theme_rows = accuracy_summary.get("relative_theme_breakdown" if use_relative else "theme_breakdown", [])
         theme_row = next(
-            (
-                t
-                for t in accuracy_summary.get("theme_breakdown", [])
-                if t["theme"] == theme and t["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT
-            ),
+            (t for t in theme_rows if t["theme"] == theme and t["sample_size"] >= _MIN_SAMPLE_FOR_PROMPT),
             None,
         )
         if theme_row:
@@ -301,8 +314,15 @@ def _build_accuracy_section(
         return ""
 
     joined = "\n".join(lines)
+    if use_relative:
+        basis = (
+            "短期の判定は30日後、中長期の判定は180日後の値動きを、同じ期間の指数（日本株は日経平均、米国株はS&P500）と"
+            "比べて採点。買い候補は指数より上がれば的中、売り候補・売却検討は指数より下がれば的中。差が±1%以内は除く"
+        )
+    else:
+        basis = "短期の判定は30日後、中長期の判定は180日後の値動きとの一致率、±1%以内の判定なしは除く"
     return f"""
-【あなたの過去の判定的中率と傾向（短期の判定は30日後、中長期の判定は180日後の値動きとの一致率、±1%以内の判定なしは除く）】
+【あなたの過去の判定的中率と傾向（{basis}）】
 {joined}
 
 上記の傾向を踏まえて、外れやすいと分かっている判定タイプ・確信度帯・テーマ・銘柄については
@@ -515,6 +535,7 @@ def _build_prompt(
     theme_line += _build_yutai_section(ticker.get("yutai"))
     theme_line += _build_sector_section(ticker.get("sector"), ticker.get("sector_peers"), ticker.get("market", "JP"))
     theme_line += _build_tsumitate_section(ticker.get("tsumitate"), ticker.get("tsumitate_peers"))
+    theme_line += prompt_caution(price_stats, market)
     reflection_section = _build_reflection_section(
         previous, price_stats.get("latest_close") if price_stats else None
     )

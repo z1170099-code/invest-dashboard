@@ -55,14 +55,20 @@ def apply_group_results(history: dict, group: str, results: list[dict]) -> None:
         if r.get("analysis_failed"):
             continue
         price_stats = r.get("price_stats") or {}
-        history[key] = {
+        # buy_guard で様子見に下げた結果は、AI自身の判定（買い候補）を残す。次回のAIの振り返りで
+        # 「前回は様子見だった」と誤解させないため。下げた理由も残し、振り返りの文に添える。
+        guard = r.get("guard") or {}
+        entry = {
             "date": today_str(),
-            "recommendation": r.get("recommendation"),
+            "recommendation": guard.get("ai_recommendation") or r.get("recommendation"),
             "score": r.get("score"),
             "reasoning": r.get("reasoning"),
             "horizon": r.get("horizon"),
             "latest_close": price_stats.get("latest_close"),
         }
+        if guard.get("reason"):
+            entry["guard_reason"] = guard["reason"]
+        history[key] = entry
 
     prefix = f"{group}:"
     for key in [k for k in history if k.startswith(prefix) and k not in seen_keys]:
